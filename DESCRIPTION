@@ -1,0 +1,15 @@
+Package: nevada
+Type: Package
+Title: NEtwork-VAlued Data Analysis
+Version: 0.0.0.9000
+Author: as.person(c(
+    "Ilenia Lovato <ilenia.lovato01@universitadipavia.it> [aut, cre]",
+    "Aymeric Stamm <aymeric@stamm.fr> [aut]"
+    ))
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 5.0.1
