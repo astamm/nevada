@@ -1,3 +1,16 @@
+
+get_adjacency <- function(network){
+  adjacent <- get.adjacency(network, type = "both")
+}
+
+get_laplacian <- function(network){
+  laplacian <- laplacian_matrix(network)
+}
+
+get_modularity <- function(network){
+  modularity <- modularity_matrix(network, rep(1,n)) #NUMERO DI VERTICI?
+}
+
 as_adjacency <- function(matrix) {
   class(matrix) <- c(class(matrix), "adjacency")
 }
