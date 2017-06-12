@@ -16,7 +16,26 @@
 #'   between all the elements of the two samples put together.
 #' @export
 #'
-#' @examples
+#' @examples x <- NULL
+#' y <- NULL
+#' for (i in 1:10) {
+#' X <- watts.strogatz.game(1, 25, 3, 0.05)
+#' Y <- barabasi.game(n, m=3, power=2, directed = FALSE)
+#' adjX <- get_adjacency(X)
+#' adjY <- get_adjacency(Y)
+#' if (i==1) {
+#' x <- list(adjX)
+#' y <- list(adjY)
+#' }
+#' else {
+#' x[[i]] <- adjX
+#' y[[i]] <- adjY
+#' }
+#' }
+#' get_paired_distances(x,y,"laplacian","spectral")
+#'
+
+
 get_paired_distances <- function(x, y, representation, distance) {
   n <- length(x)
   m <- length(y)
