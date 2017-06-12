@@ -1,9 +1,9 @@
 #' Title Compute the Hamming distance between two networks
 #'
-#' If \eqn{X} is the matrix representation for the graph \eqn{x} and \eqn{Y}
-#' is that of the graph \eqn{y}, the Hamming distance between \eqn{x} and
-#' \eqn{y} is given by \deqn{1/N(N-1)sum_{i,j} |X_ij - Y_ij|} where \eqn{N} is
-#' the number of vertices of \eqn{x} and \eqn{y}.
+#' If \eqn{X} is the matrix representation for the graph \eqn{x} and \eqn{Y} is
+#' that of the graph \eqn{y}, the Hamming distance between \eqn{x} and \eqn{y}
+#' is given by \deqn{1/N(N-1)sum_{i,j} |X_ij - Y_ij|} where \eqn{N} is the
+#' number of vertices of \eqn{x} and \eqn{y}.
 #'
 #' @param x Adjacency matrix/igraph object with N vertices.
 #' @param y Adjacency matrix/igraph object with N vertices.
@@ -13,7 +13,9 @@
 #' @return \code{get_hamming_distance} returns a scalar.
 #' @export
 #'
-#' @examples
+#' @examples g1 <- erdos.renyi.game(20, 0.1)
+#' g2 <- erdos.renyi.game(20, 0.2)
+#' get_hamming_distance(g1, g2, "adjacency")
 get_hamming_distance <- function(x, y, representation) {
   X <- switch(representation,
               adjacency <- get_adjacency(x),
@@ -44,7 +46,9 @@ get_hamming_distance <- function(x, y, representation) {
 #' @return \code{get_frobenius_distance} returns a scalar.
 #' @export
 #'
-#' @examples
+#' @examples g1 <- erdos.renyi.game(20, 0.1)
+#' g2 <- erdos.renyi.game(20, 0.2)
+#' get_frobenius_distance(g1, g2, "adjacency")
 get_frobenius_distance <- function(x, y, representation) {
   X <- switch(representation,
               adjacency <- get_adjacency(x),
@@ -77,7 +81,9 @@ get_frobenius_distance <- function(x, y, representation) {
 #' @return \code{get_spectral_distance} returns a scalar.
 #' @export
 #'
-#' @examples
+#' @examples g1 <- erdos.renyi.game(20, 0.1)
+#' g2 <- erdos.renyi.game(20, 0.2)
+#' get_spectral_distance(g1, g2, "laplacian")
 get_spectral_distance <- function(x, y, representation) {
   X <- switch(representation,
               adjacency <- get_adjacency(x),
@@ -130,7 +136,9 @@ get_spectral_distance <- function(x, y, representation) {
 #' @return \code{get_spectral_distance} returns a scalar.
 #' @export
 #'
-#' @examples
+#' @examples g1 <- erdos.renyi.game(20, 0.1)
+#' g2 <- erdos.renyi.game(20, 0.2)
+#' get_rooteuclidean_distance(g1, g2, "laplacian")
 get_rooteuclidean_distance <- function(x, y, representation) {
   X <- switch(representation,
               adjacency <- get_adjacency(x),
