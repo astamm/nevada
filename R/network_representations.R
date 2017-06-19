@@ -1,36 +1,82 @@
+#' Network Representation Functions
+#'
+#' This is a collection of functions that convert a graph stored as an
+#' \code{\link[igraph]{igraph}} object into a desired matrix representation
+#' among adjacency matrix, graph laplacian or modularity matrix.
+#'
+#' @param network An \code{\link[igraph]{igraph}} object.
+#' @param validate A boolean specifying whether the function should check the
+#'   class of its input (default: \code{TRUE}).
+#'
+#' @return A numeric square matrix giving the desired network representation
+#'   recorded in the object's class.
+#'
+#' @examples
+#' @name get-representation
+NULL
 
-get_adjacency <- function(network){
-  adjacent <- get.adjacency(network, type = "both")
+#' @rdname get-representation
+#' @export
+get_adjacency <- function(network, validate = TRUE) {
+  if (validate) {
+    if (!igraph::is_igraph(network))
+      stop("Input network should be of class igraph.")
+  }
+  repr <- igraph::get.adjacency(network, type = "both")
+  as_adjacency(repr)
 }
 
-get_laplacian <- function(network){
-  laplacian <- laplacian_matrix(network)
+#' @rdname get-representation
+#' @export
+get_laplacian <- function(network, validate = TRUE) {
+  if (validate) {
+    if (!igraph::is_igraph(network))
+      stop("Input network should be of class igraph.")
+  }
+  repr <- igraph::laplacian_matrix(network)
+  as_laplacian(repr)
 }
 
-get_modularity <- function(network){
-  modularity <- modularity_matrix(network, rep(1,n)) #NUMERO DI VERTICI?
+#' @rdname get-representation
+#' @export
+get_modularity <- function(network, validate = TRUE) {
+  if (validate) {
+    if (!igraph::is_igraph(network))
+      stop("Input network should be of class igraph.")
+  }
+  repr <- igraph::modularity_matrix(network, rep(1,n)) #NUMERO DI VERTICI?
+  as_modularity(repr)
 }
 
-as_adjacency <- function(matrix) {
-  class(matrix) <- c(class(matrix), "adjacency")
+as_adjacency <- function(x) {
+  l <- attributes(x)
+  l$representation <- "adjacency"
+  attributes(x) <- l
+  x
 }
 
-as_laplacian <- function(matrix) {
-  class(matrix) <- c(class(matrix), "laplacian")
+as_laplacian <- function(x) {
+  l <- attributes(x)
+  l$representation <- "laplacian"
+  attributes(x) <- l
+  x
 }
 
-as_modularity <- function(matrix) {
-  class(matrix) <- c(class(matrix), "modularity")
+as_modularity <- function(x) {
+  l <- attributes(x)
+  l$representation <- "modularity"
+  attributes(x) <- l
+  x
 }
 
-is_adjacency <- function(matrix) {
-  "adjacency" %in% class(matrix)
+is_adjacency <- function(x) {
+  "adjacency" == attributes(x)$representation
 }
 
-is_laplacian <- function(matrix) {
-  "laplacian" %in% class(matrix)
+is_laplacian <- function(x) {
+  "laplacian" == attributes(x)$representation
 }
 
-is_modularity <- function(matrix) {
-  "modularity" %in% class(matrix)
+is_modularity <- function(x) {
+  "modularity" == attributes(x)$representation
 }

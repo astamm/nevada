@@ -1,171 +1,98 @@
-#' Title Compute the Hamming distance between two networks
+#' Distances Between Networks
 #'
-#' If \eqn{X} is the matrix representation for the graph \eqn{x} and \eqn{Y} is
-#' that of the graph \eqn{y}, the Hamming distance between \eqn{x} and \eqn{y}
-#' is given by \deqn{1/N(N-1)sum_{i,j} |X_ij - Y_ij|} where \eqn{N} is the
-#' number of vertices of \eqn{x} and \eqn{y}.
+#' This is a collection of functions computing the distance between two
+#' networks.
 #'
-#' @param x Adjacency matrix/igraph object with N vertices.
-#' @param y Adjacency matrix/igraph object with N vertices.
-#' @param representation The choosen matrix representation for the elements of x
-#'   and y. It can be: "adjacency", "laplacian" and "modularity".
+#' Let \eqn{X} be the matrix representation of network \eqn{x} and \eqn{Y} be
+#' the matrix representation of network \eqn{y}. The Hamming distance between
+#' \eqn{x} and \eqn{y} is given by \deqn{\frac{1}{N(N-1)} \sum_{i,j} |X_{ij} -
+#' Y_{ij}|,} where \eqn{N} is the number of vertices in networks \eqn{x} and
+#' \eqn{y}. The Frobenius distance between \eqn{x} and \eqn{y} is given by
+#' \deqn{\sqrt{\sum_{i,j} (X_{ij} - Y_{ij})^2}.} The spectral distance between
+#' \eqn{x} and \eqn{y} is given by \deqn{\sqrt{\sum_i (a_i - b_i)^2},} where
+#' \eqn{a} and \eqn{b} of the eigenvalues of \eqn{X} and \eqn{Y}, respectively.
+#' This distance gives rise to classes of equivalence. Consider the spectral
+#' decomposition of \eqn{X} and \eqn{Y}: \deqn{X=VAV^{-1}} and \deqn{Y =
+#' UBU^{-1},} where \eqn{V} and \eqn{U} are the matrices whose colums are the
+#' eigenvectors of \eqn{X} and \eqn{Y}, respectively and \eqn{A} and \eqn{B} are
+#' the diagonal matrices with elements the eigenvalues of \eqn{X} and \eqn{Y},
+#' respectively. The root-Euclidean distance between \eqn{x} and \eqn{y} is
+#' given by \deqn{\sqrt{\sum_i (V \sqrt{A} V^{-1} - U \sqrt{B} U^{-1})^2}.}
 #'
-#' @return \code{get_hamming_distance} returns a scalar.
-#' @export
+#' @param x An \code{\link[igraph]{igraph}} object or a matrix representing an
+#'   underlying network.
+#' @param y An \code{\link[igraph]{igraph}} object or a matrix representing an
+#'   underlying network. Should have the same number of vertices as \code{x}.
+#' @param representation A string specifying the desired type of representation,
+#'   among: \code{"adjacency"} [default], \code{"laplacian"} and
+#'   \code{"modularity"}.
 #'
-#' @examples g1 <- erdos.renyi.game(20, 0.1)
-#' g2 <- erdos.renyi.game(20, 0.2)
+#' @return A scalar measuring the distance between the two input networks.
+#'
+#' @examples
+#' g1 <- igraph::erdos.renyi.game(20, 0.1)
+#' g2 <- igraph::erdos.renyi.game(20, 0.2)
 #' get_hamming_distance(g1, g2, "adjacency")
-get_hamming_distance <- function(x, y, representation) {
-  X <- switch(representation,
-              adjacency <- get_adjacency(x),
-              laplacian <- get_laplacian(x),
-              modularity <- get_modularity(x))
-  Y <- switch(representation,
-              adjacency <- get_adjacency(Y),
-              laplacian <- get_laplacian(Y),
-              modularity <- get_modularity(Y))
-
-  d <- sum(abs(X-Y))
-  return(trunc(d*10^4)/10^4)
-
-}
-
-
-#' Title Compute the Frobenius distance between two networks
-#'
-#' If \eqn{X} is the matrix representation for the graph \eqn{x} and \eqn{Y}
-#' is that of the graph \eqn{y}, the Frobenius distance between \eqn{x} and
-#' \eqn{y} is given by \deqn{sqrt(sum_{i,j} (X_ij - Y_ij)^2).}
-#'
-#' @param x Adjacency matrix/igraph object with N vertices.
-#' @param y Adjacency matrix/igraph object with N vertices.
-#' @param representation The choosen matrix representation for the elements of x
-#'   and y. It can be: "adjacency", "laplacian" and "modularity".
-#'
-#' @return \code{get_frobenius_distance} returns a scalar.
-#' @export
-#'
-#' @examples g1 <- erdos.renyi.game(20, 0.1)
-#' g2 <- erdos.renyi.game(20, 0.2)
 #' get_frobenius_distance(g1, g2, "adjacency")
-get_frobenius_distance <- function(x, y, representation) {
-  X <- switch(representation,
-              adjacency <- get_adjacency(x),
-              laplacian <- get_laplacian(x),
-              modularity <- get_modularity(x))
-  Y <- switch(representation,
-              adjacency <- get_adjacency(Y),
-              laplacian <- get_laplacian(Y),
-              modularity <- get_modularity(Y))
-
-  d <- sqrt(sum((X-Y)^2))
-  return(trunc(d*10^4)/10^4)
-
-}
-
-
-#' Title  Compute the Spectral distance between two networks
-#'
-#' If \eqn{X} is the matrix representation for the graph \eqn{x} and \eqn{Y}
-#' is that of the graph \eqn{y}, consider the vectors \eqn{a} and \eqn{b} of
-#' the eigenvalues of \eqn{X} and \eqn{Y}, respectively. The Spectral distance
-#' between \eqn{x} and \eqn{y} is given by \deqn{sqrt(sum_{i} (a_i - b_i)^2).}
-#' This distance gives rise to classes of equivalence.
-#'
-#' @param x Adjacency matrix/igraph object with N vertices.
-#' @param y Adjacency matrix/igraph object with N vertices.
-#' @param representation The choosen matrix representation for the elements of x
-#'   and y. It can be: "adjacency", "laplacian" and "modularity".
-#'
-#' @return \code{get_spectral_distance} returns a scalar.
-#' @export
-#'
-#' @examples g1 <- erdos.renyi.game(20, 0.1)
-#' g2 <- erdos.renyi.game(20, 0.2)
 #' get_spectral_distance(g1, g2, "laplacian")
-get_spectral_distance <- function(x, y, representation) {
-  X <- switch(representation,
-              adjacency <- get_adjacency(x),
-              laplacian <- get_laplacian(x),
-              modularity <- get_modularity(x))
-  Y <- switch(representation,
-              adjacency <- get_adjacency(Y),
-              laplacian <- get_laplacian(Y),
-              modularity <- get_modularity(Y))
+#' get_root_euclidean_distance(g1, g2, "laplacian")
+#' @name get-distance
+NULL
 
-  rX <- eigen(X, symmetric=TRUE);
-  for (t in 1:n) {
-    if (abs(rX$values[t])<1e-10) {
-      rX$values[t] <- 0;
-    }
-  }
-  dlX <- rX$values
-
-  rY <- eigen(Y, symmetric=TRUE);
-  for (t in 1:n) {
-    if (abs(rY$values[t])<1e-10) {
-      rY$values[t] <- 0;
-    }
-  }
-  dlY <- rY$values
-
-  d <- sqrt(sum((dlX-dlY)^2))
-  return(trunc(d*10^4)/10^4)
-
+#' @rdname get-distance
+#' @export
+get_hamming_distance <- function(x, y, representation = "adjacency") {
+  l <- format_inputs(x, y, representation)
+  x <- l$x
+  y <- l$y
+  d <- sum(abs(x - y))
+  trunc(d * 10^4) / 10^4
 }
 
-
-#' Title Compute the Root Euclidean distance between two networks
-#'
-#' If \eqn{X} is the matrix representation for the graph \eqn{x} and \eqn{Y} is
-#' that of the graph \eqn{y}, consider the spectral decomposition of \eqn{X} and
-#' \eqn{Y}: \deqn{X=VAV^(-1)} \deqn{X=UBU^(-1)} where \eqn{V} and \eqn{U} are
-#' the matrix whose colums are the eigenvectors of \eqn{X} and \eqn{Y},
-#' respectively; \eqn{A} and \eqn{B} are the diagonal matrix with elements the
-#' eigenvalues of \eqn{X} and \eqn{Y}, respectively. The Root Euclidean distance
-#' between \eqn{x} and \eqn{y} is given by \deqn{sqrt(sum_{i} (Vsqrt(A)V^(-1) -
-#' Usqrt(B)U^(-1))^2)} where the square root of a matrix is the matrix with the
-#' square rotted elements.
-#'
-#' @param x Adjacency matrix/igraph object with N vertices.
-#' @param y Adjacency matrix/igraph object with N vertices.
-#' @param representation The choosen matrix representation for the elements of x
-#'   and y. It can be: "adjacency", "laplacian" and "modularity".
-#'
-#' @return \code{get_spectral_distance} returns a scalar.
+#' @rdname get-distance
 #' @export
-#'
-#' @examples g1 <- erdos.renyi.game(20, 0.1)
-#' g2 <- erdos.renyi.game(20, 0.2)
-#' get_rooteuclidean_distance(g1, g2, "laplacian")
-get_rooteuclidean_distance <- function(x, y, representation) {
-  X <- switch(representation,
-              adjacency <- get_adjacency(x),
-              laplacian <- get_laplacian(x),
-              modularity <- get_modularity(x))
-  Y <- switch(representation,
-              adjacency <- get_adjacency(Y),
-              laplacian <- get_laplacian(Y),
-              modularity <- get_modularity(Y))
+get_frobenius_distance <- function(x, y, representation = "adjacency") {
+  l <- format_inputs(x, y, representation)
+  x <- l$x
+  y <- l$y
+  d <- sqrt(sum((x - y)^2))
+  trunc(d * 10^4) / 10^4
+}
 
-  rX <- eigen(X, symmetric=TRUE)
-  for (t in 1:n) {
-    if (abs(rX$values[t])<1e-10) {
-      rX$values[t] <- 0
-    }
-  }
-  dlX <- rX$vectors%*%sqrt(diag(rX$values))%*%solve(rX$vectors)
+#' @rdname get-distance
+#' @export
+get_spectral_distance <- function(x, y, representation = "adjacency") {
+  l <- format_inputs(x, y, representation)
+  x <- l$x
+  y <- l$y
 
-  rY <- eigen(Y, symmetric=TRUE)
-  for (t in 1:n) {
-    if (abs(rY$values[t])<1e-10) {
-      rY$values[t] <- 0;
-    }
-  }
-  dlY <- rY$vectors%*%sqrt(diag(rY$values))%*%solve(rY$vectors)
+  dlX <- eigen(x, symmetric = TRUE, only.values = TRUE)$values
+  dlX[abs(dlX) < 1e-10] <- 0
 
-  d <- sqrt(sum((dlX-dlY)^2))
-  return(trunc(d*10^4)/10^4)
+  dlY <- eigen(y, symmetric = TRUE, only.values = TRUE)$values
+  dlY[abs(dlY) < 1e-10] <- 0
 
+  d <- sqrt(sum((dlX - dlY)^2))
+  trunc(d * 10^4) / 10^4
+}
+
+#' @rdname get-distance
+#' @export
+get_root_euclidean_distance <- function(x, y, representation = "adjacency") {
+  l <- format_inputs(x, y, representation)
+  x <- l$x
+  y <- l$y
+
+  rX <- eigen(x, symmetric = TRUE)
+  vals <- rX$values
+  vals[abs(vals) < 1e-10] <- 0
+  dlX <- rX$vectors %*% diag(sqrt(vals)) %*% t(rX$vectors)
+
+  rY <- eigen(y, symmetric = TRUE)
+  vals <- rY$values
+  vals[abs(vals) < 1e-10] <- 0
+  dlY <- rY$vectors %*% diag(sqrt(vals)) %*% t(rY$vectors)
+
+  d <- sqrt(sum((dlX - dlY)^2))
+  trunc(d * 10^4) / 10^4
 }
