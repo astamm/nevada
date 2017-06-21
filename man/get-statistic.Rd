@@ -30,3 +30,19 @@ cardinality \eqn{n1}) and that of the second one (with cardinality \eqn{n2}).
 The distance used to compute the value of the test statistic is the same used
 to find the Fréchet means.
 }
+\examples{
+n <- 25L
+x <- list()
+y <- list()
+for (i in 1:10) {
+  X <- igraph::watts.strogatz.game(1, n, 3, 0.05)
+  Y <- igraph::barabasi.game(n, m = 3, power = 2, directed = FALSE)
+  adjX <- get_adjacency(X)
+  adjY <- get_adjacency(Y)
+  x[[i]] <- adjX
+  y[[i]] <- adjY
+}
+d <- get_distance_matrix(x, y, "adjacency", "spectral")
+stat_average <- get_average_statistic(d, 1:10)
+stat_frechet <- get_frechet_statistic(d, 1:10)
+}

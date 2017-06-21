@@ -8,13 +8,13 @@
 \alias{get_root_euclidean_distance}
 \title{Distances Between Networks}
 \usage{
-get_hamming_distance(x, y, representation = "adjacency")
+get_hamming_distance(x, y, representation = "laplacian")
 
-get_frobenius_distance(x, y, representation = "adjacency")
+get_frobenius_distance(x, y, representation = "laplacian")
 
-get_spectral_distance(x, y, representation = "adjacency")
+get_spectral_distance(x, y, representation = "laplacian")
 
-get_root_euclidean_distance(x, y, representation = "adjacency")
+get_root_euclidean_distance(x, y, representation = "laplacian")
 }
 \arguments{
 \item{x}{An \code{\link[igraph]{igraph}} object or a matrix representing an
@@ -24,7 +24,7 @@ underlying network.}
 underlying network. Should have the same number of vertices as \code{x}.}
 
 \item{representation}{A string specifying the desired type of representation,
-among: \code{"adjacency"} [default], \code{"laplacian"} and
+among: \code{"adjacency"}, \code{"laplacian"} [default] and
 \code{"modularity"}.}
 }
 \value{

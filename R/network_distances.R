@@ -24,7 +24,7 @@
 #' @param y An \code{\link[igraph]{igraph}} object or a matrix representing an
 #'   underlying network. Should have the same number of vertices as \code{x}.
 #' @param representation A string specifying the desired type of representation,
-#'   among: \code{"adjacency"} [default], \code{"laplacian"} and
+#'   among: \code{"adjacency"}, \code{"laplacian"} [default] and
 #'   \code{"modularity"}.
 #'
 #' @return A scalar measuring the distance between the two input networks.
@@ -41,58 +41,55 @@ NULL
 
 #' @rdname get-distance
 #' @export
-get_hamming_distance <- function(x, y, representation = "adjacency") {
+get_hamming_distance <- function(x, y, representation = "laplacian") {
   l <- format_inputs(x, y, representation)
   x <- l$x
   y <- l$y
-  d <- sum(abs(x - y))
-  trunc(d * 10^4) / 10^4
+  n <- nrow(x)
+  sum(abs(x - y)) / (n * (n - 1))
 }
 
 #' @rdname get-distance
 #' @export
-get_frobenius_distance <- function(x, y, representation = "adjacency") {
+get_frobenius_distance <- function(x, y, representation = "laplacian") {
   l <- format_inputs(x, y, representation)
   x <- l$x
   y <- l$y
-  d <- sqrt(sum((x - y)^2))
-  trunc(d * 10^4) / 10^4
+  sqrt(sum((x - y)^2))
 }
 
 #' @rdname get-distance
 #' @export
-get_spectral_distance <- function(x, y, representation = "adjacency") {
+get_spectral_distance <- function(x, y, representation = "laplacian") {
   l <- format_inputs(x, y, representation)
   x <- l$x
   y <- l$y
 
   dlX <- eigen(x, symmetric = TRUE, only.values = TRUE)$values
-  dlX[abs(dlX) < 1e-10] <- 0
-
   dlY <- eigen(y, symmetric = TRUE, only.values = TRUE)$values
-  dlY[abs(dlY) < 1e-10] <- 0
 
-  d <- sqrt(sum((dlX - dlY)^2))
-  trunc(d * 10^4) / 10^4
+  sqrt(sum((dlX - dlY)^2))
 }
 
 #' @rdname get-distance
 #' @export
-get_root_euclidean_distance <- function(x, y, representation = "adjacency") {
+get_root_euclidean_distance <- function(x, y, representation = "laplacian") {
+  if (representation != "lapacian")
+    stop("The root-Euclidean distance can only be used with the Laplacian matrix representation.")
+
   l <- format_inputs(x, y, representation)
   x <- l$x
   y <- l$y
 
   rX <- eigen(x, symmetric = TRUE)
   vals <- rX$values
-  vals[abs(vals) < 1e-10] <- 0
+  vals[vals < 0] <- 0
   dlX <- rX$vectors %*% diag(sqrt(vals)) %*% t(rX$vectors)
 
   rY <- eigen(y, symmetric = TRUE)
   vals <- rY$values
-  vals[abs(vals) < 1e-10] <- 0
+  vals[vals < 0] <- 0
   dlY <- rY$vectors %*% diag(sqrt(vals)) %*% t(rY$vectors)
 
-  d <- sqrt(sum((dlX - dlY)^2))
-  trunc(d * 10^4) / 10^4
+  sqrt(sum((dlX - dlY)^2))
 }

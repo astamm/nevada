@@ -28,3 +28,9 @@ This is a collection of functions that convert a graph stored as an
 \code{\link[igraph]{igraph}} object into a desired matrix representation
 among adjacency matrix, graph laplacian or modularity matrix.
 }
+\examples{
+X <- igraph::watts.strogatz.game(1, 25, 3, 0.05)
+adjX <- get_adjacency(X)
+lapX <- get_laplacian(X)
+modX <- get_modularity(X)
+}

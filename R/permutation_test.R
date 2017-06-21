@@ -28,9 +28,8 @@
 #' @param statistic A string specifying the chosen test statistic, among:
 #'   \code{"average"} [default] or \code{"frechet"}.
 #' @param B The number of permutation or the tolerance (default: \code{1000L}).
-#' @param modality A string for determining the number of permutations: either
-#'   \code{"b"} for the exact number of permutations to be performed or
-#'   \code{"tol"} for the tolerance (default: \code{"b"}).
+#'   If this number is lower than \code{1}, it is intended as a tolerance.
+#'   Otherwise, it is intended as the number of required permutations.
 #' @param alpha The significance level (default: \code{0.05}).
 #'
 #' @return A \code{\link[base]{list}} with two components: the value of the
@@ -39,8 +38,35 @@
 #' @export
 #'
 #' @examples
+#' n <- 25L
+#'
+#' x <- list()
+#' y <- list()
+#' for (i in 1:10) {
+#'   X <- igraph::watts.strogatz.game(1, n, 3, 0.05)
+#'   Y <- igraph::barabasi.game(n, m = 3, power = 2, directed = FALSE)
+#'   adjX <- get_adjacency(X)
+#'   adjY <- get_adjacency(Y)
+#'   x[[i]] <- adjX
+#'   y[[i]] <- adjY
+#' }
+#' test1 <- network_test2p(x, y, "adjacency")
+#' test1
+#'
+#' x <- list()
+#' y <- list()
+#' for (i in 1:10) {
+#'   X <- igraph::watts.strogatz.game(1, n, 3, 0.05)
+#'   Y <- igraph::watts.strogatz.game(1, n, 3, 0.05)
+#'   adjX <- get_adjacency(X)
+#'   adjY <- get_adjacency(Y)
+#'   x[[i]] <- adjX
+#'   y[[i]] <- adjY
+#' }
+#' test2 <- network_test2p(x, y, "adjacency")
+#' test2
 network_test2p <- function(x, y, representation = "adjacency", distance = "hamming",
-                           statistic = "average", B = 1000L, modality = "b", alpha = 0.05) {
+                           statistic = "average", B = 1000L, alpha = 0.05) {
   n1 <- length(x)
   n2 <- length(y)
   n <- n1 + n2
@@ -55,16 +81,13 @@ network_test2p <- function(x, y, representation = "adjacency", distance = "hammi
     frechet = get_frechet_statistic(d, 1:n1)
   )
 
-  Bnew <- switch(
-    modality,
-    b = B,
-    tol = (qnorm(alpha / 2, lower.tail = FALSE) / tol)^2
-  )
+  if (B < 1)
+    B <- (qnorm(alpha / 2, lower.tail = FALSE) / tol)^2
 
   group1.perm <- t(combn(1:n, n1))
   M <- nrow(group1.perm)
 
-  if (Bnew >= M) {
+  if (B >= M) {
     Tp <- rep(-1, M)
     for (i in 1:M) {
       p <- group1.perm[i, ]
@@ -75,7 +98,7 @@ network_test2p <- function(x, y, representation = "adjacency", distance = "hammi
       )
     }
   } else {
-    Tp <- rep(-1, Bnew)
+    Tp <- rep(-1, B)
     for (i in 1:B) {
       p <- sample(1:n, n, replace = FALSE)
       Tp[i] <- switch(
@@ -86,7 +109,7 @@ network_test2p <- function(x, y, representation = "adjacency", distance = "hammi
     }
   }
 
-  p <- sum(Tp >= T0) / B
+  p <- mean(Tp >= T0)
 
   list(statistic = T0, pvalue = p)
 }

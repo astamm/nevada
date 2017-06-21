@@ -5,7 +5,7 @@
 \title{Comparison of Network Distributions}
 \usage{
 network_test2p(x, y, representation = "adjacency", distance = "hamming",
-  statistic = "average", B = 1000L, modality = "b", alpha = 0.05)
+  statistic = "average", B = 1000L, alpha = 0.05)
 }
 \arguments{
 \item{x}{A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects
@@ -27,11 +27,9 @@ test statistic, among: \code{"hamming"} [default], \code{"frobenius"},
 \item{statistic}{A string specifying the chosen test statistic, among:
 \code{"average"} [default] or \code{"frechet"}.}
 
-\item{B}{The number of permutation or the tolerance (default: \code{1000L}).}
-
-\item{modality}{A string for determining the number of permutations: either
-\code{"b"} for the exact number of permutations to be performed or
-\code{"tol"} for the tolerance (default: \code{"b"}).}
+\item{B}{The number of permutation or the tolerance (default: \code{1000L}).
+If this number is lower than \code{1}, it is intended as a tolerance.
+Otherwise, it is intended as the number of required permutations.}
 
 \item{alpha}{The significance level (default: \code{0.05}).}
 }
@@ -54,4 +52,33 @@ The exhaustive list of all possible permutations is used if its length is
 smaller than either the user-defined number of random permutations requested
 or the number of permutations required for achieving a user-defined p-value
 resolution. Otherwise, the p-value is estimated via Monte-Carlo simulations.
+}
+\examples{
+n <- 25L
+
+x <- list()
+y <- list()
+for (i in 1:10) {
+  X <- igraph::watts.strogatz.game(1, n, 3, 0.05)
+  Y <- igraph::barabasi.game(n, m = 3, power = 2, directed = FALSE)
+  adjX <- get_adjacency(X)
+  adjY <- get_adjacency(Y)
+  x[[i]] <- adjX
+  y[[i]] <- adjY
+}
+test1 <- network_test2p(x, y, "adjacency")
+test1
+
+x <- list()
+y <- list()
+for (i in 1:10) {
+  X <- igraph::watts.strogatz.game(1, n, 3, 0.05)
+  Y <- igraph::watts.strogatz.game(1, n, 3, 0.05)
+  adjX <- get_adjacency(X)
+  adjY <- get_adjacency(Y)
+  x[[i]] <- adjX
+  y[[i]] <- adjY
+}
+test2 <- network_test2p(x, y, "adjacency")
+test2
 }

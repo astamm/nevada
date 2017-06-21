@@ -17,6 +17,20 @@
 #' @return A scalar giving the value of the desired test statistic.
 #'
 #' @examples
+#' n <- 25L
+#' x <- list()
+#' y <- list()
+#' for (i in 1:10) {
+#'   X <- igraph::watts.strogatz.game(1, n, 3, 0.05)
+#'   Y <- igraph::barabasi.game(n, m = 3, power = 2, directed = FALSE)
+#'   adjX <- get_adjacency(X)
+#'   adjY <- get_adjacency(Y)
+#'   x[[i]] <- adjX
+#'   y[[i]] <- adjY
+#' }
+#' d <- get_distance_matrix(x, y, "adjacency", "spectral")
+#' stat_average <- get_average_statistic(d, 1:10)
+#' stat_frechet <- get_frechet_statistic(d, 1:10)
 #' @name get-statistic
 NULL
 
@@ -34,19 +48,14 @@ get_frechet_statistic <- function(d, indices) {
   frechet1 <- rep(NA, M)
   frechet2 <- rep(NA, (N-M))
 
-  t <- 1
-  for (i in indices) {
-    frechet1[t] <- sum(d[i, indices]^2)
-    t <- t+1
-  }
+  for (i in seq_along(indices))
+    frechet1[i] <- sum(d[indices[i], indices]^2)
   frechetmean1 <- indices[which.min(frechet1)]
 
-  r <- 1
-  for (i in seq_len(N)[-indices]) {
-    frechet2[t] <- sum(d[i, indices]^2)
-    r <- r+1
-  }
-  frechetmean2 <- seq_len(N)[-indices][which.min(frechet2)]
+  indices <- seq_len(N)[-indices]
+  for (i in seq_along(indices))
+    frechet2[i] <- sum(d[indices[i], indices]^2)
+  frechetmean2 <- indices[which.min(frechet2)]
 
-  statistic <- d[frechetmean1, frechetmean2]
+  d[frechetmean1, frechetmean2]
 }

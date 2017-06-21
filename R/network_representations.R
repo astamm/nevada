@@ -12,6 +12,10 @@
 #'   recorded in the object's class.
 #'
 #' @examples
+#' X <- igraph::watts.strogatz.game(1, 25, 3, 0.05)
+#' adjX <- get_adjacency(X)
+#' lapX <- get_laplacian(X)
+#' modX <- get_modularity(X)
 #' @name get-representation
 NULL
 
@@ -44,7 +48,7 @@ get_modularity <- function(network, validate = TRUE) {
     if (!igraph::is_igraph(network))
       stop("Input network should be of class igraph.")
   }
-  repr <- igraph::modularity_matrix(network, rep(1,n)) #NUMERO DI VERTICI?
+  repr <- igraph::modularity_matrix(network, rep(1, n)) #NUMERO DI VERTICI?
   as_modularity(repr)
 }
 
