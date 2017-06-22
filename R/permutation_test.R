@@ -84,6 +84,10 @@ network_test2p <- function(x, y, representation = "adjacency", distance = "hammi
   if (B < 1)
     B <- (qnorm(alpha / 2, lower.tail = FALSE) / tol)^2
 
+  if (pvalue_resolution(n1, n2, B, alpha, TRUE))
+    warning("The requested significance level cannot be reached
+            given the value for B and the sample sizes.")
+
   group1.perm <- t(combn(1:n, n1))
   M <- nrow(group1.perm)
 
