@@ -42,9 +42,12 @@ NULL
 #' @rdname get-distance
 #' @export
 get_hamming_distance <- function(x, y, representation = "laplacian") {
-  l <- format_inputs(x, y, representation)
-  x <- l$x
-  y <- l$y
+  if (!compatible_networks(x, y))
+    stop("Input networks are incompatible.")
+
+  x <- format_input(x, representation)
+  y <- format_input(y, representation)
+
   n <- nrow(x)
   sum(abs(x - y)) / (n * (n - 1))
 }
@@ -52,18 +55,23 @@ get_hamming_distance <- function(x, y, representation = "laplacian") {
 #' @rdname get-distance
 #' @export
 get_frobenius_distance <- function(x, y, representation = "laplacian") {
-  l <- format_inputs(x, y, representation)
-  x <- l$x
-  y <- l$y
+  if (!compatible_networks(x, y))
+    stop("Input networks are incompatible.")
+
+  x <- format_input(x, representation)
+  y <- format_input(y, representation)
+
   sqrt(sum((x - y)^2))
 }
 
 #' @rdname get-distance
 #' @export
 get_spectral_distance <- function(x, y, representation = "laplacian") {
-  l <- format_inputs(x, y, representation)
-  x <- l$x
-  y <- l$y
+  if (!compatible_networks(x, y))
+    stop("Input networks are incompatible.")
+
+  x <- format_input(x, representation)
+  y <- format_input(y, representation)
 
   dlX <- eigen(x, symmetric = TRUE, only.values = TRUE)$values
   dlY <- eigen(y, symmetric = TRUE, only.values = TRUE)$values
@@ -77,9 +85,11 @@ get_root_euclidean_distance <- function(x, y, representation = "laplacian") {
   if (representation != "lapacian")
     stop("The root-Euclidean distance can only be used with the Laplacian matrix representation.")
 
-  l <- format_inputs(x, y, representation)
-  x <- l$x
-  y <- l$y
+  if (!compatible_networks(x, y))
+    stop("Input networks are incompatible.")
+
+  x <- format_input(x, representation)
+  y <- format_input(y, representation)
 
   rX <- eigen(x, symmetric = TRUE)
   vals <- rX$values

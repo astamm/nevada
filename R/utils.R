@@ -1,23 +1,41 @@
-format_inputs <- function(x, y, representation = "adjacency") {
+format_input <- function(x, representation = "adjacency") {
   if (igraph::is_igraph(x))
-    x <- switch(representation,
-                adjacency = get_adjacency(x),
-                laplacian = get_laplacian(x),
-                modularity = get_modularity(x)
+    x <- switch(
+      representation,
+      adjacency = get_adjacency(x),
+      laplacian = get_laplacian(x),
+      modularity = get_modularity(x)
     )
 
-  if (igraph::is_igraph(y))
-    y <- switch(representation,
-                adjacency = get_adjacency(y),
-                laplacian = get_laplacian(y),
-                modularity = get_modularity(y)
-    )
+  if (!("representation" %in% attributes(x)))
+    stop("The input matrix representation should have a representation
+         attribute that specifies which network representation has
+         been used.")
 
-  if (representation != attributes(x)$representation || representation != attributes(y)$representation)
-    stop("The input networks are not in the desired representation.")
+  if (representation != attributes(x)$representation)
+    stop("The input network is not in the desired representation.")
 
-  if (nrow(x) != nrow(y))
-    stop("The input networks do not have the same number of vertices.")
+  if (nrow(x) != ncol(x))
+    stop("A matrix representation of a network should be a square matrix.")
 
-  list(x = x, y = y)
+  x
+}
+
+compatible_networks <- function(x, y) {
+  compatible <- TRUE
+
+  if (igraph::is_igraph(x)) {
+    nx <- igraph::vcount(x)
+    ny <- igraph::vcount(y)
+  } else {
+    nx <- nrow(x)
+    ny <- nrow(y)
+  }
+
+  if (nx != ny) {
+    message("The input networks do not have the same number of vertices.")
+    compatible <- FALSE
+  }
+
+  compatible
 }
