@@ -17,5 +17,6 @@ Description: This package containes tools for the statistical analysis of networ
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: igraph
+Imports: igraph,
+    purrr
 RoxygenNote: 6.0.1

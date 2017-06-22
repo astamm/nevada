@@ -7,7 +7,7 @@ format_input <- function(x, representation = "adjacency") {
       modularity = get_modularity(x)
     )
 
-  if (!("representation" %in% attributes(x)))
+  if (!("representation" %in% names(attributes(x))))
     stop("The input matrix representation should have a representation
          attribute that specifies which network representation has
          been used.")
