@@ -59,6 +59,6 @@ pvalue_resolution <- function(nx, ny, B, alpha = 0.05, verbose = FALSE) {
                        1 / n_comb, "in average."))
     }
   }
-  p_min <= alpha
+  1 / n_comb <= alpha
 }
 
