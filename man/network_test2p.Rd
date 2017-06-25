@@ -59,26 +59,19 @@ n <- 25L
 x <- list()
 y <- list()
 for (i in 1:10) {
-  X <- igraph::watts.strogatz.game(1, n, 3, 0.05)
-  Y <- igraph::barabasi.game(n, m = 3, power = 2, directed = FALSE)
-  adjX <- get_adjacency(X)
-  adjY <- get_adjacency(Y)
-  x[[i]] <- adjX
-  y[[i]] <- adjY
+  x[[i]] <- igraph::watts.strogatz.game(1, n, 3, 0.05)
+  y[[i]] <- igraph::barabasi.game(n, m = 3, power = 2, directed = FALSE)
 }
-test1 <- network_test2p(x, y, "adjacency")
+test1 <- network_test2p(x, y, "modularity")
 test1
 
 x <- list()
 y <- list()
 for (i in 1:10) {
-  X <- igraph::watts.strogatz.game(1, n, 3, 0.05)
-  Y <- igraph::watts.strogatz.game(1, n, 3, 0.05)
-  adjX <- get_adjacency(X)
-  adjY <- get_adjacency(Y)
-  x[[i]] <- adjX
-  y[[i]] <- adjY
+  x[[i]] <- igraph::watts.strogatz.game(1, n, 3, 0.05)
+  y[[i]] <- igraph::watts.strogatz.game(1, n, 3, 0.05)
 }
-test2 <- network_test2p(x, y, "adjacency")
+
+test2 <- network_test2p(x, y, "modularity")
 test2
 }
