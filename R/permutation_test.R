@@ -73,8 +73,6 @@ network_test2p <- function(x, y, representation = "adjacency", distance = "hammi
 
   d <- get_distance_matrix(x, y, representation, distance)
 
-  #DA FARE: verifica della raggiungibilità di alpha
-
   T0 <- switch(
     statistic,
     average = get_average_statistic(d, 1:n1),
@@ -84,9 +82,9 @@ network_test2p <- function(x, y, representation = "adjacency", distance = "hammi
   if (B < 1)
     B <- (qnorm(alpha / 2, lower.tail = FALSE) / tol)^2
 
-  if (!pvalue_resolution(n1, n2, B, alpha, TRUE))
-    warning("The requested significance level cannot be reached
-            given the value for B and the sample sizes.")
+  if (!reachable_significance(n1, n2, B, alpha, TRUE))
+    warning("The requested significance level cannot be
+            reached given the sample sizes.")
 
   group1.perm <- t(combn(1:n, n1))
   M <- nrow(group1.perm)

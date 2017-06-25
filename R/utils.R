@@ -40,25 +40,23 @@ compatible_networks <- function(x, y) {
   compatible
 }
 
-pvalue_resolution <- function(nx, ny, B, alpha = 0.05, verbose = FALSE) {
+reachable_significance <- function(nx, ny, B, alpha = 0.05, verbose = FALSE) {
   n_comb <- choose(nx + ny, nx)
   p_min <- 1 / min(B, n_comb)
-  if (verbose)
+
+  if (verbose) {
     writeLines(paste(" - P-value resolution:", p_min))
-  if (B >= n_comb) { # Case of exact test
-    B <- combn(nx + ny, nx)
-    if (verbose) {
+    if (B >= n_comb) { # Case of exact test
       writeLines(" - Computing exact p-value.")
       writeLines(paste(" - P-value will never drop below", p_min))
-    }
-  } else { # Case of approximate test
-    if (verbose) {
-      writeLines(paste(" - Computing approximate p-value using",
-                       B, "random permutations."))
-      writeLines(paste(" - P-value will not drop below",
-                       1 / n_comb, "in average."))
+    } else { # Case of approximate test
+      writeLines(paste(" - Computing approximate p-value using", B,
+                       "random permutations."))
+      writeLines(paste(" - P-value will not drop below", 1 / n_comb,
+                       "on average over repeated Monte-Carlo estimates."))
     }
   }
-  1 / n_comb <= alpha
+
+  alpha * n_comb >= 1
 }
 
