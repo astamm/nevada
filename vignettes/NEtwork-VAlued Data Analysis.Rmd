@@ -1,0 +1,76 @@
+---
+title: "NEtwork-VAlued Data Analysis"
+author: "Ilenia Lovato"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{NEtwork-VAlued Data Analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: biblio.bib
+---
+
+---
+title: "NEtwork-VAlued Data Analysis"
+output: html_document
+bibliography: biblio.bib
+---
+
+In the framework of Object Oriented Data Analysis (OODA), statistical tools for the analysis of network-valued data are almost lacking, whereas data sets composed of networks are more and more increasing. The package `nevada` allows to test if two samples of networks came from the same population via two test statistics based on three possible mathematical representation of a network and on four different types of distances.
+
+## Introduction
+A network $G=(V,E)$ is a complex object consisting of a set $V$ of vertices whose relationships are represented by the edges in the set $E$. The package `nevada` contains some functions that allow not only to perform the test, but also to carry out all the intermediate steps that lead to the test itself. The theoretical details are contained in [@mox], as well as simulations and application to real data. The logical path followed in [@mox] can be summarized as follow. First of all, choose a matrix representation for the networks and define some distances between two networks. Then, define two different test statistics and introduce the permuational framework to perform the test.
+
+
+## Network representation
+There are three possible matrix representations for a network. Let $G$ be a network with $N$ nodes.
+
+**Adjacency matrix**
+A $N$ x $N$ matrix $W$ is an adjacency matrix for $G$ if element $W_{ij}$ indicates if there is an edge between vertex $i$ and vertex $j$:
+\[
+W_{ij}=
+\begin{cases}
+w_{i,j}, \quad if \quad (i,j) \in E \quad with \quad weight \quad  w_{i,j}\\
+0, \quad if \quad (i,j) \not \in E
+\end{cases}
+\]
+
+**Laplacian matrix**
+The Laplacian matrix $L$ of the network $G$ is defined in the following way: 
+\[
+L=D(W)-W
+\]
+where $D(W)$ is the diagonal matrix whose $\{ i,i \}$ element is the degree of vertex $i$.
+
+**Modularity matrix**
+The elements of the modularity matrix $B$ are given by
+\begin{equation*}
+    B_{ij} = W_{ij} - \frac{d_i d_j}{2m}
+\end{equation*}
+where $d_i$ and $d_j$ are the degree of vertices $i$ and $j$, respectively, and $m$ is the total number of edges in the network. 
+
+The functions `get_adjacency()`, `get_laplacian()` and `get_modularity()`, having as input an igraph object, return the chosen representation.
+
+## Distances between networks
+In the package `nevada` it is possible to choose which distance consider in the analysis. Let $G$ and $H$ be two networks with $N$ nodes each and suppose that $X$ and $Y$ are the matrix representations of $G$ and $H$, respectively. The user can choose between the following distances:
+
+* **Hamming distance** $\rho_H(G,H)=\frac{1}{N(N-1)}\sum_{i \neq j}^N \bigl\arrowvert X_{i,j}-Y_{i,j} \bigr\arrowvert$
+* **Frobenius distance**  $\rho_F(G,H)=\sum_{i \neq j}^N \bigl ( X_{i,j}-Y_{i,j} \bigr )^2$
+* **Spectral distance** $\rho_S(G,H)=\sum_{i \neq j}^N \bigl ( \Lambda^X_{i,j}-\Lambda^Y_{i,j} \bigr )^2$, where $\Lambda^X$ and $\Lambda^Y$ are the diagonal matrices with eigenvalues on the diagonal given by the spectral decomposition of the matrix representations of $G$ and $H$,
+* **Root Euclidean distance**  $\rho_{RE}(G,H)=\rho_F \bigl (\sqrt{L_X}, \sqrt{L_Y}\bigr )$, where $\sqrt S=U\sqrt{\Lambda} U^T$ and $(\sqrt\Lambda)_{i,j}=\sqrt{\Lambda_{i,j}}$, where $S=U\Lambda U^T$ from the spectral decomposition of $S$. 
+
+The functions `get_hamming_distance()`, `get_frobenius_distance()`, `get_spectral_distance()` and `get_root_euclidean_distance()` return the chosen distance between two networks and moreover request the choice of the matrix representation as input.
+
+## Test statistics
+The package `nevada` allows to use two different test statistics. The first one is given by the distance between the restricted Frechet means of the two samples. The Frechet mean of a set of objects is a sort of mean element and this concept of average has been widely used in the literature. The second test statistic is given by the mean of the distances between all the elements of the first sample and those of the second one.
+
+It is possible to obtain the values of the test statistics using the functions `get_average_statistic()` and `get_frechet_statistic()`.
+
+## The permutational framework
+The hypothesis is tested in a permutational framework. The null distribution is obtained by permuting the labels of the subjects of the two populations. The exhaustive list of all possible permutations is used if its length is smaller than either the user-defined number of random permutations requested or the number of permutations required for achieving a user-defined p-value resolution. Otherwise, the p-value is estimated via Monte-Carlo simulations.
+
+The function `network_test2p()` returns the value of the statistic for the original two samples and the p-value of the resulting permutation test.
+
+
+
+## References

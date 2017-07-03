@@ -53,7 +53,7 @@ get_distance_matrix <- function(x, y, representation = "adjacency", distance = "
         "frobenius" = get_frobenius_distance(network1, network2, representation),
         "spectral" = get_spectral_distance(network1, network2, representation),
         "root-euclidean" = get_root_euclidean_distance(network1, network2, representation)
-      )
+        )
       k <- k + 1
     }
   }

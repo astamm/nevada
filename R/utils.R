@@ -6,6 +6,27 @@ format_input <- function(x, representation = "adjacency") {
       laplacian = get_laplacian(x),
       modularity = get_modularity(x)
     )
+  else {
+    if ("representation" %in% names(attributes(x))) {
+      if (attributes(x)$representation != "adjacency" ||
+          (attributes(x)$representation == "adjacency" && representation == "adjacency"))
+        return(x)
+    } else {
+      if (any(x < 0))
+        stop("All entries of an adjacency matrix should be non-negative.")
+      if (any(x != t(x)))
+        stop("The input adjacency matrix should be symmetric.")
+      if (any(diag(x) != 0))
+        stop("The input adjacency matrix should have a value of 0 on the diagonal.")
+
+      x <- switch(
+        representation,
+        adjacency = get_adjacency(igraph::graph_from_adjacency_matrix(x, mode = "undirected")),
+        laplacian = get_laplacian(igraph::graph_from_adjacency_matrix(x, mode = "undirected")),
+        modularity = get_modularity(igraph::graph_from_adjacency_matrix(x, mode = "undirected"))
+      )
+    }
+  }
 
   if (!("representation" %in% names(attributes(x))))
     stop("The input matrix representation should have a representation

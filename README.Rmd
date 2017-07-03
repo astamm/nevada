@@ -1,0 +1,73 @@
+---
+title: "NEtwork-VAlued Data Analysis"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Overview
+
+The package nevada (NEtwork-VAlued Data Analysis) containes tools for the statistical analysis of network-valued data. In this framework, the statistical unit is a network and the package deals with samples of networks. With nevada it is possible to test in a non-parametric manner if the two samples came from the same population via two test statistics based on three matrix representations for a network and four different types of distances:
+
+* the `get-representation` functions return the selected matrix representation of the input graph
+* the `get-distance` functions return the chosen distance between two networks
+* the `get-statistic` functions return the value of the preferred test statistic
+* the `network_test2p()` function returns the p-value of the resulting permutation test.
+
+See the `vignette file "NEtwork-VAlued Data Analysis"` for the details of each function.
+
+## Installation
+
+You can get nevada from GitHub:
+
+`install.packages("devtools")`
+
+`devtools::install_github("ilovato/nevada")`
+
+`nevada` requires the package `igraph`.
+
+If you encounter bugs or for questions and comments, please contact the creator of the package.
+
+## Usage
+
+The following examples show how to perform the permutation test.
+
+**Example 1**
+
+`n <- 25L`
+
+`x <- list()`
+
+`y <- list()`
+
+`for (i in 1:10) {`
+  
+  `x[[i]] <- igraph::watts.strogatz.game(1, n, 3, 0.05)`
+  
+  `y[[i]] <- igraph::barabasi.game(n, m = 3, power = 2, directed = FALSE)`
+
+`}`
+
+`test1 <- network_test2p(x, y, "modularity")`
+
+`test1`
+
+**Example 2**
+
+`x <- list()`
+
+`y <- list()`
+
+`for (i in 1:10) {`
+
+  `x[[i]] <- igraph::watts.strogatz.game(1, n, 3, 0.05)`
+
+  `y[[i]] <- igraph::watts.strogatz.game(1, n, 3, 0.05)`
+
+`}`
+
+`test2 <- network_test2p(x, y, "modularity")`
+
+`test2`

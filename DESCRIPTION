@@ -20,3 +20,6 @@ LazyData: true
 Imports: igraph,
     purrr
 RoxygenNote: 6.0.1
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr

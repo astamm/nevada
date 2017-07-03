@@ -18,6 +18,8 @@
 #' the diagonal matrices with elements the eigenvalues of \eqn{X} and \eqn{Y},
 #' respectively. The root-Euclidean distance between \eqn{x} and \eqn{y} is
 #' given by \deqn{\sqrt{\sum_i (V \sqrt{A} V^{-1} - U \sqrt{B} U^{-1})^2}.}
+#' Root-Euclidean distance can used only with the laplacian matrix
+#' representation.
 #'
 #' @param x An \code{\link[igraph]{igraph}} object or a matrix representing an
 #'   underlying network.
@@ -82,7 +84,7 @@ get_spectral_distance <- function(x, y, representation = "laplacian") {
 #' @rdname get-distance
 #' @export
 get_root_euclidean_distance <- function(x, y, representation = "laplacian") {
-  if (representation != "lapacian")
+  if (representation != "laplacian")
     stop("The root-Euclidean distance can only be used with the Laplacian matrix representation.")
 
   if (!compatible_networks(x, y))
