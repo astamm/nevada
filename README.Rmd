@@ -21,7 +21,7 @@ The package `nevada` (NEtwork-VAlued Data Analysis) contains tools for the stati
 * the `get-statistic` functions return the value of the preferred test statistic
 * the `network_test2p()` function returns the p-value of the resulting permutation test.
 
-See the `vignette file "NEtwork-VAlued Data Analysis"` for the details of each function.
+See the vignette *NEtwork-VAlued Data Analysis* for the details of each function.
 
 ## Installation
 
@@ -35,10 +35,6 @@ devtools::install_github("ilovato/nevada")
 It relies on the `igraph` package. If you encounter bugs or for questions and comments, please contact the maintainer of the package.
 
 ## Usage
-
-This is a basic example which shows you how to solve a common problem:
-
-The following examples show how to perform the permutation test.
 
 **Example 1**
 

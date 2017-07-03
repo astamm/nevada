@@ -7,7 +7,7 @@ vignette: >
   %\VignetteIndexEntry{NEtwork-VAlued Data Analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: biblio.bib
+bibliography: nevada-outline.bib
 ---
 
 In the framework of Object Oriented Data Analysis (OODA), statistical tools for the analysis of network-valued data are almost lacking, whereas data sets composed of networks are more and more increasing. The package `nevada` allows to test if two samples of networks came from the same population via two test statistics based on three possible mathematical representation of a network and on four different types of distances.

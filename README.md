@@ -10,7 +10,7 @@ The package `nevada` (NEtwork-VAlued Data Analysis) contains tools for the stati
 -   the `get-statistic` functions return the value of the preferred test statistic
 -   the `network_test2p()` function returns the p-value of the resulting permutation test.
 
-See the `vignette file "NEtwork-VAlued Data Analysis"` for the details of each function.
+See the vignette *NEtwork-VAlued Data Analysis* for the details of each function.
 
 Installation
 ------------
@@ -26,10 +26,6 @@ It relies on the `igraph` package. If you encounter bugs or for questions and co
 
 Usage
 -----
-
-This is a basic example which shows you how to solve a common problem:
-
-The following examples show how to perform the permutation test.
 
 **Example 1**
 
@@ -51,7 +47,7 @@ test1 <- nevada::network_test2p(x, y, "modularity")
 #>  - P-value will not drop below 5.41254411223451e-06 on average over repeated Monte-Carlo estimates.
 test1
 #> $statistic
-#> [1] 0.4336068
+#> [1] 0.429218
 #> 
 #> $pvalue
 #> [1] 0
@@ -77,8 +73,8 @@ test2 <- nevada::network_test2p(x, y, "modularity")
 #>  - P-value will not drop below 5.41254411223451e-06 on average over repeated Monte-Carlo estimates.
 test2
 #> $statistic
-#> [1] 0.1332853
+#> [1] 0.1346036
 #> 
 #> $pvalue
-#> [1] 0.935
+#> [1] 0.148
 ```
