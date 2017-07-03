@@ -10,12 +10,6 @@ vignette: >
 bibliography: biblio.bib
 ---
 
----
-title: "NEtwork-VAlued Data Analysis"
-output: html_document
-bibliography: biblio.bib
----
-
 In the framework of Object Oriented Data Analysis (OODA), statistical tools for the analysis of network-valued data are almost lacking, whereas data sets composed of networks are more and more increasing. The package `nevada` allows to test if two samples of networks came from the same population via two test statistics based on three possible mathematical representation of a network and on four different types of distances.
 
 ## Introduction
@@ -70,7 +64,5 @@ It is possible to obtain the values of the test statistics using the functions `
 The hypothesis is tested in a permutational framework. The null distribution is obtained by permuting the labels of the subjects of the two populations. The exhaustive list of all possible permutations is used if its length is smaller than either the user-defined number of random permutations requested or the number of permutations required for achieving a user-defined p-value resolution. Otherwise, the p-value is estimated via Monte-Carlo simulations.
 
 The function `network_test2p()` returns the value of the statistic for the original two samples and the p-value of the resulting permutation test.
-
-
 
 ## References

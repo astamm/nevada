@@ -36,7 +36,7 @@
 
 
 
-<p>In the framework of Object Oriented Data Analysis (OODA), statistical tools for the analysis of network-valued data are almost lacking, whereas data sets composed of networks are more and more increasing. The package <code>nevada</code> allows to test if two samples of networks came from the same population via two test statistics based on four different types of distances and on three possible mathematical representation of a network.</p>
+<p>In the framework of Object Oriented Data Analysis (OODA), statistical tools for the analysis of network-valued data are almost lacking, whereas data sets composed of networks are more and more increasing. The package <code>nevada</code> allows to test if two samples of networks came from the same population via two test statistics based on three possible mathematical representation of a network and on four different types of distances.</p>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p>A network <span class="math inline">\(G=(V,E)\)</span> is a complex object consisting of a set <span class="math inline">\(V\)</span> of vertices whose relationships are represented by the edges in the set <span class="math inline">\(E\)</span>. The package <code>nevada</code> contains some functions that allow not only to perform the test, but also to carry out all the intermediate steps that lead to the test itself. The theoretical details are contained in <span class="citation">(Lovato et al. 2017)</span>, as well as simulations and application to real data. The logical path followed in <span class="citation">(Lovato et al. 2017)</span> can be summarized as follow. First of all, choose a matrix representation for the networks and define some distances between two networks. Then, define two different test statistics and introduce the permuational framework to perform the test.</p>
@@ -54,12 +54,12 @@ w_{i,j}, \quad if \quad (i,j) \in E \quad with \quad weight \quad  w_{i,j}\\
 <p><strong>Laplacian matrix</strong> The Laplacian matrix <span class="math inline">\(L\)</span> of the network <span class="math inline">\(G\)</span> is defined in the following way: <span class="math display">\[
 L=D(W)-W
 \]</span> where <span class="math inline">\(D(W)\)</span> is the diagonal matrix whose <span class="math inline">\(\{ i,i \}\)</span> element is the degree of vertex <span class="math inline">\(i\)</span>.</p>
-<strong>Modularity matrix</strong> The elelemnts of the modularity matrix <span class="math inline">\(B\)</span> are given by
+<strong>Modularity matrix</strong> The elements of the modularity matrix <span class="math inline">\(B\)</span> are given by
 <span class="math display">\[\begin{equation*}
     B_{ij} = W_{ij} - \frac{d_i d_j}{2m}
 \end{equation*}\]</span>
 <p>where <span class="math inline">\(d_i\)</span> and <span class="math inline">\(d_j\)</span> are the degree of vertices <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>, respectively, and <span class="math inline">\(m\)</span> is the total number of edges in the network.</p>
-<p>The functions <code>get_adjacency</code>, <code>get_laplacian</code> and <code>get_modularity</code>, having as input an igraph object, return the chosen representation.</p>
+<p>The functions <code>get_adjacency()</code>, <code>get_laplacian()</code> and <code>get_modularity()</code>, having as input an igraph object, return the chosen representation.</p>
 </div>
 <div id="distances-between-networks" class="section level2">
 <h2>Distances between networks</h2>
@@ -67,20 +67,20 @@ L=D(W)-W
 <ul>
 <li><strong>Hamming distance</strong> <span class="math inline">\(\rho_H(G,H)=\frac{1}{N(N-1)}\sum_{i \neq j}^N \bigl\arrowvert X_{i,j}-Y_{i,j} \bigr\arrowvert\)</span></li>
 <li><strong>Frobenius distance</strong> <span class="math inline">\(\rho_F(G,H)=\sum_{i \neq j}^N \bigl ( X_{i,j}-Y_{i,j} \bigr )^2\)</span></li>
-<li><strong>Spectral distance</strong> <span class="math inline">\(\rho_S(G,H)=\sum_{i \neq j}^N \bigl ( \Lambda^X_{i,j}-\Lambda^Y_{i,j} \bigr )^2\)</span>, where <span class="math inline">\(\Lambda^X\)</span> and <span class="math inline">\(\Lambda^Y\)</span> are the diagonal matrices given by the spectral decomposition of the matrix representations of <span class="math inline">\(G\)</span> and <span class="math inline">\(H\)</span>,</li>
+<li><strong>Spectral distance</strong> <span class="math inline">\(\rho_S(G,H)=\sum_{i \neq j}^N \bigl ( \Lambda^X_{i,j}-\Lambda^Y_{i,j} \bigr )^2\)</span>, where <span class="math inline">\(\Lambda^X\)</span> and <span class="math inline">\(\Lambda^Y\)</span> are the diagonal matrices with eigenvalues on the diagonal given by the spectral decomposition of the matrix representations of <span class="math inline">\(G\)</span> and <span class="math inline">\(H\)</span>,</li>
 <li><strong>Root Euclidean distance</strong> <span class="math inline">\(\rho_{RE}(G,H)=\rho_F \bigl (\sqrt{L_X}, \sqrt{L_Y}\bigr )\)</span>, where <span class="math inline">\(\sqrt S=U\sqrt{\Lambda} U^T\)</span> and <span class="math inline">\((\sqrt\Lambda)_{i,j}=\sqrt{\Lambda_{i,j}}\)</span>, where <span class="math inline">\(S=U\Lambda U^T\)</span> from the spectral decomposition of <span class="math inline">\(S\)</span>.</li>
 </ul>
-<p>The functions <code>get_hamming_distance</code>, <code>get_frobenius_distance</code>, <code>get_spectral_distance</code> and <code>get_root_euclidean_distance</code> return the chosen distance between two networks and moreover request the choice of the matrix representation as input.</p>
+<p>The functions <code>get_hamming_distance()</code>, <code>get_frobenius_distance()</code>, <code>get_spectral_distance()</code> and <code>get_root_euclidean_distance()</code> return the chosen distance between two networks and moreover request the choice of the matrix representation as input.</p>
 </div>
 <div id="test-statistics" class="section level2">
 <h2>Test statistics</h2>
-<p>The package <code>nevada</code> allows to use two different test statistics. The first one is given by the distance between the restricted Fr'echet means of the two samples. The Fr'echet mean of a set of objects is a sort of mean element and this concept of average has been widely used in the literature. The second test statistic is given by the mean of the distances between all the elements of the first sample and those of the second one.</p>
-<p>It is possible to obtain the values of the test statistics using the functions <code>get_average_statistic</code> and <code>get_frechet_statistic</code>.</p>
+<p>The package <code>nevada</code> allows to use two different test statistics. The first one is given by the distance between the restricted Frechet means of the two samples. The Frechet mean of a set of objects is a sort of mean element and this concept of average has been widely used in the literature. The second test statistic is given by the mean of the distances between all the elements of the first sample and those of the second one.</p>
+<p>It is possible to obtain the values of the test statistics using the functions <code>get_average_statistic()</code> and <code>get_frechet_statistic()</code>.</p>
 </div>
 <div id="the-permutational-framework" class="section level2">
 <h2>The permutational framework</h2>
 <p>The hypothesis is tested in a permutational framework. The null distribution is obtained by permuting the labels of the subjects of the two populations. The exhaustive list of all possible permutations is used if its length is smaller than either the user-defined number of random permutations requested or the number of permutations required for achieving a user-defined p-value resolution. Otherwise, the p-value is estimated via Monte-Carlo simulations.</p>
-<p>The function <code>network_test2p</code> returns the value of the statistic for the original two samples and the p-value of the resulting permutation test.</p>
+<p>The function <code>network_test2p()</code> returns the value of the statistic for the original two samples and the p-value of the resulting permutation test.</p>
 </div>
 <div id="references" class="section level2 unnumbered">
 <h2>References</h2>

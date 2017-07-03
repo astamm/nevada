@@ -50,6 +50,8 @@ eigenvectors of \eqn{X} and \eqn{Y}, respectively and \eqn{A} and \eqn{B} are
 the diagonal matrices with elements the eigenvalues of \eqn{X} and \eqn{Y},
 respectively. The root-Euclidean distance between \eqn{x} and \eqn{y} is
 given by \deqn{\sqrt{\sum_i (V \sqrt{A} V^{-1} - U \sqrt{B} U^{-1})^2}.}
+Root-Euclidean distance can used only with the laplacian matrix
+representation.
 }
 \examples{
 g1 <- igraph::erdos.renyi.game(20, 0.1)
