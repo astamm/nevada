@@ -47,7 +47,7 @@ test1 <- nevada::network_test2p(x, y, "modularity")
 #>  - P-value will not drop below 5.41254411223451e-06 on average over repeated Monte-Carlo estimates.
 test1
 #> $statistic
-#> [1] 0.429218
+#> [1] 0.429437
 #> 
 #> $pvalue
 #> [1] 0
@@ -73,8 +73,8 @@ test2 <- nevada::network_test2p(x, y, "modularity")
 #>  - P-value will not drop below 5.41254411223451e-06 on average over repeated Monte-Carlo estimates.
 test2
 #> $statistic
-#> [1] 0.1346036
+#> [1] 0.1259262
 #> 
 #> $pvalue
-#> [1] 0.148
+#> [1] 0.634
 ```
