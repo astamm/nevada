@@ -37,8 +37,15 @@ get_distance_matrix <- function(x, y, representation = "adjacency", distance = "
   n <- length(x)
   m <- length(y)
   N <- n + m
-  x <- purrr::map(x, format_input, representation)
-  y <- purrr::map(y, format_input, representation)
+
+  if (requireNamespace("purrr", quietly = TRUE)) {
+    x <- purrr::map(x, format_input, representation)
+    y <- purrr::map(y, format_input, representation)
+  } else {
+    x <- lapply(x, format_input, representation)
+    y <- lapply(y, format_input, representation)
+  }
+
   z <- c(x, y)
 
   dist <- rep(-1, N * (N - 1) / 2)
