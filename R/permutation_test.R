@@ -79,10 +79,10 @@ network_test2p <- function(x, y, representation = "adjacency", distance = "hammi
     warning("The requested significance level cannot be
             reached given the sample sizes.")
 
-  group1.perm <- t(combn(1:n, n1))
-  M <- nrow(group1.perm)
+  M <- choose(n, n1)
 
   if (B >= M) {
+    group1.perm <- t(combn(1:n, n1))
     Tp <- rep(-1, M)
     for (i in 1:M) {
       p <- group1.perm[i, ]
