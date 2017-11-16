@@ -2,17 +2,20 @@
 % Please edit documentation in R/test_statistics.R
 \name{get-statistic}
 \alias{get-statistic}
-\alias{get_average_statistic}
-\alias{get_frechet_statistic}
+\alias{get_mod_statistic}
+\alias{get_dom_statistic}
+\alias{get_sdom_statistic}
 \title{Test Statistics for Network Populations}
 \usage{
-get_average_statistic(d, indices)
+get_mod_statistic(d, indices)
 
-get_frechet_statistic(d, indices)
+get_dom_statistic(d, indices)
+
+get_sdom_statistic(d, indices)
 }
 \arguments{
-\item{d}{A matrix of dimension \eqn{(n1+n2)x(n1+n2)} containing the
-distances between all the elements of the two samples put together.}
+\item{d}{A matrix of dimension \eqn{(n1+n2)x(n1+n2)} containing the distances
+between all the elements of the two samples put together.}
 
 \item{indices}{A vector of dimension \eqn{n1} containing the indices of the
 elements of the first sample.}
@@ -22,13 +25,15 @@ A scalar giving the value of the desired test statistic.
 }
 \description{
 This is a collection of functions that provide various test statistics for
-populations of networks. The \emph{average} test statistic is given by the
-mean of all the distances between the \eqn{n1} elements of the fist sample
-and those (\eqn{n2}) of the second one. The \emph{Fréchet} test statistic is
-given by the distance between the Frechet mean of the first sample (with
-cardinality \eqn{n1}) and that of the second one (with cardinality \eqn{n2}).
-The distance used to compute the value of the test statistic is the same used
-to find the Fréchet means.
+populations of networks. The \emph{MoD} (mean of the distances) test statistic
+is given by the mean of all the distances between the \eqn{n1} elements of the
+fist sample and those (\eqn{n2}) of the second one. The \emph{DoM} (distance
+of the means) test statistic is given by the distance between the Frechet mean
+of the first sample (with cardinality \eqn{n1}) and that of the second one
+(with cardinality \eqn{n2}). The \emph{sDoM} (standardized distance of the
+means) is the \emph{DoM} statistic standardized by the pooled sample standard
+deviation. The distance used to compute the value of the test statistic is the
+same used to find the Fréchet means.
 }
 \examples{
 n <- 25L
@@ -43,6 +48,7 @@ for (i in 1:10) {
   y[[i]] <- adjY
 }
 d <- get_distance_matrix(x, y, "adjacency", "spectral")
-stat_average <- get_average_statistic(d, 1:10)
-stat_frechet <- get_frechet_statistic(d, 1:10)
+stat_mod <- get_mod_statistic(d, 1:10)
+stat_dom <- get_dom_statistic(d, 1:10)
+stat_sdom <- get_sdom_statistic(d, 1:10)
 }

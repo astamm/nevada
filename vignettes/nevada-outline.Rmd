@@ -58,7 +58,7 @@ The functions `get_hamming_distance()`, `get_frobenius_distance()`, `get_spectra
 ## Test statistics
 The package `nevada` allows to use two different test statistics. The first one is given by the distance between the restricted Frechet means of the two samples. The Frechet mean of a set of objects is a sort of mean element and this concept of average has been widely used in the literature. The second test statistic is given by the mean of the distances between all the elements of the first sample and those of the second one.
 
-It is possible to obtain the values of the test statistics using the functions `get_average_statistic()` and `get_frechet_statistic()`.
+It is possible to obtain the values of the test statistics using the functions `get_mod_statistic()`, `get_dom_statistic()` and `get_sdom_statistic()`.
 
 ## The permutational framework
 The hypothesis is tested in a permutational framework. The null distribution is obtained by permuting the labels of the subjects of the two populations. The exhaustive list of all possible permutations is used if its length is smaller than either the user-defined number of random permutations requested or the number of permutations required for achieving a user-defined p-value resolution. Otherwise, the p-value is estimated via Monte-Carlo simulations.
