@@ -109,9 +109,7 @@ network_test2p <- function(
     p <- mean(Tp >= T0)
   else {
     b <- sum(Tp >= T0)
-    # corr <- integrate(pbinom, 0, 0.5 / M, q = b, size = B)$value
-    # p <- (b + 1) / (B + 1) - corr
-    p <- statmod::permp(b, B, n1, n2)
+    p <- phipson_smyth_pvalue(b, B, M)
   }
 
   list(statistic = T0, pvalue = p, permuted_statistics = Tp)

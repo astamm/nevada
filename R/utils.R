@@ -160,3 +160,13 @@ rperm2 <- function(m, size=2) { # Obtain m unique permutations of 1:size
   s[is.na(s)] <- NULL
   list(failures=n.failures, sample=matrix(unlist(s), ncol=size))
 } # Returns an m by size matrix; each row is a permutation of 1:size.
+
+phipson_smyth_pvalue <- function(b, B, M) {
+  if (M <= 10000) {
+    pt <- (1:M) / M
+    return(mean(pbinom(q = b, size = B, prob = pt)))
+  }
+
+  corr <- integrate(pbinom, 0, 0.5 / M, q = b, size = B)$value
+  (b + 1) / (B + 1) - corr
+}
