@@ -5,7 +5,8 @@
 \title{Comparison of Network Distributions}
 \usage{
 network_test2p(x, y, representation = "adjacency", distance = "hamming",
-  statistic = "average", B = 1000L, alpha = 0.05)
+  statistic = "mod", B = 1000L, alpha = 0.05, test = "exact",
+  verbose = TRUE)
 }
 \arguments{
 \item{x}{A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects
@@ -25,13 +26,16 @@ test statistic, among: \code{"hamming"} [default], \code{"frobenius"},
 \code{"spectral"} and \code{"root-euclidean"}.}
 
 \item{statistic}{A string specifying the chosen test statistic, among:
-\code{"average"} [default] or \code{"frechet"}.}
+\code{"mod"} [default], \code{"dom"} or \code{"sdom"}.}
 
 \item{B}{The number of permutation or the tolerance (default: \code{1000L}).
 If this number is lower than \code{1}, it is intended as a tolerance.
 Otherwise, it is intended as the number of required permutations.}
 
 \item{alpha}{The significance level (default: \code{0.05}).}
+
+\item{verbose}{A boolean to switch on/off verbosity (information about
+p-value resolution).}
 }
 \value{
 A \code{\link[base]{list}} with two components: the value of the
