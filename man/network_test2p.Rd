@@ -6,7 +6,7 @@
 \usage{
 network_test2p(x, y, representation = "adjacency", distance = "hamming",
   statistic = "mod", B = 1000L, alpha = 0.05, test = "exact",
-  verbose = TRUE)
+  verbose = TRUE, seed = NULL)
 }
 \arguments{
 \item{x}{A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects

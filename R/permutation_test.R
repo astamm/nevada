@@ -63,7 +63,7 @@
 network_test2p <- function(
   x, y,
   representation = "adjacency", distance = "hamming", statistic = "mod",
-  B = 1000L, alpha = 0.05, test = "exact", verbose = TRUE) {
+  B = 1000L, alpha = 0.05, test = "exact", verbose = TRUE, seed = NULL) {
   n1 <- length(x)
   n2 <- length(y)
   n <- n1 + n2
@@ -91,6 +91,7 @@ network_test2p <- function(
   if (n1 == n2)
     M <- M / 2
 
+  set.seed(seed)
   test <- match.arg(test, c("approximate", "exact"))
   if (test == "approximate" & M <= B) {
     B <- M

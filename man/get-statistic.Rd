@@ -25,15 +25,15 @@ A scalar giving the value of the desired test statistic.
 }
 \description{
 This is a collection of functions that provide various test statistics for
-populations of networks. The \emph{MoD} (mean of the distances) test statistic
-is given by the mean of all the distances between the \eqn{n1} elements of the
-fist sample and those (\eqn{n2}) of the second one. The \emph{DoM} (distance
-of the means) test statistic is given by the distance between the Frechet mean
-of the first sample (with cardinality \eqn{n1}) and that of the second one
-(with cardinality \eqn{n2}). The \emph{sDoM} (standardized distance of the
-means) is the \emph{DoM} statistic standardized by the pooled sample standard
-deviation. The distance used to compute the value of the test statistic is the
-same used to find the Fréchet means.
+populations of networks. The \emph{MoD} (mean of the distances) test
+statistic is given by the mean of all the distances between the \eqn{n1}
+elements of the fist sample and those (\eqn{n2}) of the second one. The
+\emph{DoM} (distance of the means) test statistic is given by the distance
+between the Frechet mean of the first sample (with cardinality \eqn{n1}) and
+that of the second one (with cardinality \eqn{n2}). The \emph{sDoM}
+(standardized distance of the means) is the \emph{DoM} statistic standardized
+by the pooled sample standard deviation. The distance used to compute the
+value of the test statistic is the same used to find the Fréchet means.
 }
 \examples{
 n <- 25L
