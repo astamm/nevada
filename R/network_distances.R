@@ -63,7 +63,7 @@ get_frobenius_distance <- function(x, y, representation = "laplacian") {
   x <- format_input(x, representation)
   y <- format_input(y, representation)
 
-  sqrt(sum((x - y)^2))
+  internal_frobenius(x, y)
 }
 
 #' @rdname get-distance
@@ -75,10 +75,7 @@ get_spectral_distance <- function(x, y, representation = "laplacian") {
   x <- format_input(x, representation)
   y <- format_input(y, representation)
 
-  dlX <- eigen(x, symmetric = TRUE, only.values = TRUE)$values
-  dlY <- eigen(y, symmetric = TRUE, only.values = TRUE)$values
-
-  sqrt(sum((dlX - dlY)^2))
+  internal_spectral(x, y)
 }
 
 #' @rdname get-distance

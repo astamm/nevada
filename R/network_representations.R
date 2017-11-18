@@ -26,7 +26,7 @@ get_adjacency <- function(network, validate = TRUE) {
     if (!igraph::is_igraph(network))
       stop("Input network should be of class igraph.")
   }
-  repr <- igraph::get.adjacency(network, type = "both")
+  repr <- igraph::as_adjacency_matrix(network, type = "both", sparse = FALSE)
   as_adjacency(repr)
 }
 
@@ -37,7 +37,7 @@ get_laplacian <- function(network, validate = TRUE) {
     if (!igraph::is_igraph(network))
       stop("Input network should be of class igraph.")
   }
-  repr <- igraph::laplacian_matrix(network)
+  repr <- igraph::laplacian_matrix(network, sparse = FALSE)
   as_laplacian(repr)
 }
 

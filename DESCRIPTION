@@ -17,9 +17,11 @@ Description: This package containes tools for the statistical analysis of networ
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: igraph
+Imports: igraph,
+    Rcpp
 RoxygenNote: 6.0.1
 Suggests: knitr,
     rmarkdown,
     purrr
 VignetteBuilder: knitr
+LinkingTo: Rcpp, RcppArmadillo
