@@ -93,14 +93,17 @@ get_scenarioD_datasets <- function(n1, n2 = n1, times = 1L, seed = NULL) {
 
 # Plot simulations --------------------------------------------------------
 
-plot_simulation <- function(df) {
+plot_simulation <- function(df, alpha = 0.05) {
   df %>%
+    dplyr::mutate(
+      representation = forcats::fct_relevel(representation, c("adjacency", "laplacian", "modularity")),
+      distance = forcats::fct_relevel(distance, c("frobenius", "spectral")),
+      statistic = forcats::fct_relevel(statistic, c("dom", "sdom", "mod"))
+    ) %>%
     ggplot2::ggplot(ggplot2::aes(
-      x = size,
-      y = pvalue_mean,
-      color = representation,
-      linetype = statistic,
-      shape = distance
+      x = n_pop,
+      y = power,
+      color = representation
     )) +
     ggplot2::geom_point() +
     ggplot2::geom_line() +
@@ -108,7 +111,8 @@ plot_simulation <- function(df) {
       yintercept = alpha
     )) +
     ggplot2::theme_bw() +
+    # ggplot2::scale_y_continuous(limits = c(0, 1)) +
     ggplot2::xlab("Sample size") +
     ggplot2::ylab("Estimated Power") +
-    ggplot2::scale_y_continuous(limits = c(0, 1))
+    ggplot2::facet_grid(distance ~ statistic)
 }

@@ -50,8 +50,7 @@ get_hamming_distance <- function(x, y, representation = "laplacian") {
   x <- format_input(x, representation)
   y <- format_input(y, representation)
 
-  n <- nrow(x)
-  sum(abs(x - y)) / (n * (n - 1))
+  internal_hamming(x, y)
 }
 
 #' @rdname get-distance
@@ -90,15 +89,5 @@ get_root_euclidean_distance <- function(x, y, representation = "laplacian") {
   x <- format_input(x, representation)
   y <- format_input(y, representation)
 
-  rX <- eigen(x, symmetric = TRUE)
-  vals <- rX$values
-  vals[vals < 0] <- 0
-  dlX <- rX$vectors %*% diag(sqrt(vals)) %*% t(rX$vectors)
-
-  rY <- eigen(y, symmetric = TRUE)
-  vals <- rY$values
-  vals[vals < 0] <- 0
-  dlY <- rY$vectors %*% diag(sqrt(vals)) %*% t(rY$vectors)
-
-  sqrt(sum((dlX - dlY)^2))
+  internal_root_euclidean(x, y)
 }

@@ -6,6 +6,18 @@
 
 using namespace Rcpp;
 
+// internal_hamming
+double internal_hamming(const arma::mat& x, const arma::mat& y);
+RcppExport SEXP _nevada_internal_hamming(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(internal_hamming(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
 // internal_frobenius
 double internal_frobenius(const arma::mat& x, const arma::mat& y);
 RcppExport SEXP _nevada_internal_frobenius(SEXP xSEXP, SEXP ySEXP) {
@@ -30,10 +42,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// internal_root_euclidean
+double internal_root_euclidean(const arma::mat& x, const arma::mat& y);
+RcppExport SEXP _nevada_internal_root_euclidean(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(internal_root_euclidean(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_nevada_internal_hamming", (DL_FUNC) &_nevada_internal_hamming, 2},
     {"_nevada_internal_frobenius", (DL_FUNC) &_nevada_internal_frobenius, 2},
     {"_nevada_internal_spectral", (DL_FUNC) &_nevada_internal_spectral, 2},
+    {"_nevada_internal_root_euclidean", (DL_FUNC) &_nevada_internal_root_euclidean, 2},
     {NULL, NULL, 0}
 };
 
