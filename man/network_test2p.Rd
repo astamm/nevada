@@ -6,7 +6,7 @@
 \usage{
 network_test2p(x, y, representation = "adjacency", distance = "hamming",
   statistic = "mod", B = 1000L, alpha = 0.05, test = "exact",
-  verbose = TRUE, seed = NULL)
+  verbose = TRUE)
 }
 \arguments{
 \item{x}{A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects
@@ -34,13 +34,18 @@ Otherwise, it is intended as the number of required permutations.}
 
 \item{alpha}{The significance level (default: \code{0.05}).}
 
+\item{test}{A character string specifying if performing an exact test through
+the use of Phipson Smyth p-value or an approximate test through a
+Monte-Carlo p-value (default: \code{"exact"}).}
+
 \item{verbose}{A boolean to switch on/off verbosity (information about
 p-value resolution).}
 }
 \value{
-A \code{\link[base]{list}} with two components: the value of the
-  statistic for the original two samples and the p-value of the resulting
-  permutation test.
+A \code{\link[base]{list}} with three components: the value of the
+  statistic for the original two samples, the p-value of the resulting
+  permutation test and a numeric vector storing the values of the permutated
+  statistics.
 }
 \description{
 This function carries out an hypothesis test where the null hypothesis is

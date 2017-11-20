@@ -108,3 +108,41 @@ double internal_root_euclidean(const arma::mat &x, const arma::mat &y)
 
   return std::sqrt(squaredDiff);
 }
+
+// [[Rcpp::export]]
+arma::mat internal_distance_matrix(const Rcpp::List &z, const std::string &distance)
+{
+  unsigned int n = z.size();
+  arma::mat out(n, n, arma::fill::zeros);
+  arma::mat net1, net2;
+
+  for (unsigned int i = 0;i < n-1;++i)
+  {
+    net1 = Rcpp::as<arma::mat>(z[i]);
+
+    for (unsigned int j = i+1;j < n;++j)
+    {
+      net2 = Rcpp::as<arma::mat>(z[j]);
+
+      double distanceValue = 0.0;
+      if (distance == "hamming")
+        distanceValue = internal_hamming(net1, net2);
+      else if (distance == "frobenius")
+        distanceValue = internal_frobenius(net1, net2);
+      else if (distance == "spectral")
+        distanceValue = internal_spectral(net1, net2);
+      else if (distance == "root-euclidean")
+        distanceValue = internal_root_euclidean(net1, net2);
+      else
+      {
+        Rcpp::Rcout << "Unavailable distance." << std::endl;
+        exit(-1);
+      }
+
+      out(i,j) = distanceValue;
+      out(j,i) = distanceValue;
+    }
+  }
+
+  return out;
+}

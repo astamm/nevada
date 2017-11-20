@@ -1,8 +1,4 @@
-#######################################
-### Simulations in Biometrika paper ###
-#######################################
-
-# Scenario 0 --------------------------------------------------------------
+# Utility functions -------------------------------------------------------
 
 rpois_network <- function(lambda, n) {
   A <- diag(0, n)
@@ -10,7 +6,7 @@ rpois_network <- function(lambda, n) {
   A + t(A)
 }
 
-rblocks_network <- function(pois_indices) {
+rblocks_network <- function(pois_indices, upper = TRUE) {
   m <- n * (n - 1L) / 2L
   p <- length(pois_indices)
   if (p > m)
@@ -21,20 +17,20 @@ rblocks_network <- function(pois_indices) {
   weights[-pois_indices] <- rbinom(m - p, 1L, 0.2)
 
   A <- diag(0, n)
-  A[upper.tri(A)] <- weights
+  if (upper)
+    A[upper.tri(A)] <- weights
+  else
+    A[lower.tri(A)] <- weights
   A + t(A)
 }
+
+# Scenario 0 --------------------------------------------------------------
 
 get_scenario0_dataset <- function(n1, n2 = n1) {
   n <- 25L
   x <- replicate(n1, rpois_network(5, n), simplify = FALSE)
   y <- replicate(n2, rpois_network(5, n), simplify = FALSE)
   list(x = x, y = y)
-}
-
-get_scenario0_datasets <- function(n1, n2 = n1, times = 1L, seed = NULL) {
-  set.seed(seed)
-  replicate(times, get_scenario0_dataset(n1, n2), simplify = FALSE)
 }
 
 # Scenario A --------------------------------------------------------------
@@ -46,23 +42,13 @@ get_scenarioA_dataset <- function(n1, n2 = n1) {
   list(x = x, y = y)
 }
 
-get_scenarioA_datasets <- function(n1, n2 = n1, times = 1L, seed = NULL) {
-  set.seed(seed)
-  replicate(times, get_scenarioA_dataset(n1, n2), simplify = FALSE)
-}
-
 # Scenario B --------------------------------------------------------------
 
 get_scenarioB_dataset <- function(n1, n2 = n1) {
-  n <- 8L
-  x <- replicate(n1, rblocks_network(1:6), simplify = FALSE)
-  y <- replicate(n2, rblocks_network(c(15, 20:21, 26:28)), simplify = FALSE)
+  n <- 25L
+  x <- replicate(n1, rblocks_network(1:66, upper = TRUE), simplify = FALSE)
+  y <- replicate(n2, rblocks_network(222+1:78, upper = FALSE), simplify = FALSE)
   list(x = x, y = y)
-}
-
-get_scenarioB_datasets <- function(n1, n2 = n1, times = 1L, seed = NULL) {
-  set.seed(seed)
-  replicate(times, get_scenarioB_dataset(n1, n2), simplify = FALSE)
 }
 
 # Scenario C --------------------------------------------------------------
@@ -73,11 +59,6 @@ get_scenarioC_dataset <- function(n1, n2 = n1) {
   list(x = x, y = y)
 }
 
-get_scenarioC_datasets <- function(n1, n2 = n1, times = 1L, seed = NULL) {
-  set.seed(seed)
-  replicate(times, get_scenarioC_dataset(n1, n2), simplify = FALSE)
-}
-
 # Scenario D --------------------------------------------------------------
 
 get_scenarioD_dataset <- function(n1, n2 = n1) {
@@ -86,33 +67,34 @@ get_scenarioD_dataset <- function(n1, n2 = n1) {
   list(x = x, y = y)
 }
 
-get_scenarioD_datasets <- function(n1, n2 = n1, times = 1L, seed = NULL) {
-  set.seed(seed)
-  replicate(times, get_scenarioD_dataset(n1, n2), simplify = FALSE)
+# Test --------------------------------------------------------------------
+
+perform_single_test <- function(scenario, n_pop, representation, distance, statistic, alpha = 0.05) {
+  data <- switch(
+    scenario,
+    "0" = get_scenario0_dataset(n_pop),
+    "A" = get_scenarioA_dataset(n_pop),
+    "B" = get_scenarioB_dataset(n_pop),
+    "C" = get_scenarioC_dataset(n_pop),
+    "D" = get_scenarioD_dataset(n_pop)
+  )
+
+  test <- network_test2p(
+    data$x, data$y,
+    representation = representation,
+    distance = distance,
+    statistic = statistic,
+    verbose = FALSE,
+    alpha = alpha
+  )
+
+  test$pvalue
 }
 
-# Plot simulations --------------------------------------------------------
+# Power -------------------------------------------------------------------
 
-plot_simulation <- function(df, alpha = 0.05) {
-  df %>%
-    dplyr::mutate(
-      representation = forcats::fct_relevel(representation, c("adjacency", "laplacian", "modularity")),
-      distance = forcats::fct_relevel(distance, c("frobenius", "spectral")),
-      statistic = forcats::fct_relevel(statistic, c("dom", "sdom", "mod"))
-    ) %>%
-    ggplot2::ggplot(ggplot2::aes(
-      x = n_pop,
-      y = power,
-      color = representation
-    )) +
-    ggplot2::geom_point() +
-    ggplot2::geom_line() +
-    ggplot2::geom_hline(ggplot2::aes(
-      yintercept = alpha
-    )) +
-    ggplot2::theme_bw() +
-    # ggplot2::scale_y_continuous(limits = c(0, 1)) +
-    ggplot2::xlab("Sample size") +
-    ggplot2::ylab("Estimated Power") +
-    ggplot2::facet_grid(distance ~ statistic)
+#' @export
+get_power <- function(scenario, n_pop, representation, distance, statistic, alpha = 0.05, R = 10L, seed = NULL) {
+  set.seed(seed)
+  replicate(R, perform_single_test(scenario, n_pop, representation, distance, statistic, alpha = alpha))
 }

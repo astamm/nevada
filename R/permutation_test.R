@@ -31,12 +31,16 @@
 #'   If this number is lower than \code{1}, it is intended as a tolerance.
 #'   Otherwise, it is intended as the number of required permutations.
 #' @param alpha The significance level (default: \code{0.05}).
+#' @param test A character string specifying if performing an exact test through
+#'   the use of Phipson Smyth p-value or an approximate test through a
+#'   Monte-Carlo p-value (default: \code{"exact"}).
 #' @param verbose A boolean to switch on/off verbosity (information about
 #'   p-value resolution).
 #'
-#' @return A \code{\link[base]{list}} with two components: the value of the
-#'   statistic for the original two samples and the p-value of the resulting
-#'   permutation test.
+#' @return A \code{\link[base]{list}} with three components: the value of the
+#'   statistic for the original two samples, the p-value of the resulting
+#'   permutation test and a numeric vector storing the values of the permutated
+#'   statistics.
 #' @export
 #'
 #' @examples
@@ -63,7 +67,7 @@
 network_test2p <- function(
   x, y,
   representation = "adjacency", distance = "hamming", statistic = "mod",
-  B = 1000L, alpha = 0.05, test = "exact", verbose = TRUE, seed = NULL) {
+  B = 1000L, alpha = 0.05, test = "exact", verbose = TRUE) {
   n1 <- length(x)
   n2 <- length(y)
   n <- n1 + n2
@@ -91,7 +95,6 @@ network_test2p <- function(
   if (n1 == n2)
     M <- M / 2
 
-  set.seed(seed)
   test <- match.arg(test, c("approximate", "exact"))
   if (test == "approximate" & M <= B) {
     B <- M

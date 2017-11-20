@@ -17,3 +17,7 @@ internal_root_euclidean <- function(x, y) {
     .Call('_nevada_internal_root_euclidean', PACKAGE = 'nevada', x, y)
 }
 
+internal_distance_matrix <- function(z, distance) {
+    .Call('_nevada_internal_distance_matrix', PACKAGE = 'nevada', z, distance)
+}
+

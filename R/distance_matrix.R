@@ -34,39 +34,8 @@
 #' d <- get_distance_matrix(x, y, "adjacency", "spectral")
 #' d
 get_distance_matrix <- function(x, y, representation = "adjacency", distance = "hamming") {
-  n <- length(x)
-  m <- length(y)
-  N <- n + m
-
-  if (requireNamespace("purrr", quietly = TRUE)) {
-    x <- purrr::map(x, format_input, representation)
-    y <- purrr::map(y, format_input, representation)
-  } else {
-    x <- lapply(x, format_input, representation)
-    y <- lapply(y, format_input, representation)
-  }
-
+  x <- lapply(x, format_input, representation)
+  y <- lapply(y, format_input, representation)
   z <- c(x, y)
-
-  dist <- rep(-1, N * (N - 1) / 2)
-  k <- 1
-  for (i in 1:(N-1)) {
-    network1 <- z[[i]]
-    for (j in ((i+1):N)) {
-      network2 <- z[[j]]
-      dist[k] <- switch(
-        distance,
-        "hamming" = get_hamming_distance(network1, network2, representation),
-        "frobenius" = get_frobenius_distance(network1, network2, representation),
-        "spectral" = get_spectral_distance(network1, network2, representation),
-        "root-euclidean" = get_root_euclidean_distance(network1, network2, representation)
-        )
-      k <- k + 1
-    }
-  }
-
-  d <- diag(rep(0, N))
-  d[lower.tri(d)] <- dist
-  d <- d + t(d)
-  d
+  internal_distance_matrix(z, distance);
 }

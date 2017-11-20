@@ -54,12 +54,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// internal_distance_matrix
+arma::mat internal_distance_matrix(const Rcpp::List& z, const std::string& distance);
+RcppExport SEXP _nevada_internal_distance_matrix(SEXP zSEXP, SEXP distanceSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type z(zSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type distance(distanceSEXP);
+    rcpp_result_gen = Rcpp::wrap(internal_distance_matrix(z, distance));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_nevada_internal_hamming", (DL_FUNC) &_nevada_internal_hamming, 2},
     {"_nevada_internal_frobenius", (DL_FUNC) &_nevada_internal_frobenius, 2},
     {"_nevada_internal_spectral", (DL_FUNC) &_nevada_internal_spectral, 2},
     {"_nevada_internal_root_euclidean", (DL_FUNC) &_nevada_internal_root_euclidean, 2},
+    {"_nevada_internal_distance_matrix", (DL_FUNC) &_nevada_internal_distance_matrix, 2},
     {NULL, NULL, 0}
 };
 
