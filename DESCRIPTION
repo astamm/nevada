@@ -21,7 +21,6 @@ Imports: igraph,
     Rcpp
 RoxygenNote: 6.0.1
 Suggests: knitr,
-    rmarkdown,
-    purrr
+    rmarkdown
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo

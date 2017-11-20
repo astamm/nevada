@@ -102,12 +102,7 @@ network_test2p <- function(
   } else
     group1.perm <- replicate(B, sample.int(n))[1:n1, ]
 
-  Tp <- switch(
-    statistic,
-    mod = purrr::map_dbl(1:B, ~ get_mod_statistic(d, group1.perm[, .])),
-    dom = purrr::map_dbl(1:B, ~ get_dom_statistic(d, group1.perm[, .])),
-    sdom = purrr::map_dbl(1:B, ~ get_sdom_statistic(d, group1.perm[, .]))
-  )
+  Tp <- sapply(1:B, get_permuted_statistic, d, group1.perm, statistic)
 
   if (test == "approximate")
     p <- mean(Tp >= T0)

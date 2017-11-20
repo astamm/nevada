@@ -170,3 +170,12 @@ phipson_smyth_pvalue <- function(b, B, M) {
   corr <- integrate(pbinom, 0, 0.5 / M, q = b, size = B)$value
   (b + 1) / (B + 1) - corr
 }
+
+get_permuted_statistic <- function(i, d, group1.perm, statistic) {
+  switch(
+    statistic,
+    mod = get_mod_statistic(d, group1.perm[, i]),
+    dom = get_dom_statistic(d, group1.perm[, i]),
+    sdom = get_sdom_statistic(d, group1.perm[, i])
+  )
+}
