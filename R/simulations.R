@@ -6,7 +6,7 @@ rpois_network <- function(lambda, n) {
   A + t(A)
 }
 
-rblocks_network <- function(pois_indices, upper = TRUE) {
+rblocks_network <- function(pois_indices, n, upper = TRUE) {
   m <- n * (n - 1L) / 2L
   p <- length(pois_indices)
   if (p > m)
@@ -46,8 +46,8 @@ get_scenarioA_dataset <- function(n1, n2 = n1) {
 
 get_scenarioB_dataset <- function(n1, n2 = n1) {
   n <- 25L
-  x <- replicate(n1, rblocks_network(1:66, upper = TRUE), simplify = FALSE)
-  y <- replicate(n2, rblocks_network(222+1:78, upper = FALSE), simplify = FALSE)
+  x <- replicate(n1, rblocks_network(1:66, n, upper = TRUE), simplify = FALSE)
+  y <- replicate(n2, rblocks_network(222+1:78, n, upper = FALSE), simplify = FALSE)
   list(x = x, y = y)
 }
 
