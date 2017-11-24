@@ -84,3 +84,20 @@ is_laplacian <- function(x) {
 is_modularity <- function(x) {
   "modularity" == attributes(x)$representation
 }
+
+as_transitivity <- function(x) {
+  x <- as.matrix(x)
+  l <- attributes(x)
+  l$representation <- "transitivity"
+  attributes(x) <- l
+  x
+}
+
+get_transitivity <- function(network, validate = TRUE) {
+  if (validate) {
+    if (!igraph::is_igraph(network))
+      stop("Input network should be of class igraph.")
+  }
+  repr <- igraph::transitivity(network, type = "undirected")
+  as_transitivity(repr)
+}

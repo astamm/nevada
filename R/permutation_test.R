@@ -72,7 +72,7 @@ network_test2p <- function(
   n2 <- length(y)
   n <- n1 + n2
 
-  representation <- match.arg(representation, c("adjacency", "laplacian", "modularity"))
+  representation <- match.arg(representation, c("adjacency", "laplacian", "modularity", "transitivity"))
   distance <- match.arg(distance, c("hamming", "frobenius", "spectral", "root-euclidean"))
   d <- get_distance_matrix(x, y, representation, distance)
 

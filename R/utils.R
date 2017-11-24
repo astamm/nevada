@@ -4,7 +4,8 @@ format_input <- function(x, representation = "adjacency") {
       representation,
       adjacency = get_adjacency(x),
       laplacian = get_laplacian(x),
-      modularity = get_modularity(x)
+      modularity = get_modularity(x),
+      transitivity = get_transitivity(x)
     )
   else {
     if ("representation" %in% names(attributes(x))) {
@@ -23,7 +24,8 @@ format_input <- function(x, representation = "adjacency") {
         representation,
         adjacency = get_adjacency(igraph::graph_from_adjacency_matrix(x, mode = "undirected")),
         laplacian = get_laplacian(igraph::graph_from_adjacency_matrix(x, mode = "undirected")),
-        modularity = get_modularity(igraph::graph_from_adjacency_matrix(x, mode = "undirected"))
+        modularity = get_modularity(igraph::graph_from_adjacency_matrix(x, mode = "undirected")),
+        transitivity = get_transitivity(igraph::graph_from_adjacency_matrix(x, mode = "undirected"))
       )
     }
   }
