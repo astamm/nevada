@@ -72,19 +72,8 @@ double internal_root_euclidean(const arma::mat &x, const arma::mat &y)
 
   for (unsigned int i = 0;i < n;++i)
   {
-    double eigVal = eigval1[i];
-
-    if (eigVal < 0.0)
-      eigval1[i] = 0.0;
-    else
-      eigval1[i] = std::sqrt(eigVal);
-
-    eigVal = eigval2[i];
-
-    if (eigVal < 0.0)
-      eigval2[i] = 0.0;
-    else
-      eigval2[i] = std::sqrt(eigVal);
+    eigval1[i] = std::sqrt(std::max(0.0, eigval1[i]));
+    eigval2[i] = std::sqrt(std::max(0.0, eigval2[i]));
   }
 
   double squaredDiff = 0.0;
