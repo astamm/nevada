@@ -19,7 +19,8 @@ The package `nevada` (NEtwork-VAlued Data Analysis) contains tools for the stati
 * the `get-representation` functions return the selected matrix representation of the input graph
 * the `get-distance` functions return the chosen distance between two networks
 * the `get-statistic` functions return the value of the preferred test statistic
-* the `network_test2p()` function returns the p-value of the resulting permutation test.
+* the `twosample_test()` function returns the p-value of the resulting permutation test.
+* the `twosample_power()` function returns a Monte-Carlo estimate of the power of the test in some specific scenarios.
 
 See the vignette *NEtwork-VAlued Data Analysis* for the details of each function.
 
@@ -45,8 +46,8 @@ n <- 10L
 x <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
 y <- replicate(n, igraph::sample_pa(n = 25, power = 2, m = 3, directed = FALSE), simplify = FALSE)
 
-test1 <- nevada::network_test2p(x, y, "modularity")
-test1
+test1 <- nevada::twosample_test(x, y, "modularity")
+test1$pvalue
 ```
 
 **Example 2**
@@ -58,6 +59,6 @@ n <- 10L
 x <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
 y <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
 
-test2 <- nevada::network_test2p(x, y, "modularity")
-test2
+test2 <- nevada::twosample_test(x, y, "modularity")
+test2$pvalue
 ```

@@ -8,7 +8,8 @@ The package `nevada` (NEtwork-VAlued Data Analysis) contains tools for the stati
 -   the `get-representation` functions return the selected matrix representation of the input graph
 -   the `get-distance` functions return the chosen distance between two networks
 -   the `get-statistic` functions return the value of the preferred test statistic
--   the `network_test2p()` function returns the p-value of the resulting permutation test.
+-   the `twosample_test()` function returns the p-value of the resulting permutation test.
+-   the `twosample_power()` function returns a Monte-Carlo estimate of the power of the test in some specific scenarios.
 
 See the vignette *NEtwork-VAlued Data Analysis* for the details of each function.
 
@@ -32,25 +33,16 @@ Usage
 In this first example, we compare two populations of networks generated according to two different models (Watts-Strogatz and Barabasi), using the modularity matrix representation of networks, the Hamming distance to compare single networks and the average statistic to summarize information and perform the permutation test.
 
 ``` r
-n <- 25L
-x <- list()
-y <- list()
+n <- 10L
+x <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
+y <- replicate(n, igraph::sample_pa(n = 25, power = 2, m = 3, directed = FALSE), simplify = FALSE)
 
-for (i in 1:10) {
-  x[[i]] <- igraph::watts.strogatz.game(1, n, 3, 0.05)
-  y[[i]] <- igraph::barabasi.game(n, m = 3, power = 2, directed = FALSE)
-}
-
-test1 <- nevada::network_test2p(x, y, "modularity")
+test1 <- nevada::twosample_test(x, y, "modularity")
 #>  - P-value resolution: 0.001
 #>  - Computing approximate p-value using 1000 random permutations.
 #>  - P-value will not drop below 5.41254411223451e-06 on average over repeated Monte-Carlo estimates.
-test1
-#> $statistic
-#> [1] 0.429437
-#> 
-#> $pvalue
-#> [1] 0
+test1$pvalue
+#> [1] 0.0009936031
 ```
 
 **Example 2**
@@ -58,23 +50,14 @@ test1
 In this second example, we compare two populations of networks generated according to the sane model (Watts-Strogatz), using once again the modularity matrix representation of networks, the Hamming distance to compare single networks and the average statistic to summarize information and perform the permutation test.
 
 ``` r
-n <- 25L
-x <- list()
-y <- list()
+n <- 10L
+x <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
+y <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
 
-for (i in 1:10) {
-  x[[i]] <- igraph::watts.strogatz.game(1, n, 3, 0.05)
-  y[[i]] <- igraph::watts.strogatz.game(1, n, 3, 0.05)
-}
-
-test2 <- nevada::network_test2p(x, y, "modularity")
+test2 <- nevada::twosample_test(x, y, "modularity")
 #>  - P-value resolution: 0.001
 #>  - Computing approximate p-value using 1000 random permutations.
 #>  - P-value will not drop below 5.41254411223451e-06 on average over repeated Monte-Carlo estimates.
-test2
-#> $statistic
-#> [1] 0.1259262
-#> 
-#> $pvalue
-#> [1] 0.634
+test2$pvalue
+#> [1] 0.5114831
 ```
