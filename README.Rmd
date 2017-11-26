@@ -41,14 +41,9 @@ It relies on the `igraph` package. If you encounter bugs or for questions and co
 In this first example, we compare two populations of networks generated according to two different models (Watts-Strogatz and Barabasi), using the modularity matrix representation of networks, the Hamming distance to compare single networks and the average statistic to summarize information and perform the permutation test.
 
 ```{r example1}
-n <- 25L
-x <- list()
-y <- list()
-
-for (i in 1:10) {
-  x[[i]] <- igraph::watts.strogatz.game(1, n, 3, 0.05)
-  y[[i]] <- igraph::barabasi.game(n, m = 3, power = 2, directed = FALSE)
-}
+n <- 10L
+x <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
+y <- replicate(n, igraph::sample_pa(n = 25, power = 2, m = 3, directed = FALSE), simplify = FALSE)
 
 test1 <- nevada::network_test2p(x, y, "modularity")
 test1
@@ -59,14 +54,9 @@ test1
 In this second example, we compare two populations of networks generated according to the sane model (Watts-Strogatz), using once again the modularity matrix representation of networks, the Hamming distance to compare single networks and the average statistic to summarize information and perform the permutation test.
 
 ```{r example2}
-n <- 25L
-x <- list()
-y <- list()
-
-for (i in 1:10) {
-  x[[i]] <- igraph::watts.strogatz.game(1, n, 3, 0.05)
-  y[[i]] <- igraph::watts.strogatz.game(1, n, 3, 0.05)
-}
+n <- 10L
+x <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
+y <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
 
 test2 <- nevada::network_test2p(x, y, "modularity")
 test2

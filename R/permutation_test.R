@@ -44,27 +44,20 @@
 #' @export
 #'
 #' @examples
-#' n <- 25L
+#' n <- 10L
 #'
-#' x <- list()
-#' y <- list()
-#' for (i in 1:10) {
-#'   x[[i]] <- igraph::watts.strogatz.game(1, n, 3, 0.05)
-#'   y[[i]] <- igraph::barabasi.game(n, m = 3, power = 2, directed = FALSE)
-#' }
-#' test1 <- network_test2p(x, y, "modularity")
+#' # Two different models for the two populations
+#' x <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
+#' y <- replicate(n, igraph::sample_pa(n = 25, power = 2, m = 3, directed = FALSE), simplify = FALSE)
+#' test1 <- twosample_test(x, y, "modularity")
 #' test1
 #'
-#' x <- list()
-#' y <- list()
-#' for (i in 1:10) {
-#'   x[[i]] <- igraph::watts.strogatz.game(1, n, 3, 0.05)
-#'   y[[i]] <- igraph::watts.strogatz.game(1, n, 3, 0.05)
-#' }
-#'
-#' test2 <- network_test2p(x, y, "modularity")
+#' # Same model for the two populations
+#' x <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
+#' y <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
+#' test2 <- twosample_test(x, y, "modularity")
 #' test2
-network_test2p <- function(
+twosample_test <- function(
   x, y,
   representation = "adjacency", distance = "hamming", statistic = "mod",
   B = 1000L, alpha = 0.05, test = "exact", verbose = TRUE) {

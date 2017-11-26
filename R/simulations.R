@@ -56,7 +56,7 @@ perform_single_test <- function(scenario, n_pop, representation, distance, stati
     "E" = get_scenarioE_dataset(n_pop)
   )
 
-  test <- network_test2p(
+  test <- twosample_test(
     data$x, data$y,
     representation = representation,
     distance = distance,
@@ -98,9 +98,9 @@ perform_single_test <- function(scenario, n_pop, representation, distance, stati
 #'
 #' @examples
 #' alpha <- 0.05
-#' p <- get_power(alpha = 0.05)
+#' p <- twosample_power(alpha = 0.05)
 #' mean(p <= alpha)
-get_power <- function(
+twosample_power <- function(
   scenario = "0",
   n_pop = 4L,
   representation = "adjacency",
