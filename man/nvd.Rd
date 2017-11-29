@@ -27,6 +27,5 @@ A \code{nvd} object which is a list of \code{\link[igraph]{igraph}}
 This is the constructor for objects of class \code{nvd}.
 }
 \examples{
-x <- nvd(n = 10L)
-x
+nvd(n = 10L)
 }

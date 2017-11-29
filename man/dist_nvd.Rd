@@ -33,6 +33,5 @@ is denoted by \eqn{n1} and that of the second one is denoted by \eqn{n2}.
 \examples{
 x <- nvd("smallworld", 10)
 y <- nvd("pa", 10)
-d <- dist_nvd(x, y, "adjacency", "spectral")
-d
+dist_nvd(x, y, "adjacency", "spectral")
 }

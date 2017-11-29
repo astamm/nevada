@@ -22,9 +22,9 @@
 #' x <- nvd("smallworld", 10)
 #' y <- nvd("pa", 10)
 #' d <- dist_nvd(x, y, "adjacency", "spectral")
-#' stat_mod <- stat_mod(d, 1:10)
-#' stat_dom <- stat_dom(d, 1:10)
-#' stat_sdom <- stat_sdom(d, 1:10)
+#' stat_mod(d, 1:10)
+#' stat_dom(d, 1:10)
+#' stat_sdom(d, 1:10)
 #' @name statistics
 NULL
 

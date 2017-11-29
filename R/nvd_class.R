@@ -16,8 +16,7 @@
 #' @export
 #'
 #' @examples
-#' x <- nvd(n = 10L)
-#' x
+#' nvd(n = 10L)
 nvd <- function(model = "smallworld", n = 0L, pref.matrix = NULL, lambda = NULL) {
   model <- match.arg(model, c("sbm", "k_regular", "gnp", "smallworld", "pa", "poisson"))
 

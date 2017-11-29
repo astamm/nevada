@@ -116,8 +116,7 @@ dist_root_euclidean <- function(x, y, representation = "laplacian") {
 #' @examples
 #' x <- nvd("smallworld", 10)
 #' y <- nvd("pa", 10)
-#' d <- dist_nvd(x, y, "adjacency", "spectral")
-#' d
+#' dist_nvd(x, y, "adjacency", "spectral")
 dist_nvd <- function(x, y = NULL, representation = "adjacency", distance = "hamming") {
   x <- lapply(x, format_input, representation)
 

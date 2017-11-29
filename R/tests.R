@@ -47,16 +47,16 @@
 #' n <- 10L
 #'
 #' # Two different models for the two populations
-#' x <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
-#' y <- replicate(n, igraph::sample_pa(n = 25, power = 2, m = 3, directed = FALSE), simplify = FALSE)
+#' x <- nvd("smallworld", n)
+#' y <- nvd("pa", n)
 #' test1 <- test_twosample(x, y, "modularity")
-#' test1
+#' test1$pvalue
 #'
 #' # Same model for the two populations
-#' x <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
-#' y <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
+#' x <- nvd("smallworld", n)
+#' y <- nvd("smallworld", n)
 #' test2 <- test_twosample(x, y, "modularity")
-#' test2
+#' test2$pvalue
 test_twosample <- function(
   x, y,
   representation = "adjacency", distance = "hamming", statistic = "mod",

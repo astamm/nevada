@@ -29,8 +29,8 @@ This is a collection of functions that convert a graph stored as an
 among adjacency matrix, graph laplacian or modularity matrix.
 }
 \examples{
-X <- igraph::sample_smallworld(1, 25, 3, 0.05)
-adjX <- repr_adjacency(X)
-lapX <- repr_laplacian(X)
-modX <- repr_modularity(X)
+g <- igraph::sample_smallworld(1, 25, 3, 0.05)
+repr_adjacency(g)
+repr_laplacian(g)
+repr_modularity(g)
 }

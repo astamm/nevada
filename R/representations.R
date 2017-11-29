@@ -12,10 +12,10 @@
 #'   recorded in the object's class.
 #'
 #' @examples
-#' X <- igraph::sample_smallworld(1, 25, 3, 0.05)
-#' adjX <- repr_adjacency(X)
-#' lapX <- repr_laplacian(X)
-#' modX <- repr_modularity(X)
+#' g <- igraph::sample_smallworld(1, 25, 3, 0.05)
+#' repr_adjacency(g)
+#' repr_laplacian(g)
+#' repr_modularity(g)
 #' @name representations
 NULL
 
