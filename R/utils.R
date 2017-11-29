@@ -2,10 +2,10 @@ format_input <- function(x, representation = "adjacency") {
   if (igraph::is_igraph(x))
     x <- switch(
       representation,
-      adjacency = get_adjacency(x),
-      laplacian = get_laplacian(x),
-      modularity = get_modularity(x),
-      transitivity = get_transitivity(x)
+      adjacency = repr_adjacency(x),
+      laplacian = repr_laplacian(x),
+      modularity = repr_modularity(x),
+      transitivity = repr_transitivity(x)
     )
   else {
     if ("representation" %in% names(attributes(x))) {
@@ -22,10 +22,10 @@ format_input <- function(x, representation = "adjacency") {
 
       x <- switch(
         representation,
-        adjacency = get_adjacency(igraph::graph_from_adjacency_matrix(x, mode = "undirected")),
-        laplacian = get_laplacian(igraph::graph_from_adjacency_matrix(x, mode = "undirected")),
-        modularity = get_modularity(igraph::graph_from_adjacency_matrix(x, mode = "undirected")),
-        transitivity = get_transitivity(igraph::graph_from_adjacency_matrix(x, mode = "undirected"))
+        adjacency = repr_adjacency(igraph::graph_from_adjacency_matrix(x, mode = "undirected")),
+        laplacian = repr_laplacian(igraph::graph_from_adjacency_matrix(x, mode = "undirected")),
+        modularity = repr_modularity(igraph::graph_from_adjacency_matrix(x, mode = "undirected")),
+        transitivity = repr_transitivity(igraph::graph_from_adjacency_matrix(x, mode = "undirected"))
       )
     }
   }
@@ -176,8 +176,8 @@ phipson_smyth_pvalue <- function(b, B, M) {
 get_permuted_statistic <- function(i, d, group1.perm, statistic) {
   switch(
     statistic,
-    mod = get_mod_statistic(d, group1.perm[, i]),
-    dom = get_dom_statistic(d, group1.perm[, i]),
-    sdom = get_sdom_statistic(d, group1.perm[, i])
+    mod = stat_mod(d, group1.perm[, i]),
+    dom = stat_dom(d, group1.perm[, i]),
+    sdom = stat_sdom(d, group1.perm[, i])
   )
 }

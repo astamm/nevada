@@ -32,18 +32,18 @@
 #' @return A scalar measuring the distance between the two input networks.
 #'
 #' @examples
-#' g1 <- igraph::erdos.renyi.game(20, 0.1)
-#' g2 <- igraph::erdos.renyi.game(20, 0.2)
-#' get_hamming_distance(g1, g2, "adjacency")
-#' get_frobenius_distance(g1, g2, "adjacency")
-#' get_spectral_distance(g1, g2, "laplacian")
-#' get_root_euclidean_distance(g1, g2, "laplacian")
-#' @name get-distance
+#' g1 <- igraph::sample_gnp(20, 0.1)
+#' g2 <- igraph::sample_gnp(20, 0.2)
+#' dist_hamming(g1, g2, "adjacency")
+#' dist_frobenius(g1, g2, "adjacency")
+#' dist_spectral(g1, g2, "laplacian")
+#' dist_root_euclidean(g1, g2, "laplacian")
+#' @name distances
 NULL
 
-#' @rdname get-distance
+#' @rdname distances
 #' @export
-get_hamming_distance <- function(x, y, representation = "laplacian") {
+dist_hamming <- function(x, y, representation = "laplacian") {
   if (!compatible_networks(x, y))
     stop("Input networks are incompatible.")
 
@@ -53,9 +53,9 @@ get_hamming_distance <- function(x, y, representation = "laplacian") {
   internal_hamming(x, y)
 }
 
-#' @rdname get-distance
+#' @rdname distances
 #' @export
-get_frobenius_distance <- function(x, y, representation = "laplacian") {
+dist_frobenius <- function(x, y, representation = "laplacian") {
   if (!compatible_networks(x, y))
     stop("Input networks are incompatible.")
 
@@ -65,9 +65,9 @@ get_frobenius_distance <- function(x, y, representation = "laplacian") {
   internal_frobenius(x, y)
 }
 
-#' @rdname get-distance
+#' @rdname distances
 #' @export
-get_spectral_distance <- function(x, y, representation = "laplacian") {
+dist_spectral <- function(x, y, representation = "laplacian") {
   if (!compatible_networks(x, y))
     stop("Input networks are incompatible.")
 
@@ -77,9 +77,9 @@ get_spectral_distance <- function(x, y, representation = "laplacian") {
   internal_spectral(x, y)
 }
 
-#' @rdname get-distance
+#' @rdname distances
 #' @export
-get_root_euclidean_distance <- function(x, y, representation = "laplacian") {
+dist_root_euclidean <- function(x, y, representation = "laplacian") {
   if (representation != "laplacian")
     stop("The root-Euclidean distance can only be used with the Laplacian matrix representation.")
 
@@ -90,4 +90,41 @@ get_root_euclidean_distance <- function(x, y, representation = "laplacian") {
   y <- format_input(y, representation)
 
   internal_root_euclidean(x, y)
+}
+
+#' Pairwise Distance Matrix Between Two Samples of Networks
+#'
+#' This function computes the matrix of pairwise distances between all the
+#' elements of the two samples put together. The cardinality of the fist sample
+#' is denoted by \eqn{n1} and that of the second one is denoted by \eqn{n2}.
+#'
+#' @param x A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects or matrix
+#'   representations of underlying networks from a given first population.
+#' @param y A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects or matrix
+#'   representations of underlying networks from a given second population.
+#' @param representation A string specifying the desired type of representation,
+#'   among: \code{"adjacency"} [default], \code{"laplacian"} and
+#'   \code{"modularity"}.
+#' @param distance A string specifying the chosen distance for calculating the
+#'   test statistic, among: \code{"hamming"} [default], \code{"frobenius"},
+#'   \code{"spectral"} and \code{"root-euclidean"}.
+#'
+#' @return A matrix of dimension \eqn{(n1+n2) \times (n1+n2)} containing the
+#'   distances between all the elements of the two samples put together.
+#' @export
+#'
+#' @examples
+#' x <- nvd("smallworld", 10)
+#' y <- nvd("pa", 10)
+#' d <- dist_nvd(x, y, "adjacency", "spectral")
+#' d
+dist_nvd <- function(x, y = NULL, representation = "adjacency", distance = "hamming") {
+  x <- lapply(x, format_input, representation)
+
+  if (!is.null(y)) {
+    y <- lapply(y, format_input, representation)
+    x <- c(x, y)
+  }
+
+  internal_distance_matrix(x, distance)
 }

@@ -12,16 +12,16 @@
 #'   recorded in the object's class.
 #'
 #' @examples
-#' X <- igraph::watts.strogatz.game(1, 25, 3, 0.05)
-#' adjX <- get_adjacency(X)
-#' lapX <- get_laplacian(X)
-#' modX <- get_modularity(X)
-#' @name get-representation
+#' X <- igraph::sample_smallworld(1, 25, 3, 0.05)
+#' adjX <- repr_adjacency(X)
+#' lapX <- repr_laplacian(X)
+#' modX <- repr_modularity(X)
+#' @name representations
 NULL
 
-#' @rdname get-representation
+#' @rdname representations
 #' @export
-get_adjacency <- function(network, validate = TRUE) {
+repr_adjacency <- function(network, validate = TRUE) {
   if (validate) {
     if (!igraph::is_igraph(network))
       stop("Input network should be of class igraph.")
@@ -30,9 +30,9 @@ get_adjacency <- function(network, validate = TRUE) {
   as_adjacency(repr)
 }
 
-#' @rdname get-representation
+#' @rdname representations
 #' @export
-get_laplacian <- function(network, validate = TRUE) {
+repr_laplacian <- function(network, validate = TRUE) {
   if (validate) {
     if (!igraph::is_igraph(network))
       stop("Input network should be of class igraph.")
@@ -41,9 +41,9 @@ get_laplacian <- function(network, validate = TRUE) {
   as_laplacian(repr)
 }
 
-#' @rdname get-representation
+#' @rdname representations
 #' @export
-get_modularity <- function(network, validate = TRUE) {
+repr_modularity <- function(network, validate = TRUE) {
   if (validate) {
     if (!igraph::is_igraph(network))
       stop("Input network should be of class igraph.")
@@ -93,7 +93,7 @@ as_transitivity <- function(x) {
   x
 }
 
-get_transitivity <- function(network, validate = TRUE) {
+repr_transitivity <- function(network, validate = TRUE) {
   if (validate) {
     if (!igraph::is_igraph(network))
       stop("Input network should be of class igraph.")

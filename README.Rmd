@@ -16,11 +16,11 @@ knitr::opts_chunk$set(
 
 The package `nevada` (NEtwork-VAlued Data Analysis) contains tools for the statistical analysis of network-valued data. In this framework, the statistical unit is a network and the package deals with samples of networks. With nevada it is possible to test in a non-parametric manner if the two samples came from the same population via two test statistics based on three matrix representations for a network and four different types of distances:
 
-* the `get-representation` functions return the selected matrix representation of the input graph
-* the `get-distance` functions return the chosen distance between two networks
-* the `get-statistic` functions return the value of the preferred test statistic
-* the `twosample_test()` function returns the p-value of the resulting permutation test.
-* the `twosample_power()` function returns a Monte-Carlo estimate of the power of the test in some specific scenarios.
+* the `repr_*()` functions return the selected matrix representation of the input graph
+* the `dist_*()` functions return the chosen distance between two networks
+* the `stat_*()` functions return the value of the preferred test statistic
+* the `test_twosample()` function returns the p-value of the resulting permutation test.
+* the `power_twosample()` function returns a Monte-Carlo estimate of the power of the test in some specific scenarios.
 
 See the vignette *NEtwork-VAlued Data Analysis* for the details of each function.
 
@@ -43,10 +43,9 @@ In this first example, we compare two populations of networks generated accordin
 
 ```{r example1}
 n <- 10L
-x <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
-y <- replicate(n, igraph::sample_pa(n = 25, power = 2, m = 3, directed = FALSE), simplify = FALSE)
-
-test1 <- nevada::twosample_test(x, y, "modularity")
+x <- nevada::nvd("smallworld", n)
+y <- nevada::nvd("pa", n)
+test1 <- nevada::test_twosample(x, y, "modularity")
 test1$pvalue
 ```
 
@@ -56,9 +55,8 @@ In this second example, we compare two populations of networks generated accordi
 
 ```{r example2}
 n <- 10L
-x <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
-y <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
-
-test2 <- nevada::twosample_test(x, y, "modularity")
+x <- nevada::nvd("smallworld", n)
+y <- nevada::nvd("smallworld", n)
+test2 <- nevada::test_twosample(x, y, "modularity")
 test2$pvalue
 ```

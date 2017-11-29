@@ -49,15 +49,15 @@
 #' # Two different models for the two populations
 #' x <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
 #' y <- replicate(n, igraph::sample_pa(n = 25, power = 2, m = 3, directed = FALSE), simplify = FALSE)
-#' test1 <- twosample_test(x, y, "modularity")
+#' test1 <- test_twosample(x, y, "modularity")
 #' test1
 #'
 #' # Same model for the two populations
 #' x <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
 #' y <- replicate(n, igraph::sample_smallworld(dim = 1, size = 25, nei = 3, p = 0.05), simplify = FALSE)
-#' test2 <- twosample_test(x, y, "modularity")
+#' test2 <- test_twosample(x, y, "modularity")
 #' test2
-twosample_test <- function(
+test_twosample <- function(
   x, y,
   representation = "adjacency", distance = "hamming", statistic = "mod",
   B = 1000L, alpha = 0.05, test = "exact", verbose = TRUE) {
@@ -67,14 +67,14 @@ twosample_test <- function(
 
   representation <- match.arg(representation, c("adjacency", "laplacian", "modularity", "transitivity"))
   distance <- match.arg(distance, c("hamming", "frobenius", "spectral", "root-euclidean"))
-  d <- get_distance_matrix(x, y, representation, distance)
+  d <- dist_nvd(x, y, representation, distance)
 
   statistic <- match.arg(statistic, c("mod", "dom", "sdom"))
   T0 <- switch(
     statistic,
-    mod = get_mod_statistic(d, 1:n1),
-    dom = get_dom_statistic(d, 1:n1),
-    sdom = get_sdom_statistic(d, 1:n1)
+    mod = stat_mod(d, 1:n1),
+    dom = stat_dom(d, 1:n1),
+    sdom = stat_sdom(d, 1:n1)
   )
 
   if (B < 1)

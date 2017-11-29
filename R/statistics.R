@@ -19,33 +19,24 @@
 #' @return A scalar giving the value of the desired test statistic.
 #'
 #' @examples
-#' n <- 25L
-#' x <- list()
-#' y <- list()
-#' for (i in 1:10) {
-#'   X <- igraph::watts.strogatz.game(1, n, 3, 0.05)
-#'   Y <- igraph::barabasi.game(n, m = 3, power = 2, directed = FALSE)
-#'   adjX <- get_adjacency(X)
-#'   adjY <- get_adjacency(Y)
-#'   x[[i]] <- adjX
-#'   y[[i]] <- adjY
-#' }
-#' d <- get_distance_matrix(x, y, "adjacency", "spectral")
-#' stat_mod <- get_mod_statistic(d, 1:10)
-#' stat_dom <- get_dom_statistic(d, 1:10)
-#' stat_sdom <- get_sdom_statistic(d, 1:10)
-#' @name get-statistic
+#' x <- nvd("smallworld", 10)
+#' y <- nvd("pa", 10)
+#' d <- dist_nvd(x, y, "adjacency", "spectral")
+#' stat_mod <- stat_mod(d, 1:10)
+#' stat_dom <- stat_dom(d, 1:10)
+#' stat_sdom <- stat_sdom(d, 1:10)
+#' @name statistics
 NULL
 
-#' @rdname get-statistic
+#' @rdname statistics
 #' @export
-get_mod_statistic <- function(d, indices) {
+stat_mod <- function(d, indices) {
   mean(d[indices, seq_len(nrow(d))[-indices]])
 }
 
-#' @rdname get-statistic
+#' @rdname statistics
 #' @export
-get_dom_statistic <- function(d, indices) {
+stat_dom <- function(d, indices) {
   N <- nrow(d)
   M <- length(indices)
   frechet1 <- rep(NA, M)
@@ -63,9 +54,9 @@ get_dom_statistic <- function(d, indices) {
   d[frechetmean1, frechetmean2]
 }
 
-#' @rdname get-statistic
+#' @rdname statistics
 #' @export
-get_sdom_statistic <- function(d, indices) {
+stat_sdom <- function(d, indices) {
   N <- nrow(d)
   M <- length(indices)
   frechet1 <- rep(NA, M)

@@ -5,36 +5,34 @@ rpois_network <- function(lambda, n) {
 }
 
 get_scenario0_dataset <- function(n1, n2 = n1) {
-  n <- 25L
-  x <- replicate(n1, rpois_network(5, n), simplify = FALSE)
-  y <- replicate(n2, rpois_network(5, n), simplify = FALSE)
+  x <- nvd("poisson", 10, lambda = 5)
+  y <- nvd("poisson", 10, lambda = 5)
   list(x = x, y = y)
 }
 
 get_scenarioA_dataset <- function(n1, n2 = n1) {
-  n <- 25L
-  x <- replicate(n1, rpois_network(5, n), simplify = FALSE)
-  y <- replicate(n2, rpois_network(6, n), simplify = FALSE)
+  x <- nvd("poisson", 10, lambda = 5)
+  y <- nvd("poisson", 10, lambda = 6)
   list(x = x, y = y)
 }
 
 get_scenarioB_dataset <- function(n1, n2 = n1) {
   p1 <- matrix(data = c(0.8, 0.2, 0.2, 0.2), nrow = 2L, ncol = 2L)
   p2 <- matrix(data = c(0.2, 0.2, 0.2, 0.8), nrow = 2L, ncol = 2L)
-  x <- replicate(n1, igraph::sample_sbm(n = 25L, pref.matrix = p1, block.sizes = c(12L, 13L)), simplify = FALSE)
-  y <- replicate(n2, igraph::sample_sbm(n = 25L, pref.matrix = p2, block.sizes = c(13L, 12L)), simplify = FALSE)
+  x <- nvd("sbm", n1, pref.matrix = p1)
+  y <- nvd("sbm", n2, pref.matrix = p2)
   list(x = x, y = y)
 }
 
 get_scenarioC_dataset <- function(n1, n2 = n1) {
-  x <- replicate(n1, igraph::sample_k_regular(no.of.nodes = 25L, k = 8L), simplify = FALSE)
-  y <- replicate(n2, igraph::sample_gnp(n = 25L, p = 1/3), simplify = FALSE)
+  x <- nvd("k_regular", n1)
+  y <- nvd("gnp", n2)
   list(x = x, y = y)
 }
 
 get_scenarioD_dataset <- function(n1, n2 = n1) {
-  x <- replicate(n1, igraph::sample_smallworld(dim = 1L, size = 25L, nei = 4L, p = 0.15), simplify = FALSE)
-  y <- replicate(n2, igraph::sample_pa(n = 25L, power = 2L, m = 4L, directed = FALSE), simplify = FALSE)
+  x <- nvd("smallworld", n1)
+  y <- nvd("pa", n2)
   list(x = x, y = y)
 }
 
@@ -56,7 +54,7 @@ perform_single_test <- function(scenario, n_pop, representation, distance, stati
     "E" = get_scenarioE_dataset(n_pop)
   )
 
-  test <- twosample_test(
+  test <- test_twosample(
     data$x, data$y,
     representation = representation,
     distance = distance,
@@ -98,9 +96,9 @@ perform_single_test <- function(scenario, n_pop, representation, distance, stati
 #'
 #' @examples
 #' alpha <- 0.05
-#' p <- twosample_power(alpha = 0.05)
+#' p <- power_twosample(alpha = 0.05)
 #' mean(p <= alpha)
-twosample_power <- function(
+power_twosample <- function(
   scenario = "0",
   n_pop = 4L,
   representation = "adjacency",
