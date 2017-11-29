@@ -9,6 +9,7 @@
 #' @param ...
 #'
 #' @return Invisibly returns the dataset computed to generate the plot.
+#' @importFrom dplyr %>%
 #' @export
 #'
 #' @examples
