@@ -30,10 +30,10 @@ plot.nvd <- function(x, y, ...) {
     dplyr::mutate(
       Representation = Representation %>%
         forcats::as_factor() %>%
-        forcats::fct_relabel(stringi::stri_trans_totitle),
+        forcats::fct_relabel(capitalize),
       Distance = Distance %>%
         forcats::as_factor() %>%
-        forcats::fct_relabel(stringi::stri_trans_totitle),
+        forcats::fct_relabel(capitalize),
       Label = forcats::as_factor(Label)
     ) %>%
     ggplot2::ggplot(ggplot2::aes(x = V1, y = V2, color = Label)) +

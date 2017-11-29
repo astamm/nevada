@@ -181,3 +181,7 @@ get_permuted_statistic <- function(i, d, group1.perm, statistic) {
     sdom = stat_sdom(d, group1.perm[, i])
   )
 }
+
+capitalize <- function(x) {
+  gsub("(?<=\\b)([a-z])", "\\U\\1", tolower(x), perl = TRUE)
+}
