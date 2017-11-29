@@ -1,7 +1,7 @@
 rpois_network <- function(lambda, n) {
   A <- diag(0, n)
   A[upper.tri(A)] <- rpois(n * (n - 1L) / 2L, lambda)
-  A + t(A)
+  igraph::graph_from_adjacency_matrix(A + t(A), mode = "undirected")
 }
 
 get_scenario0_dataset <- function(n1, n2 = n1) {
@@ -37,9 +37,8 @@ get_scenarioD_dataset <- function(n1, n2 = n1) {
 }
 
 get_scenarioE_dataset <- function(n1, n2 = n1) {
-  n <- 25L
-  x <- replicate(n1, rpois_network(5, n), simplify = FALSE)
-  y <- replicate(n2, rpois_network(20, n), simplify = FALSE)
+  x <- nvd("poisson", 10, lambda = 5)
+  y <- nvd("poisson", 10, lambda = 20)
   list(x = x, y = y)
 }
 
