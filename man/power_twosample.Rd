@@ -5,8 +5,8 @@
 \title{Power Simulations for Permutation Tests}
 \usage{
 power_twosample(scenario = "0", n_pop = 4L, representation = "adjacency",
-  distance = "frobenius", statistic = "mod", alpha = 0.05, R = 1000L,
-  seed = NULL)
+  distance = "frobenius", statistic = "mod", alpha = 0.05,
+  test = "exact", R = 1000L, seed = NULL)
 }
 \arguments{
 \item{scenario}{A character specifying the scenario to be simulated (choices
@@ -15,16 +15,22 @@ are: "0" [default], "A", "B", "C", "D" or "E").}
 \item{n_pop}{The sample size of each population (the same is used for both
 populations, default: 4L)}
 
-\item{representation}{The chosen network representation as a string (choices
-are: "adjacency" [default], "laplacian" or "modularity").}
+\item{representation}{A string specifying the desired type of representation,
+among: \code{"adjacency"} [default], \code{"laplacian"} and
+\code{"modularity"}.}
 
-\item{distance}{The chosen distance between networks as a string (choices
-are: "hamming", "frobenius" [default], "spectral" or "root-euclidean").}
+\item{distance}{A string specifying the chosen distance for calculating the
+test statistic, among: \code{"hamming"} [default], \code{"frobenius"},
+\code{"spectral"} and \code{"root-euclidean"}.}
 
-\item{statistic}{The chosen test statistic as a string (choices are: "mod"
-[default], "sdom" or "dom").}
+\item{statistic}{A string specifying the chosen test statistic, among:
+\code{"mod"} [default], \code{"dom"} or \code{"sdom"}.}
 
-\item{alpha}{The significance level of the test (default: 5\%).}
+\item{alpha}{The significance level (default: \code{0.05}).}
+
+\item{test}{A character string specifying if performing an exact test through
+the use of Phipson Smyth p-value or an approximate test through a
+Monte-Carlo p-value (default: \code{"exact"}).}
 
 \item{R}{The number of Monte-Carlo runs used to estimate the power (default:
 1000L).}

@@ -41,5 +41,7 @@ plot.nvd <- function(x, y, ...) {
     ggplot2::geom_point() +
     ggplot2::theme_bw() +
     ggplot2::facet_wrap(~ Representation + Distance, scales = "free", labeller = "label_both") +
-    ggplot2::theme(legend.position = "none")
+    ggplot2::theme(legend.position = "none") +
+    ggplot2::xlab("First Principal Coordinate") +
+    ggplot2::ylab("Second Principal Coordinate")
 }

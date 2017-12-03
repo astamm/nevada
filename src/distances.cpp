@@ -1,8 +1,5 @@
-// [[Rcpp::depends(RcppArmadillo)]]
-#include <RcppArmadillo.h>
-#include <Rcpp.h>
+#include "distances.h"
 
-// [[Rcpp::export]]
 double internal_hamming(const arma::mat &x, const arma::mat &y)
 {
   unsigned int n = x.n_rows;
@@ -24,7 +21,6 @@ double internal_hamming(const arma::mat &x, const arma::mat &y)
   return absDiff / n / (n - 1.0);
 }
 
-// [[Rcpp::export]]
 double internal_frobenius(const arma::mat &x, const arma::mat &y)
 {
   unsigned int n = x.n_rows;
@@ -45,7 +41,6 @@ double internal_frobenius(const arma::mat &x, const arma::mat &y)
   return std::sqrt(squaredDiff);
 }
 
-// [[Rcpp::export]]
 double internal_spectral(const arma::mat &x, const arma::mat &y)
 {
   unsigned int n = x.n_rows;
@@ -60,7 +55,6 @@ double internal_spectral(const arma::mat &x, const arma::mat &y)
   return std::sqrt(squaredDiff);
 }
 
-// [[Rcpp::export]]
 double internal_root_euclidean(const arma::mat &x, const arma::mat &y)
 {
   unsigned int n = x.n_rows;
@@ -98,8 +92,7 @@ double internal_root_euclidean(const arma::mat &x, const arma::mat &y)
   return std::sqrt(squaredDiff);
 }
 
-// [[Rcpp::export]]
-arma::mat internal_distance_matrix(const Rcpp::List &z, const std::string &distance)
+arma::mat internal_distance_matrix(const Rcpp::List &z, const std::string distance)
 {
   unsigned int n = z.size();
   arma::mat out(n, n, arma::fill::zeros);

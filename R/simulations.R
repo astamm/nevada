@@ -42,7 +42,7 @@ get_scenarioE_dataset <- function(n1, n2 = n1) {
   list(x = x, y = y)
 }
 
-perform_single_test <- function(scenario, n_pop, representation, distance, statistic, alpha = 0.05) {
+perform_single_test <- function(scenario, n_pop, representation, distance, statistic, alpha = 0.05, test = "exact") {
   data <- switch(
     scenario,
     "0" = get_scenario0_dataset(n_pop),
@@ -53,16 +53,17 @@ perform_single_test <- function(scenario, n_pop, representation, distance, stati
     "E" = get_scenarioE_dataset(n_pop)
   )
 
-  test <- test_twosample(
+  test_data <- test_twosample(
     data$x, data$y,
     representation = representation,
     distance = distance,
     statistic = statistic,
     verbose = FALSE,
-    alpha = alpha
+    alpha = alpha,
+    test = test
   )
 
-  test$pvalue
+  test_data$pvalue
 }
 
 #' Power Simulations for Permutation Tests
@@ -77,13 +78,7 @@ perform_single_test <- function(scenario, n_pop, representation, distance, stati
 #'   are: "0" [default], "A", "B", "C", "D" or "E").
 #' @param n_pop The sample size of each population (the same is used for both
 #'   populations, default: 4L)
-#' @param representation The chosen network representation as a string (choices
-#'   are: "adjacency" [default], "laplacian" or "modularity").
-#' @param distance The chosen distance between networks as a string (choices
-#'   are: "hamming", "frobenius" [default], "spectral" or "root-euclidean").
-#' @param statistic The chosen test statistic as a string (choices are: "mod"
-#'   [default], "sdom" or "dom").
-#' @param alpha The significance level of the test (default: 5\%).
+#' @inheritParams test_twosample
 #' @param R The number of Monte-Carlo runs used to estimate the power (default:
 #'   1000L).
 #' @param seed An integer specifying the seed to start randomness from (default:
@@ -104,8 +99,9 @@ power_twosample <- function(
   distance = "frobenius",
   statistic = "mod",
   alpha = 0.05,
+  test = "exact",
   R = 1000L,
   seed = NULL) {
   set.seed(seed)
-  replicate(R, perform_single_test(scenario, n_pop, representation, distance, statistic, alpha = alpha))
+  replicate(R, perform_single_test(scenario, n_pop, representation, distance, statistic, alpha = alpha, test = test))
 }
