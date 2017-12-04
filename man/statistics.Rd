@@ -4,21 +4,26 @@
 \alias{statistics}
 \alias{stat_mod}
 \alias{stat_dom}
-\alias{stat_sdom}
+\alias{stat_dom_frobenius}
 \title{Test Statistics for Network Populations}
 \usage{
 stat_mod(d, indices)
 
-stat_dom(d, indices)
+stat_dom(d, indices, standardize = TRUE)
 
-stat_sdom(d, indices)
+stat_dom_frobenius(d, indices, standardize = TRUE)
 }
 \arguments{
-\item{d}{A matrix of dimension \eqn{(n1+n2)x(n1+n2)} containing the distances
-between all the elements of the two samples put together.}
+\item{d}{Either a matrix of dimension \eqn{(n1+n2)x(n1+n2)} containing the
+distances between all the elements of the two samples put together or, for
+the \code{stat_dom_frobenius} statistic, the concatenation of the lists of
+matrix representations of networks in samples 1 and 2.}
 
 \item{indices}{A vector of dimension \eqn{n1} containing the indices of the
 elements of the first sample.}
+
+\item{standardize}{If \code{TRUE} (default), standardize the test statistic
+using the pooled sample variance estimator.}
 }
 \value{
 A scalar giving the value of the desired test statistic.
@@ -38,8 +43,11 @@ value of the test statistic is the same used to find the Fréchet means.
 \examples{
 x <- nvd("smallworld", 10)
 y <- nvd("pa", 10)
-d <- dist_nvd(x, y, "adjacency", "spectral")
+d <- dist_nvd(x, y, representation = "laplacian", distance = "frobenius")
 stat_mod(d, 1:10)
-stat_dom(d, 1:10)
-stat_sdom(d, 1:10)
+stat_dom(d, 1:10, FALSE)
+stat_dom(d, 1:10, TRUE)
+dm <- repr_nvd(x, y, representation = "laplacian")
+stat_dom_frobenius(dm, 1:10, FALSE)
+stat_dom_frobenius(dm, 1:10, TRUE)
 }

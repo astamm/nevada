@@ -13,12 +13,8 @@
 #' or the number of permutations required for achieving a user-defined p-value
 #' resolution. Otherwise, the p-value is estimated via Monte-Carlo simulations.
 #'
-#' @param x A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects
-#'   or matrix representations of underlying networks from a given first
-#'   population.
-#' @param y A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects
-#'   or matrix representations of underlying networks from a given second
-#'   population.
+#' @param x An \code{\link{nvd}} object listing networks in sample 1.
+#' @param y An \code{\link{nvd}} object listing networks in sample 2.
 #' @param representation A string specifying the desired type of representation,
 #'   among: \code{"adjacency"} [default], \code{"laplacian"} and
 #'   \code{"modularity"}.
@@ -57,28 +53,45 @@
 #' y <- nvd("smallworld", n)
 #' test2 <- test_twosample(x, y, "modularity")
 #' test2$pvalue
-test_twosample <- function(
-  x, y,
-  representation = "adjacency", distance = "hamming", statistic = "mod",
-  B = 1000L, alpha = 0.05, test = "exact", verbose = TRUE) {
+test_twosample <- function(x,
+                           y,
+                           representation = "adjacency",
+                           distance = "hamming",
+                           statistic = "mod",
+                           B = 1000L,
+                           alpha = 0.05,
+                           test = "exact",
+                           verbose = TRUE) {
   n1 <- length(x)
   n2 <- length(y)
   n <- n1 + n2
 
-  representation <- match.arg(representation, c("adjacency", "laplacian", "modularity", "transitivity"))
-  distance <- match.arg(distance, c("hamming", "frobenius", "spectral", "root-euclidean"))
-  d <- dist_nvd(x, y, representation, distance)
+  representation <-
+    match.arg(representation,
+              c("adjacency", "laplacian", "modularity", "transitivity"))
+  distance <-
+    match.arg(distance,
+              c("hamming", "frobenius", "spectral", "root-euclidean"))
+  statistic <-
+    match.arg(statistic,
+              c("mod", "dom", "sdom", "dom-frobenius", "sdom-frobenius"))
 
-  statistic <- match.arg(statistic, c("mod", "dom", "sdom"))
+  if (statistic %in% c("dom-frobenius", "sdom-frobenius"))
+    d <- repr_nvd(x, y, representation = representation)
+  else
+    d <- dist_nvd(x, y, representation = representation, distance = distance)
+
   T0 <- switch(
     statistic,
-    mod = stat_mod(d, 1:n1),
-    dom = stat_dom(d, 1:n1),
-    sdom = stat_sdom(d, 1:n1)
+    "mod" = stat_mod(d, 1:n1),
+    "dom" = stat_dom(d, 1:n1, standardize = FALSE),
+    "sdom" = stat_dom(d, 1:n1, standardize = TRUE),
+    "dom-frobenius" = stat_dom_frobenius(d, 1:n1, standardize = FALSE),
+    "sdom-frobenius" = stat_dom_frobenius(d, 1:n1, standardize = TRUE)
   )
 
   if (B < 1)
-    B <- (qnorm(alpha / 2, lower.tail = FALSE) / tol)^2
+    B <- (qnorm(alpha / 2, lower.tail = FALSE) / tol) ^ 2
 
   if (!reachable_significance(n1, n2, B, alpha, verbose))
     warning("The requested significance level cannot be
@@ -95,7 +108,7 @@ test_twosample <- function(
   } else
     group1.perm <- replicate(B, sample.int(n))[1:n1, ]
 
-  Tp <- sapply(1:B, get_permuted_statistic, d, group1.perm, statistic)
+  Tp <- sapply(1:B, get_permuted_statistic, group1.perm, d, statistic)
 
   if (test == "approximate")
     p <- mean(Tp >= T0)
@@ -104,5 +117,9 @@ test_twosample <- function(
     p <- phipson_smyth_pvalue(b, B, M)
   }
 
-  list(statistic = T0, pvalue = p, permuted_statistics = Tp)
+  list(
+    statistic = T0,
+    pvalue = p,
+    permuted_statistics = Tp
+  )
 }

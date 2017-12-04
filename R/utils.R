@@ -173,12 +173,14 @@ phipson_smyth_pvalue <- function(b, B, M) {
   (b + 1) / (B + 1) - corr
 }
 
-get_permuted_statistic <- function(i, d, group1.perm, statistic) {
+get_permuted_statistic <- function(i, indices1, d, statistic) {
   switch(
     statistic,
-    mod = stat_mod(d, group1.perm[, i]),
-    dom = stat_dom(d, group1.perm[, i]),
-    sdom = stat_sdom(d, group1.perm[, i])
+    "mod" = stat_mod(d, indices1[, i]),
+    "dom" = stat_dom(d, indices1[, i], FALSE),
+    "sdom" = stat_dom(d, indices1[, i], TRUE),
+    "dom-frobenius" = stat_dom_frobenius(d, indices1[, i], FALSE),
+    "sdom-frobenius" = stat_dom_frobenius(d, indices1[, i], TRUE)
   )
 }
 
