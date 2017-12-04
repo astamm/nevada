@@ -42,7 +42,13 @@ get_scenarioE_dataset <- function(n1, n2 = n1) {
   list(x = x, y = y)
 }
 
-perform_single_test <- function(scenario, n_pop, representation, distance, statistic, alpha = 0.05, test = "exact") {
+perform_single_test <- function(scenario,
+                                n_pop,
+                                representation,
+                                distance,
+                                statistic,
+                                alpha = 0.05,
+                                test = "exact") {
   data <- switch(
     scenario,
     "0" = get_scenario0_dataset(n_pop),
@@ -54,7 +60,8 @@ perform_single_test <- function(scenario, n_pop, representation, distance, stati
   )
 
   test_data <- test_twosample(
-    data$x, data$y,
+    data$x,
+    data$y,
     representation = representation,
     distance = distance,
     statistic = statistic,
@@ -92,16 +99,26 @@ perform_single_test <- function(scenario, n_pop, representation, distance, stati
 #' alpha <- 0.05
 #' p <- power_twosample(alpha = 0.05)
 #' mean(p <= alpha)
-power_twosample <- function(
-  scenario = "0",
-  n_pop = 4L,
-  representation = "adjacency",
-  distance = "frobenius",
-  statistic = "mod",
-  alpha = 0.05,
-  test = "exact",
-  R = 1000L,
-  seed = NULL) {
+power_twosample <- function(scenario = "0",
+                            n_pop = 4L,
+                            representation = "adjacency",
+                            distance = "frobenius",
+                            statistic = "mod",
+                            alpha = 0.05,
+                            test = "exact",
+                            R = 1000L,
+                            seed = NULL) {
   set.seed(seed)
-  replicate(R, perform_single_test(scenario, n_pop, representation, distance, statistic, alpha = alpha, test = test))
+  replicate(
+    R,
+    perform_single_test(
+      scenario,
+      n_pop,
+      representation,
+      distance,
+      statistic,
+      alpha = alpha,
+      test = test
+    )
+  )
 }

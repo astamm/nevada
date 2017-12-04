@@ -7,11 +7,13 @@
 dist_nvd(x, y = NULL, representation = "adjacency", distance = "hamming")
 }
 \arguments{
-\item{x}{A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects or matrix
-representations of underlying networks from a given first population.}
+\item{x}{A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects
+or matrix representations of underlying networks from a given first
+population.}
 
-\item{y}{A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects or matrix
-representations of underlying networks from a given second population.}
+\item{y}{A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects
+or matrix representations of underlying networks from a given second
+population.}
 
 \item{representation}{A string specifying the desired type of representation,
 among: \code{"adjacency"} [default], \code{"laplacian"} and

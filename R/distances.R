@@ -50,7 +50,7 @@ dist_hamming <- function(x, y, representation = "laplacian") {
   x <- format_input(x, representation)
   y <- format_input(y, representation)
 
-  internal_hamming(x, y)
+  dist_hamming_impl(x, y)
 }
 
 #' @rdname distances
@@ -62,7 +62,7 @@ dist_frobenius <- function(x, y, representation = "laplacian") {
   x <- format_input(x, representation)
   y <- format_input(y, representation)
 
-  internal_frobenius(x, y)
+  dist_frobenius_impl(x, y)
 }
 
 #' @rdname distances
@@ -74,7 +74,7 @@ dist_spectral <- function(x, y, representation = "laplacian") {
   x <- format_input(x, representation)
   y <- format_input(y, representation)
 
-  internal_spectral(x, y)
+  dist_spectral_impl(x, y)
 }
 
 #' @rdname distances
@@ -89,7 +89,7 @@ dist_root_euclidean <- function(x, y, representation = "laplacian") {
   x <- format_input(x, representation)
   y <- format_input(y, representation)
 
-  internal_root_euclidean(x, y)
+  dist_root_euclidean_impl(x, y)
 }
 
 #' Pairwise Distance Matrix Between Two Samples of Networks
@@ -98,10 +98,12 @@ dist_root_euclidean <- function(x, y, representation = "laplacian") {
 #' elements of the two samples put together. The cardinality of the fist sample
 #' is denoted by \eqn{n1} and that of the second one is denoted by \eqn{n2}.
 #'
-#' @param x A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects or matrix
-#'   representations of underlying networks from a given first population.
-#' @param y A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects or matrix
-#'   representations of underlying networks from a given second population.
+#' @param x A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects
+#'   or matrix representations of underlying networks from a given first
+#'   population.
+#' @param y A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects
+#'   or matrix representations of underlying networks from a given second
+#'   population.
 #' @param representation A string specifying the desired type of representation,
 #'   among: \code{"adjacency"} [default], \code{"laplacian"} and
 #'   \code{"modularity"}.
@@ -117,13 +119,10 @@ dist_root_euclidean <- function(x, y, representation = "laplacian") {
 #' x <- nvd("smallworld", 10)
 #' y <- nvd("pa", 10)
 #' dist_nvd(x, y, "adjacency", "spectral")
-dist_nvd <- function(x, y = NULL, representation = "adjacency", distance = "hamming") {
-  x <- lapply(x, format_input, representation)
-
-  if (!is.null(y)) {
-    y <- lapply(y, format_input, representation)
-    x <- c(x, y)
-  }
-
-  internal_distance_matrix(x, distance)
+dist_nvd <- function(x,
+                     y = NULL,
+                     representation = "adjacency",
+                     distance = "hamming") {
+  x <- repr_nvd(x, y, representation = representation)
+  dist_nvd_impl(x, distance)
 }

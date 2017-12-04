@@ -101,3 +101,27 @@ repr_transitivity <- function(network, validate = TRUE) {
   repr <- igraph::transitivity(network, type = "undirected")
   as_transitivity(repr)
 }
+
+#' Network-Valued to Matrix-Valued Data
+#'
+#' @param x An \code{\link{nvd}} object.
+#' @param y An \code{\link{nvd}} object. If \code{NULL} (default), it is not
+#'   taken into account.
+#' @param representation A string specifying the requested matrix
+#'   representation. Choices are: \code{"adjacency"}, \code{"laplacian"}
+#'   [default] or \code{"modularity"}.
+#'
+#' @return A list of matrices.
+#' @export
+#'
+#' @examples
+#' x <- nvd("gnp", 10)
+#' xm <- repr_nvd(x)
+repr_nvd <- function(x, y = NULL, representation = "laplacian") {
+  x <- lapply(x, format_input, representation)
+  if (!is.null(y)) {
+    y <- lapply(y, format_input, representation)
+    x <- c(x, y)
+  }
+  x
+}

@@ -9,13 +9,9 @@ test_twosample(x, y, representation = "adjacency", distance = "hamming",
   verbose = TRUE)
 }
 \arguments{
-\item{x}{A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects
-or matrix representations of underlying networks from a given first
-population.}
+\item{x}{An \code{\link{nvd}} object listing networks in sample 1.}
 
-\item{y}{A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects
-or matrix representations of underlying networks from a given second
-population.}
+\item{y}{An \code{\link{nvd}} object listing networks in sample 2.}
 
 \item{representation}{A string specifying the desired type of representation,
 among: \code{"adjacency"} [default], \code{"laplacian"} and

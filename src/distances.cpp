@@ -1,6 +1,6 @@
 #include "distances.h"
 
-double internal_hamming(const arma::mat &x, const arma::mat &y)
+double dist_hamming_impl(const arma::mat &x, const arma::mat &y)
 {
   unsigned int n = x.n_rows;
 
@@ -21,7 +21,7 @@ double internal_hamming(const arma::mat &x, const arma::mat &y)
   return absDiff / n / (n - 1.0);
 }
 
-double internal_frobenius(const arma::mat &x, const arma::mat &y)
+double dist_frobenius_impl(const arma::mat &x, const arma::mat &y)
 {
   unsigned int n = x.n_rows;
 
@@ -41,7 +41,7 @@ double internal_frobenius(const arma::mat &x, const arma::mat &y)
   return std::sqrt(squaredDiff);
 }
 
-double internal_spectral(const arma::mat &x, const arma::mat &y)
+double dist_spectral_impl(const arma::mat &x, const arma::mat &y)
 {
   unsigned int n = x.n_rows;
 
@@ -55,7 +55,7 @@ double internal_spectral(const arma::mat &x, const arma::mat &y)
   return std::sqrt(squaredDiff);
 }
 
-double internal_root_euclidean(const arma::mat &x, const arma::mat &y)
+double dist_root_euclidean_impl(const arma::mat &x, const arma::mat &y)
 {
   unsigned int n = x.n_rows;
 
@@ -92,7 +92,7 @@ double internal_root_euclidean(const arma::mat &x, const arma::mat &y)
   return std::sqrt(squaredDiff);
 }
 
-arma::mat internal_distance_matrix(const Rcpp::List &z, const std::string distance)
+arma::mat dist_nvd_impl(const Rcpp::List &z, const std::string distance)
 {
   unsigned int n = z.size();
   arma::mat out(n, n, arma::fill::zeros);
@@ -108,13 +108,13 @@ arma::mat internal_distance_matrix(const Rcpp::List &z, const std::string distan
 
       double distanceValue = 0.0;
       if (distance == "hamming")
-        distanceValue = internal_hamming(net1, net2);
+        distanceValue = dist_hamming_impl(net1, net2);
       else if (distance == "frobenius")
-        distanceValue = internal_frobenius(net1, net2);
+        distanceValue = dist_frobenius_impl(net1, net2);
       else if (distance == "spectral")
-        distanceValue = internal_spectral(net1, net2);
+        distanceValue = dist_spectral_impl(net1, net2);
       else if (distance == "root-euclidean")
-        distanceValue = internal_root_euclidean(net1, net2);
+        distanceValue = dist_root_euclidean_impl(net1, net2);
       else
       {
         Rcpp::Rcout << "Unavailable distance." << std::endl;

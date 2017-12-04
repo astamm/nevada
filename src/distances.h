@@ -3,16 +3,16 @@
 #include <Rcpp.h>
 
 // [[Rcpp::export]]
-double internal_hamming(const arma::mat &x, const arma::mat &y);
+double dist_hamming_impl(const arma::mat &x, const arma::mat &y);
 
 // [[Rcpp::export]]
-double internal_frobenius(const arma::mat &x, const arma::mat &y);
+double dist_frobenius_impl(const arma::mat &x, const arma::mat &y);
 
 // [[Rcpp::export]]
-double internal_spectral(const arma::mat &x, const arma::mat &y);
+double dist_spectral_impl(const arma::mat &x, const arma::mat &y);
 
 // [[Rcpp::export]]
-double internal_root_euclidean(const arma::mat &x, const arma::mat &y);
+double dist_root_euclidean_impl(const arma::mat &x, const arma::mat &y);
 
 // [[Rcpp::export]]
-arma::mat internal_distance_matrix(const Rcpp::List &z, const std::string distance = "frobenius");
+arma::mat dist_nvd_impl(const Rcpp::List &z, const std::string distance = "frobenius");

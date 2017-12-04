@@ -6,73 +6,87 @@
 
 using namespace Rcpp;
 
-// internal_hamming
-double internal_hamming(const arma::mat& x, const arma::mat& y);
-RcppExport SEXP _nevada_internal_hamming(SEXP xSEXP, SEXP ySEXP) {
+// dist_hamming_impl
+double dist_hamming_impl(const arma::mat& x, const arma::mat& y);
+RcppExport SEXP _nevada_dist_hamming_impl(SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(internal_hamming(x, y));
+    rcpp_result_gen = Rcpp::wrap(dist_hamming_impl(x, y));
     return rcpp_result_gen;
 END_RCPP
 }
-// internal_frobenius
-double internal_frobenius(const arma::mat& x, const arma::mat& y);
-RcppExport SEXP _nevada_internal_frobenius(SEXP xSEXP, SEXP ySEXP) {
+// dist_frobenius_impl
+double dist_frobenius_impl(const arma::mat& x, const arma::mat& y);
+RcppExport SEXP _nevada_dist_frobenius_impl(SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(internal_frobenius(x, y));
+    rcpp_result_gen = Rcpp::wrap(dist_frobenius_impl(x, y));
     return rcpp_result_gen;
 END_RCPP
 }
-// internal_spectral
-double internal_spectral(const arma::mat& x, const arma::mat& y);
-RcppExport SEXP _nevada_internal_spectral(SEXP xSEXP, SEXP ySEXP) {
+// dist_spectral_impl
+double dist_spectral_impl(const arma::mat& x, const arma::mat& y);
+RcppExport SEXP _nevada_dist_spectral_impl(SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(internal_spectral(x, y));
+    rcpp_result_gen = Rcpp::wrap(dist_spectral_impl(x, y));
     return rcpp_result_gen;
 END_RCPP
 }
-// internal_root_euclidean
-double internal_root_euclidean(const arma::mat& x, const arma::mat& y);
-RcppExport SEXP _nevada_internal_root_euclidean(SEXP xSEXP, SEXP ySEXP) {
+// dist_root_euclidean_impl
+double dist_root_euclidean_impl(const arma::mat& x, const arma::mat& y);
+RcppExport SEXP _nevada_dist_root_euclidean_impl(SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(internal_root_euclidean(x, y));
+    rcpp_result_gen = Rcpp::wrap(dist_root_euclidean_impl(x, y));
     return rcpp_result_gen;
 END_RCPP
 }
-// internal_distance_matrix
-arma::mat internal_distance_matrix(const Rcpp::List& z, const std::string& distance);
-RcppExport SEXP _nevada_internal_distance_matrix(SEXP zSEXP, SEXP distanceSEXP) {
+// dist_nvd_impl
+arma::mat dist_nvd_impl(const Rcpp::List& z, const std::string distance);
+RcppExport SEXP _nevada_dist_nvd_impl(SEXP zSEXP, SEXP distanceSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::List& >::type z(zSEXP);
-    Rcpp::traits::input_parameter< const std::string& >::type distance(distanceSEXP);
-    rcpp_result_gen = Rcpp::wrap(internal_distance_matrix(z, distance));
+    Rcpp::traits::input_parameter< const std::string >::type distance(distanceSEXP);
+    rcpp_result_gen = Rcpp::wrap(dist_nvd_impl(z, distance));
+    return rcpp_result_gen;
+END_RCPP
+}
+// stat_dom_frobenius_impl
+double stat_dom_frobenius_impl(const Rcpp::List& x, const Rcpp::List& y, const bool standardize);
+RcppExport SEXP _nevada_stat_dom_frobenius_impl(SEXP xSEXP, SEXP ySEXP, SEXP standardizeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const bool >::type standardize(standardizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(stat_dom_frobenius_impl(x, y, standardize));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_nevada_internal_hamming", (DL_FUNC) &_nevada_internal_hamming, 2},
-    {"_nevada_internal_frobenius", (DL_FUNC) &_nevada_internal_frobenius, 2},
-    {"_nevada_internal_spectral", (DL_FUNC) &_nevada_internal_spectral, 2},
-    {"_nevada_internal_root_euclidean", (DL_FUNC) &_nevada_internal_root_euclidean, 2},
-    {"_nevada_internal_distance_matrix", (DL_FUNC) &_nevada_internal_distance_matrix, 2},
+    {"_nevada_dist_hamming_impl", (DL_FUNC) &_nevada_dist_hamming_impl, 2},
+    {"_nevada_dist_frobenius_impl", (DL_FUNC) &_nevada_dist_frobenius_impl, 2},
+    {"_nevada_dist_spectral_impl", (DL_FUNC) &_nevada_dist_spectral_impl, 2},
+    {"_nevada_dist_root_euclidean_impl", (DL_FUNC) &_nevada_dist_root_euclidean_impl, 2},
+    {"_nevada_dist_nvd_impl", (DL_FUNC) &_nevada_dist_nvd_impl, 2},
+    {"_nevada_stat_dom_frobenius_impl", (DL_FUNC) &_nevada_stat_dom_frobenius_impl, 3},
     {NULL, NULL, 0}
 };
 
