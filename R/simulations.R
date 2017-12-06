@@ -1,24 +1,24 @@
 rpois_network <- function(lambda, n) {
   A <- diag(0, n)
   A[upper.tri(A)] <- rpois(n * (n - 1L) / 2L, lambda)
-  igraph::graph_from_adjacency_matrix(A + t(A), mode = "undirected")
+  igraph::graph_from_adjacency_matrix(A, mode = "upper")
 }
 
 get_scenario0_dataset <- function(n1, n2 = n1) {
-  x <- nvd("poisson", 10, lambda = 5)
-  y <- nvd("poisson", 10, lambda = 5)
+  x <- nvd("poisson", n1, lambda = 5)
+  y <- nvd("poisson", n2, lambda = 5)
   list(x = x, y = y)
 }
 
 get_scenarioA_dataset <- function(n1, n2 = n1) {
-  x <- nvd("poisson", 10, lambda = 5)
-  y <- nvd("poisson", 10, lambda = 6)
+  x <- nvd("poisson", n1, lambda = 5)
+  y <- nvd("poisson", n2, lambda = 6)
   list(x = x, y = y)
 }
 
 get_scenarioB_dataset <- function(n1, n2 = n1) {
-  p1 <- matrix(data = c(0.8, 0.2, 0.2, 0.2), nrow = 2L, ncol = 2L)
-  p2 <- matrix(data = c(0.2, 0.2, 0.2, 0.8), nrow = 2L, ncol = 2L)
+  p1 <- matrix(data = c(0.8, rep(0.2, 8L)), nrow = 3L)
+  p2 <- matrix(data = c(rep(0.2, 8L), 0.8), nrow = 3L)
   x <- nvd("sbm", n1, pref.matrix = p1)
   y <- nvd("sbm", n2, pref.matrix = p2)
   list(x = x, y = y)
@@ -37,8 +37,8 @@ get_scenarioD_dataset <- function(n1, n2 = n1) {
 }
 
 get_scenarioE_dataset <- function(n1, n2 = n1) {
-  x <- nvd("poisson", 10, lambda = 5)
-  y <- nvd("poisson", 10, lambda = 20)
+  x <- nvd("poisson", n1, lambda = 5)
+  y <- nvd("poisson", n2, lambda = 20)
   list(x = x, y = y)
 }
 

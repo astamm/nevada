@@ -28,7 +28,7 @@ nvd <- function(model = "smallworld", n = 0L, pref.matrix = NULL, lambda = NULL)
 
   obj <- replicate(n, switch(
     model,
-    "sbm" = igraph::sample_sbm(n = 25L, pref.matrix = pref.matrix, block.sizes = c(12L, 13L)),
+    "sbm" = igraph::sample_sbm(n = 25L, pref.matrix = pref.matrix, block.sizes = c(12L, 1L, 12L)),
     "k_regular" = igraph::sample_k_regular(no.of.nodes = 25L, k = 8L),
     "gnp" = igraph::sample_gnp(n = 25L, p = 1/3),
     "smallworld" = igraph::sample_smallworld(dim = 1L, size = 25L, nei = 4L, p = 0.15),
