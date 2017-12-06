@@ -6,7 +6,7 @@
 \usage{
 test_twosample(x, y, representation = "adjacency", distance = "hamming",
   statistic = "mod", B = 1000L, alpha = 0.05, test = "exact",
-  verbose = TRUE)
+  verbose = FALSE)
 }
 \arguments{
 \item{x}{An \code{\link{nvd}} object listing networks in sample 1.}
@@ -35,7 +35,7 @@ the use of Phipson Smyth p-value or an approximate test through a
 Monte-Carlo p-value (default: \code{"exact"}).}
 
 \item{verbose}{A boolean to switch on/off verbosity (information about
-p-value resolution).}
+p-value resolution). By default, it is off.}
 }
 \value{
 A \code{\link[base]{list}} with three components: the value of the

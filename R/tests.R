@@ -31,7 +31,7 @@
 #'   the use of Phipson Smyth p-value or an approximate test through a
 #'   Monte-Carlo p-value (default: \code{"exact"}).
 #' @param verbose A boolean to switch on/off verbosity (information about
-#'   p-value resolution).
+#'   p-value resolution). By default, it is off.
 #'
 #' @return A \code{\link[base]{list}} with three components: the value of the
 #'   statistic for the original two samples, the p-value of the resulting
@@ -61,25 +61,31 @@ test_twosample <- function(x,
                            B = 1000L,
                            alpha = 0.05,
                            test = "exact",
-                           verbose = TRUE) {
+                           verbose = FALSE) {
   n1 <- length(x)
   n2 <- length(y)
   n <- n1 + n2
 
-  representation <-
-    match.arg(representation,
-              c("adjacency", "laplacian", "modularity", "transitivity"))
-  distance <-
-    match.arg(distance,
-              c("hamming", "frobenius", "spectral", "root-euclidean"))
-  statistic <-
-    match.arg(statistic,
-              c("mod", "dom", "sdom", "dom-frobenius", "sdom-frobenius"))
+  representation <- match.arg(
+    representation,
+    c("adjacency", "laplacian", "modularity", "transitivity")
+  )
+  distance <- match.arg(
+    distance,
+    c("hamming", "frobenius", "spectral", "root-euclidean")
+  )
+  statistic <- match.arg(
+    statistic,
+    c("mod", "dom", "sdom", "dom-frobenius", "sdom-frobenius", "original", "generalized", "weighted")
+  )
 
   if (statistic %in% c("dom-frobenius", "sdom-frobenius"))
     d <- repr_nvd(x, y, representation = representation)
-  else
+  else {
     d <- dist_nvd(x, y, representation = representation, distance = distance)
+    if (statistic %in% c("original", "generalized", "weighted"))
+      d <- get_hao_params(d, n1, k = 5L)
+  }
 
   T0 <- switch(
     statistic,
@@ -87,7 +93,10 @@ test_twosample <- function(x,
     "dom" = stat_dom(d, 1:n1, standardize = FALSE),
     "sdom" = stat_dom(d, 1:n1, standardize = TRUE),
     "dom-frobenius" = stat_dom_frobenius(d, 1:n1, standardize = FALSE),
-    "sdom-frobenius" = stat_dom_frobenius(d, 1:n1, standardize = TRUE)
+    "sdom-frobenius" = stat_dom_frobenius(d, 1:n1, standardize = TRUE),
+    "original" = stat_hao(d, 1:n1, type = "original"),
+    "generalized" = stat_hao(d, 1:n1, type = "generalized"),
+    "weighted" = stat_hao(d, 1:n1, type = "weighted")
   )
 
   if (B < 1)

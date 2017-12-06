@@ -41,3 +41,37 @@ double stat_dom_frobenius_impl(const Rcpp::List &x, const Rcpp::List &y, const b
 
   return meanDifference / std::sqrt(pooledVariance);
 }
+
+arma::vec get_hao_rvalues(const arma::mat &E, const arma::vec &indices)
+{
+  unsigned int r1 = 0;
+  unsigned int r2 = 0;
+
+  for (unsigned int i = 0;i < E.n_rows;++i)
+  {
+    bool firstIndexIn = false;
+    bool secondIndexIn = false;
+    for (unsigned int j = 0;j < indices.n_elem;++j)
+    {
+      if (E(i,0) == indices[j])
+        firstIndexIn = true;
+
+      if (E(i,1) == indices[j])
+        secondIndexIn = true;
+
+      if (firstIndexIn && secondIndexIn)
+      {
+        r1++;
+        break;
+      }
+    }
+
+    if (!firstIndexIn && !secondIndexIn)
+      r2++;
+  }
+
+  arma::vec rValues(2);
+  rValues[0] = r1;
+  rValues[1] = r2;
+  return rValues;
+}

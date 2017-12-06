@@ -25,3 +25,7 @@ stat_dom_frobenius_impl <- function(x, y, standardize = TRUE) {
     .Call('_nevada_stat_dom_frobenius_impl', PACKAGE = 'nevada', x, y, standardize)
 }
 
+get_hao_rvalues <- function(E, indices) {
+    .Call('_nevada_get_hao_rvalues', PACKAGE = 'nevada', E, indices)
+}
+

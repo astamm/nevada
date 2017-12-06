@@ -77,3 +77,28 @@ stat_dom_frobenius <- function(d, indices, standardize = TRUE) {
   y <- d[-indices]
   stat_dom_frobenius_impl(x, y, standardize)
 }
+
+stat_hao <- function(d, indices, type = "original") {
+  E <- d$E
+  nE <- d$nE
+  n1 <- d$n1
+  n2 <- d$n2
+  mu0 <- d$mu0
+  mu1 <- d$mu1
+  mu2 <- d$mu2
+  V0 <- d$V0
+  V1 <- d$V1
+  V2 <- d$V2
+  V12 <- d$V12
+  Sinv <- d$Sinv
+
+  temp <- get_hao_rvalues(E, indices)
+  R1 <- temp[1]
+  R2 <- temp[2]
+
+  switch(type,
+    original = (nE - R1 - R2 - mu0)^2 / V0,
+    generalized = Sinv[1,1] * (R1 - mu1)^2 + Sinv[2, 2] * (R2 - mu2)^2 + 2 * Sinv[1, 2] * (R1 - mu1) * (R2 - mu2),
+    weighted = (n2 * (R1 - mu1) + n1 * (R2 - mu2))^2 / (n2^2 * V1 + n1^2 * V2 + 2 * n2 * n1 * V12)
+  )
+}

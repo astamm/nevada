@@ -79,6 +79,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// get_hao_rvalues
+arma::vec get_hao_rvalues(const arma::mat& E, const arma::vec& indices);
+RcppExport SEXP _nevada_get_hao_rvalues(SEXP ESEXP, SEXP indicesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type E(ESEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type indices(indicesSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_hao_rvalues(E, indices));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_nevada_dist_hamming_impl", (DL_FUNC) &_nevada_dist_hamming_impl, 2},
@@ -87,6 +99,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nevada_dist_root_euclidean_impl", (DL_FUNC) &_nevada_dist_root_euclidean_impl, 2},
     {"_nevada_dist_nvd_impl", (DL_FUNC) &_nevada_dist_nvd_impl, 2},
     {"_nevada_stat_dom_frobenius_impl", (DL_FUNC) &_nevada_stat_dom_frobenius_impl, 3},
+    {"_nevada_get_hao_rvalues", (DL_FUNC) &_nevada_get_hao_rvalues, 2},
     {NULL, NULL, 0}
 };
 
