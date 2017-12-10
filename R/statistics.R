@@ -17,8 +17,11 @@
 #'   matrix representations of networks in samples 1 and 2.
 #' @param indices A vector of dimension \eqn{n1} containing the indices of the
 #'   elements of the first sample.
-#' @param standardize If \code{TRUE} (default), standardize the test statistic
+#' @param standardize If \code{TRUE} (default), standardize the DoM statistic
 #'   using the pooled sample variance estimator.
+#' @param type A string specifying the version of the edge count test statistic
+#'   to be used. Choices are \code{"original"} [default], \code{"generalized"}
+#'   or \code{"weighted"}.
 #'
 #' @return A scalar giving the value of the desired test statistic.
 #'
@@ -78,7 +81,9 @@ stat_dom_frobenius <- function(d, indices, standardize = TRUE) {
   stat_dom_frobenius_impl(x, y, standardize)
 }
 
-stat_hao <- function(d, indices, type = "original") {
+#' @rdname statistics
+#' @export
+stat_edge_count <- function(d, indices, type = "original") {
   E <- d$E
   nE <- d$nE
   n1 <- d$n1
@@ -92,7 +97,7 @@ stat_hao <- function(d, indices, type = "original") {
   V12 <- d$V12
   Sinv <- d$Sinv
 
-  temp <- get_hao_rvalues(E, indices)
+  temp <- stat_edge_count_impl(E, indices)
   R1 <- temp[1]
   R2 <- temp[2]
 

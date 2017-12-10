@@ -181,9 +181,9 @@ get_permuted_statistic <- function(i, indices1, d, statistic) {
     "sdom" = stat_dom(d, indices1[, i], TRUE),
     "dom-frobenius" = stat_dom_frobenius(d, indices1[, i], FALSE),
     "sdom-frobenius" = stat_dom_frobenius(d, indices1[, i], TRUE),
-    "original" = stat_hao(d, indices1[, i], "original"),
-    "generalized" = stat_hao(d, indices1[, i], "generalized"),
-    "weighted" = stat_hao(d, indices1[, i], "weighted")
+    "original" = stat_edge_count(d, indices1[, i], "original"),
+    "generalized" = stat_edge_count(d, indices1[, i], "generalized"),
+    "weighted" = stat_edge_count(d, indices1[, i], "weighted")
   )
 }
 
@@ -191,7 +191,7 @@ capitalize <- function(x) {
   gsub("(?<=\\b)([a-z])", "\\U\\1", tolower(x), perl = TRUE)
 }
 
-get_hao_params <- function(d, n1, k = 1L) {
+edge_count_global_variables <- function(d, n1, k = 1L) {
   while (k >= n1)
     k <- k - 2L
   g <- kmst(d, k)

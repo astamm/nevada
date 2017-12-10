@@ -84,7 +84,7 @@ test_twosample <- function(x,
   else {
     d <- dist_nvd(x, y, representation = representation, distance = distance)
     if (statistic %in% c("original", "generalized", "weighted"))
-      d <- get_hao_params(d, n1, k = 5L)
+      d <- edge_count_global_variables(d, n1, k = 5L)
   }
 
   T0 <- switch(
@@ -94,9 +94,9 @@ test_twosample <- function(x,
     "sdom" = stat_dom(d, 1:n1, standardize = TRUE),
     "dom-frobenius" = stat_dom_frobenius(d, 1:n1, standardize = FALSE),
     "sdom-frobenius" = stat_dom_frobenius(d, 1:n1, standardize = TRUE),
-    "original" = stat_hao(d, 1:n1, type = "original"),
-    "generalized" = stat_hao(d, 1:n1, type = "generalized"),
-    "weighted" = stat_hao(d, 1:n1, type = "weighted")
+    "original" = stat_edge_count(d, 1:n1, type = "original"),
+    "generalized" = stat_edge_count(d, 1:n1, type = "generalized"),
+    "weighted" = stat_edge_count(d, 1:n1, type = "weighted")
   )
 
   if (B < 1)

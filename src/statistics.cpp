@@ -42,7 +42,7 @@ double stat_dom_frobenius_impl(const Rcpp::List &x, const Rcpp::List &y, const b
   return meanDifference / std::sqrt(pooledVariance);
 }
 
-arma::vec get_hao_rvalues(const arma::mat &E, const arma::vec &indices)
+arma::vec stat_edge_count_impl(const arma::mat &E, const arma::vec &indices)
 {
   unsigned int r1 = 0;
   unsigned int r2 = 0;

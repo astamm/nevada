@@ -5,6 +5,7 @@
 \alias{stat_mod}
 \alias{stat_dom}
 \alias{stat_dom_frobenius}
+\alias{stat_edge_count}
 \title{Test Statistics for Network Populations}
 \usage{
 stat_mod(d, indices)
@@ -12,6 +13,8 @@ stat_mod(d, indices)
 stat_dom(d, indices, standardize = TRUE)
 
 stat_dom_frobenius(d, indices, standardize = TRUE)
+
+stat_edge_count(d, indices, type = "original")
 }
 \arguments{
 \item{d}{Either a matrix of dimension \eqn{(n1+n2)x(n1+n2)} containing the
@@ -22,8 +25,12 @@ matrix representations of networks in samples 1 and 2.}
 \item{indices}{A vector of dimension \eqn{n1} containing the indices of the
 elements of the first sample.}
 
-\item{standardize}{If \code{TRUE} (default), standardize the test statistic
+\item{standardize}{If \code{TRUE} (default), standardize the DoM statistic
 using the pooled sample variance estimator.}
+
+\item{type}{A string specifying the version of the edge count test statistic
+to be used. Choices are \code{"original"} [default], \code{"generalized"}
+or \code{"weighted"}.}
 }
 \value{
 A scalar giving the value of the desired test statistic.
