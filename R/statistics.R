@@ -102,8 +102,8 @@ stat_edge_count <- function(d, indices, type = "original") {
   R2 <- temp[2]
 
   switch(type,
-    original = (nE - R1 - R2 - mu0)^2 / V0,
+    original = -(nE - R1 - R2 - mu0) / sqrt(V0),
     generalized = Sinv[1,1] * (R1 - mu1)^2 + Sinv[2, 2] * (R2 - mu2)^2 + 2 * Sinv[1, 2] * (R1 - mu1) * (R2 - mu2),
-    weighted = (n2 * (R1 - mu1) + n1 * (R2 - mu2))^2 / (n2^2 * V1 + n1^2 * V2 + 2 * n2 * n1 * V12)
+    weighted = (n2 * (R1 - mu1) + n1 * (R2 - mu2)) / sqrt(n2^2 * V1 + n1^2 * V2 + 2 * n2 * n1 * V12)
   )
 }

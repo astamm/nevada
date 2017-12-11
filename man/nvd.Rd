@@ -4,7 +4,8 @@
 \alias{nvd}
 \title{Network-Valued Data Constructor}
 \usage{
-nvd(model = "smallworld", n = 0L, pref.matrix = NULL, lambda = NULL)
+nvd(model = "smallworld", n = 0L, pref.matrix = NULL, lambda = NULL,
+  size = NULL, prob = NULL)
 }
 \arguments{
 \item{model}{A string specifying the model to be used for sampling networks

@@ -4,6 +4,40 @@ rpois_network <- function(lambda, n) {
   igraph::graph_from_adjacency_matrix(A, mode = "upper")
 }
 
+rbinom_network <- function(size, prob, n) {
+  A <- diag(0, n)
+  A[upper.tri(A)] <- rbinom(n * (n - 1L) / 2L, size, prob)
+  igraph::graph_from_adjacency_matrix(A, mode = "upper")
+}
+
+# Equal distributions
+get_scenario10_dataset <- function(n1, n2 = n1) {
+  x <- nvd("binomial", n1, size = 10, prob = 1/2)
+  y <- nvd("binomial", n2, size = 10, prob = 1/2)
+  list(x = x, y = y)
+}
+
+# Distributions with equal means, different variances
+get_scenario11_dataset <- function(n1, n2 = n1) {
+  x <- nvd("binomial", n1, size = 10, prob = 1/2)
+  y <- nvd("binomial", n2, size = 20, prob = 1/4)
+  list(x = x, y = y)
+}
+
+# Distributions with different means, equal variances
+get_scenario12_dataset <- function(n1, n2 = n1) {
+  x <- nvd("binomial", n1, size = 10, prob = 1/4)
+  y <- nvd("binomial", n2, size = 10, prob = 3/4)
+  list(x = x, y = y)
+}
+
+# Distributions with different means, different variances
+get_scenario13_dataset <- function(n1, n2 = n1) {
+  x <- nvd("binomial", n1, size = 20, prob = 1/4)
+  y <- nvd("binomial", n2, size = 10, prob = 3/4)
+  list(x = x, y = y)
+}
+
 get_scenario0_dataset <- function(n1, n2 = n1) {
   x <- nvd("poisson", n1, lambda = 5)
   y <- nvd("poisson", n2, lambda = 5)
@@ -56,7 +90,11 @@ perform_single_test <- function(scenario,
     "B" = get_scenarioB_dataset(n_pop),
     "C" = get_scenarioC_dataset(n_pop),
     "D" = get_scenarioD_dataset(n_pop),
-    "E" = get_scenarioE_dataset(n_pop)
+    "E" = get_scenarioE_dataset(n_pop),
+    "10" = get_scenario10_dataset(n_pop),
+    "11" = get_scenario11_dataset(n_pop),
+    "12" = get_scenario12_dataset(n_pop),
+    "13" = get_scenario13_dataset(n_pop)
   )
 
   test_data <- test_twosample(

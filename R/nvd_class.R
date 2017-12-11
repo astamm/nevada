@@ -17,14 +17,17 @@
 #'
 #' @examples
 #' nvd(n = 10L)
-nvd <- function(model = "smallworld", n = 0L, pref.matrix = NULL, lambda = NULL) {
-  model <- match.arg(model, c("sbm", "k_regular", "gnp", "smallworld", "pa", "poisson"))
+nvd <- function(model = "smallworld", n = 0L, pref.matrix = NULL, lambda = NULL, size = NULL, prob = NULL) {
+  model <- match.arg(model, c("sbm", "k_regular", "gnp", "smallworld", "pa", "poisson", "binomial"))
 
   if (model == "sbm" & is.null(pref.matrix))
-    stop("The pref.matrix argument should be specify to use the SBM generator.")
+    stop("The pref.matrix argument should be specified to use the SBM generator.")
 
   if (model == "poisson" & is.null(lambda))
-    stop("The lambda argument should be specify to use the Poisson generator.")
+    stop("The lambda argument should be specified to use the Poisson generator.")
+
+  if (model == "binomial" & (is.null(size) | is.null(prob)))
+    stop("The size and prob arguments should be specified to use the Binomial generator.")
 
   obj <- replicate(n, switch(
     model,
@@ -33,7 +36,8 @@ nvd <- function(model = "smallworld", n = 0L, pref.matrix = NULL, lambda = NULL)
     "gnp" = igraph::sample_gnp(n = 25L, p = 1/3),
     "smallworld" = igraph::sample_smallworld(dim = 1L, size = 25L, nei = 4L, p = 0.15),
     "pa" = igraph::sample_pa(n = 25L, power = 2L, m = 4L, directed = FALSE),
-    "poisson" = rpois_network(lambda = lambda, n = 25L)
+    "poisson" = rpois_network(lambda = lambda, n = 25L),
+    "binomial" = rbinom_network(size = size, prob = prob, n = 25L)
   ), simplify = FALSE)
 
   as_nvd(obj)
