@@ -8,7 +8,7 @@
 \alias{stat_edge_count}
 \title{Test Statistics for Network Populations}
 \usage{
-stat_mod(d, indices)
+stat_mod(d, indices, standardize = TRUE)
 
 stat_dom(d, indices, standardize = TRUE)
 

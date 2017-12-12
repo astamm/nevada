@@ -40,8 +40,14 @@ NULL
 
 #' @rdname statistics
 #' @export
-stat_mod <- function(d, indices) {
-  mean(d[indices, -indices])
+stat_mod <- function(d, indices, standardize = TRUE) {
+  x <- d[indices, -indices]
+  stat_value <- mean(x)
+
+  if (!standardize)
+    return(stat_value)
+
+  stat_value / sd(x)
 }
 
 #' @rdname statistics
