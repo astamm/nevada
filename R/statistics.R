@@ -40,14 +40,67 @@ NULL
 
 #' @rdname statistics
 #' @export
-stat_mod <- function(d, indices, standardize = TRUE) {
-  x <- d[indices, -indices]
-  stat_value <- mean(x)
+stat_lot <- function(d, indices, pooled = TRUE) {
+  xy <- d[indices, -indices]^2
+  xx <- d[indices, indices]
+  xx <- xx[upper.tri(xx)]^2
+  yy <- d[-indices, -indices]
+  yy <- yy[upper.tri(yy)]^2
+  varx <- mean(xx) / 2
+  vary <- mean(yy) / 2
+  mse <- mean(xy)
+  n1 <- length(indices)
+  n2 <- nrow(d) - n1
+  if (pooled)
+    var <- mean(c(xx, yy)) / 2 * (1 / n1 + 1 / n2)
+  else
+    var <- varx / n1 + vary / n2
+  (mse - varx - vary) / var
+}
 
-  if (!standardize)
-    return(stat_value)
+#' @rdname statistics
+#' @export
+stat_sot <- function(d, indices) {
+  xx <- d[indices, indices]
+  xx <- xx[upper.tri(xx)]^2
+  yy <- d[-indices, -indices]
+  yy <- yy[upper.tri(yy)]^2
+  varx <- mean(xx) / 2
+  vary <- mean(yy) / 2
+  max(varx, vary) / min(varx, vary)
+}
 
-  stat_value / sd(x)
+#' @rdname statistics
+#' @export
+stat_biswas <- function(d, indices) {
+  xy <- d[indices, -indices]
+  xx <- d[indices, indices]
+  xx <- xx[upper.tri(xx)]
+  yy <- d[-indices, -indices]
+  yy <- yy[upper.tri(yy)]
+  muFF <- mean(xx)
+  muGG <- mean(yy)
+  muFG <- mean(xy)
+  (muFF - muFG)^2 + (muGG - muFG)^2
+}
+
+#' @rdname statistics
+#' @export
+stat_energy <- function(d, indices, alpha = 1) {
+  xy <- d[indices, -indices]^alpha
+  xx <- d[indices, indices]^alpha
+  yy <- d[-indices, -indices]^alpha
+  varx <- mean(xx) / 2
+  vary <- mean(yy) / 2
+  mse <- mean(xy)
+  mse - varx - vary
+}
+
+#' @rdname statistics
+#' @export
+stat_mod <- function(d, indices) {
+  xy <- d[indices, -indices]
+  mean(xy)
 }
 
 #' @rdname statistics
@@ -81,10 +134,18 @@ stat_dom <- function(d, indices, standardize = TRUE) {
 
 #' @rdname statistics
 #' @export
-stat_dom_frobenius <- function(d, indices, standardize = TRUE) {
+stat_student_euclidean <- function(d, indices) {
   x <- d[indices]
   y <- d[-indices]
-  stat_dom_frobenius_impl(x, y, standardize)
+  stat_t_euclidean_impl(x, y, pooled = TRUE)
+}
+
+#' @rdname statistics
+#' @export
+stat_welch_euclidean <- function(d, indices) {
+  x <- d[indices]
+  y <- d[-indices]
+  stat_t_euclidean_impl(x, y, pooled = FALSE)
 }
 
 #' @rdname statistics
