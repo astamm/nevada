@@ -174,16 +174,23 @@ phipson_smyth_pvalue <- function(b, B, M) {
 }
 
 get_permuted_statistic <- function(i, indices1, d, statistic) {
+  if (i == 0)
+    indices <- seq_len(nrow(indices1))
+  else
+    indices <- indices1[, i]
+
   switch(
     statistic,
-    "mod" = stat_mod(d, indices1[, i]),
-    "dom" = stat_dom(d, indices1[, i], FALSE),
-    "sdom" = stat_dom(d, indices1[, i], TRUE),
-    "dom-frobenius" = stat_dom_frobenius(d, indices1[, i], FALSE),
-    "sdom-frobenius" = stat_dom_frobenius(d, indices1[, i], TRUE),
-    "original" = stat_edge_count(d, indices1[, i], "original"),
-    "generalized" = stat_edge_count(d, indices1[, i], "generalized"),
-    "weighted" = stat_edge_count(d, indices1[, i], "weighted")
+    plot = stat_lot(d, indices, pooled = TRUE),
+    lot = stat_lot(d, indices, pooled = FALSE),
+    sot = stat_sot(d, indices),
+    biswas = stat_biswas(d, indices),
+    energy = stat_energy(d, indices),
+    student = stat_student_euclidean(d, indices),
+    welch = stat_welch_euclidean(d, indices),
+    original = stat_edge_count(d, indices, type = "original"),
+    generalized = stat_edge_count(d, indices, type = "generalized"),
+    weighted = stat_edge_count(d, indices, type = "weighted")
   )
 }
 
@@ -192,23 +199,18 @@ capitalize <- function(x) {
 }
 
 edge_count_global_variables <- function(d, n1, k = 1L) {
-  while (k >= n1)
-    k <- k - 2L
+  k <- min(k, ceiling(nrow(d) / 4))
   g <- kmst(d, k)
   E <- igraph::as_edgelist(g)
   n <- nrow(d)
   n2 <- n - n1
   Ebynode <- vector("list", n)
-  for (i in 1:n)
-    Ebynode[[i]] <- rep(0, 0)
   for (i in 1:nrow(E)) {
     Ebynode[[E[i, 1]]] <- c(Ebynode[[E[i, 1]]], E[i, 2])
     Ebynode[[E[i, 2]]] <- c(Ebynode[[E[i, 2]]], E[i, 1])
   }
   nE <- nrow(E)
-  nodedeg <- numeric(n)
-  for (i in 1:n)
-    nodedeg[i] <- length(Ebynode[[i]])
+  nodedeg <- sapply(Ebynode, length)
   nEi <- sum(nodedeg * (nodedeg - 1))
   mu0 <- nE * 2 * n1 * n2 / n / (n - 1)
   mu1 <- nE * n1 * (n1 - 1) / n / (n - 1)
@@ -231,7 +233,7 @@ edge_count_global_variables <- function(d, n1, k = 1L) {
     V1 = V1,
     V2 = V2,
     V12 = V12,
-    Sinv = solve(S)
+    Sinv = solve_partial(S)
   )
 }
 
@@ -250,4 +252,47 @@ kmst <- function(d, k = 1L) {
     }
   }
   res
+}
+
+solve_partial <- function(M) {
+  eig <- eigen(M, symmetric = TRUE)
+  Minv <- matrix(0, nrow = nrow(M), ncol = ncol(M))
+  for (i in seq_along(eig$values)) {
+    l <- eig$values[i]
+    if (l < .Machine$double.eps)
+      next()
+    v <- eig$vectors[, i]
+    Minv <- Minv + (v %*% t(v)) / l
+  }
+  Minv
+}
+
+xi <- function(th) {
+  2 + th^2 - pi / 8 * ( (2 + th^2) * besselI(th^2 / 4, 0, expon.scaled = TRUE) + th^2 * besselI(th^2 / 4, 1, expon.scaled = TRUE) )^2
+}
+
+fixed_point <- function(th, r) {
+  sqrt(xi(th) * (1 + r^2) - 2)
+}
+
+rice_params <- function(x) {
+  mu <- mean(x)
+  sig <- sd(x)
+  r <- mu / sig
+  lb <- sqrt(2 / xi(0) - 1)
+  if (r <= lb)
+    th <- 0
+  else {
+    th <- r - lb
+    th_new <- 0
+    iter <- 0
+    while (abs(th_new - th) > 1.0e-6) {
+      iter <- iter + 1
+      th_new <- th
+      th <- fixed_point(th, r)
+    }
+  }
+  sigma <- sig / sqrt(xi(th))
+  nu <- sqrt( mu^2 + (xi(th) - 2) * sig^2 )
+  list(nu = nu, sigma = sigma)
 }
