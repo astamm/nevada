@@ -1,7 +1,7 @@
 #include "statistics.h"
 #include "distances.h"
 
-double stat_dom_frobenius_impl(const Rcpp::List &x, const Rcpp::List &y, const bool standardize)
+double stat_t_euclidean_impl(const Rcpp::List &x, const Rcpp::List &y, const bool pooled)
 {
   unsigned int n1 = x.size();
   unsigned int n2 = y.size();
@@ -20,9 +20,6 @@ double stat_dom_frobenius_impl(const Rcpp::List &x, const Rcpp::List &y, const b
 
   double meanDifference = dist_frobenius_impl(m1, m2);
 
-  if (!standardize)
-    return meanDifference;
-
   double ssd1 = 0;
   for (unsigned int i = 0;i < n1;++i)
   {
@@ -37,9 +34,9 @@ double stat_dom_frobenius_impl(const Rcpp::List &x, const Rcpp::List &y, const b
     ssd2 += tmpVal * tmpVal;
   }
 
-  double pooledVariance = (ssd1 + ssd2) / (n1 + n2 - 2);
+  double varianceValue = (pooled) ? (ssd1 + ssd2) / (n1 + n2 - 2) * (1.0 / n1 + 1.0 / n2) : ssd1 / (n1 - 1.0) / n1 + ssd2 / (n2 - 1.0) / n2;
 
-  return meanDifference / std::sqrt(pooledVariance);
+  return meanDifference / std::sqrt(varianceValue);
 }
 
 arma::vec stat_edge_count_impl(const arma::mat &E, const arma::vec &indices)
