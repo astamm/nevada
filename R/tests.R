@@ -57,10 +57,11 @@ test_twosample <- function(x,
                            y,
                            representation = "adjacency",
                            distance = "hamming",
-                           statistic = "mod",
+                           statistic = "lot",
                            B = 1000L,
                            alpha = 0.05,
                            test = "exact",
+                           k = 5L,
                            verbose = FALSE) {
   n1 <- length(x)
   n2 <- length(y)
@@ -70,41 +71,27 @@ test_twosample <- function(x,
     representation,
     c("adjacency", "laplacian", "modularity", "transitivity")
   )
+
   distance <- match.arg(
     distance,
     c("hamming", "frobenius", "spectral", "root-euclidean")
   )
-  statistic <- match.arg(
-    statistic,
-    c("mod", "dom", "sdom", "dom-frobenius", "sdom-frobenius", "original", "generalized", "weighted")
-  )
 
-  if (statistic %in% c("dom-frobenius", "sdom-frobenius"))
-    d <- repr_nvd(x, y, representation = representation)
-  else {
+  npc <- length(statistic) > 1
+
+  if (!npc) {
+    if (statistic %in% c("student", "welch"))
+      d <- repr_nvd(x, y, representation = representation)
+    else {
+      d <- dist_nvd(x, y, representation = representation, distance = distance)
+      if (statistic %in% c("original", "generalized", "weighted"))
+        d <- edge_count_global_variables(d, n1, k = k)
+    }
+  } else
     d <- dist_nvd(x, y, representation = representation, distance = distance)
-    if (statistic %in% c("original", "generalized", "weighted"))
-      d <- edge_count_global_variables(d, n1, k = 5L)
-  }
-
-  T0 <- switch(
-    statistic,
-    "mod" = stat_mod(d, 1:n1),
-    "dom" = stat_dom(d, 1:n1, standardize = FALSE),
-    "sdom" = stat_dom(d, 1:n1, standardize = TRUE),
-    "dom-frobenius" = stat_dom_frobenius(d, 1:n1, standardize = FALSE),
-    "sdom-frobenius" = stat_dom_frobenius(d, 1:n1, standardize = TRUE),
-    "original" = stat_edge_count(d, 1:n1, type = "original"),
-    "generalized" = stat_edge_count(d, 1:n1, type = "generalized"),
-    "weighted" = stat_edge_count(d, 1:n1, type = "weighted")
-  )
 
   if (B < 1)
-    B <- (qnorm(alpha / 2, lower.tail = FALSE) / tol) ^ 2
-
-  if (!reachable_significance(n1, n2, B, alpha, verbose))
-    warning("The requested significance level cannot be
-            reached given the sample sizes.")
+    B <- (qnorm(alpha / 2, lower.tail = FALSE) / tol)^2
 
   M <- choose(n, n1)
   if (n1 == n2)
@@ -117,18 +104,39 @@ test_twosample <- function(x,
   } else
     group1.perm <- replicate(B, sample.int(n))[1:n1, ]
 
-  Tp <- sapply(1:B, get_permuted_statistic, group1.perm, d, statistic)
+  if (!npc)
+    Tp <- sapply(0:B, get_permuted_statistic, indices1 = group1.perm, d = d, statistic = statistic)
+  else {
+    Tp <- statistic %>%
+      purrr::map(~ sapply(0:B, get_permuted_statistic, indices1 = group1.perm, d = d, statistic = .)) %>%
+      purrr::map(~ sapply(1:(B+1), stats2pvalue, Tp = ., test = test, B = B, M = M)) %>%
+      purrr::transpose() %>%
+      purrr::simplify_all() %>%
+      purrr::map_dbl(combine_pvalues)
+  }
 
+  list(
+    statistic = Tp[1],
+    pvalue = stats2pvalue(1, Tp, test, B, M),
+    permuted_statistics = Tp[-1]
+  )
+}
+
+stats2pvalue <- function(i, Tp, test = "exact", B, M) {
+  T0 <- Tp[i]
+  Tp <- Tp[-i]
   if (test == "approximate")
     p <- mean(Tp >= T0)
   else {
     b <- sum(Tp >= T0)
     p <- phipson_smyth_pvalue(b, B, M)
   }
+}
 
-  list(
-    statistic = T0,
-    pvalue = p,
-    permuted_statistics = Tp
+combine_pvalues <- function(p, method = "tippett") {
+  switch (
+    method,
+    tippett = 1 - min(p),
+    fisher = - 2 * sum(log(p))
   )
 }
