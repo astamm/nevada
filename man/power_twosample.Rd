@@ -6,7 +6,7 @@
 \usage{
 power_twosample(scenario = "0", n_pop = 4L, representation = "adjacency",
   distance = "frobenius", statistic = "mod", alpha = 0.05,
-  test = "exact", R = 1000L, seed = NULL)
+  test = "exact", k = 5L, R = 1000L, seed = NULL)
 }
 \arguments{
 \item{scenario}{A character specifying the scenario to be simulated (choices

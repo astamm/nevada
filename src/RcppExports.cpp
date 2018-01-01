@@ -66,16 +66,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// stat_dom_frobenius_impl
-double stat_dom_frobenius_impl(const Rcpp::List& x, const Rcpp::List& y, const bool standardize);
-RcppExport SEXP _nevada_stat_dom_frobenius_impl(SEXP xSEXP, SEXP ySEXP, SEXP standardizeSEXP) {
+// stat_t_euclidean_impl
+double stat_t_euclidean_impl(const Rcpp::List& x, const Rcpp::List& y, const bool pooled);
+RcppExport SEXP _nevada_stat_t_euclidean_impl(SEXP xSEXP, SEXP ySEXP, SEXP pooledSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List& >::type y(ySEXP);
-    Rcpp::traits::input_parameter< const bool >::type standardize(standardizeSEXP);
-    rcpp_result_gen = Rcpp::wrap(stat_dom_frobenius_impl(x, y, standardize));
+    Rcpp::traits::input_parameter< const bool >::type pooled(pooledSEXP);
+    rcpp_result_gen = Rcpp::wrap(stat_t_euclidean_impl(x, y, pooled));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -98,7 +98,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nevada_dist_spectral_impl", (DL_FUNC) &_nevada_dist_spectral_impl, 2},
     {"_nevada_dist_root_euclidean_impl", (DL_FUNC) &_nevada_dist_root_euclidean_impl, 2},
     {"_nevada_dist_nvd_impl", (DL_FUNC) &_nevada_dist_nvd_impl, 2},
-    {"_nevada_stat_dom_frobenius_impl", (DL_FUNC) &_nevada_stat_dom_frobenius_impl, 3},
+    {"_nevada_stat_t_euclidean_impl", (DL_FUNC) &_nevada_stat_t_euclidean_impl, 3},
     {"_nevada_stat_edge_count_impl", (DL_FUNC) &_nevada_stat_edge_count_impl, 2},
     {NULL, NULL, 0}
 };

@@ -5,7 +5,7 @@
 \title{Comparison of Network Distributions}
 \usage{
 test_twosample(x, y, representation = "adjacency", distance = "hamming",
-  statistic = "mod", B = 1000L, alpha = 0.05, test = "exact",
+  statistic = "lot", B = 1000L, alpha = 0.05, test = "exact", k = 5L,
   verbose = FALSE)
 }
 \arguments{

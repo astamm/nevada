@@ -2,17 +2,32 @@
 % Please edit documentation in R/statistics.R
 \name{statistics}
 \alias{statistics}
+\alias{stat_lot}
+\alias{stat_sot}
+\alias{stat_biswas}
+\alias{stat_energy}
 \alias{stat_mod}
 \alias{stat_dom}
-\alias{stat_dom_frobenius}
+\alias{stat_student_euclidean}
+\alias{stat_welch_euclidean}
 \alias{stat_edge_count}
 \title{Test Statistics for Network Populations}
 \usage{
-stat_mod(d, indices, standardize = TRUE)
+stat_lot(d, indices, pooled = TRUE)
+
+stat_sot(d, indices)
+
+stat_biswas(d, indices)
+
+stat_energy(d, indices, alpha = 1)
+
+stat_mod(d, indices)
 
 stat_dom(d, indices, standardize = TRUE)
 
-stat_dom_frobenius(d, indices, standardize = TRUE)
+stat_student_euclidean(d, indices)
+
+stat_welch_euclidean(d, indices)
 
 stat_edge_count(d, indices, type = "original")
 }

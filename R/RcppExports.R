@@ -21,8 +21,8 @@ dist_nvd_impl <- function(z, distance = "frobenius") {
     .Call('_nevada_dist_nvd_impl', PACKAGE = 'nevada', z, distance)
 }
 
-stat_dom_frobenius_impl <- function(x, y, standardize = TRUE) {
-    .Call('_nevada_stat_dom_frobenius_impl', PACKAGE = 'nevada', x, y, standardize)
+stat_t_euclidean_impl <- function(x, y, pooled = TRUE) {
+    .Call('_nevada_stat_t_euclidean_impl', PACKAGE = 'nevada', x, y, pooled)
 }
 
 stat_edge_count_impl <- function(E, indices) {

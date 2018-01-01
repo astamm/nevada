@@ -12,29 +12,29 @@ rbinom_network <- function(size, prob, n) {
 
 # Equal distributions
 get_scenario10_dataset <- function(n1, n2 = n1) {
-  x <- nvd("binomial", n1, size = 10, prob = 1/2)
-  y <- nvd("binomial", n2, size = 10, prob = 1/2)
+  x <- nvd("binomial", n1, size = 15, prob = 1/3)
+  y <- nvd("binomial", n2, size = 15, prob = 1/3)
   list(x = x, y = y)
 }
 
 # Distributions with equal means, different variances
 get_scenario11_dataset <- function(n1, n2 = n1) {
-  x <- nvd("binomial", n1, size = 10, prob = 1/2)
+  x <- nvd("binomial", n1, size = 15, prob = 1/3)
   y <- nvd("binomial", n2, size = 20, prob = 1/4)
   list(x = x, y = y)
 }
 
 # Distributions with different means, equal variances
 get_scenario12_dataset <- function(n1, n2 = n1) {
-  x <- nvd("binomial", n1, size = 10, prob = 1/4)
-  y <- nvd("binomial", n2, size = 10, prob = 3/4)
+  x <- nvd("binomial", n1, size = 15, prob = 31/64)
+  y <- nvd("binomial", n2, size = 15, prob = 33/64)
   list(x = x, y = y)
 }
 
 # Distributions with different means, different variances
 get_scenario13_dataset <- function(n1, n2 = n1) {
-  x <- nvd("binomial", n1, size = 20, prob = 1/4)
-  y <- nvd("binomial", n2, size = 10, prob = 3/4)
+  x <- nvd("binomial", n1, size = 15, prob = 1/5)
+  y <- nvd("binomial", n2, size = 15, prob = 1/6)
   list(x = x, y = y)
 }
 
@@ -82,7 +82,8 @@ perform_single_test <- function(scenario,
                                 distance,
                                 statistic,
                                 alpha = 0.05,
-                                test = "exact") {
+                                test = "exact",
+                                k = 5L) {
   data <- switch(
     scenario,
     "0" = get_scenario0_dataset(n_pop),
@@ -103,9 +104,10 @@ perform_single_test <- function(scenario,
     representation = representation,
     distance = distance,
     statistic = statistic,
-    verbose = FALSE,
     alpha = alpha,
-    test = test
+    test = test,
+    k = k,
+    verbose = FALSE
   )
 
   test_data$pvalue
@@ -144,10 +146,12 @@ power_twosample <- function(scenario = "0",
                             statistic = "mod",
                             alpha = 0.05,
                             test = "exact",
+                            k = 5L,
                             R = 1000L,
                             seed = NULL) {
   set.seed(seed)
-  replicate(
+
+  pvalues <- replicate(
     R,
     perform_single_test(
       scenario,
@@ -156,7 +160,10 @@ power_twosample <- function(scenario = "0",
       distance,
       statistic,
       alpha = alpha,
-      test = test
+      test = test,
+      k = k
     )
   )
+
+  mean(pvalues <= 0.05)
 }
