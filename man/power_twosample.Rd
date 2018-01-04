@@ -20,17 +20,23 @@ among: \code{"adjacency"} [default], \code{"laplacian"} and
 \code{"modularity"}.}
 
 \item{distance}{A string specifying the chosen distance for calculating the
-test statistic, among: \code{"hamming"} [default], \code{"frobenius"},
+test statistic, among: \code{"hamming"}, \code{"frobenius"} [default],
 \code{"spectral"} and \code{"root-euclidean"}.}
 
-\item{statistic}{A string specifying the chosen test statistic, among:
-\code{"mod"} [default], \code{"dom"} or \code{"sdom"}.}
+\item{statistic}{A string specifying the chosen test statistic(s), among:
+\code{"lot"} [default], \code{"sot"}, \code{"biswas"}, \code{"energy"},
+\code{"student"}, \code{"welch"}, \code{"original"}, \code{"generalized"},
+\code{"weighted"} or a combination from \code{c("lot", "sot", "biswas",
+"energy")}.}
 
 \item{alpha}{The significance level (default: \code{0.05}).}
 
 \item{test}{A character string specifying if performing an exact test through
-the use of Phipson Smyth p-value or an approximate test through a
-Monte-Carlo p-value (default: \code{"exact"}).}
+the use of Phipson-Smyth estimate of the p-value or an approximate test
+through a Monte-Carlo estimate of the p-value (default: \code{"exact"}).}
+
+\item{k}{An integer specifying the density of the minimum spanning tree used
+for the edge count statistics (default: \code{5L}).}
 
 \item{R}{The number of Monte-Carlo runs used to estimate the power (default:
 1000L).}
