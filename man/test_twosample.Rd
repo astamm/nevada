@@ -54,12 +54,6 @@ fashion using a permutational framework in which several statistics can be
 used, together with several choices of network matrix representations and
 distances between networks.
 }
-\details{
-The exhaustive list of all possible permutations is used if its length is
-smaller than either the user-defined number of random permutations requested
-or the number of permutations required for achieving a user-defined p-value
-resolution. Otherwise, the p-value is estimated via Monte-Carlo simulations.
-}
 \examples{
 n <- 10L
 

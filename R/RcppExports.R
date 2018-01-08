@@ -21,6 +21,10 @@ dist_nvd_impl <- function(z, distance = "frobenius") {
     .Call('_nevada_dist_nvd_impl', PACKAGE = 'nevada', z, distance)
 }
 
+repr_adjacency_impl <- function(numberOfVertices, edgeList, weights) {
+    .Call('_nevada_repr_adjacency_impl', PACKAGE = 'nevada', numberOfVertices, edgeList, weights)
+}
+
 stat_t_euclidean_impl <- function(x, y, pooled = TRUE) {
     .Call('_nevada_stat_t_euclidean_impl', PACKAGE = 'nevada', x, y, pooled)
 }

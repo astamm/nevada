@@ -1,13 +1,13 @@
 rpois_network <- function(lambda, n) {
   A <- diag(0, n)
   A[upper.tri(A)] <- rpois(n * (n - 1L) / 2L, lambda)
-  igraph::graph_from_adjacency_matrix(A, mode = "upper")
+  igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
 }
 
 rbinom_network <- function(size, prob, n) {
   A <- diag(0, n)
   A[upper.tri(A)] <- rbinom(n * (n - 1L) / 2L, size, prob)
-  igraph::graph_from_adjacency_matrix(A, mode = "upper")
+  igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
 }
 
 # Equal distributions

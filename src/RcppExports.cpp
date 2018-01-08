@@ -66,6 +66,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// repr_adjacency_impl
+arma::mat repr_adjacency_impl(const unsigned int numberOfVertices, const arma::mat& edgeList, const arma::vec& weights);
+RcppExport SEXP _nevada_repr_adjacency_impl(SEXP numberOfVerticesSEXP, SEXP edgeListSEXP, SEXP weightsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const unsigned int >::type numberOfVertices(numberOfVerticesSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type edgeList(edgeListSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type weights(weightsSEXP);
+    rcpp_result_gen = Rcpp::wrap(repr_adjacency_impl(numberOfVertices, edgeList, weights));
+    return rcpp_result_gen;
+END_RCPP
+}
 // stat_t_euclidean_impl
 double stat_t_euclidean_impl(const Rcpp::List& x, const Rcpp::List& y, const bool pooled);
 RcppExport SEXP _nevada_stat_t_euclidean_impl(SEXP xSEXP, SEXP ySEXP, SEXP pooledSEXP) {
@@ -98,6 +111,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nevada_dist_spectral_impl", (DL_FUNC) &_nevada_dist_spectral_impl, 2},
     {"_nevada_dist_root_euclidean_impl", (DL_FUNC) &_nevada_dist_root_euclidean_impl, 2},
     {"_nevada_dist_nvd_impl", (DL_FUNC) &_nevada_dist_nvd_impl, 2},
+    {"_nevada_repr_adjacency_impl", (DL_FUNC) &_nevada_repr_adjacency_impl, 3},
     {"_nevada_stat_t_euclidean_impl", (DL_FUNC) &_nevada_stat_t_euclidean_impl, 3},
     {"_nevada_stat_edge_count_impl", (DL_FUNC) &_nevada_stat_edge_count_impl, 2},
     {NULL, NULL, 0}

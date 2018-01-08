@@ -22,10 +22,10 @@ format_input <- function(x, representation = "adjacency") {
 
       x <- switch(
         representation,
-        adjacency = repr_adjacency(igraph::graph_from_adjacency_matrix(x, mode = "undirected")),
-        laplacian = repr_laplacian(igraph::graph_from_adjacency_matrix(x, mode = "undirected")),
-        modularity = repr_modularity(igraph::graph_from_adjacency_matrix(x, mode = "undirected")),
-        transitivity = repr_transitivity(igraph::graph_from_adjacency_matrix(x, mode = "undirected"))
+        adjacency = repr_adjacency(igraph::graph_from_adjacency_matrix(x, mode = "undirected", weighted = TRUE)),
+        laplacian = repr_laplacian(igraph::graph_from_adjacency_matrix(x, mode = "undirected", weighted = TRUE)),
+        modularity = repr_modularity(igraph::graph_from_adjacency_matrix(x, mode = "undirected", weighted = TRUE)),
+        transitivity = repr_transitivity(igraph::graph_from_adjacency_matrix(x, mode = "undirected", weighted = TRUE))
       )
     }
   }
