@@ -106,7 +106,7 @@ test_twosample <- function(x,
   else {
     Tp <- statistic %>%
       purrr::map(~ sapply(0:B, get_permuted_statistic, indices1 = group1.perm, d = d, statistic = .)) %>%
-      purrr::map(~ sapply(1:(B+1), stats2pvalue, Tp = ., test = test, B = B, M = M)) %>%
+      purrr::map(~ sapply(1:(B+1), stats2pvalue, Tp = ., test = "approximate", B = B, M = M)) %>%
       purrr::transpose() %>%
       purrr::simplify_all() %>%
       purrr::map_dbl(combine_pvalues)
@@ -121,13 +121,11 @@ test_twosample <- function(x,
 
 stats2pvalue <- function(i, Tp, test = "exact", B, M) {
   T0 <- Tp[i]
-  Tp <- Tp[-i]
+  b <- sum(Tp >= T0) - 1
   if (test == "approximate")
-    p <- mean(Tp >= T0)
-  else {
-    b <- sum(Tp >= T0)
+    p <- b / B
+  else
     p <- phipson_smyth_pvalue(b, B, M)
-  }
 }
 
 combine_pvalues <- function(p, method = "tippett") {

@@ -165,7 +165,7 @@ rperm2 <- function(m, size=2) { # Obtain m unique permutations of 1:size
 
 phipson_smyth_pvalue <- function(b, B, M) {
   if (M <= 10000) {
-    pt <- (1:M) / M
+    pt <- seq_len(M) / M
     return(mean(pbinom(q = b, size = B, prob = pt)))
   }
 
