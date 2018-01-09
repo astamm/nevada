@@ -106,8 +106,7 @@ perform_single_test <- function(scenario,
     statistic = statistic,
     alpha = alpha,
     test = test,
-    k = k,
-    verbose = FALSE
+    k = k
   )
 
   test_data$pvalue
@@ -143,7 +142,7 @@ power_twosample <- function(scenario = "0",
                             n_pop = 4L,
                             representation = "adjacency",
                             distance = "frobenius",
-                            statistic = "mod",
+                            statistic = "lot",
                             alpha = 0.05,
                             test = "exact",
                             k = 5L,

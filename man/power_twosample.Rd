@@ -5,7 +5,7 @@
 \title{Power Simulations for Permutation Tests}
 \usage{
 power_twosample(scenario = "0", n_pop = 4L, representation = "adjacency",
-  distance = "frobenius", statistic = "mod", alpha = 0.05,
+  distance = "frobenius", statistic = "lot", alpha = 0.05,
   test = "exact", k = 5L, R = 1000L, seed = NULL)
 }
 \arguments{
