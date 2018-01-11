@@ -79,6 +79,59 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// stat_lot_impl
+double stat_lot_impl(const arma::mat& distanceMatrix, const arma::vec& firstGroupIndices, const arma::vec& secondGroupIndices);
+RcppExport SEXP _nevada_stat_lot_impl(SEXP distanceMatrixSEXP, SEXP firstGroupIndicesSEXP, SEXP secondGroupIndicesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type distanceMatrix(distanceMatrixSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type firstGroupIndices(firstGroupIndicesSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type secondGroupIndices(secondGroupIndicesSEXP);
+    rcpp_result_gen = Rcpp::wrap(stat_lot_impl(distanceMatrix, firstGroupIndices, secondGroupIndices));
+    return rcpp_result_gen;
+END_RCPP
+}
+// stat_sot_impl
+double stat_sot_impl(const arma::mat& distanceMatrix, const arma::vec& firstGroupIndices, const arma::vec& secondGroupIndices);
+RcppExport SEXP _nevada_stat_sot_impl(SEXP distanceMatrixSEXP, SEXP firstGroupIndicesSEXP, SEXP secondGroupIndicesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type distanceMatrix(distanceMatrixSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type firstGroupIndices(firstGroupIndicesSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type secondGroupIndices(secondGroupIndicesSEXP);
+    rcpp_result_gen = Rcpp::wrap(stat_sot_impl(distanceMatrix, firstGroupIndices, secondGroupIndices));
+    return rcpp_result_gen;
+END_RCPP
+}
+// stat_biswas_impl
+double stat_biswas_impl(const arma::mat& distanceMatrix, const arma::vec& firstGroupIndices, const arma::vec& secondGroupIndices);
+RcppExport SEXP _nevada_stat_biswas_impl(SEXP distanceMatrixSEXP, SEXP firstGroupIndicesSEXP, SEXP secondGroupIndicesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type distanceMatrix(distanceMatrixSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type firstGroupIndices(firstGroupIndicesSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type secondGroupIndices(secondGroupIndicesSEXP);
+    rcpp_result_gen = Rcpp::wrap(stat_biswas_impl(distanceMatrix, firstGroupIndices, secondGroupIndices));
+    return rcpp_result_gen;
+END_RCPP
+}
+// stat_energy_impl
+double stat_energy_impl(const arma::mat& distanceMatrix, const arma::vec& firstGroupIndices, const arma::vec& secondGroupIndices, const unsigned int alpha);
+RcppExport SEXP _nevada_stat_energy_impl(SEXP distanceMatrixSEXP, SEXP firstGroupIndicesSEXP, SEXP secondGroupIndicesSEXP, SEXP alphaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type distanceMatrix(distanceMatrixSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type firstGroupIndices(firstGroupIndicesSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type secondGroupIndices(secondGroupIndicesSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type alpha(alphaSEXP);
+    rcpp_result_gen = Rcpp::wrap(stat_energy_impl(distanceMatrix, firstGroupIndices, secondGroupIndices, alpha));
+    return rcpp_result_gen;
+END_RCPP
+}
 // stat_t_euclidean_impl
 double stat_t_euclidean_impl(const Rcpp::List& x, const Rcpp::List& y, const bool pooled);
 RcppExport SEXP _nevada_stat_t_euclidean_impl(SEXP xSEXP, SEXP ySEXP, SEXP pooledSEXP) {
@@ -112,6 +165,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nevada_dist_root_euclidean_impl", (DL_FUNC) &_nevada_dist_root_euclidean_impl, 2},
     {"_nevada_dist_nvd_impl", (DL_FUNC) &_nevada_dist_nvd_impl, 2},
     {"_nevada_repr_adjacency_impl", (DL_FUNC) &_nevada_repr_adjacency_impl, 3},
+    {"_nevada_stat_lot_impl", (DL_FUNC) &_nevada_stat_lot_impl, 3},
+    {"_nevada_stat_sot_impl", (DL_FUNC) &_nevada_stat_sot_impl, 3},
+    {"_nevada_stat_biswas_impl", (DL_FUNC) &_nevada_stat_biswas_impl, 3},
+    {"_nevada_stat_energy_impl", (DL_FUNC) &_nevada_stat_energy_impl, 4},
     {"_nevada_stat_t_euclidean_impl", (DL_FUNC) &_nevada_stat_t_euclidean_impl, 3},
     {"_nevada_stat_edge_count_impl", (DL_FUNC) &_nevada_stat_edge_count_impl, 2},
     {NULL, NULL, 0}

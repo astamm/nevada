@@ -40,60 +40,30 @@ NULL
 
 #' @rdname statistics
 #' @export
-stat_lot <- function(d, indices, pooled = TRUE) {
-  xy <- d[indices, -indices]^2
-  xx <- d[indices, indices]
-  xx <- xx[upper.tri(xx)]^2
-  yy <- d[-indices, -indices]
-  yy <- yy[upper.tri(yy)]^2
-  varx <- mean(xx) / 2
-  vary <- mean(yy) / 2
-  mse <- mean(xy)
-  n1 <- length(indices)
-  n2 <- nrow(d) - n1
-  if (pooled)
-    var <- mean(c(xx, yy)) / 2 * (1 / n1 + 1 / n2)
-  else
-    var <- varx / n1 + vary / n2
-  (mse - varx - vary) / var
+stat_lot <- function(d, indices) {
+  indices2 <- seq_len(nrow(d))[-indices]
+  stat_lot_impl(d, indices, indices2)
 }
 
 #' @rdname statistics
 #' @export
 stat_sot <- function(d, indices) {
-  xx <- d[indices, indices]
-  xx <- xx[upper.tri(xx)]^2
-  yy <- d[-indices, -indices]
-  yy <- yy[upper.tri(yy)]^2
-  varx <- mean(xx) / 2
-  vary <- mean(yy) / 2
-  max(varx, vary) / min(varx, vary)
+  indices2 <- seq_len(nrow(d))[-indices]
+  stat_sot_impl(d, indices, indices2)
 }
 
 #' @rdname statistics
 #' @export
 stat_biswas <- function(d, indices) {
-  xy <- d[indices, -indices]
-  xx <- d[indices, indices]
-  xx <- xx[upper.tri(xx)]
-  yy <- d[-indices, -indices]
-  yy <- yy[upper.tri(yy)]
-  muFF <- mean(xx)
-  muGG <- mean(yy)
-  muFG <- mean(xy)
-  (muFF - muFG)^2 + (muGG - muFG)^2
+  indices2 <- seq_len(nrow(d))[-indices]
+  stat_biswas_impl(d, indices, indices2)
 }
 
 #' @rdname statistics
 #' @export
 stat_energy <- function(d, indices, alpha = 1) {
-  xy <- d[indices, -indices]^alpha
-  xx <- d[indices, indices]^alpha
-  yy <- d[-indices, -indices]^alpha
-  varx <- mean(xx) / 2
-  vary <- mean(yy) / 2
-  mse <- mean(xy)
-  mse - varx - vary
+  indices2 <- seq_len(nrow(d))[-indices]
+  stat_energy_impl(d, indices, indices2, alpha)
 }
 
 #' @rdname statistics

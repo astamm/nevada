@@ -25,6 +25,22 @@ repr_adjacency_impl <- function(numberOfVertices, edgeList, weights) {
     .Call('_nevada_repr_adjacency_impl', PACKAGE = 'nevada', numberOfVertices, edgeList, weights)
 }
 
+stat_lot_impl <- function(distanceMatrix, firstGroupIndices, secondGroupIndices) {
+    .Call('_nevada_stat_lot_impl', PACKAGE = 'nevada', distanceMatrix, firstGroupIndices, secondGroupIndices)
+}
+
+stat_sot_impl <- function(distanceMatrix, firstGroupIndices, secondGroupIndices) {
+    .Call('_nevada_stat_sot_impl', PACKAGE = 'nevada', distanceMatrix, firstGroupIndices, secondGroupIndices)
+}
+
+stat_biswas_impl <- function(distanceMatrix, firstGroupIndices, secondGroupIndices) {
+    .Call('_nevada_stat_biswas_impl', PACKAGE = 'nevada', distanceMatrix, firstGroupIndices, secondGroupIndices)
+}
+
+stat_energy_impl <- function(distanceMatrix, firstGroupIndices, secondGroupIndices, alpha = 1L) {
+    .Call('_nevada_stat_energy_impl', PACKAGE = 'nevada', distanceMatrix, firstGroupIndices, secondGroupIndices, alpha)
+}
+
 stat_t_euclidean_impl <- function(x, y, pooled = TRUE) {
     .Call('_nevada_stat_t_euclidean_impl', PACKAGE = 'nevada', x, y, pooled)
 }

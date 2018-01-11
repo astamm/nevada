@@ -181,8 +181,7 @@ get_permuted_statistic <- function(i, indices1, d, statistic) {
 
   switch(
     statistic,
-    plot = stat_lot(d, indices, pooled = TRUE),
-    lot = stat_lot(d, indices, pooled = FALSE),
+    lot = stat_lot(d, indices),
     sot = stat_sot(d, indices),
     biswas = stat_biswas(d, indices),
     energy = stat_energy(d, indices),

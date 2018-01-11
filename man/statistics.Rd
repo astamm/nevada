@@ -13,7 +13,7 @@
 \alias{stat_edge_count}
 \title{Test Statistics for Network Populations}
 \usage{
-stat_lot(d, indices, pooled = TRUE)
+stat_lot(d, indices)
 
 stat_sot(d, indices)
 
