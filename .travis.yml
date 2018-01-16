@@ -4,10 +4,16 @@ language: R
 sudo: required
 cache: packages
 r_binary_packages:
-- igraph
-- Rcpp
-- RcppArmadillo
-- tidyr
-- dplyr
-- tibble
-- ggplot2
+  - igraph
+  - Rcpp
+  - RcppArmadillo
+  - tidyr
+  - dplyr
+  - tibble
+  - ggplot2
+
+addons:
+   apt:
+     packages:
+       - gmp-dev # for GMP, a dependency of igraph
+       - libxml2-dev # for XML, a dependency of igraph
