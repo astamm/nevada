@@ -4,9 +4,10 @@ language: R
 sudo: required
 cache: packages
 r_binary_packages:
-  - igraph
-  - Rcpp
-  - tidyr
-  - dplyr
-  - tibble
-  - ggplot2
+- igraph
+- Rcpp
+- RcppArmadillo
+- tidyr
+- dplyr
+- tibble
+- ggplot2
