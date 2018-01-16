@@ -1,5 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+[![Travis-CI Build Status](https://travis-ci.org/astamm/nevada.svg?branch=master)](https://travis-ci.org/astamm/nevada)
+
 Overview of the `nevada` package
 --------------------------------
 
@@ -37,9 +39,6 @@ n <- 10L
 x <- nevada::nvd("smallworld", n)
 y <- nevada::nvd("pa", n)
 test1 <- nevada::test_twosample(x, y, "modularity")
-#>  - P-value resolution: 0.001
-#>  - Computing approximate p-value using 1000 random permutations.
-#>  - P-value will not drop below 5.41254411223451e-06 on average over repeated Monte-Carlo estimates.
 test1$pvalue
 #> [1] 0.0009936031
 ```
@@ -53,9 +52,6 @@ n <- 10L
 x <- nevada::nvd("smallworld", n)
 y <- nevada::nvd("smallworld", n)
 test2 <- nevada::test_twosample(x, y, "modularity")
-#>  - P-value resolution: 0.001
-#>  - Computing approximate p-value using 1000 random permutations.
-#>  - P-value will not drop below 5.41254411223451e-06 on average over repeated Monte-Carlo estimates.
 test2$pvalue
-#> [1] 0.9010935
+#> [1] 0.415579
 ```
