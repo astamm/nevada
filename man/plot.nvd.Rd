@@ -11,7 +11,7 @@
 
 \item{y}{A \code{\link{nvd}} object.}
 
-\item{...}{}
+\item{...}{Extra arguments to be passed to the plot function.}
 }
 \value{
 Invisibly returns the dataset computed to generate the plot.

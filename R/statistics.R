@@ -1,26 +1,33 @@
 #' Test Statistics for Network Populations
 #'
-#' This is a collection of functions that provide various test statistics for
-#' populations of networks. The \emph{MoD} (mean of the distances) test
-#' statistic is given by the mean of all the distances between the \eqn{n1}
-#' elements of the fist sample and those (\eqn{n2}) of the second one. The
-#' \emph{DoM} (distance of the means) test statistic is given by the distance
-#' between the Frechet mean of the first sample (with cardinality \eqn{n1}) and
-#' that of the second one (with cardinality \eqn{n2}). The \emph{sDoM}
-#' (standardized distance of the means) is the \emph{DoM} statistic standardized
-#' by the pooled sample standard deviation. The distance used to compute the
-#' value of the test statistic is the same used to find the Fréchet means.
+#' This is a collection of functions that provide statistics for testing
+#' equality in distribution between samples of networks.
+#'
+#' In details, there are three main categories of statistics:
+#'
+#' \itemize{ \item distance-based statistics: such as \code{stat_lot} which is a
+#' distance-based version of the t statistic, \code{stat_sot} which is a
+#' distance-based version of the F statistic, \code{stat_energy} which is the
+#' class of energy-based statistics and \code{stat_biswas} which is the
+#' Biswas-Ghosh statistic. \item Euclidean t-Statistics: both Student
+#' \code{stat_student_euclidean} version for equal variances and Welch
+#' \code{stat_welch_euclidean} version for unequal variances, \item Statistics
+#' based on similarity graphs: three types of edge count statistics. }
 #'
 #' @param d Either a matrix of dimension \eqn{(n1+n2)x(n1+n2)} containing the
-#'   distances between all the elements of the two samples put together or, for
-#'   the \code{stat_dom_frobenius} statistic, the concatenation of the lists of
-#'   matrix representations of networks in samples 1 and 2.
+#'   distances between all the elements of the two samples put together (for
+#'   distance-based statistics) or the concatenation of the lists of matrix
+#'   representations of networks in samples 1 and 2 for Euclidean t-Statistics
+#'   or a list of edge properties of a similarity graph for the graph-based edge
+#'   count statistics.
 #' @param indices A vector of dimension \eqn{n1} containing the indices of the
 #'   elements of the first sample.
+#' @param alpha An integer specifying to which power elevating the Euclidean
+#'   distance of the energy-based statistic (default: 1L).
 #' @param standardize If \code{TRUE} (default), standardize the DoM statistic
 #'   using the pooled sample variance estimator.
 #' @param type A string specifying the version of the edge count test statistic
-#'   to be used. Choices are \code{"original"} [default], \code{"generalized"}
+#'   to be used. Choices are \code{"original"}, \code{"generalized"} [default]
 #'   or \code{"weighted"}.
 #'
 #' @return A scalar giving the value of the desired test statistic.
@@ -127,7 +134,7 @@ stat_welch_euclidean <- function(d, indices) {
 
 #' @rdname statistics
 #' @export
-stat_edge_count <- function(d, indices, type = "original") {
+stat_edge_count <- function(d, indices, type = "generalized") {
   E <- d$E
   nE <- d$nE
   n1 <- d$n1
@@ -153,6 +160,7 @@ stat_edge_count <- function(d, indices, type = "original") {
 }
 
 #' @export
+#' @keywords internal
 edge_count_global_variables <- function(d, n1, k = 1L) {
   k <- min(k, ceiling(nrow(d) / 4))
   g <- kmst(d, k)

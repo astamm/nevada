@@ -88,9 +88,6 @@ test_twosample <- function(x,
   } else
     d <- dist_nvd(x, y, representation = representation, distance = distance)
 
-  if (B < 1)
-    B <- (qnorm(alpha / 2, lower.tail = FALSE) / tol)^2
-
   M <- choose(n, n1)
   if (n1 == n2)
     M <- M / 2
@@ -98,7 +95,7 @@ test_twosample <- function(x,
   test <- match.arg(test, c("approximate", "exact"))
   if (test == "approximate" & M <= B) {
     B <- M
-    group1.perm <- combn(n, n1)[, 1:B]
+    group1.perm <- utils::combn(n, n1)[, 1:B]
   } else
     group1.perm <- replicate(B, sample.int(n))[1:n1, ]
 

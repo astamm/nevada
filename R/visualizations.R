@@ -6,7 +6,7 @@
 #'
 #' @param x A \code{\link{nvd}} object.
 #' @param y A \code{\link{nvd}} object.
-#' @param ...
+#' @param ... Extra arguments to be passed to the plot function.
 #'
 #' @return Invisibly returns the dataset computed to generate the plot.
 #' @importFrom dplyr %>%
@@ -21,12 +21,12 @@ plot.nvd <- function(x, y, ...) {
   dchoices <- c("hamming", "frobenius", "spectral", "root-euclidean")
   tidyr::crossing(Representation = rchoices, Distance = dchoices) %>%
     dplyr::mutate(
-      d = purrr::map2(Representation, Distance, dist_nvd, x = x, y = y),
-      mds = purrr::map(d, cmdscale) %>%
+      dist_matrix = purrr::map2(Representation, Distance, dist_nvd, x = x, y = y),
+      mds = purrr::map(dist_matrix, stats::cmdscale) %>%
         purrr::map(tibble::as_tibble) %>%
         purrr::map(dplyr::mutate, Label = c(rep("1", length(x)), rep("2", length(y))))
     ) %>%
-    dplyr::select(-d) %>%
+    dplyr::select(-dist_matrix) %>%
     tidyr::unnest() %>%
     dplyr::mutate(
       Representation = Representation %>%

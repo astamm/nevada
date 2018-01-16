@@ -1,12 +1,12 @@
 rpois_network <- function(lambda, n) {
   A <- diag(0, n)
-  A[upper.tri(A)] <- rpois(n * (n - 1L) / 2L, lambda)
+  A[upper.tri(A)] <- stats::rpois(n * (n - 1L) / 2L, lambda)
   igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
 }
 
 rbinom_network <- function(size, prob, n) {
   A <- diag(0, n)
-  A[upper.tri(A)] <- rbinom(n * (n - 1L) / 2L, size, prob)
+  A[upper.tri(A)] <- stats::rbinom(n * (n - 1L) / 2L, size, prob)
   igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
 }
 
@@ -70,12 +70,6 @@ get_scenarioD_dataset <- function(n1, n2 = n1) {
   list(x = x, y = y)
 }
 
-get_scenarioE_dataset <- function(n1, n2 = n1) {
-  x <- nvd("poisson", n1, lambda = 5)
-  y <- nvd("poisson", n2, lambda = 20)
-  list(x = x, y = y)
-}
-
 perform_single_test <- function(scenario,
                                 n_pop,
                                 representation,
@@ -91,7 +85,6 @@ perform_single_test <- function(scenario,
     "B" = get_scenarioB_dataset(n_pop),
     "C" = get_scenarioC_dataset(n_pop),
     "D" = get_scenarioD_dataset(n_pop),
-    "E" = get_scenarioE_dataset(n_pop),
     "10" = get_scenario10_dataset(n_pop),
     "11" = get_scenario11_dataset(n_pop),
     "12" = get_scenario12_dataset(n_pop),

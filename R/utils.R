@@ -130,7 +130,7 @@ rperm2 <- function(m, size=2) { # Obtain m unique permutations of 1:size
       p <- sample(1:size)
       k <- prefix(p, k.head)
       ip <- cache[[k]]
-      hash.p <- paste(tail(p,-k.head), collapse="")
+      hash.p <- paste(utils::tail(p,-k.head), collapse="")
       if (is.null(ip[[hash.p]])) break
 
       # Prepare to try again.
@@ -166,10 +166,10 @@ rperm2 <- function(m, size=2) { # Obtain m unique permutations of 1:size
 phipson_smyth_pvalue <- function(b, B, M) {
   if (M <= 10000) {
     pt <- seq_len(M) / M
-    return(mean(pbinom(q = b, size = B, prob = pt)))
+    return(mean(stats::pbinom(q = b, size = B, prob = pt)))
   }
 
-  corr <- integrate(pbinom, 0, 0.5 / M, q = b, size = B)$value
+  corr <- stats::integrate(stats::pbinom, 0, 0.5 / M, q = b, size = B)$value
   (b + 1) / (B + 1) - corr
 }
 
@@ -237,7 +237,7 @@ fixed_point <- function(th, r) {
 
 rice_params <- function(x) {
   mu <- mean(x)
-  sig <- sd(x)
+  sig <- stats::sd(x)
   r <- mu / sig
   lb <- sqrt(2 / xi(0) - 1)
   if (r <= lb)
