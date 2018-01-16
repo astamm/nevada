@@ -5,12 +5,12 @@
 Overview of the `nevada` package
 --------------------------------
 
-The package `nevada` (NEtwork-VAlued Data Analysis) contains tools for the statistical analysis of network-valued data. In this framework, the statistical unit is a network and the package deals with samples of networks. With nevada it is possible to test in a non-parametric manner if the two samples came from the same population via two test statistics based on three matrix representations for a network and four different types of distances:
+The package `nevada` (NEtwork-VAlued Data Analysis) is an R package for the statistical analysis of network-valued datasets. In this setting, a sample is made of statistical units that are networks themselves. The package provides a set of matrix representations for networks so that network-valued data can be transformed into matrix-valued data. Subsequently, a number of distances between matrices is provided as well to quantify how far two networks are from each other and a number of distance-based statistics is proposed for testing equality in distribution between samples of networks using exact permutation testing procedures. The implementation is largely made in C++ and the matrix of inter- and intra-sample distances is pre-computed, which alleviates the computational burden often associated with permutation tests. In details:
 
--   the `repr_*()` functions return the selected matrix representation of the input graph
--   the `dist_*()` functions return the chosen distance between two networks
--   the `stat_*()` functions return the value of the preferred test statistic
--   the `test_twosample()` function returns the p-value of the resulting permutation test.
+-   the `repr_*()` functions return the chosen matrix representation of the input graph,
+-   the `dist_*()` functions return the chosen distance between two networks,
+-   the `stat_*()` functions return the value of the chosen test statistic,
+-   the `test_twosample()` function returns the p-value of a permutation test in which the null hypothesis is that the two samples come from the same distribution of networks,
 -   the `power_twosample()` function returns a Monte-Carlo estimate of the power of the test in some specific scenarios.
 
 See the vignette *NEtwork-VAlued Data Analysis* for the details of each function.
@@ -22,7 +22,7 @@ You can install `nevada` from github with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("ilovato/nevada")
+devtools::install_github("astamm/nevada")
 ```
 
 It relies on the `igraph` package. If you encounter bugs or for questions and comments, please contact the maintainer of the package.
@@ -38,7 +38,7 @@ In this first example, we compare two populations of networks generated accordin
 n <- 10L
 x <- nevada::nvd("smallworld", n)
 y <- nevada::nvd("pa", n)
-test1 <- nevada::test_twosample(x, y, "modularity")
+test1 <- nevada::test_twosample(x, y, representation = "modularity")
 test1$pvalue
 #> [1] 0.0009936031
 ```
@@ -51,7 +51,7 @@ In this second example, we compare two populations of networks generated accordi
 n <- 10L
 x <- nevada::nvd("smallworld", n)
 y <- nevada::nvd("smallworld", n)
-test2 <- nevada::test_twosample(x, y, "modularity")
+test2 <- nevada::test_twosample(x, y, representation = "modularity")
 test2$pvalue
-#> [1] 0.415579
+#> [1] 0.5104841
 ```

@@ -14,11 +14,21 @@ nvd(model = "smallworld", n = 0L, pref.matrix = NULL, lambda = NULL,
 
 \item{n}{An integer specifying the sample size (default: \code{0L}).}
 
-\item{pref.matrix}{A matrix giving the Bernoulli rates for the SBM
-generator (see \code{\link[igraph]{sample_sbm}} for details).}
+\item{pref.matrix}{A matrix giving the Bernoulli rates for the SBM generator
+(see \code{\link[igraph]{sample_sbm}} for details). Default is \code{NULL}.
+It is required for \code{model == "sbm"}.}
 
 \item{lambda}{A numeric value specifying the mean value for the Poisson
-generator.}
+generator. Default is \code{NULL}. It is required for \code{model ==
+"poisson"}.}
+
+\item{size}{An integer value specifying the number of trials for the binomial
+distribution. Default is \code{NULL}. It is required for \code{model ==
+"binomial"}.}
+
+\item{prob}{A numeric value specifying the probability of success of each
+trial for the binomial distribution. Default is \code{NULL}. It is required
+for \code{model == "binomial"}.}
 }
 \value{
 A \code{nvd} object which is a list of \code{\link[igraph]{igraph}}

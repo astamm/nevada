@@ -4,11 +4,19 @@
 \name{nevada-package}
 \alias{nevada}
 \alias{nevada-package}
-\title{nevada: NEtwork-VAlued Data Analysis}
+\title{nevada: network-valued data analysis}
 \description{
-This package containes tools for the statistical analysis of network-valued data.
-Given two samples of networks it is possible to test if they came from the same population via two test
-statistics based on four different types of distances. The user can also choose which distance to use.
-It is important to note that in some cases different distances and different test statistics can lead to
-different results.
+nevada provides a ...
+}
+\details{
+It has three main goals:
+
+\itemize{
+\item ...
+\item ...
+\item ...
+}
+
+To learn more about nevada, start with the vignettes:
+`browseVignettes(package = "nevada")`
 }

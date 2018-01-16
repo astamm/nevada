@@ -63,13 +63,20 @@ by the pooled sample standard deviation. The distance used to compute the
 value of the test statistic is the same used to find the Fréchet means.
 }
 \examples{
-x <- nvd("smallworld", 10)
-y <- nvd("pa", 10)
+n1 <- 30L
+n2 <- 10L
+x <- nvd("smallworld", n1)
+y <- nvd("pa", n2)
 d <- dist_nvd(x, y, representation = "laplacian", distance = "frobenius")
-stat_mod(d, 1:10)
-stat_dom(d, 1:10, FALSE)
-stat_dom(d, 1:10, TRUE)
-dm <- repr_nvd(x, y, representation = "laplacian")
-stat_dom_frobenius(dm, 1:10, FALSE)
-stat_dom_frobenius(dm, 1:10, TRUE)
+stat_lot(d, 1:n1)
+stat_sot(d, 1:n1)
+stat_biswas(d, 1:n1)
+stat_energy(d, 1:n1)
+r <- repr_nvd(x, y, representation = "laplacian")
+stat_student_euclidean(r, 1:n1)
+stat_welch_euclidean(r, 1:n1)
+e <- edge_count_global_variables(d, n1, k = 5L)
+stat_edge_count(e, 1:n1, type = "original")
+stat_edge_count(e, 1:n1, type = "generalized")
+stat_edge_count(e, 1:n1, type = "weighted")
 }

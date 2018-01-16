@@ -4,7 +4,8 @@
 \alias{dist_nvd}
 \title{Pairwise Distance Matrix Between Two Samples of Networks}
 \usage{
-dist_nvd(x, y = NULL, representation = "adjacency", distance = "hamming")
+dist_nvd(x, y = NULL, representation = "adjacency",
+  distance = "frobenius")
 }
 \arguments{
 \item{x}{A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects
@@ -20,7 +21,7 @@ among: \code{"adjacency"} [default], \code{"laplacian"} and
 \code{"modularity"}.}
 
 \item{distance}{A string specifying the chosen distance for calculating the
-test statistic, among: \code{"hamming"} [default], \code{"frobenius"},
+test statistic, among: \code{"hamming"}, \code{"frobenius"} [default],
 \code{"spectral"} and \code{"root-euclidean"}.}
 }
 \value{

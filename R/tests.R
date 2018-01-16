@@ -60,6 +60,7 @@ test_twosample <- function(x,
                            alpha = 0.05,
                            test = "exact",
                            k = 5L) {
+
   n1 <- length(x)
   n2 <- length(y)
   n <- n1 + n2

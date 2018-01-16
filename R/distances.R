@@ -26,7 +26,7 @@
 #' @param y An \code{\link[igraph]{igraph}} object or a matrix representing an
 #'   underlying network. Should have the same number of vertices as \code{x}.
 #' @param representation A string specifying the desired type of representation,
-#'   among: \code{"adjacency"}, \code{"laplacian"} [default] and
+#'   among: \code{"adjacency"} [default], \code{"laplacian"} and
 #'   \code{"modularity"}.
 #'
 #' @return A scalar measuring the distance between the two input networks.
@@ -43,7 +43,7 @@ NULL
 
 #' @rdname distances
 #' @export
-dist_hamming <- function(x, y, representation = "laplacian") {
+dist_hamming <- function(x, y, representation = "adjacency") {
   if (!compatible_networks(x, y))
     stop("Input networks are incompatible.")
 
@@ -108,7 +108,7 @@ dist_root_euclidean <- function(x, y, representation = "laplacian") {
 #'   among: \code{"adjacency"} [default], \code{"laplacian"} and
 #'   \code{"modularity"}.
 #' @param distance A string specifying the chosen distance for calculating the
-#'   test statistic, among: \code{"hamming"} [default], \code{"frobenius"},
+#'   test statistic, among: \code{"hamming"}, \code{"frobenius"} [default],
 #'   \code{"spectral"} and \code{"root-euclidean"}.
 #'
 #' @return A matrix of dimension \eqn{(n1+n2) \times (n1+n2)} containing the
@@ -122,7 +122,8 @@ dist_root_euclidean <- function(x, y, representation = "laplacian") {
 dist_nvd <- function(x,
                      y = NULL,
                      representation = "adjacency",
-                     distance = "hamming") {
+                     distance = "frobenius") {
+
   x <- repr_nvd(x, y, representation = representation)
   dist_nvd_impl(x, distance)
 }

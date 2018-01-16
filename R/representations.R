@@ -111,8 +111,8 @@ repr_transitivity <- function(network, validate = TRUE) {
 #' @param y An \code{\link{nvd}} object. If \code{NULL} (default), it is not
 #'   taken into account.
 #' @param representation A string specifying the requested matrix
-#'   representation. Choices are: \code{"adjacency"}, \code{"laplacian"}
-#'   [default] or \code{"modularity"}.
+#'   representation. Choices are: \code{"adjacency"} [default],
+#'   \code{"laplacian"} or \code{"modularity"}.
 #'
 #' @return A list of matrices.
 #' @export
@@ -120,7 +120,7 @@ repr_transitivity <- function(network, validate = TRUE) {
 #' @examples
 #' x <- nvd("gnp", 10)
 #' xm <- repr_nvd(x)
-repr_nvd <- function(x, y = NULL, representation = "laplacian") {
+repr_nvd <- function(x, y = NULL, representation = "adjacency") {
   x <- lapply(x, format_input, representation)
   if (!is.null(y)) {
     y <- lapply(y, format_input, representation)

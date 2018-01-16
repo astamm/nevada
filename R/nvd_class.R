@@ -6,10 +6,18 @@
 #'   (current choices are: \code{"sbm"}, \code{"k_regular"}, \code{"gnp"},
 #'   \code{"smallworld"} [default], \code{"pa"}, \code{"poisson"}).
 #' @param n An integer specifying the sample size (default: \code{0L}).
-#' @param pref.matrix A matrix giving the Bernoulli rates for the SBM
-#'   generator (see \code{\link[igraph]{sample_sbm}} for details).
+#' @param pref.matrix A matrix giving the Bernoulli rates for the SBM generator
+#'   (see \code{\link[igraph]{sample_sbm}} for details). Default is \code{NULL}.
+#'   It is required for \code{model == "sbm"}.
 #' @param lambda A numeric value specifying the mean value for the Poisson
-#'   generator.
+#'   generator. Default is \code{NULL}. It is required for \code{model ==
+#'   "poisson"}.
+#' @param size An integer value specifying the number of trials for the binomial
+#'   distribution. Default is \code{NULL}. It is required for \code{model ==
+#'   "binomial"}.
+#' @param prob A numeric value specifying the probability of success of each
+#'   trial for the binomial distribution. Default is \code{NULL}. It is required
+#'   for \code{model == "binomial"}.
 #'
 #' @return A \code{nvd} object which is a list of \code{\link[igraph]{igraph}}
 #'   objects.
@@ -17,8 +25,17 @@
 #'
 #' @examples
 #' nvd(n = 10L)
-nvd <- function(model = "smallworld", n = 0L, pref.matrix = NULL, lambda = NULL, size = NULL, prob = NULL) {
-  model <- match.arg(model, c("sbm", "k_regular", "gnp", "smallworld", "pa", "poisson", "binomial"))
+nvd <- function(model = "smallworld",
+                n = 0L,
+                pref.matrix = NULL,
+                lambda = NULL,
+                size = NULL,
+                prob = NULL) {
+
+  model <- match.arg(
+    model,
+    c("sbm", "k_regular", "gnp", "smallworld", "pa", "poisson", "binomial")
+  )
 
   if (model == "sbm" & is.null(pref.matrix))
     stop("The pref.matrix argument should be specified to use the SBM generator.")
@@ -43,7 +60,7 @@ nvd <- function(model = "smallworld", n = 0L, pref.matrix = NULL, lambda = NULL,
   as_nvd(obj)
 }
 
-as.nvd <- function(obj) {
+as_nvd <- function(obj) {
   if (!is.list(obj))
     stop("Input should be a list.")
 
@@ -63,10 +80,6 @@ as.nvd <- function(obj) {
   obj
 }
 
-as_nvd <- as.nvd
-
-is.nvd <- function(obj) {
+is_nvd <- function(obj) {
   "nvd" %in% class(obj)
 }
-
-is_nvd <- is.nvd

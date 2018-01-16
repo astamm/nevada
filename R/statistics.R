@@ -26,15 +26,22 @@
 #' @return A scalar giving the value of the desired test statistic.
 #'
 #' @examples
-#' x <- nvd("smallworld", 10)
-#' y <- nvd("pa", 10)
+#' n1 <- 30L
+#' n2 <- 10L
+#' x <- nvd("smallworld", n1)
+#' y <- nvd("pa", n2)
 #' d <- dist_nvd(x, y, representation = "laplacian", distance = "frobenius")
-#' stat_mod(d, 1:10)
-#' stat_dom(d, 1:10, FALSE)
-#' stat_dom(d, 1:10, TRUE)
-#' dm <- repr_nvd(x, y, representation = "laplacian")
-#' stat_dom_frobenius(dm, 1:10, FALSE)
-#' stat_dom_frobenius(dm, 1:10, TRUE)
+#' stat_lot(d, 1:n1)
+#' stat_sot(d, 1:n1)
+#' stat_biswas(d, 1:n1)
+#' stat_energy(d, 1:n1)
+#' r <- repr_nvd(x, y, representation = "laplacian")
+#' stat_student_euclidean(r, 1:n1)
+#' stat_welch_euclidean(r, 1:n1)
+#' e <- edge_count_global_variables(d, n1, k = 5L)
+#' stat_edge_count(e, 1:n1, type = "original")
+#' stat_edge_count(e, 1:n1, type = "generalized")
+#' stat_edge_count(e, 1:n1, type = "weighted")
 #' @name statistics
 NULL
 
@@ -142,5 +149,45 @@ stat_edge_count <- function(d, indices, type = "original") {
     original = -(nE - R1 - R2 - mu0) / sqrt(V0),
     generalized = Sinv[1,1] * (R1 - mu1)^2 + Sinv[2, 2] * (R2 - mu2)^2 + 2 * Sinv[1, 2] * (R1 - mu1) * (R2 - mu2),
     weighted = (n2 * (R1 - mu1) + n1 * (R2 - mu2)) / sqrt(n2^2 * V1 + n1^2 * V2 + 2 * n2 * n1 * V12)
+  )
+}
+
+#' @export
+edge_count_global_variables <- function(d, n1, k = 1L) {
+  k <- min(k, ceiling(nrow(d) / 4))
+  g <- kmst(d, k)
+  E <- igraph::as_edgelist(g)
+  n <- nrow(d)
+  n2 <- n - n1
+  Ebynode <- vector("list", n)
+  for (i in 1:nrow(E)) {
+    Ebynode[[E[i, 1]]] <- c(Ebynode[[E[i, 1]]], E[i, 2])
+    Ebynode[[E[i, 2]]] <- c(Ebynode[[E[i, 2]]], E[i, 1])
+  }
+  nE <- nrow(E)
+  nodedeg <- sapply(Ebynode, length)
+  nEi <- sum(nodedeg * (nodedeg - 1))
+  mu0 <- nE * 2 * n1 * n2 / n / (n - 1)
+  mu1 <- nE * n1 * (n1 - 1) / n / (n - 1)
+  mu2 <- nE * n2 * (n2 - 1) / n / (n - 1)
+  V0 <- nEi * n1 * n2 / n / (n - 1) + (nE * (nE - 1) - nEi) * 4 * n1 * n2 * (n1 - 1) * (n2 - 1) / n / (n - 1) / (n - 2) / (n - 3) + mu0 - mu0^2
+  V1 <- nEi * n1 * (n1 - 1) * (n1 - 2) / n / (n - 1) / (n - 2) + (nE * (nE - 1) - nEi) * n1 * (n1 - 1) * (n1 - 2) * (n1 - 3) / n / (n - 1) / (n - 2) / (n - 3) + mu1 - mu1^2
+  V2 <- nEi * n2 * (n2 - 1) * (n2 - 2) / n / (n - 1) / (n - 2) + (nE * (nE - 1) - nEi) * n2 * (n2 - 1) * (n2 - 2) * (n2 - 3) / n / (n - 1) / (n - 2) / (n - 3) + mu2 - mu2^2
+  V12 <- (nE * (nE - 1) - nEi) * n1 * n2 * (n1 - 1) * (n2 - 1) / n / (n - 1) / (n - 2) / (n - 3) - mu1 * mu2
+  S <- matrix(c(V1, V12, V12, V2), nrow = 2)
+
+  list(
+    E = E,
+    nE = nE,
+    n1 = n1,
+    n2 = n2,
+    mu0 = mu0,
+    mu1 = mu1,
+    mu2 = mu2,
+    V0 = V0,
+    V1 = V1,
+    V2 = V2,
+    V12 = V12,
+    Sinv = solve_partial(S)
   )
 }

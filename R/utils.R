@@ -197,45 +197,6 @@ capitalize <- function(x) {
   gsub("(?<=\\b)([a-z])", "\\U\\1", tolower(x), perl = TRUE)
 }
 
-edge_count_global_variables <- function(d, n1, k = 1L) {
-  k <- min(k, ceiling(nrow(d) / 4))
-  g <- kmst(d, k)
-  E <- igraph::as_edgelist(g)
-  n <- nrow(d)
-  n2 <- n - n1
-  Ebynode <- vector("list", n)
-  for (i in 1:nrow(E)) {
-    Ebynode[[E[i, 1]]] <- c(Ebynode[[E[i, 1]]], E[i, 2])
-    Ebynode[[E[i, 2]]] <- c(Ebynode[[E[i, 2]]], E[i, 1])
-  }
-  nE <- nrow(E)
-  nodedeg <- sapply(Ebynode, length)
-  nEi <- sum(nodedeg * (nodedeg - 1))
-  mu0 <- nE * 2 * n1 * n2 / n / (n - 1)
-  mu1 <- nE * n1 * (n1 - 1) / n / (n - 1)
-  mu2 <- nE * n2 * (n2 - 1) / n / (n - 1)
-  V0 <- nEi * n1 * n2 / n / (n - 1) + (nE * (nE - 1) - nEi) * 4 * n1 * n2 * (n1 - 1) * (n2 - 1) / n / (n - 1) / (n - 2) / (n - 3) + mu0 - mu0^2
-  V1 <- nEi * n1 * (n1 - 1) * (n1 - 2) / n / (n - 1) / (n - 2) + (nE * (nE - 1) - nEi) * n1 * (n1 - 1) * (n1 - 2) * (n1 - 3) / n / (n - 1) / (n - 2) / (n - 3) + mu1 - mu1^2
-  V2 <- nEi * n2 * (n2 - 1) * (n2 - 2) / n / (n - 1) / (n - 2) + (nE * (nE - 1) - nEi) * n2 * (n2 - 1) * (n2 - 2) * (n2 - 3) / n / (n - 1) / (n - 2) / (n - 3) + mu2 - mu2^2
-  V12 <- (nE * (nE - 1) - nEi) * n1 * n2 * (n1 - 1) * (n2 - 1) / n / (n - 1) / (n - 2) / (n - 3) - mu1 * mu2
-  S <- matrix(c(V1, V12, V12, V2), nrow = 2)
-
-  list(
-    E = E,
-    nE = nE,
-    n1 = n1,
-    n2 = n2,
-    mu0 = mu0,
-    mu1 = mu1,
-    mu2 = mu2,
-    V0 = V0,
-    V1 = V1,
-    V2 = V2,
-    V12 = V12,
-    Sinv = solve_partial(S)
-  )
-}
-
 kmst <- function(d, k = 1L) {
   for (i in 1:k) {
     g <- igraph::graph_from_adjacency_matrix(d, mode = "undirected", weighted = TRUE)

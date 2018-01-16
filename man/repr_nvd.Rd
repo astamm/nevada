@@ -4,7 +4,7 @@
 \alias{repr_nvd}
 \title{Network-Valued to Matrix-Valued Data}
 \usage{
-repr_nvd(x, y = NULL, representation = "laplacian")
+repr_nvd(x, y = NULL, representation = "adjacency")
 }
 \arguments{
 \item{x}{An \code{\link{nvd}} object.}
@@ -13,8 +13,8 @@ repr_nvd(x, y = NULL, representation = "laplacian")
 taken into account.}
 
 \item{representation}{A string specifying the requested matrix
-representation. Choices are: \code{"adjacency"}, \code{"laplacian"}
-[default] or \code{"modularity"}.}
+representation. Choices are: \code{"adjacency"} [default],
+\code{"laplacian"} or \code{"modularity"}.}
 }
 \value{
 A list of matrices.

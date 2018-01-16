@@ -8,7 +8,7 @@
 \alias{dist_root_euclidean}
 \title{Distances Between Networks}
 \usage{
-dist_hamming(x, y, representation = "laplacian")
+dist_hamming(x, y, representation = "adjacency")
 
 dist_frobenius(x, y, representation = "laplacian")
 
@@ -24,7 +24,7 @@ underlying network.}
 underlying network. Should have the same number of vertices as \code{x}.}
 
 \item{representation}{A string specifying the desired type of representation,
-among: \code{"adjacency"}, \code{"laplacian"} [default] and
+among: \code{"adjacency"} [default], \code{"laplacian"} and
 \code{"modularity"}.}
 }
 \value{
