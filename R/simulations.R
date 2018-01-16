@@ -10,101 +10,6 @@ rbinom_network <- function(size, prob, n) {
   igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
 }
 
-# Equal distributions
-get_scenario10_dataset <- function(n1, n2 = n1) {
-  x <- nvd("binomial", n1, size = 15, prob = 1/3)
-  y <- nvd("binomial", n2, size = 15, prob = 1/3)
-  list(x = x, y = y)
-}
-
-# Distributions with equal means, different variances
-get_scenario11_dataset <- function(n1, n2 = n1) {
-  x <- nvd("binomial", n1, size = 15, prob = 1/3)
-  y <- nvd("binomial", n2, size = 20, prob = 1/4)
-  list(x = x, y = y)
-}
-
-# Distributions with different means, equal variances
-get_scenario12_dataset <- function(n1, n2 = n1) {
-  x <- nvd("binomial", n1, size = 15, prob = 31/64)
-  y <- nvd("binomial", n2, size = 15, prob = 33/64)
-  list(x = x, y = y)
-}
-
-# Distributions with different means, different variances
-get_scenario13_dataset <- function(n1, n2 = n1) {
-  x <- nvd("binomial", n1, size = 15, prob = 1/5)
-  y <- nvd("binomial", n2, size = 15, prob = 1/6)
-  list(x = x, y = y)
-}
-
-get_scenario0_dataset <- function(n1, n2 = n1) {
-  x <- nvd("poisson", n1, lambda = 5)
-  y <- nvd("poisson", n2, lambda = 5)
-  list(x = x, y = y)
-}
-
-get_scenarioA_dataset <- function(n1, n2 = n1) {
-  x <- nvd("poisson", n1, lambda = 5)
-  y <- nvd("poisson", n2, lambda = 6)
-  list(x = x, y = y)
-}
-
-get_scenarioB_dataset <- function(n1, n2 = n1) {
-  p1 <- matrix(data = c(0.8, rep(0.2, 8L)), nrow = 3L)
-  p2 <- matrix(data = c(rep(0.2, 8L), 0.8), nrow = 3L)
-  x <- nvd("sbm", n1, pref.matrix = p1)
-  y <- nvd("sbm", n2, pref.matrix = p2)
-  list(x = x, y = y)
-}
-
-get_scenarioC_dataset <- function(n1, n2 = n1) {
-  x <- nvd("k_regular", n1)
-  y <- nvd("gnp", n2)
-  list(x = x, y = y)
-}
-
-get_scenarioD_dataset <- function(n1, n2 = n1) {
-  x <- nvd("smallworld", n1)
-  y <- nvd("pa", n2)
-  list(x = x, y = y)
-}
-
-perform_single_test <- function(scenario,
-                                n_pop,
-                                representation,
-                                distance,
-                                statistic,
-                                alpha = 0.05,
-                                test = "exact",
-                                k = 5L) {
-  data <- switch(
-    scenario,
-    "0" = get_scenario0_dataset(n_pop),
-    "A" = get_scenarioA_dataset(n_pop),
-    "B" = get_scenarioB_dataset(n_pop),
-    "C" = get_scenarioC_dataset(n_pop),
-    "D" = get_scenarioD_dataset(n_pop),
-    "10" = get_scenario10_dataset(n_pop),
-    "11" = get_scenario11_dataset(n_pop),
-    "12" = get_scenario12_dataset(n_pop),
-    "13" = get_scenario13_dataset(n_pop)
-  )
-
-  test_data <- test_twosample(
-    data$x,
-    data$y,
-    representation = representation,
-    distance = distance,
-    statistic = statistic,
-    alpha = alpha,
-    test = test,
-    k = k
-  )
-
-  test_data$pvalue
-}
-
 #' Power Simulations for Permutation Tests
 #'
 #' This function provides a Monte-Carlo estimate of the power of the permutation
@@ -113,49 +18,76 @@ perform_single_test <- function(scenario,
 #' Currently, six scenarios of pairs of populations are implemented. Scenario 0
 #' allows to make sure that all our permutation tests are exact.
 #'
-#' @param scenario A character specifying the scenario to be simulated (choices
-#'   are: "0" [default], "A", "B", "C", "D" or "E").
-#' @param n_pop The sample size of each population (the same is used for both
-#'   populations, default: 4L)
+#' @param model1 A string specifying the model to be used for sample 1 among
+#'   \code{"sbm"}, \code{"k_regular"}, \code{"gnp"} [default],
+#'   \code{"smallworld"}, \code{"pa"}, \code{"poisson"} and \code{"binomial}.
+#' @param model2 A string specifying the model to be used for sample 1 among
+#'   \code{"sbm"}, \code{"k_regular"} [default], \code{"gnp"},
+#'   \code{"smallworld"}, \code{"pa"}, \code{"poisson"} and \code{"binomial}.
+#' @param n1 The size of sample 1 (default: 20L).
+#' @param n2 The size of sample 2 (default: 20L).
+#' @param size1 The number of trials for the binomial distribution of sample 1
+#'   (default: \code{NULL}). Must be specified if \code{model == "binomial"}.
+#' @param prob1 The probability of success of each trial for the binomial
+#'   distribution of sample 1 (default: \code{NULL}). Must be specified if
+#'   \code{model == "binomial"}.
+#' @param size2 The number of trials for the binomial distribution of sample 2
+#'   (default: \code{NULL}). Must be specified if \code{model == "binomial"}.
+#' @param prob2 The probability of success of each trial for the binomial
+#'   distribution of sample 2 (default: \code{NULL}). Must be specified if
+#'   \code{model == "binomial"}.
+#' @param lambda1 The mean of the Poisson distribution of sample 1 (default:
+#'   \code{NULL}). Must be specified if \code{model == "poisson"}.
+#' @param lambda2 The mean of the Poisson distribution of sample 2 (default:
+#'   \code{NULL}). Must be specified if \code{model == "poisson"}.
+#' @param pref.matrix1 A matrix giving the Bernoulli rates for the SBM generator
+#'   of sample 1 (default: \code{NULL}). Must be specified if \code{model ==
+#'   "sbm"}.
+#' @param pref.matrix2 A matrix giving the Bernoulli rates for the SBM generator
+#'   of sample 2 (default: \code{NULL}). Must be specified if \code{model ==
+#'   "sbm"}.
 #' @inheritParams test_twosample
 #' @param R The number of Monte-Carlo runs used to estimate the power (default:
 #'   1000L).
 #' @param seed An integer specifying the seed to start randomness from (default:
 #'   uses clock).
 #'
-#' @return A vector \code{p} of \code{R} p-values, one for each Monte-Carlo run.
-#'   The power can then be estimated as \code{mean(p <= alpha)}.
+#' @return A numeric value estimating the power of the test.
 #' @export
 #'
 #' @examples
-#' alpha <- 0.05
-#' p <- power_twosample(alpha = 0.05)
-#' mean(p <= alpha)
-power_twosample <- function(scenario = "0",
-                            n_pop = 4L,
+#' power_twosample()
+power_twosample <- function(model1 = "gnp", model2 = "k_regular",
+                            n1 = 20L, n2 = 20L,
+                            size1 = NULL, prob1 = NULL, size2 = NULL, prob2 = NULL,
+                            lambda1 = NULL, lambda2 = NULL,
+                            pref.matrix1 = NULL, pref.matrix2 = NULL,
                             representation = "adjacency",
                             distance = "frobenius",
                             statistic = "lot",
+                            B = 1000L,
                             alpha = 0.05,
                             test = "exact",
                             k = 5L,
                             R = 1000L,
                             seed = NULL) {
+
   set.seed(seed)
 
   pvalues <- replicate(
     R,
-    perform_single_test(
-      scenario,
-      n_pop,
-      representation,
-      distance,
-      statistic,
+    test_twosample(
+      x = nvd(model1, n1, pref.matrix1, lambda1, size1, prob1),
+      y = nvd(model2, n2, pref.matrix2, lambda2, size2, prob2),
+      representation = representation,
+      distance = distance,
+      statistic = statistic,
+      B = B,
       alpha = alpha,
       test = test,
       k = k
-    )
+    )$pvalue
   )
 
-  mean(pvalues <= 0.05)
+  mean(pvalues <= alpha)
 }

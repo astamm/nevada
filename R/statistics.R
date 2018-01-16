@@ -159,8 +159,24 @@ stat_edge_count <- function(d, indices, type = "generalized") {
   )
 }
 
+#' Transform distance matrix in edge properties of minimal spanning tree
+#'
+#' @param d A matrix of dimension \eqn{(n1+n2)x(n1+n2)} containing the distances
+#'   between all the elements of the two samples put together.
+#' @param n1 An integer giving the size of the first sample.
+#' @param k An integer specifying the density of the minimal spanning tree to
+#'   generate.
+#'
+#' @return A list of edge properties of the minimal spanning tree.
 #' @export
-#' @keywords internal
+#'
+#' @examples
+#' n1 <- 30L
+#' n2 <- 10L
+#' x <- nvd("smallworld", n1)
+#' y <- nvd("pa", n2)
+#' d <- dist_nvd(x, y, representation = "laplacian", distance = "frobenius")
+#' e <- edge_count_global_variables(d, n1, k = 5L)
 edge_count_global_variables <- function(d, n1, k = 1L) {
   k <- min(k, ceiling(nrow(d) / 4))
   g <- kmst(d, k)

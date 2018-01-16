@@ -116,10 +116,7 @@ arma::mat dist_nvd_impl(const Rcpp::List &z, const std::string distance)
       else if (distance == "root-euclidean")
         distanceValue = dist_root_euclidean_impl(net1, net2);
       else
-      {
-        Rcpp::Rcout << "Unavailable distance." << std::endl;
-        exit(-1);
-      }
+        Rcpp::stop("Unavailable distance.\n");
 
       out(i,j) = distanceValue;
       out(j,i) = distanceValue;

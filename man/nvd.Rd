@@ -10,7 +10,8 @@ nvd(model = "smallworld", n = 0L, pref.matrix = NULL, lambda = NULL,
 \arguments{
 \item{model}{A string specifying the model to be used for sampling networks
 (current choices are: \code{"sbm"}, \code{"k_regular"}, \code{"gnp"},
-\code{"smallworld"} [default], \code{"pa"}, \code{"poisson"}).}
+\code{"smallworld"} [default], \code{"pa"}, \code{"poisson"} and
+\code{"binomial"}).}
 
 \item{n}{An integer specifying the sample size (default: \code{0L}).}
 

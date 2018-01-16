@@ -4,7 +4,8 @@
 #'
 #' @param model A string specifying the model to be used for sampling networks
 #'   (current choices are: \code{"sbm"}, \code{"k_regular"}, \code{"gnp"},
-#'   \code{"smallworld"} [default], \code{"pa"}, \code{"poisson"}).
+#'   \code{"smallworld"} [default], \code{"pa"}, \code{"poisson"} and
+#'   \code{"binomial"}).
 #' @param n An integer specifying the sample size (default: \code{0L}).
 #' @param pref.matrix A matrix giving the Bernoulli rates for the SBM generator
 #'   (see \code{\link[igraph]{sample_sbm}} for details). Default is \code{NULL}.

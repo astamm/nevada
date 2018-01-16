@@ -1,4 +1,4 @@
-.onLoad <- function(libname = find.package("grattan"), pkgname = "grattan"){
+.onLoad <- function(libname = find.package("nevada"), pkgname = "nevada"){
 
   # CRAN Note avoidance
   if(getRversion() >= "2.15.1")

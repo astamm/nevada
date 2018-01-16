@@ -4,16 +4,53 @@
 \alias{power_twosample}
 \title{Power Simulations for Permutation Tests}
 \usage{
-power_twosample(scenario = "0", n_pop = 4L, representation = "adjacency",
-  distance = "frobenius", statistic = "lot", alpha = 0.05,
+power_twosample(model1 = "gnp", model2 = "k_regular", n1 = 20L,
+  n2 = 20L, size1 = NULL, prob1 = NULL, size2 = NULL, prob2 = NULL,
+  lambda1 = NULL, lambda2 = NULL, pref.matrix1 = NULL,
+  pref.matrix2 = NULL, representation = "adjacency",
+  distance = "frobenius", statistic = "lot", B = 1000L, alpha = 0.05,
   test = "exact", k = 5L, R = 1000L, seed = NULL)
 }
 \arguments{
-\item{scenario}{A character specifying the scenario to be simulated (choices
-are: "0" [default], "A", "B", "C", "D" or "E").}
+\item{model1}{A string specifying the model to be used for sample 1 among
+\code{"sbm"}, \code{"k_regular"}, \code{"gnp"} [default],
+\code{"smallworld"}, \code{"pa"}, \code{"poisson"} and \code{"binomial}.}
 
-\item{n_pop}{The sample size of each population (the same is used for both
-populations, default: 4L)}
+\item{model2}{A string specifying the model to be used for sample 1 among
+\code{"sbm"}, \code{"k_regular"} [default], \code{"gnp"},
+\code{"smallworld"}, \code{"pa"}, \code{"poisson"} and \code{"binomial}.}
+
+\item{n1}{The size of sample 1 (default: 20L).}
+
+\item{n2}{The size of sample 2 (default: 20L).}
+
+\item{size1}{The number of trials for the binomial distribution of sample 1
+(default: \code{NULL}). Must be specified if \code{model == "binomial"}.}
+
+\item{prob1}{The probability of success of each trial for the binomial
+distribution of sample 1 (default: \code{NULL}). Must be specified if
+\code{model == "binomial"}.}
+
+\item{size2}{The number of trials for the binomial distribution of sample 2
+(default: \code{NULL}). Must be specified if \code{model == "binomial"}.}
+
+\item{prob2}{The probability of success of each trial for the binomial
+distribution of sample 2 (default: \code{NULL}). Must be specified if
+\code{model == "binomial"}.}
+
+\item{lambda1}{The mean of the Poisson distribution of sample 1 (default:
+\code{NULL}). Must be specified if \code{model == "poisson"}.}
+
+\item{lambda2}{The mean of the Poisson distribution of sample 2 (default:
+\code{NULL}). Must be specified if \code{model == "poisson"}.}
+
+\item{pref.matrix1}{A matrix giving the Bernoulli rates for the SBM generator
+of sample 1 (default: \code{NULL}). Must be specified if \code{model ==
+"sbm"}.}
+
+\item{pref.matrix2}{A matrix giving the Bernoulli rates for the SBM generator
+of sample 2 (default: \code{NULL}). Must be specified if \code{model ==
+"sbm"}.}
 
 \item{representation}{A string specifying the desired type of representation,
 among: \code{"adjacency"} [default], \code{"laplacian"} and
@@ -28,6 +65,10 @@ test statistic, among: \code{"hamming"}, \code{"frobenius"} [default],
 \code{"student"}, \code{"welch"}, \code{"original"}, \code{"generalized"},
 \code{"weighted"} or a combination from \code{c("lot", "sot", "biswas",
 "energy")}.}
+
+\item{B}{The number of permutation or the tolerance (default: \code{1000L}).
+If this number is lower than \code{1}, it is intended as a tolerance.
+Otherwise, it is intended as the number of required permutations.}
 
 \item{alpha}{The significance level (default: \code{0.05}).}
 
@@ -45,8 +86,7 @@ for the edge count statistics (default: \code{5L}).}
 uses clock).}
 }
 \value{
-A vector \code{p} of \code{R} p-values, one for each Monte-Carlo run.
-  The power can then be estimated as \code{mean(p <= alpha)}.
+A numeric value estimating the power of the test.
 }
 \description{
 This function provides a Monte-Carlo estimate of the power of the permutation
@@ -57,7 +97,5 @@ Currently, six scenarios of pairs of populations are implemented. Scenario 0
 allows to make sure that all our permutation tests are exact.
 }
 \examples{
-alpha <- 0.05
-p <- power_twosample(alpha = 0.05)
-mean(p <= alpha)
+power_twosample()
 }
