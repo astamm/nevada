@@ -15,5 +15,5 @@ r_binary_packages:
 addons:
    apt:
      packages:
-       - gmp-dev # for GMP, a dependency of igraph
+       - gmp3-dev # for GMP, a dependency of igraph
        - libxml2-dev # for XML, a dependency of igraph
