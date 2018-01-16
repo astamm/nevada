@@ -2,50 +2,50 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 dist_hamming_impl <- function(x, y) {
-    .Call('_nevada_dist_hamming_impl', PACKAGE = 'nevada', x, y)
+    .Call(`_nevada_dist_hamming_impl`, x, y)
 }
 
 dist_frobenius_impl <- function(x, y) {
-    .Call('_nevada_dist_frobenius_impl', PACKAGE = 'nevada', x, y)
+    .Call(`_nevada_dist_frobenius_impl`, x, y)
 }
 
 dist_spectral_impl <- function(x, y) {
-    .Call('_nevada_dist_spectral_impl', PACKAGE = 'nevada', x, y)
+    .Call(`_nevada_dist_spectral_impl`, x, y)
 }
 
 dist_root_euclidean_impl <- function(x, y) {
-    .Call('_nevada_dist_root_euclidean_impl', PACKAGE = 'nevada', x, y)
+    .Call(`_nevada_dist_root_euclidean_impl`, x, y)
 }
 
 dist_nvd_impl <- function(z, distance = "frobenius") {
-    .Call('_nevada_dist_nvd_impl', PACKAGE = 'nevada', z, distance)
+    .Call(`_nevada_dist_nvd_impl`, z, distance)
 }
 
 repr_adjacency_impl <- function(numberOfVertices, edgeList, weights) {
-    .Call('_nevada_repr_adjacency_impl', PACKAGE = 'nevada', numberOfVertices, edgeList, weights)
+    .Call(`_nevada_repr_adjacency_impl`, numberOfVertices, edgeList, weights)
 }
 
 stat_lot_impl <- function(distanceMatrix, firstGroupIndices, secondGroupIndices) {
-    .Call('_nevada_stat_lot_impl', PACKAGE = 'nevada', distanceMatrix, firstGroupIndices, secondGroupIndices)
+    .Call(`_nevada_stat_lot_impl`, distanceMatrix, firstGroupIndices, secondGroupIndices)
 }
 
 stat_sot_impl <- function(distanceMatrix, firstGroupIndices, secondGroupIndices) {
-    .Call('_nevada_stat_sot_impl', PACKAGE = 'nevada', distanceMatrix, firstGroupIndices, secondGroupIndices)
+    .Call(`_nevada_stat_sot_impl`, distanceMatrix, firstGroupIndices, secondGroupIndices)
 }
 
 stat_biswas_impl <- function(distanceMatrix, firstGroupIndices, secondGroupIndices) {
-    .Call('_nevada_stat_biswas_impl', PACKAGE = 'nevada', distanceMatrix, firstGroupIndices, secondGroupIndices)
+    .Call(`_nevada_stat_biswas_impl`, distanceMatrix, firstGroupIndices, secondGroupIndices)
 }
 
 stat_energy_impl <- function(distanceMatrix, firstGroupIndices, secondGroupIndices, alpha = 1L) {
-    .Call('_nevada_stat_energy_impl', PACKAGE = 'nevada', distanceMatrix, firstGroupIndices, secondGroupIndices, alpha)
+    .Call(`_nevada_stat_energy_impl`, distanceMatrix, firstGroupIndices, secondGroupIndices, alpha)
 }
 
 stat_t_euclidean_impl <- function(x, y, pooled = TRUE) {
-    .Call('_nevada_stat_t_euclidean_impl', PACKAGE = 'nevada', x, y, pooled)
+    .Call(`_nevada_stat_t_euclidean_impl`, x, y, pooled)
 }
 
 stat_edge_count_impl <- function(E, indices) {
-    .Call('_nevada_stat_edge_count_impl', PACKAGE = 'nevada', E, indices)
+    .Call(`_nevada_stat_edge_count_impl`, E, indices)
 }
 

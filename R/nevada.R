@@ -1,3 +1,3 @@
-#' @useDynLib nevada
+#' @useDynLib nevada, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
-NULL
+"_PACKAGE"
