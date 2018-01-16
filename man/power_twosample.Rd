@@ -14,11 +14,11 @@ power_twosample(model1 = "gnp", model2 = "k_regular", n1 = 20L,
 \arguments{
 \item{model1}{A string specifying the model to be used for sample 1 among
 \code{"sbm"}, \code{"k_regular"}, \code{"gnp"} [default],
-\code{"smallworld"}, \code{"pa"}, \code{"poisson"} and \code{"binomial}.}
+\code{"smallworld"}, \code{"pa"}, \code{"poisson"} and \code{"binomial"}.}
 
-\item{model2}{A string specifying the model to be used for sample 1 among
+\item{model2}{A string specifying the model to be used for sample 2 among
 \code{"sbm"}, \code{"k_regular"} [default], \code{"gnp"},
-\code{"smallworld"}, \code{"pa"}, \code{"poisson"} and \code{"binomial}.}
+\code{"smallworld"}, \code{"pa"}, \code{"poisson"} and \code{"binomial"}.}
 
 \item{n1}{The size of sample 1 (default: 20L).}
 

@@ -20,10 +20,10 @@ rbinom_network <- function(size, prob, n) {
 #'
 #' @param model1 A string specifying the model to be used for sample 1 among
 #'   \code{"sbm"}, \code{"k_regular"}, \code{"gnp"} [default],
-#'   \code{"smallworld"}, \code{"pa"}, \code{"poisson"} and \code{"binomial}.
-#' @param model2 A string specifying the model to be used for sample 1 among
+#'   \code{"smallworld"}, \code{"pa"}, \code{"poisson"} and \code{"binomial"}.
+#' @param model2 A string specifying the model to be used for sample 2 among
 #'   \code{"sbm"}, \code{"k_regular"} [default], \code{"gnp"},
-#'   \code{"smallworld"}, \code{"pa"}, \code{"poisson"} and \code{"binomial}.
+#'   \code{"smallworld"}, \code{"pa"}, \code{"poisson"} and \code{"binomial"}.
 #' @param n1 The size of sample 1 (default: 20L).
 #' @param n2 The size of sample 2 (default: 20L).
 #' @param size1 The number of trials for the binomial distribution of sample 1
