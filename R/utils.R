@@ -189,7 +189,8 @@ get_permuted_statistic <- function(i, indices1, d, statistic) {
     welch = stat_welch_euclidean(d, indices),
     original = stat_edge_count(d, indices, type = "original"),
     generalized = stat_edge_count(d, indices, type = "generalized"),
-    weighted = stat_edge_count(d, indices, type = "weighted")
+    weighted = stat_edge_count(d, indices, type = "weighted"),
+    cq = stat_cq(d, indices)
   )
 }
 

@@ -132,6 +132,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// stat_cq_impl
+double stat_cq_impl(const arma::mat& similarityMatrix, const arma::vec& firstGroupIndices, const arma::vec& secondGroupIndices);
+RcppExport SEXP _nevada_stat_cq_impl(SEXP similarityMatrixSEXP, SEXP firstGroupIndicesSEXP, SEXP secondGroupIndicesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type similarityMatrix(similarityMatrixSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type firstGroupIndices(firstGroupIndicesSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type secondGroupIndices(secondGroupIndicesSEXP);
+    rcpp_result_gen = Rcpp::wrap(stat_cq_impl(similarityMatrix, firstGroupIndices, secondGroupIndices));
+    return rcpp_result_gen;
+END_RCPP
+}
 // stat_t_euclidean_impl
 double stat_t_euclidean_impl(const Rcpp::List& x, const Rcpp::List& y, const bool pooled);
 RcppExport SEXP _nevada_stat_t_euclidean_impl(SEXP xSEXP, SEXP ySEXP, SEXP pooledSEXP) {
@@ -169,6 +182,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nevada_stat_sot_impl", (DL_FUNC) &_nevada_stat_sot_impl, 3},
     {"_nevada_stat_biswas_impl", (DL_FUNC) &_nevada_stat_biswas_impl, 3},
     {"_nevada_stat_energy_impl", (DL_FUNC) &_nevada_stat_energy_impl, 4},
+    {"_nevada_stat_cq_impl", (DL_FUNC) &_nevada_stat_cq_impl, 3},
     {"_nevada_stat_t_euclidean_impl", (DL_FUNC) &_nevada_stat_t_euclidean_impl, 3},
     {"_nevada_stat_edge_count_impl", (DL_FUNC) &_nevada_stat_edge_count_impl, 2},
     {NULL, NULL, 0}

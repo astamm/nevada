@@ -41,6 +41,10 @@ stat_energy_impl <- function(distanceMatrix, firstGroupIndices, secondGroupIndic
     .Call(`_nevada_stat_energy_impl`, distanceMatrix, firstGroupIndices, secondGroupIndices, alpha)
 }
 
+stat_cq_impl <- function(similarityMatrix, firstGroupIndices, secondGroupIndices) {
+    .Call(`_nevada_stat_cq_impl`, similarityMatrix, firstGroupIndices, secondGroupIndices)
+}
+
 stat_t_euclidean_impl <- function(x, y, pooled = TRUE) {
     .Call(`_nevada_stat_t_euclidean_impl`, x, y, pooled)
 }

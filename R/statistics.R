@@ -159,6 +159,11 @@ stat_edge_count <- function(d, indices, type = "generalized") {
   )
 }
 
+stat_cq <- function(d, indices) {
+  indices2 <- seq_len(nrow(d))[-indices]
+  stat_cq_impl(d, indices, indices2)
+}
+
 #' Transform distance matrix in edge properties of minimal spanning tree
 #'
 #' @param d A matrix of dimension \eqn{(n1+n2)x(n1+n2)} containing the distances

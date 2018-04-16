@@ -163,6 +163,51 @@ double stat_energy_impl(const arma::mat &distanceMatrix, const arma::vec &firstG
   return xyMean - (xxMean + yyMean) / 2.0;
 }
 
+double stat_cq_impl(const arma::mat &similarityMatrix, const arma::vec &firstGroupIndices, const arma::vec &secondGroupIndices)
+{
+  double xyMean = 0.0, xxMean = 0.0, yyMean = 0.0;
+  unsigned int n1 = firstGroupIndices.n_elem;
+  unsigned int n2 = secondGroupIndices.n_elem;
+  unsigned int counter_xy = 0, counter_xx = 0, counter_yy = 0;
+  for (unsigned int i = 0;i < n1;++i)
+  {
+    for (unsigned int j = 0;j < n2;++j)
+    {
+      xyMean *= (counter_xy / (counter_xy + 1.0));
+      double similarityValue = similarityMatrix(firstGroupIndices[i] - 1, secondGroupIndices[j] - 1);
+      xyMean += similarityValue / (counter_xy + 1.0);
+      ++counter_xy;
+
+      if (i == 0)
+      {
+        for (unsigned int k = 0;k < n2;++k)
+        {
+          if (j == k)
+            continue;
+
+          yyMean *= (counter_yy / (counter_yy + 1.0));
+          double similarityValue = similarityMatrix(secondGroupIndices[j] - 1, secondGroupIndices[k] - 1);
+          yyMean += similarityValue / (counter_yy + 1.0);
+          ++counter_yy;
+        }
+      }
+    }
+
+    for (unsigned int j = 0;j < n1;++j)
+    {
+      if (i == j)
+        continue;
+
+      xxMean *= (counter_xx / (counter_xx + 1.0));
+      double similarityValue = similarityMatrix(firstGroupIndices[i] - 1, firstGroupIndices[j] - 1);
+      xxMean += similarityValue / (counter_xx + 1.0);
+      ++counter_xx;
+    }
+  }
+
+  return xxMean + yyMean - 2 * xyMean;
+}
+
 double stat_t_euclidean_impl(const Rcpp::List &x, const Rcpp::List &y, const bool pooled)
 {
   unsigned int n1 = x.size();
