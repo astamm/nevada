@@ -66,6 +66,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// mean_nvd_impl
+arma::mat mean_nvd_impl(const Rcpp::List& z);
+RcppExport SEXP _nevada_mean_nvd_impl(SEXP zSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type z(zSEXP);
+    rcpp_result_gen = Rcpp::wrap(mean_nvd_impl(z));
+    return rcpp_result_gen;
+END_RCPP
+}
 // repr_adjacency_impl
 arma::mat repr_adjacency_impl(const unsigned int numberOfVertices, const arma::mat& edgeList, const arma::vec& weights);
 RcppExport SEXP _nevada_repr_adjacency_impl(SEXP numberOfVerticesSEXP, SEXP edgeListSEXP, SEXP weightsSEXP) {
@@ -177,6 +188,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nevada_dist_spectral_impl", (DL_FUNC) &_nevada_dist_spectral_impl, 2},
     {"_nevada_dist_root_euclidean_impl", (DL_FUNC) &_nevada_dist_root_euclidean_impl, 2},
     {"_nevada_dist_nvd_impl", (DL_FUNC) &_nevada_dist_nvd_impl, 2},
+    {"_nevada_mean_nvd_impl", (DL_FUNC) &_nevada_mean_nvd_impl, 1},
     {"_nevada_repr_adjacency_impl", (DL_FUNC) &_nevada_repr_adjacency_impl, 3},
     {"_nevada_stat_lot_impl", (DL_FUNC) &_nevada_stat_lot_impl, 3},
     {"_nevada_stat_sot_impl", (DL_FUNC) &_nevada_stat_sot_impl, 3},

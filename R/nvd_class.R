@@ -61,6 +61,7 @@ nvd <- function(model = "smallworld",
   as_nvd(obj)
 }
 
+#' @export
 as_nvd <- function(obj) {
   if (!is.list(obj))
     stop("Input should be a list.")
@@ -83,4 +84,30 @@ as_nvd <- function(obj) {
 
 is_nvd <- function(obj) {
   "nvd" %in% class(obj)
+}
+
+#' Mean of network-valued data
+#'
+#' @param x An \code{\link{nvd}} object.
+#' @param representation A string specifying the graph representation to be used (choices: adjacency [default], laplacian, modularity).
+#' @param ... Other argument to be parsed to the \code{\link[base]{mean}} function.
+#'
+#' @return The mean network in the chosen matrix representation assuming Euclidean geometry for now.
+#' @export
+#'
+#' @examples
+#' d <- nvd(n = 10L)
+#' mean(d)
+mean.nvd <- function(x, representation = "adjacency", ...) {
+  x <- switch (representation,
+    adjacency = purrr::map(x, repr_adjacency),
+    laplacian = purrr::map(x, repr_laplacian),
+    modularity = purrr::map(x, repr_modularity)
+  )
+  x <- mean_nvd_impl(x)
+  switch (representation,
+    adjacency = as_adjacency(x),
+    laplacian = as_laplacian(x),
+    modularity = as_modularity(x)
+  )
 }

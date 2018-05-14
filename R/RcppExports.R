@@ -21,6 +21,10 @@ dist_nvd_impl <- function(z, distance = "frobenius") {
     .Call(`_nevada_dist_nvd_impl`, z, distance)
 }
 
+mean_nvd_impl <- function(z) {
+    .Call(`_nevada_mean_nvd_impl`, z)
+}
+
 repr_adjacency_impl <- function(numberOfVertices, edgeList, weights) {
     .Call(`_nevada_repr_adjacency_impl`, numberOfVertices, edgeList, weights)
 }
