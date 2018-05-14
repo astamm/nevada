@@ -61,7 +61,18 @@ nvd <- function(model = "smallworld",
   as_nvd(obj)
 }
 
+#' Coercion to Network-Valued Data Object
+#'
+#' This function flags a list of \code{\link[igraph]{igraph}} objects as an
+#' \code{\link{nvd}} object as defined in this package.
+#'
+#' @param obj A list of \code{\link[igraph]{igraph}} objects.
+#'
+#' @return An \code{\link{nvd}} object.
 #' @export
+#'
+#' @examples
+#' as_nvd(nvd("smallworld", 10))
 as_nvd <- function(obj) {
   if (!is.list(obj))
     stop("Input should be a list.")
