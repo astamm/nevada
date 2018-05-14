@@ -27,7 +27,7 @@ repr_adjacency <- function(network, validate = TRUE) {
       stop("Input network should be of class igraph.")
   }
   if ("weight" %in% igraph::edge_attr_names(network))
-    repr <- repr_adjacency_impl(igraph::vcount(network), igraph::as_edgelist(network), igraph::E(network)$weight)
+    repr <- repr_adjacency_impl(igraph::vcount(network), igraph::as_edgelist(network, names = FALSE), igraph::E(network)$weight)
   else
     repr <- igraph::as_adjacency_matrix(network, type = "both", sparse = FALSE)
   as_adjacency(repr)
