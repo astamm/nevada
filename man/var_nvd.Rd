@@ -23,7 +23,14 @@ A positive scalar value evaluating the amount of variability of the
   sample around the specified network.
 }
 \description{
-Fréchet Variance of Network-Valued Data
+This function computes the Fréchet variance around a specified network from
+an observed sample of network-valued random variables according to a
+specified distance. In most cases, the user is willing to compute the sample
+variance, in which case the Fréchet variance has to be evaluated w.r.t. the
+sample Fréchet mean. In this case, it is important that the user indicates
+the same distance as the one (s)he used to separately compute the sample
+Fréchet mean. This function can also be used as is as the function to be
+minimized in order to find the Fréchet mean for a given distance.
 }
 \examples{
 d <- nvd(n = 10L)

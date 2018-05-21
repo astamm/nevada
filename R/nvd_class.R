@@ -99,11 +99,20 @@ is_nvd <- function(obj) {
 
 #' Fréchet Mean of Network-Valued Data
 #'
-#' @param x An \code{\link{nvd}} object.
-#' @param representation A string specifying the graph representation to be used (choices: adjacency [default], laplacian, modularity).
-#' @param ... Other argument to be parsed to the \code{\link[base]{mean}} function.
+#' This function computes the sample Fréchet mean from an observed sample of
+#' network-valued random variables according to a specified matrix
+#' representation. It currently only supports the Euclidean geometry i.e. the
+#' sample Fréchet mean is obtained as the argmin of the sum of squared Frobenius
+#' distances.
 #'
-#' @return The mean network in the chosen matrix representation assuming Euclidean geometry for now.
+#' @param x An \code{\link{nvd}} object.
+#' @param representation A string specifying the graph representation to be used
+#'   (choices: adjacency [default], laplacian, modularity).
+#' @param ... Other argument to be parsed to the \code{\link[base]{mean}}
+#'   function.
+#'
+#' @return The mean network in the chosen matrix representation assuming
+#'   Euclidean geometry for now.
 #' @export
 #'
 #' @examples
@@ -121,6 +130,15 @@ mean.nvd <- function(x, representation = "adjacency", ...) {
 }
 
 #' Fréchet Variance of Network-Valued Data
+#'
+#' This function computes the Fréchet variance around a specified network from
+#' an observed sample of network-valued random variables according to a
+#' specified distance. In most cases, the user is willing to compute the sample
+#' variance, in which case the Fréchet variance has to be evaluated w.r.t. the
+#' sample Fréchet mean. In this case, it is important that the user indicates
+#' the same distance as the one (s)he used to separately compute the sample
+#' Fréchet mean. This function can also be used as is as the function to be
+#' minimized in order to find the Fréchet mean for a given distance.
 #'
 #' @param x An \code{\link{nvd}} object listing a sample of networks.
 #' @param x0 A network already in matrix representation around which to

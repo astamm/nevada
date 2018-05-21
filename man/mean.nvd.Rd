@@ -9,15 +9,22 @@
 \arguments{
 \item{x}{An \code{\link{nvd}} object.}
 
-\item{representation}{A string specifying the graph representation to be used (choices: adjacency [default], laplacian, modularity).}
+\item{representation}{A string specifying the graph representation to be used
+(choices: adjacency [default], laplacian, modularity).}
 
-\item{...}{Other argument to be parsed to the \code{\link[base]{mean}} function.}
+\item{...}{Other argument to be parsed to the \code{\link[base]{mean}}
+function.}
 }
 \value{
-The mean network in the chosen matrix representation assuming Euclidean geometry for now.
+The mean network in the chosen matrix representation assuming
+  Euclidean geometry for now.
 }
 \description{
-Fréchet Mean of Network-Valued Data
+This function computes the sample Fréchet mean from an observed sample of
+network-valued random variables according to a specified matrix
+representation. It currently only supports the Euclidean geometry i.e. the
+sample Fréchet mean is obtained as the argmin of the sum of squared Frobenius
+distances.
 }
 \examples{
 d <- nvd(n = 10L)
