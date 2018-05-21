@@ -26,7 +26,7 @@
 #' @param y An \code{\link[igraph]{igraph}} object or a matrix representing an
 #'   underlying network. Should have the same number of vertices as \code{x}.
 #' @param representation A string specifying the desired type of representation,
-#'   among: \code{"adjacency"} [default], \code{"laplacian"} and
+#'   among: \code{"adjacency"}, \code{"laplacian"} [default] and
 #'   \code{"modularity"}.
 #'
 #' @return A scalar measuring the distance between the two input networks.
@@ -43,7 +43,7 @@ NULL
 
 #' @rdname distances
 #' @export
-dist_hamming <- function(x, y, representation = "adjacency") {
+dist_hamming <- function(x, y, representation = "laplacian") {
   if (!compatible_networks(x, y))
     stop("Input networks are incompatible.")
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/nvd_class.R
 \name{mean.nvd}
 \alias{mean.nvd}
-\title{Mean of network-valued data}
+\title{Fréchet Mean of Network-Valued Data}
 \usage{
 \method{mean}{nvd}(x, representation = "adjacency", ...)
 }
@@ -17,7 +17,7 @@
 The mean network in the chosen matrix representation assuming Euclidean geometry for now.
 }
 \description{
-Mean of network-valued data
+Fréchet Mean of Network-Valued Data
 }
 \examples{
 d <- nvd(n = 10L)

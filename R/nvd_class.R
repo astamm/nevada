@@ -97,7 +97,7 @@ is_nvd <- function(obj) {
   "nvd" %in% class(obj)
 }
 
-#' Mean of network-valued data
+#' Fréchet Mean of Network-Valued Data
 #'
 #' @param x An \code{\link{nvd}} object.
 #' @param representation A string specifying the graph representation to be used (choices: adjacency [default], laplacian, modularity).
@@ -110,15 +110,61 @@ is_nvd <- function(obj) {
 #' d <- nvd(n = 10L)
 #' mean(d)
 mean.nvd <- function(x, representation = "adjacency", ...) {
-  x <- switch (representation,
-    adjacency = purrr::map(x, repr_adjacency),
-    laplacian = purrr::map(x, repr_laplacian),
-    modularity = purrr::map(x, repr_modularity)
-  )
+  x <- purrr::map(x, format_input, representation = representation)
   x <- mean_nvd_impl(x)
-  switch (representation,
+  switch(
+    representation,
     adjacency = as_adjacency(x),
     laplacian = as_laplacian(x),
     modularity = as_modularity(x)
+  )
+}
+
+#' Fréchet Variance of Network-Valued Data
+#'
+#' @param x An \code{\link{nvd}} object listing a sample of networks.
+#' @param x0 A network already in matrix representation around which to
+#'   calculate variance (usually the Fréchet mean but not necessarily). Note
+#'   that the chosen matrix representation is extracted from this parameter.
+#' @param distance A string specifying the distance to be used. Possible choices
+#'   are: hamming, frobenius [default], spectral or root-euclidean. When the
+#'   Fréchet mean is used as \code{x0} parameter, the distance should match the
+#'   one used to compute the mean. This is not currently checked.
+#'
+#' @return A positive scalar value evaluating the amount of variability of the
+#'   sample around the specified network.
+#' @export
+#'
+#' @examples
+#' d <- nvd(n = 10L)
+#' m <- mean(d)
+#' var_nvd(x = d, x0 = m, distance = "frobenius")
+var_nvd <- function(x, x0, distance = "frobenius") {
+  if (!is_nvd(x))
+    stop("The input x should be of class nvd.")
+  if (!is.matrix(x0))
+    stop("The input x0 should be of class matrix.")
+  representation <- attributes(x0)$representation
+  if (representation == "")
+    stop("The input x0 matrix should have an attribute named representation.")
+  x <- purrr::map(x, format_input, representation = representation)
+  switch(
+    distance,
+    hamming = purrr::reduce(x, function(.v, .x, .x0) {
+      d <- dist_hamming_impl(.x, .x0)
+      .v + d^2
+    }, .x0 = x0, .init = 0),
+    frobenius = purrr::reduce(x, function(.v, .x, .x0) {
+      d <- dist_frobenius_impl(.x, .x0)
+      .v + d^2
+    }, .x0 = x0, .init = 0),
+    spectral = purrr::reduce(x, function(.v, .x, .x0) {
+      d <- dist_spectral_impl(.x, .x0)
+      .v + d^2
+    }, .x0 = x0, .init = 0),
+    "root-euclidean" = purrr::reduce(x, function(.v, .x, .x0) {
+      d <- dist_root_euclidean_impl(.x, .x0)
+      .v + d^2
+    }, .x0 = x0, .init = 0)
   )
 }
