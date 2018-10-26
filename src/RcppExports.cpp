@@ -90,13 +90,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // mean_nvd_impl
-arma::mat mean_nvd_impl(const Rcpp::List& z);
-RcppExport SEXP _nevada_mean_nvd_impl(SEXP zSEXP) {
+arma::mat mean_nvd_impl(const Rcpp::List& z, const arma::vec& weights);
+RcppExport SEXP _nevada_mean_nvd_impl(SEXP zSEXP, SEXP weightsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::List& >::type z(zSEXP);
-    rcpp_result_gen = Rcpp::wrap(mean_nvd_impl(z));
+    Rcpp::traits::input_parameter< const arma::vec& >::type weights(weightsSEXP);
+    rcpp_result_gen = Rcpp::wrap(mean_nvd_impl(z, weights));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -225,7 +226,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nevada_dist_nvd_impl", (DL_FUNC) &_nevada_dist_nvd_impl, 2},
     {"_nevada_ipro_frobenius_impl", (DL_FUNC) &_nevada_ipro_frobenius_impl, 2},
     {"_nevada_est_nbdsmooth", (DL_FUNC) &_nevada_est_nbdsmooth, 1},
-    {"_nevada_mean_nvd_impl", (DL_FUNC) &_nevada_mean_nvd_impl, 1},
+    {"_nevada_mean_nvd_impl", (DL_FUNC) &_nevada_mean_nvd_impl, 2},
     {"_nevada_var_nvd_impl", (DL_FUNC) &_nevada_var_nvd_impl, 2},
     {"_nevada_repr_adjacency_impl", (DL_FUNC) &_nevada_repr_adjacency_impl, 3},
     {"_nevada_stat_lot_impl", (DL_FUNC) &_nevada_stat_lot_impl, 3},

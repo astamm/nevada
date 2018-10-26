@@ -29,8 +29,8 @@ est_nbdsmooth <- function(A) {
     .Call(`_nevada_est_nbdsmooth`, A)
 }
 
-mean_nvd_impl <- function(z) {
-    .Call(`_nevada_mean_nvd_impl`, z)
+mean_nvd_impl <- function(z, weights) {
+    .Call(`_nevada_mean_nvd_impl`, z, weights)
 }
 
 var_nvd_impl <- function(z, distance = "frobenius") {

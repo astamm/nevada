@@ -118,9 +118,10 @@ is_nvd <- function(obj) {
 #' @examples
 #' d <- nvd(n = 10L)
 #' mean(d)
-mean.nvd <- function(x, representation = "adjacency", ...) {
+mean.nvd <- function(x, representation = "adjacency", weights = NULL, ...) {
   x <- repr_nvd(x, representation = representation)
-  x <- mean_nvd_impl(x)
+  if (is.null(weights)) weights <- rep(1, length(x))
+  x <- mean_nvd_impl(x, weights)
   switch(
     representation,
     adjacency = as_adjacency(x),
