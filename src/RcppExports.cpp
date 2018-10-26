@@ -66,6 +66,29 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// ipro_frobenius_impl
+double ipro_frobenius_impl(const arma::mat& x, const arma::mat& y);
+RcppExport SEXP _nevada_ipro_frobenius_impl(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(ipro_frobenius_impl(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// est_nbdsmooth
+arma::mat est_nbdsmooth(const arma::mat& A);
+RcppExport SEXP _nevada_est_nbdsmooth(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(est_nbdsmooth(A));
+    return rcpp_result_gen;
+END_RCPP
+}
 // mean_nvd_impl
 arma::mat mean_nvd_impl(const Rcpp::List& z);
 RcppExport SEXP _nevada_mean_nvd_impl(SEXP zSEXP) {
@@ -74,6 +97,18 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::List& >::type z(zSEXP);
     rcpp_result_gen = Rcpp::wrap(mean_nvd_impl(z));
+    return rcpp_result_gen;
+END_RCPP
+}
+// var_nvd_impl
+double var_nvd_impl(const Rcpp::List& z, const std::string distance);
+RcppExport SEXP _nevada_var_nvd_impl(SEXP zSEXP, SEXP distanceSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type z(zSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type distance(distanceSEXP);
+    rcpp_result_gen = Rcpp::wrap(var_nvd_impl(z, distance));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -188,7 +223,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nevada_dist_spectral_impl", (DL_FUNC) &_nevada_dist_spectral_impl, 2},
     {"_nevada_dist_root_euclidean_impl", (DL_FUNC) &_nevada_dist_root_euclidean_impl, 2},
     {"_nevada_dist_nvd_impl", (DL_FUNC) &_nevada_dist_nvd_impl, 2},
+    {"_nevada_ipro_frobenius_impl", (DL_FUNC) &_nevada_ipro_frobenius_impl, 2},
+    {"_nevada_est_nbdsmooth", (DL_FUNC) &_nevada_est_nbdsmooth, 1},
     {"_nevada_mean_nvd_impl", (DL_FUNC) &_nevada_mean_nvd_impl, 1},
+    {"_nevada_var_nvd_impl", (DL_FUNC) &_nevada_var_nvd_impl, 2},
     {"_nevada_repr_adjacency_impl", (DL_FUNC) &_nevada_repr_adjacency_impl, 3},
     {"_nevada_stat_lot_impl", (DL_FUNC) &_nevada_stat_lot_impl, 3},
     {"_nevada_stat_sot_impl", (DL_FUNC) &_nevada_stat_sot_impl, 3},

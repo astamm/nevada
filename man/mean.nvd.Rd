@@ -10,7 +10,7 @@
 \item{x}{An \code{\link{nvd}} object.}
 
 \item{representation}{A string specifying the graph representation to be used
-(choices: adjacency [default], laplacian, modularity).}
+(choices: adjacency [default], laplacian, modularity, graphon).}
 
 \item{...}{Other argument to be parsed to the \code{\link[base]{mean}}
 function.}

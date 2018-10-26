@@ -26,8 +26,8 @@
 #' @param y An \code{\link[igraph]{igraph}} object or a matrix representing an
 #'   underlying network. Should have the same number of vertices as \code{x}.
 #' @param representation A string specifying the desired type of representation,
-#'   among: \code{"adjacency"}, \code{"laplacian"} [default] and
-#'   \code{"modularity"}.
+#'   among: \code{"adjacency"}, \code{"laplacian"} [default],
+#'   \code{"modularity"} or \code{"graphon"}.
 #'
 #' @return A scalar measuring the distance between the two input networks.
 #'
@@ -92,6 +92,40 @@ dist_root_euclidean <- function(x, y, representation = "laplacian") {
   dist_root_euclidean_impl(x, y)
 }
 
+#' Inner-Products Between Networks
+#'
+#' This is a collection of functions computing the inner product between two
+#' networks.
+#'
+#' @param x An \code{\link[igraph]{igraph}} object or a matrix representing an
+#'   underlying network.
+#' @param y An \code{\link[igraph]{igraph}} object or a matrix representing an
+#'   underlying network. Should have the same number of vertices as \code{x}.
+#' @param representation A string specifying the desired type of representation,
+#'   among: \code{"adjacency"}, \code{"laplacian"} [default],
+#'   \code{"modularity"} or \code{"graphon"}.
+#'
+#' @return A scalar measuring the angle between the two input networks.
+#'
+#' @examples
+#' g1 <- igraph::sample_gnp(20, 0.1)
+#' g2 <- igraph::sample_gnp(20, 0.2)
+#' ipro_frobenius(g1, g2, "adjacency")
+#' @name inner-products
+NULL
+
+#' @rdname inner-products
+#' @export
+ipro_frobenius <- function(x, y, representation = "laplacian") {
+  if (!compatible_networks(x, y))
+    stop("Input networks are incompatible.")
+
+  x <- format_input(x, representation)
+  y <- format_input(y, representation)
+
+  ipro_frobenius_impl(x, y)
+}
+
 #' Pairwise Distance Matrix Between Two Samples of Networks
 #'
 #' This function computes the matrix of pairwise distances between all the
@@ -105,8 +139,8 @@ dist_root_euclidean <- function(x, y, representation = "laplacian") {
 #'   or matrix representations of underlying networks from a given second
 #'   population.
 #' @param representation A string specifying the desired type of representation,
-#'   among: \code{"adjacency"} [default], \code{"laplacian"} and
-#'   \code{"modularity"}.
+#'   among: \code{"adjacency"}, \code{"laplacian"} [default],
+#'   \code{"modularity"} or \code{"graphon"}.
 #' @param distance A string specifying the chosen distance for calculating the
 #'   test statistic, among: \code{"hamming"}, \code{"frobenius"} [default],
 #'   \code{"spectral"} and \code{"root-euclidean"}.

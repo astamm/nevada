@@ -24,8 +24,8 @@ underlying network.}
 underlying network. Should have the same number of vertices as \code{x}.}
 
 \item{representation}{A string specifying the desired type of representation,
-among: \code{"adjacency"}, \code{"laplacian"} [default] and
-\code{"modularity"}.}
+among: \code{"adjacency"}, \code{"laplacian"} [default],
+\code{"modularity"} or \code{"graphon"}.}
 }
 \value{
 A scalar measuring the distance between the two input networks.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/nvd_class.R
 \name{var_nvd}
 \alias{var_nvd}
-\title{Fréchet Variance of Network-Valued Data}
+\title{Fréchet Variance of Network-Valued Data Around a Given Network}
 \usage{
 var_nvd(x, x0, distance = "frobenius")
 }

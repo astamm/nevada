@@ -17,8 +17,8 @@ or matrix representations of underlying networks from a given second
 population.}
 
 \item{representation}{A string specifying the desired type of representation,
-among: \code{"adjacency"} [default], \code{"laplacian"} and
-\code{"modularity"}.}
+among: \code{"adjacency"}, \code{"laplacian"} [default],
+\code{"modularity"} or \code{"graphon"}.}
 
 \item{distance}{A string specifying the chosen distance for calculating the
 test statistic, among: \code{"hamming"}, \code{"frobenius"} [default],

@@ -107,7 +107,7 @@ is_nvd <- function(obj) {
 #'
 #' @param x An \code{\link{nvd}} object.
 #' @param representation A string specifying the graph representation to be used
-#'   (choices: adjacency [default], laplacian, modularity).
+#'   (choices: adjacency [default], laplacian, modularity, graphon).
 #' @param ... Other argument to be parsed to the \code{\link[base]{mean}}
 #'   function.
 #'
@@ -119,17 +119,18 @@ is_nvd <- function(obj) {
 #' d <- nvd(n = 10L)
 #' mean(d)
 mean.nvd <- function(x, representation = "adjacency", ...) {
-  x <- purrr::map(x, format_input, representation = representation)
+  x <- repr_nvd(x, representation = representation)
   x <- mean_nvd_impl(x)
   switch(
     representation,
     adjacency = as_adjacency(x),
     laplacian = as_laplacian(x),
-    modularity = as_modularity(x)
+    modularity = as_modularity(x),
+    graphon = as_graphon(x)
   )
 }
 
-#' Fréchet Variance of Network-Valued Data
+#' Fréchet Variance of Network-Valued Data Around a Given Network
 #'
 #' This function computes the Fréchet variance around a specified network from
 #' an observed sample of network-valued random variables according to a
@@ -166,7 +167,7 @@ var_nvd <- function(x, x0, distance = "frobenius") {
   if (representation == "")
     stop("The input x0 matrix should have an attribute named representation.")
   x <- purrr::map(x, format_input, representation = representation)
-  switch(
+  ssd <- switch(
     distance,
     hamming = purrr::reduce(x, function(.v, .x, .x0) {
       d <- dist_hamming_impl(.x, .x0)
@@ -185,4 +186,31 @@ var_nvd <- function(x, x0, distance = "frobenius") {
       .v + d^2
     }, .x0 = x0, .init = 0)
   )
+  ssd / (length(x) - 1)
+}
+
+#' Fréchet Variance of Network-Valued Data from Inter-Point Distances
+#'
+#' This function computes the Fréchet variance using exclusively inter-point
+#' distances. As such, it can accommodate any pair of representation and
+#' distance.
+#'
+#' @param x An \code{\link{nvd}} object listing a sample of networks.
+#' @param representation A string specifying the graph representation to be used
+#'   (choices: adjacency [default], laplacian, modularity, graphon).
+#' @param distance A string specifying the distance to be used. Possible choices
+#'   are: hamming, frobenius [default], spectral or root-euclidean.
+#'
+#' @return A positive scalar value evaluating the variance based on inter-point
+#'   distances.
+#' @export
+#'
+#' @examples
+#' d <- nvd(n = 10L)
+#' var2_nvd(x = d, representation = "graphon", distance = "frobenius")
+var2_nvd <- function(x, representation = "adjacency", distance = "frobenius") {
+  if (!is_nvd(x))
+    stop("The input x should be of class nvd.")
+  x <- repr_nvd(x, representation = representation)
+  var_nvd_impl(x, distance)
 }

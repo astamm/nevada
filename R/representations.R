@@ -2,7 +2,8 @@
 #'
 #' This is a collection of functions that convert a graph stored as an
 #' \code{\link[igraph]{igraph}} object into a desired matrix representation
-#' among adjacency matrix, graph laplacian or modularity matrix.
+#' among adjacency matrix, graph laplacian, modularity matrix or graphon (edge
+#' probability matrix).
 #'
 #' @param network An \code{\link[igraph]{igraph}} object.
 #' @param validate A boolean specifying whether the function should check the
@@ -16,6 +17,7 @@
 #' repr_adjacency(g)
 #' repr_laplacian(g)
 #' repr_modularity(g)
+#' repr_graphon(g)
 #' @name representations
 NULL
 
@@ -55,6 +57,19 @@ repr_modularity <- function(network, validate = TRUE) {
   as_modularity(repr)
 }
 
+#' @rdname representations
+#' @export
+repr_graphon <- function(network, validate = TRUE) {
+  if (validate) {
+    if (!igraph::is_igraph(network))
+      stop("Input network should be of class igraph.")
+  }
+  A <- repr_adjacency(network, FALSE)
+  A <- matrix(as.numeric(A > 0), igraph::vcount(network))
+  repr <- est_nbdsmooth(A)
+  as_graphon(repr)
+}
+
 as_adjacency <- function(x) {
   l <- attributes(x)
   l$representation <- "adjacency"
@@ -76,6 +91,13 @@ as_modularity <- function(x) {
   x
 }
 
+as_graphon <- function(x) {
+  l <- attributes(x)
+  l$representation <- "graphon"
+  attributes(x) <- l
+  x
+}
+
 is_adjacency <- function(x) {
   "adjacency" == attributes(x)$representation
 }
@@ -86,6 +108,10 @@ is_laplacian <- function(x) {
 
 is_modularity <- function(x) {
   "modularity" == attributes(x)$representation
+}
+
+is_graphon <- function(x) {
+  "graphon" == attributes(x)$representation
 }
 
 as_transitivity <- function(x) {

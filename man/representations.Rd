@@ -5,6 +5,7 @@
 \alias{repr_adjacency}
 \alias{repr_laplacian}
 \alias{repr_modularity}
+\alias{repr_graphon}
 \title{Network Representation Functions}
 \usage{
 repr_adjacency(network, validate = TRUE)
@@ -12,6 +13,8 @@ repr_adjacency(network, validate = TRUE)
 repr_laplacian(network, validate = TRUE)
 
 repr_modularity(network, validate = TRUE)
+
+repr_graphon(network, validate = TRUE)
 }
 \arguments{
 \item{network}{An \code{\link[igraph]{igraph}} object.}
@@ -26,11 +29,13 @@ A numeric square matrix giving the desired network representation
 \description{
 This is a collection of functions that convert a graph stored as an
 \code{\link[igraph]{igraph}} object into a desired matrix representation
-among adjacency matrix, graph laplacian or modularity matrix.
+among adjacency matrix, graph laplacian, modularity matrix or graphon (edge
+probability matrix).
 }
 \examples{
 g <- igraph::sample_smallworld(1, 25, 3, 0.05)
 repr_adjacency(g)
 repr_laplacian(g)
 repr_modularity(g)
+repr_graphon(g)
 }

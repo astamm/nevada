@@ -5,6 +5,7 @@ format_input <- function(x, representation = "adjacency") {
       adjacency = repr_adjacency(x),
       laplacian = repr_laplacian(x),
       modularity = repr_modularity(x),
+      graphon = repr_graphon(x),
       transitivity = repr_transitivity(x)
     )
   else {
@@ -25,6 +26,7 @@ format_input <- function(x, representation = "adjacency") {
         adjacency = repr_adjacency(igraph::graph_from_adjacency_matrix(x, mode = "undirected", weighted = TRUE)),
         laplacian = repr_laplacian(igraph::graph_from_adjacency_matrix(x, mode = "undirected", weighted = TRUE)),
         modularity = repr_modularity(igraph::graph_from_adjacency_matrix(x, mode = "undirected", weighted = TRUE)),
+        graphon = repr_graphon(igraph::graph_from_adjacency_matrix(x, mode = "undirected", weighted = TRUE)),
         transitivity = repr_transitivity(igraph::graph_from_adjacency_matrix(x, mode = "undirected", weighted = TRUE))
       )
     }
