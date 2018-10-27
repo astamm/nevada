@@ -4,11 +4,14 @@
 \alias{mean.nvd}
 \title{Fréchet Mean of Network-Valued Data}
 \usage{
-\method{mean}{nvd}(x, representation = "adjacency", weights = NULL,
-  ...)
+\method{mean}{nvd}(x, weights = rep(1, length(x)),
+  representation = "adjacency", ...)
 }
 \arguments{
 \item{x}{An \code{\link{nvd}} object.}
+
+\item{weights}{A numeric vector specifying weights for each observation
+(default: equally weighted).}
 
 \item{representation}{A string specifying the graph representation to be used
 (choices: adjacency [default], laplacian, modularity, graphon).}

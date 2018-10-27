@@ -106,6 +106,8 @@ is_nvd <- function(obj) {
 #' distances.
 #'
 #' @param x An \code{\link{nvd}} object.
+#' @param weights A numeric vector specifying weights for each observation
+#'   (default: equally weighted).
 #' @param representation A string specifying the graph representation to be used
 #'   (choices: adjacency [default], laplacian, modularity, graphon).
 #' @param ... Other argument to be parsed to the \code{\link[base]{mean}}
@@ -118,7 +120,7 @@ is_nvd <- function(obj) {
 #' @examples
 #' d <- nvd(n = 10L)
 #' mean(d)
-mean.nvd <- function(x, representation = "adjacency", weights = NULL, ...) {
+mean.nvd <- function(x, weights = rep(1, length(x)), representation = "adjacency", ...) {
   x <- repr_nvd(x, representation = representation)
   if (is.null(weights)) weights <- rep(1, length(x))
   x <- mean_nvd_impl(x, weights)
@@ -146,6 +148,8 @@ mean.nvd <- function(x, representation = "adjacency", weights = NULL, ...) {
 #' @param x0 A network already in matrix representation around which to
 #'   calculate variance (usually the Fréchet mean but not necessarily). Note
 #'   that the chosen matrix representation is extracted from this parameter.
+#' @param weights A numeric vector specifying weights for each observation
+#'   (default: equally weighted).
 #' @param distance A string specifying the distance to be used. Possible choices
 #'   are: hamming, frobenius [default], spectral or root-euclidean. When the
 #'   Fréchet mean is used as \code{x0} parameter, the distance should match the
@@ -159,7 +163,7 @@ mean.nvd <- function(x, representation = "adjacency", weights = NULL, ...) {
 #' d <- nvd(n = 10L)
 #' m <- mean(d)
 #' var_nvd(x = d, x0 = m, distance = "frobenius")
-var_nvd <- function(x, x0, distance = "frobenius") {
+var_nvd <- function(x, x0, weights = rep(1, length(x)), distance = "frobenius") {
   if (!is_nvd(x))
     stop("The input x should be of class nvd.")
   if (!is.matrix(x0))
@@ -170,24 +174,24 @@ var_nvd <- function(x, x0, distance = "frobenius") {
   x <- purrr::map(x, format_input, representation = representation)
   ssd <- switch(
     distance,
-    hamming = purrr::reduce(x, function(.v, .x, .x0) {
+    hamming = purrr::reduce2(x, weights, function(.v, .x, .y, .x0) {
       d <- dist_hamming_impl(.x, .x0)
-      .v + d^2
+      .v + .y * d^2
     }, .x0 = x0, .init = 0),
-    frobenius = purrr::reduce(x, function(.v, .x, .x0) {
+    frobenius = purrr::reduce2(x, weights, function(.v, .x, .y, .x0) {
       d <- dist_frobenius_impl(.x, .x0)
-      .v + d^2
+      .v + .y * d^2
     }, .x0 = x0, .init = 0),
-    spectral = purrr::reduce(x, function(.v, .x, .x0) {
+    spectral = purrr::reduce2(x, weights, function(.v, .x, .y, .x0) {
       d <- dist_spectral_impl(.x, .x0)
-      .v + d^2
+      .v + .y * d^2
     }, .x0 = x0, .init = 0),
-    "root-euclidean" = purrr::reduce(x, function(.v, .x, .x0) {
+    "root-euclidean" = purrr::reduce2(x, weights, function(.v, .x, .y, .x0) {
       d <- dist_root_euclidean_impl(.x, .x0)
-      .v + d^2
+      .v + .y * d^2
     }, .x0 = x0, .init = 0)
   )
-  ssd / (length(x) - 1)
+  ssd / sum(weights)
 }
 
 #' Fréchet Variance of Network-Valued Data from Inter-Point Distances

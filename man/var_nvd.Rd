@@ -4,7 +4,7 @@
 \alias{var_nvd}
 \title{Fréchet Variance of Network-Valued Data Around a Given Network}
 \usage{
-var_nvd(x, x0, distance = "frobenius")
+var_nvd(x, x0, weights = rep(1, length(x)), distance = "frobenius")
 }
 \arguments{
 \item{x}{An \code{\link{nvd}} object listing a sample of networks.}
@@ -12,6 +12,9 @@ var_nvd(x, x0, distance = "frobenius")
 \item{x0}{A network already in matrix representation around which to
 calculate variance (usually the Fréchet mean but not necessarily). Note
 that the chosen matrix representation is extracted from this parameter.}
+
+\item{weights}{A numeric vector specifying weights for each observation
+(default: equally weighted).}
 
 \item{distance}{A string specifying the distance to be used. Possible choices
 are: hamming, frobenius [default], spectral or root-euclidean. When the
