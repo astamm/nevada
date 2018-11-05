@@ -46,7 +46,7 @@ rbinom_network <- function(size, prob, n) {
 #' @param pref.matrix2 A matrix giving the Bernoulli rates for the SBM generator
 #'   of sample 2 (default: \code{NULL}). Must be specified if \code{model ==
 #'   "sbm"}.
-#' @inheritParams test_twosample
+#' @inheritParams test2_global
 #' @param R The number of Monte-Carlo runs used to estimate the power (default:
 #'   1000L).
 #' @param seed An integer specifying the seed to start randomness from (default:
@@ -57,26 +57,26 @@ rbinom_network <- function(size, prob, n) {
 #'
 #' @examples
 #' power_twosample()
-power_twosample <- function(model1 = "gnp", model2 = "k_regular",
-                            n1 = 20L, n2 = 20L,
-                            size1 = NULL, prob1 = NULL, size2 = NULL, prob2 = NULL,
-                            lambda1 = NULL, lambda2 = NULL,
-                            pref.matrix1 = NULL, pref.matrix2 = NULL,
-                            representation = "adjacency",
-                            distance = "frobenius",
-                            statistic = "lot",
-                            B = 1000L,
-                            alpha = 0.05,
-                            test = "exact",
-                            k = 5L,
-                            R = 1000L,
-                            seed = NULL) {
+power2 <- function(model1 = "gnp", model2 = "k_regular",
+                   n1 = 20L, n2 = 20L,
+                   size1 = NULL, prob1 = NULL, size2 = NULL, prob2 = NULL,
+                   lambda1 = NULL, lambda2 = NULL,
+                   pref.matrix1 = NULL, pref.matrix2 = NULL,
+                   representation = "adjacency",
+                   distance = "frobenius",
+                   statistic = "lot",
+                   B = 1000L,
+                   alpha = 0.05,
+                   test = "exact",
+                   k = 5L,
+                   R = 1000L,
+                   seed = NULL) {
 
   set.seed(seed)
 
   pvalues <- replicate(
     R,
-    test_twosample(
+    test2_global(
       x = nvd(model1, n1, pref.matrix1, lambda1, size1, prob1),
       y = nvd(model2, n2, pref.matrix2, lambda2, size2, prob2),
       representation = representation,

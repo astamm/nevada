@@ -21,8 +21,8 @@ The package `nevada` (NEtwork-VAlued Data Analysis) is an R package for the stat
 * the `repr_*()` functions return the chosen matrix representation of the input graph,
 * the `dist_*()` functions return the chosen distance between two networks,
 * the `stat_*()` functions return the value of the chosen test statistic,
-* the `test_twosample()` function returns the p-value of a permutation test in which the null hypothesis is that the two samples come from the same distribution of networks,
-* the `power_twosample()` function returns a Monte-Carlo estimate of the power of the test in some specific scenarios.
+* the `test2_global()` function returns the p-value of a permutation test in which the null hypothesis is that the two samples come from the same distribution of networks,
+* the `power2()` function returns a Monte-Carlo estimate of the power of the test in some specific scenarios.
 
 See the vignette *NEtwork-VAlued Data Analysis* for the details of each function.
 
@@ -47,8 +47,8 @@ In this first example, we compare two populations of networks generated accordin
 n <- 10L
 x <- nevada::nvd("smallworld", n)
 y <- nevada::nvd("pa", n)
-test1 <- nevada::test_twosample(x, y, representation = "modularity")
-test1$pvalue
+t1 <- nevada::test2_global(x, y, representation = "modularity")
+t1$pvalue
 ```
 
 **Example 2**
@@ -59,6 +59,6 @@ In this second example, we compare two populations of networks generated accordi
 n <- 10L
 x <- nevada::nvd("smallworld", n)
 y <- nevada::nvd("smallworld", n)
-test2 <- nevada::test_twosample(x, y, representation = "modularity")
-test2$pvalue
+t2 <- nevada::test2_global(x, y, representation = "modularity")
+t2$pvalue
 ```

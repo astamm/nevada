@@ -30,6 +30,8 @@
 #'   through a Monte-Carlo estimate of the p-value (default: \code{"exact"}).
 #' @param k An integer specifying the density of the minimum spanning tree used
 #'   for the edge count statistics (default: \code{5L}).
+#' @param seed An integer for specifying the seed of the random generator for
+#'   result reproducibility (default: \code{NULL}).
 #'
 #' @return A \code{\link[base]{list}} with three components: the value of the
 #'   statistic for the original two samples, the p-value of the resulting
@@ -43,24 +45,25 @@
 #' # Two different models for the two populations
 #' x <- nvd("smallworld", n)
 #' y <- nvd("pa", n)
-#' test1 <- test_twosample(x, y, "modularity")
-#' test1$pvalue
+#' t1 <- test2_global(x, y, "modularity")
+#' t1$pvalue
 #'
 #' # Same model for the two populations
 #' x <- nvd("smallworld", n)
 #' y <- nvd("smallworld", n)
-#' test2 <- test_twosample(x, y, "modularity")
-#' test2$pvalue
-test_twosample <- function(x,
-                           y,
-                           representation = "adjacency",
-                           distance = "frobenius",
-                           statistic = "lot",
-                           B = 1000L,
-                           alpha = 0.05,
-                           test = "exact",
-                           k = 5L) {
+#' t2 <- test2_global(x, y, "modularity")
+#' t2$pvalue
+test2_global <- function(x, y,
+                         representation = "adjacency",
+                         distance = "frobenius",
+                         statistic = "lot",
+                         B = 1000L,
+                         alpha = 0.05,
+                         test = "exact",
+                         k = 5L,
+                         seed = NULL) {
 
+  set.seed(seed)
   n1 <- length(x)
   n2 <- length(y)
   n <- n1 + n2
@@ -120,10 +123,8 @@ test_twosample <- function(x,
 stats2pvalue <- function(i, Tp, test = "exact", B, M) {
   T0 <- Tp[i]
   b <- sum(Tp >= T0) - 1
-  if (test == "approximate")
-    p <- b / B
-  else
-    p <- phipson_smyth_pvalue(b, B, M)
+  if (test == "approximate") return(b / B)
+  phipson_smyth_pvalue(b, B, M)
 }
 
 combine_pvalues <- function(p, method = "tippett") {
