@@ -97,5 +97,5 @@ Currently, six scenarios of pairs of populations are implemented. Scenario 0
 allows to make sure that all our permutation tests are exact.
 }
 \examples{
-power_twosample()
+power2()
 }

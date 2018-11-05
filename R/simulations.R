@@ -56,7 +56,7 @@ rbinom_network <- function(size, prob, n) {
 #' @export
 #'
 #' @examples
-#' power_twosample()
+#' power2()
 power2 <- function(model1 = "gnp", model2 = "k_regular",
                    n1 = 20L, n2 = 20L,
                    size1 = NULL, prob1 = NULL, size2 = NULL, prob2 = NULL,
