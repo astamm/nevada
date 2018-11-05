@@ -4,8 +4,9 @@
 \alias{test_twosample}
 \title{Comparison of Network Distributions}
 \usage{
-test_twosample(x, y, representation = "adjacency", distance = "frobenius",
-  statistic = "lot", B = 1000L, alpha = 0.05, test = "exact", k = 5L)
+test_twosample(x, y, representation = "adjacency",
+  distance = "frobenius", statistic = "lot", B = 1000L,
+  alpha = 0.05, test = "exact", k = 5L)
 }
 \arguments{
 \item{x}{An \code{\link{nvd}} object listing networks in sample 1.}
