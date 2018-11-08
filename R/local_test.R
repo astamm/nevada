@@ -1,15 +1,14 @@
-test2_local <- function(x,
-                        y,
-                        location,
+test2_local <- function(x, y, location,
                         representation = "adjacency",
                         distance = "frobenius",
                         statistic = c("sot", "lot"),
                         alpha = 0.05,
                         B = 1000,
                         seed = NULL) {
+
+  # Perform global test
   p_global <- test2_global(
-    x,
-    y,
+    x, y,
     representation = representation,
     distance = distance,
     statistic = statistic,
@@ -18,46 +17,46 @@ test2_local <- function(x,
     seed = seed
   )$pvalue
 
+  # Extract labels of partition elements
   areas <- sort(unique(location))
   N <- length(areas)
   V <- purrr::map(areas, ~ which(location == .x))
-  dimens1 <- which(data.frame(table(location))[, 2] == 1)
 
-  if (N == dim(x[[1]])[1]) {
+  # Find partition elements of dimension 1
+  partition <- data.frame(table(location))
+  dimens1 <- partition$location[partition$Freq == 1]
+
+  # Number of vertices
+  n_vertices <- igraph::vcount(x[[1]])
+
+  if (N == n_vertices) { # Case when each vertex is its own partition element
     if (p_global < alpha) {
-      p_single_node <-
-        matrix(
-          data = rep(as.numeric(p_global), N * N),
-          nrow = N,
-          ncol = N
-        )
+      p_single_node <- matrix(p_global, N, N)
+      Y <- utils::combn(N, N - 1)
 
       if (N == 2) {
         pvalue <- rep(-1, N)
-        Y <- combn(c(1, 2), 1)
-        m <- as.numeric(dim(Y)[2])
+
+        m <- dim(Y)[2]
 
         for (j in 1:m) {
           xx <-
-            sapply(
+            lapply(
               x,
               select_nodes_tot,
-              zone = Y[, j],
-              vertex = V,
-              simplify = FALSE
+              subsets = Y[, j],
+              vertex_set = V
             )
           yy <-
-            sapply(
+            lapply(
               y,
               select_nodes_tot,
-              zone = Y[, j],
-              vertex = V,
-              simplify = FALSE
+              subsets = Y[, j],
+              vertex_set = V
             )
 
           pvalue[j] <- test2_global(
-            xx,
-            yy,
+            xx, yy,
             representation = representation,
             distance = distance,
             statistic = statistic,
@@ -66,28 +65,25 @@ test2_local <- function(x,
           )$pvalue
 
           p_single_node[Y[, j], Y[, j]] <-
-            max(as.numeric(p_single_node[Y[, j], Y[, j]]), pvalue[j])
+            max(p_single_node[Y[, j], Y[, j]], pvalue[j])
         }
       }
       else {
         results_tot <-
           possibly_significant_areas_tot(
-            x,
-            y,
-            combn(1:N, (N - 1)),
-            V,
+            x, y, Y, V,
             N - 2,
             p_single_node,
             representation = representation,
             distance = distance,
+            statistic = statistic,
             alpha = alpha,
-            N = N,
-            B = B
+            B = B,
+            seed = seed
           )
 
-        if (results_tot[[1]]) {
+        if (results_tot[[1]])
           p_single_node <- results_tot[[2]]
-        }
         else {
           areas_to_be_tested_tot <- as.matrix(results_tot[[2]])
           p_single_node <- results_tot[[3]]
