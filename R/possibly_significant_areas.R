@@ -32,7 +32,6 @@ possibly_significant_areas_tot <-
         representation = representation,
         distance = distance,
         statistic = statistic,
-        alpha = alpha,
         B = B,
         seed = seed
       )$pvalue

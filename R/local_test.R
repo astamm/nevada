@@ -12,7 +12,6 @@ test2_local <- function(x, y, location,
     representation = representation,
     distance = distance,
     statistic = statistic,
-    alpha = alpha,
     B = B,
     seed = seed
   )$pvalue
@@ -60,7 +59,6 @@ test2_local <- function(x, y, location,
             representation = representation,
             distance = distance,
             statistic = statistic,
-            alpha = alpha,
             B = B
           )$pvalue
 
@@ -150,7 +148,6 @@ test2_local <- function(x, y, location,
         representation = representation,
         distance = distance,
         statistic = statistic,
-        alpha = alpha,
         B = B,
         seed = seed
       )$pvalue
@@ -178,7 +175,6 @@ test2_local <- function(x, y, location,
         representation = representation,
         distance = distance,
         statistic = statistic,
-        alpha = alpha,
         B = B,
         seed = seed
       )$pvalue
@@ -234,7 +230,6 @@ test2_local <- function(x, y, location,
             representation = representation,
             distance = distance,
             statistic = statistic,
-            alpha = alpha,
             B = B,
             seed = seed
           )$pvalue
@@ -330,7 +325,6 @@ test2_local <- function(x, y, location,
                 representation = representation,
                 distance = distance,
                 statistic = statistic,
-                alpha = alpha,
                 B = B,
                 seed = seed
               )$pvalue
@@ -379,7 +373,6 @@ test2_local <- function(x, y, location,
             representation = representation,
             distance = distance,
             statistic = statistic,
-            alpha = alpha,
             B = B,
             seed = seed
           )$pvalue
@@ -480,7 +473,6 @@ test2_local <- function(x, y, location,
                 representation = representation,
                 distance = distance,
                 statistic = statistic,
-                alpha = alpha,
                 B = B,
                 seed = seed
               )$pvalue
@@ -530,7 +522,6 @@ test2_local <- function(x, y, location,
               representation = representation,
               distance = distance,
               statistic = statistic,
-              alpha = alpha,
               B = B,
               seed = seed
             )$pvalue
@@ -627,7 +618,6 @@ test2_local <- function(x, y, location,
                   representation = representation,
                   distance = distance,
                   statistic = statistic,
-                  alpha = alpha,
                   B = B,
                   seed = seed
                 )$pvalue
