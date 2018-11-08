@@ -1,4 +1,4 @@
-#' Comparison of Network Distributions
+#' Global Two-Sample Test for Network-Valued Data
 #'
 #' This function carries out an hypothesis test where the null hypothesis is
 #' that the two populations of networks share the same underlying probabilistic
@@ -24,7 +24,6 @@
 #' @param B The number of permutation or the tolerance (default: \code{1000L}).
 #'   If this number is lower than \code{1}, it is intended as a tolerance.
 #'   Otherwise, it is intended as the number of required permutations.
-#' @param alpha The significance level (default: \code{0.05}).
 #' @param test A character string specifying if performing an exact test through
 #'   the use of Phipson-Smyth estimate of the p-value or an approximate test
 #'   through a Monte-Carlo estimate of the p-value (default: \code{"exact"}).
@@ -58,7 +57,6 @@ test2_global <- function(x, y,
                          distance = "frobenius",
                          statistic = "lot",
                          B = 1000L,
-                         alpha = 0.05,
                          test = "exact",
                          k = 5L,
                          seed = NULL) {
@@ -133,4 +131,44 @@ combine_pvalues <- function(p, method = "tippett") {
     tippett = 1 - min(p),
     fisher = - 2 * sum(log(p))
   )
+}
+
+#' Local Two-Sample Test for Network-Valued Data
+#'
+#' @inheritParams test2_global
+#' @param partition Either a list or a vector specifying vertex memberships into
+#'   partition elements.
+#' @param alpha Significance level for hypothesis testing (default:
+#'   \code{0.05}). If set to 1, the function outputs properly adjusted p-values.
+#'   If lower than 1, then only p-values lower than alpha are properly adjusted.
+#'
+#' @return A length-2 list reporting the adjusted p-values of each element of
+#'   the partition for the intra- and inter-tests.
+#' @export
+#'
+#' @examples
+#' n <- 10L
+#'
+#' # Two different models for the two populations
+#' x <- nvd("smallworld", n)
+#' y <- nvd("pa", n)
+#' t1 <- test2_local(x, y, "modularity")
+#' t1$pvalue
+#'
+#' # Same model for the two populations
+#' x <- nvd("smallworld", n)
+#' y <- nvd("smallworld", n)
+#' t2 <- test2_local(x, y, "modularity")
+#' t2$pvalue
+test2_local <- function(x, y, partition,
+                        representation = "adjacency",
+                        distance = "frobenius",
+                        statistic = "lot",
+                        B = 1000L,
+                        alpha = 0.05,
+                        test = "exact",
+                        k = 5L,
+                        seed = NULL) {
+  partition <- as_vertex_partition(partition)
+
 }

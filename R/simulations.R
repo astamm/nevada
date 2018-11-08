@@ -47,6 +47,8 @@ rbinom_network <- function(size, prob, n) {
 #'   of sample 2 (default: \code{NULL}). Must be specified if \code{model ==
 #'   "sbm"}.
 #' @inheritParams test2_global
+#' @param alpha Significance level for hypothesis testing (default:
+#'   \code{0.05}).
 #' @param R The number of Monte-Carlo runs used to estimate the power (default:
 #'   1000L).
 #' @param seed An integer specifying the seed to start randomness from (default:

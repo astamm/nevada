@@ -70,7 +70,8 @@ test statistic, among: \code{"hamming"}, \code{"frobenius"} [default],
 If this number is lower than \code{1}, it is intended as a tolerance.
 Otherwise, it is intended as the number of required permutations.}
 
-\item{alpha}{The significance level (default: \code{0.05}).}
+\item{alpha}{Significance level for hypothesis testing (default:
+\code{0.05}).}
 
 \item{test}{A character string specifying if performing an exact test through
 the use of Phipson-Smyth estimate of the p-value or an approximate test
