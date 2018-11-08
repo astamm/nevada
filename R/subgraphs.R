@@ -51,7 +51,7 @@ subgraph_inter <- function(g, vids) {
   vids %>%
     purrr::map(~ igraph::induced_subgraph(g, .x)) %>%
     purrr::reduce(igraph::disjoint_union) %>%
-    igraph::difference(subgraph_full(g, vids), .) %>%
+    igraph::difference(big = subgraph_full(g, vids)) %>%
     igraph::set_graph_attr("atoms", names(vids))
 }
 

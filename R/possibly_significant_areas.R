@@ -178,17 +178,6 @@ possibly_significant_areas_int <- function(x, y, Y, V, dimens, p_int, dimens1, r
     p_int[1,Y[,j]] <- apply(t(as.matrix(p_int[1,Y[,j]])), 2, function(x) max(as.numeric(x), pvalue[j]))
   }
 
-  #Z <- NULL
-  #t <- 1
-  #for (j in 1:m) {
-   # if (pvalue[j] < 0.05) {
-    #  Z[[t]] <- utils::combn(Y[,j], dimens)
-     # t <- t + 1
-    #}
-  #}
-
-  #possibly_significant_areas <- t(unique.matrix(t(do.call("cbind", Z))))
-
   Z <- unique(as.vector(Y[,which(pvalue<alpha)]))
 
   if (length(Z) == 0) {
@@ -270,7 +259,6 @@ possibly_significant_areas_int <- function(x, y, Y, V, dimens, p_int, dimens1, r
     }
 
     possibly_significant_areas <- c
-    #possibly_significant_areas <- utils::combn(Z, dimens)
     results <- list(exit_int, possibly_significant_areas, p_int)
     return(results)
   }
@@ -294,8 +282,6 @@ possibly_significant_areas_ext <- function(x, y, Y, V, dimens, p_ext, representa
       p_ext[inter[1,k], inter[2,k]] <- max(as.numeric(p_ext[inter[1,k], inter[2,k]]), as.numeric(pvalue[j]))
     }
   }
-
-  #possibly_significant_areas <- t(unique.matrix(t(do.call("cbind", Z))))
 
   Z <- unique(as.vector(Y[,which(pvalue<alpha)]))
 
@@ -354,7 +340,6 @@ possibly_significant_areas_ext <- function(x, y, Y, V, dimens, p_ext, representa
 
 
     possibly_significant_areas <- c
-    #possibly_significant_areas <- utils::combn(Z, dimens)
     results <- list(exit_ext, possibly_significant_areas, p_ext)
     return(results)
   }
