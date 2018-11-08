@@ -1,13 +1,6 @@
-select_nodes_tot <- function(x, zone, vertex) {
-  vertici <- vertex[[zone[1]]]
-  r <- 2
-  for (l in zone[-1]) {
-    vertici <- c(vertici, vertex[[zone[r]]])
-    r <- r+1
-  }
-
-  xtot <- x[sort(vertici), sort(vertici)]
-  return(xtot)
+select_nodes_tot <- function(x, subsets, vertex_set) {
+  vids <- unlist(vertex_set[subsets])
+  igraph::induced_subgraph(x, vids)
 }
 
 select_nodes_int <- function(x, zone, vertex) {
