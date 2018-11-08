@@ -85,7 +85,6 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
       distance = distance,
       statistic = statistic,
       B = B,
-      alpha = alpha,
       test = test,
       k = k
     )$pvalue
