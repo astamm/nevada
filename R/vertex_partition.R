@@ -66,5 +66,11 @@ generate_sigma_algebra <- function(x) {
   N <- length(x)
   N:1 %>%
     purrr::map(~ utils::combn(N, .x, rlang::as_function(~ x[.]), simplify = FALSE)) %>%
-    rlang::set_names(paste0("D", N:1))
+    rlang::set_names(paste0("D", N:1)) %>%
+    purrr::map(~ rlang::set_names(
+      x = .x,
+      nm = .x %>%
+        purrr::map(names) %>%
+        purrr::map_chr(paste0, collapse = ",")
+    ))
 }

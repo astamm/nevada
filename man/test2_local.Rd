@@ -57,16 +57,17 @@ Local Two-Sample Test for Network-Valued Data
 }
 \examples{
 n <- 10L
+m <- as.integer(rep(1:5, 5))
 
 # Two different models for the two populations
 x <- nvd("smallworld", n)
 y <- nvd("pa", n)
-t1 <- test2_local(x, y, "modularity")
-t1$pvalue
+t1 <- test2_local(x, y, m)
+t1
 
 # Same model for the two populations
 x <- nvd("smallworld", n)
 y <- nvd("smallworld", n)
-t2 <- test2_local(x, y, "modularity")
-t2$pvalue
+t2 <- test2_local(x, y, m)
+t2
 }
