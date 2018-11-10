@@ -56,18 +56,32 @@ A length-2 list reporting the adjusted p-values of each element of
 Local Two-Sample Test for Network-Valued Data
 }
 \examples{
-n <- 10L
-m <- as.integer(rep(1:5, 5))
-
-# Two different models for the two populations
-x <- nvd("smallworld", n)
-y <- nvd("pa", n)
-t1 <- test2_local(x, y, m)
-t1
-
-# Same model for the two populations
-x <- nvd("smallworld", n)
-y <- nvd("smallworld", n)
-t2 <- test2_local(x, y, m)
-t2
+n <- 10
+p1 <- matrix(
+  data = c(0.1, 0.4, 0.1, 0.4,
+           0.4, 0.4, 0.1, 0.4,
+           0.1, 0.1, 0.4, 0.4,
+           0.4, 0.4, 0.4, 0.4),
+  nrow = 4,
+  ncol = 4,
+  byrow = TRUE
+)
+p2 <- matrix(
+  data = c(0.1, 0.4, 0.4, 0.4,
+           0.4, 0.4, 0.4, 0.4,
+           0.4, 0.4, 0.1, 0.1,
+           0.4, 0.4, 0.1, 0.4),
+  nrow = 4,
+  ncol = 4,
+  byrow = TRUE
+)
+set.seed(1234)
+sim <- n \%>\%
+  purrr::rerun(
+    x = igraph::sample_sbm(68, p1, c(17,17,17,17)),
+    y = igraph::sample_sbm(68, p2, c(17,17,17,17))
+  ) \%>\%
+  purrr::transpose() \%>\%
+  purrr::map(as_nvd)
+t0 <- test2_local(sim$x, sim$y, m, statistic = c("lot", "sot"), seed = 1234)
 }
