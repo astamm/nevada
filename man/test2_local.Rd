@@ -56,6 +56,7 @@ A length-2 list reporting the adjusted p-values of each element of
 Local Two-Sample Test for Network-Valued Data
 }
 \examples{
+library(tidyverse)
 n <- 10
 p1 <- matrix(
   data = c(0.1, 0.4, 0.1, 0.4,
@@ -83,5 +84,6 @@ sim <- n \%>\%
   ) \%>\%
   purrr::transpose() \%>\%
   purrr::map(as_nvd)
+m <- as.integer(c(rep(1, 17), rep(2, 17), rep(3, 17), rep(4, 17)))
 t0 <- test2_local(sim$x, sim$y, m, statistic = c("lot", "sot"), seed = 1234)
 }
