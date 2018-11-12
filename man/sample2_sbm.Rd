@@ -4,7 +4,7 @@
 \alias{sample2_sbm}
 \title{Two-Sample Stochastic Block Model Generator}
 \usage{
-sample2_sbm(n, nv, p1, p2 = p1, b1, b2 = b1, seed = NULL)
+sample2_sbm(n, nv, p1, b1, p2 = p1, b2 = b1, seed = NULL)
 }
 \arguments{
 \item{n}{Integer scalar giving the sample size.}
@@ -17,14 +17,14 @@ KxK matrix, where K is the number of groups. The probability of creating an
 edge between vertices from groups i and j is given by element (i,j). For
 undirected graphs, this matrix must be symmetric.}
 
+\item{b1}{Numeric vector giving the number of vertices in each group for the
+first sample. The sum of the vector must match the number of vertices.}
+
 \item{p2}{The matrix giving the Bernoulli rates for the 2nd sample (default:
 same as 1st sample). This is a KxK matrix, where K is the number of groups.
 The probability of creating an edge between vertices from groups i and j is
 given by element (i,j). For undirected graphs, this matrix must be
 symmetric.}
-
-\item{b1}{Numeric vector giving the number of vertices in each group for the
-first sample. The sum of the vector must match the number of vertices.}
 
 \item{b2}{Numeric vector giving the number of vertices in each group for the
 second sample (default: same as 1st sample). The sum of the vector must
@@ -62,5 +62,5 @@ p2 <- matrix(
   ncol = 4,
   byrow = TRUE
 )
-sim <- sample2_sbm(n, 68, p1, p2, c(17, 17, 17, 17), seed = 1234)
+sim <- sample2_sbm(n, 68, p1, c(17, 17, 17, 17), p2, seed = 1234)
 }
