@@ -147,7 +147,6 @@ combine_pvalues <- function(p, method = "tippett") {
 #' @export
 #'
 #' @examples
-#' library(tidyverse)
 #' n <- 10
 #' p1 <- matrix(
 #'   data = c(0.1, 0.4, 0.1, 0.4,
@@ -167,14 +166,7 @@ combine_pvalues <- function(p, method = "tippett") {
 #'   ncol = 4,
 #'   byrow = TRUE
 #' )
-#' set.seed(1234)
-#' sim <- n %>%
-#'   purrr::rerun(
-#'     x = igraph::sample_sbm(68, p1, c(17, 17, 17, 17)),
-#'     y = igraph::sample_sbm(68, p2, c(17, 17, 17, 17))
-#'   ) %>%
-#'   purrr::transpose() %>%
-#'   purrr::map(as_nvd)
+#' sim <- sample2_sbm(n, 68, p1, p2, c(17, 17, 17, 17), seed = 1234)
 #' m <- as.integer(c(rep(1, 17), rep(2, 17), rep(3, 17), rep(4, 17)))
 #' t0 <- test2_local(sim$x, sim$y, m, statistic = c("lot", "sot"), seed = 1234)
 test2_local <- function(x, y, partition,

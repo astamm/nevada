@@ -97,6 +97,68 @@ is_nvd <- function(obj) {
   "nvd" %in% class(obj)
 }
 
+#' Two-Sample Stochastic Block Model Generator
+#'
+#' This function generates two samples of networks according to the stochastic
+#' block model (SBM). This is essentially a wrapper around
+#' \code{\link[igraph]{sample_sbm}} which allows to sample a single network from
+#' the SBM.
+#'
+#' @param n Integer scalar giving the sample size.
+#' @param nv Integer scalar giving the number of vertices of the generated
+#'   networks, common to all networks in both samples.
+#' @param p1 The matrix giving the Bernoulli rates for the 1st sample. This is a
+#'   KxK matrix, where K is the number of groups. The probability of creating an
+#'   edge between vertices from groups i and j is given by element (i,j). For
+#'   undirected graphs, this matrix must be symmetric.
+#' @param p2 The matrix giving the Bernoulli rates for the 2nd sample (default:
+#'   same as 1st sample). This is a KxK matrix, where K is the number of groups.
+#'   The probability of creating an edge between vertices from groups i and j is
+#'   given by element (i,j). For undirected graphs, this matrix must be
+#'   symmetric.
+#' @param b1 Numeric vector giving the number of vertices in each group for the
+#'   first sample. The sum of the vector must match the number of vertices.
+#' @param b2 Numeric vector giving the number of vertices in each group for the
+#'   second sample (default: same as 1st sample). The sum of the vector must
+#'   match the number of vertices.
+#' @param seed The seed for the random number generator (default: \code{NULL}).
+#'
+#' @return A length-2 list containing the two samples stored as
+#'   \code{\link{nvd}} objects.
+#' @export
+#'
+#' @examples
+#' n <- 10
+#' p1 <- matrix(
+#'   data = c(0.1, 0.4, 0.1, 0.4,
+#'            0.4, 0.4, 0.1, 0.4,
+#'            0.1, 0.1, 0.4, 0.4,
+#'            0.4, 0.4, 0.4, 0.4),
+#'   nrow = 4,
+#'   ncol = 4,
+#'   byrow = TRUE
+#' )
+#' p2 <- matrix(
+#'   data = c(0.1, 0.4, 0.4, 0.4,
+#'            0.4, 0.4, 0.4, 0.4,
+#'            0.4, 0.4, 0.1, 0.1,
+#'            0.4, 0.4, 0.1, 0.4),
+#'   nrow = 4,
+#'   ncol = 4,
+#'   byrow = TRUE
+#' )
+#' sim <- sample2_sbm(n, 68, p1, p2, c(17, 17, 17, 17), seed = 1234)
+sample2_sbm <- function(n, nv, p1, p2 = p1, b1, b2 = b1, seed = NULL) {
+  set.seed(seed)
+  sim <- n %>%
+    purrr::rerun(
+      x = igraph::sample_sbm(nv, p1, b1),
+      y = igraph::sample_sbm(nv, p2, b2)
+    ) %>%
+    purrr::transpose() %>%
+    purrr::map(as_nvd)
+}
+
 #' Fréchet Mean of Network-Valued Data
 #'
 #' This function computes the sample Fréchet mean from an observed sample of
