@@ -7,7 +7,7 @@
 generate_sigma_algebra(x)
 }
 \arguments{
-\item{x}{Input partition.}
+\item{x}{Input partition stored as a \code{vertex_partition} object.}
 }
 \value{
 Sigma-alegbra

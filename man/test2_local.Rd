@@ -75,7 +75,7 @@ p2 <- matrix(
   ncol = 4,
   byrow = TRUE
 )
-sim <- sample2_sbm(n, 68, p1, p2, c(17, 17, 17, 17), seed = 1234)
+sim <- sample2_sbm(n, 68, p1, c(17, 17, 17, 17), p2, seed = 1234)
 m <- as.integer(c(rep(1, 17), rep(2, 17), rep(3, 17), rep(4, 17)))
 t0 <- test2_local(sim$x, sim$y, m, statistic = c("lot", "sot"), seed = 1234)
 }
