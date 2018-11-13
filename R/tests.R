@@ -168,7 +168,8 @@ combine_pvalues <- function(p, method = "tippett") {
 #' )
 #' sim <- sample2_sbm(n, 68, p1, c(17, 17, 17, 17), p2, seed = 1234)
 #' m <- as.integer(c(rep(1, 17), rep(2, 17), rep(3, 17), rep(4, 17)))
-#' t0 <- test2_local(sim$x, sim$y, m, statistic = c("lot", "sot"), seed = 1234)
+#' t1 <- test2_local(sim$x, sim$y, m, statistic = c("lot", "sot"), seed = 1234, alpha = 1.00)
+#' t2 <- test2_local(sim$x, sim$y, m, statistic = c("lot", "sot"), seed = 1234, alpha = 0.05)
 test2_local <- function(x, y, partition,
                         representation = "adjacency",
                         distance = "frobenius",
@@ -183,109 +184,165 @@ test2_local <- function(x, y, partition,
   partition <- as_vertex_partition(partition)
   E <- names(partition)
   sa <- generate_sigma_algebra(partition)
+  psize <- length(sa)
 
-  # Tests on full subgraphs
-  p_full <- test2_subgraph(
-    x, y, sa,
-    subgraph_full,
-    representation, distance, statistic, B, test, k, seed
-  )
-
-  # Tests on intra subgraphs
-  p_intra <- test2_subgraph(
-    x, y, sa,
-    subgraph_intra,
-    representation, distance, statistic, B, test, k, seed
-  )
-
-  # Tests on inter subgraphs
-  p_inter <- test2_subgraph(
-    x, y, sa[-length(sa)],
-    subgraph_inter,
-    representation, distance, statistic, B, test, k, seed
-  )
-
-  # Intra-adjusted p-values
+  # Initialize output for intra-adjusted pvalues
+  stop_intra <- FALSE
   p_intra <- utils::combn(E, 1, simplify = FALSE) %>%
     purrr::transpose() %>%
     purrr::simplify_all() %>%
     rlang::set_names("E") %>%
     tibble::as_tibble() %>%
-    dplyr::mutate(
-      indices = purrr::map(E, function(e) {
-        purrr::map_lgl(p_intra$Elements, ~ e %in% .x)
-      }),
-      pvalue = purrr::map_dbl(indices, ~ max(p_intra$pvalue[.x], na.rm = TRUE)),
-      indices = purrr::map_dbl(
-        indices,
-        ~ max(p_full$pvalue[.x], na.rm = TRUE)
-      ),
-      pvalue = pmax(pvalue, indices)
-    ) %>%
-    select(-indices)
+    dplyr::mutate(pvalue = 0, truncated = FALSE)
 
-  # Inter-adjusted p-values
+  # Intialize output for inter-adjusted pvalues
+  stop_inter <- FALSE
   p_inter <- utils::combn(E, 2, simplify = FALSE) %>%
     purrr::transpose() %>%
     purrr::simplify_all() %>%
     rlang::set_names(c("E1", "E2")) %>%
     tibble::as_tibble() %>%
-    dplyr::mutate(
-      indices = purrr::map2(E1, E2, function(e1, e2) {
-        purrr::map_lgl(p_inter$Elements, ~ all(c(e1, e2) %in% .x))
-      }),
-      pvalue = purrr::map_dbl(indices, ~ max(p_inter$pvalue[.x], na.rm = TRUE)),
-      indices = purrr::map_dbl(
-        indices,
-        ~ max(p_full$pvalue[c(.x, rep(FALSE, length(E)))], na.rm = TRUE)
-      ),
-      pvalue = pmax(pvalue, indices)
-    ) %>%
-    select(-indices)
+    dplyr::mutate(pvalue = 0, truncated = FALSE)
+
+  skip_intra <- NULL
+  skip_inter <- NULL
+
+  for (i in 1:psize) {
+    sas <- sa[[i]]
+    compositions <- names(sas)
+
+    for (j in 1:length(sas)) {
+
+      if (stop_intra && stop_inter)
+        return(list(intra = p_intra, inter = p_inter))
+
+      if (compositions[j] %in% skip_intra && compositions[j] %in% skip_inter)
+        next()
+
+      individuals <- compositions[j] %>%
+        stringr::str_split(",") %>%
+        purrr::simplify()
+
+      # Tests on full subgraphs
+      p <- test2_subgraph(
+        x, y, sas[[j]],
+        subgraph_full,
+        representation, distance, statistic, B, test, k, seed
+      )
+
+      # Grab combinations that do not require update anymore
+      if (p >= alpha) {
+        for (k in 1:length(individuals)) {
+          tmp <- individuals %>%
+            utils::combn(k, paste0, collapse = ",", simplify = FALSE) %>%
+            purrr::simplify()
+          skip_intra <- c(skip_intra, tmp) %>% unique()
+          skip_inter <- c(skip_inter, tmp) %>% unique()
+        }
+      }
+
+      # Intra-adjusted p-values from full tests
+      if (!stop_intra)
+        p_intra <- .update_intra_pvalues(p_intra, individuals, p, alpha)
+      stop_intra <- all(p_intra$truncated)
+
+      # Inter-adjusted p-values from full tests
+      if (!stop_inter && i < psize)
+        p_inter <- .update_inter_pvalues(p_inter, individuals, p, alpha)
+      stop_inter <- all(p_inter$truncated)
+
+      if (!stop_intra) {
+        if (compositions[j] %in% skip_intra)
+          next()
+
+        # Tests on intra subgraphs
+        p <- test2_subgraph(
+          x, y, sas[[j]],
+          subgraph_intra,
+          representation, distance, statistic, B, test, k, seed
+        )
+
+        # Grab combinations that do not require update anymore
+        if (p >= alpha) {
+          for (k in 1:length(individuals)) {
+            tmp <- individuals %>%
+              utils::combn(k, simplify = FALSE) %>%
+              purrr::simplify()
+            skip_intra <- c(skip_intra, tmp) %>% unique()
+          }
+        }
+
+        # Intra-adjusted p-values from intra tests
+        p_intra <- .update_intra_pvalues(p_intra, individuals, p, alpha)
+        stop_intra <- all(p_intra$truncated)
+      }
+
+      if (!stop_inter && i < psize) {
+        if (compositions[j] %in% skip_inter)
+          next()
+
+        # Tests on inter subgraphs
+        p <- test2_subgraph(
+          x, y, sas[[j]],
+          subgraph_inter,
+          representation, distance, statistic, B, test, k, seed
+        )
+
+        # Grab combinations that do not require update anymore
+        if (p >= alpha) {
+          for (k in 2:length(individuals)) {
+            tmp <- individuals %>%
+              utils::combn(k, simplify = FALSE) %>%
+              purrr::simplify()
+            skip_inter <- c(skip_inter, tmp) %>% unique()
+          }
+        }
+
+        # Inter-adjusted p-values from inter tests
+        p_inter <- .update_inter_pvalues(p_inter, individuals, p, alpha)
+        stop_inter <- all(p_inter$truncated)
+      }
+    }
+  }
 
   list(intra = p_intra, inter = p_inter)
 }
 
-test2_subgraph <- function(x, y, sa, fun, representation, distance, statistic, B, test, k, seed) {
+.update_intra_pvalues <- function(output, c, p, alpha) {
+  output %>%
+    dplyr::mutate(
+      pvalue = purrr::map2_dbl(E, pvalue, ~ dplyr::if_else(.x %in% c, pmax(.y, p), .y)),
+      truncated = pvalue >= alpha
+    )
+}
+
+.update_inter_pvalues <- function(output, c, p, alpha) {
+  output %>%
+    dplyr::mutate(
+      pvalue = purrr::pmap_dbl(
+        list(E1, E2, pvalue),
+        ~ dplyr::if_else(all(c(..1, ..2) %in% c), pmax(..3, p), ..3)
+      ),
+      truncated = pvalue >= alpha
+    )
+}
+
+test2_subgraph <- function(x, y, subpartition, fun,
+                           representation, distance, statistic, B, test, k, seed) {
   x <- x %>%
-    purrr::map(function(g) {
-      sa %>%
-        purrr::modify_depth(2, rlang::as_function(fun), g = g) %>%
-        purrr::flatten()
-    }) %>%
-    purrr::transpose() %>%
-    tibble::as_tibble() %>%
-    tidyr::gather(Elements, Graphs) %>%
-    dplyr::mutate(Elements = forcats::as_factor(Elements)) %>%
-    dplyr::group_by(Elements) %>%
-    dplyr::do(x = as_nvd(.$Graphs)) %>%
-    dplyr::ungroup()
+    purrr::map(rlang::as_function(fun), vids = subpartition) %>%
+    as_nvd()
   y <- y %>%
-    purrr::map(function(g) {
-      sa %>%
-        purrr::modify_depth(2, rlang::as_function(fun), g = g) %>%
-        purrr::flatten()
-    }) %>%
-    purrr::transpose() %>%
-    tibble::as_tibble() %>%
-    tidyr::gather(Elements, Graphs) %>%
-    dplyr::mutate(Elements = forcats::as_factor(Elements)) %>%
-    dplyr::group_by(Elements) %>%
-    dplyr::do(y = as_nvd(.$Graphs)) %>%
-    dplyr::ungroup()
-  p <- x %>%
-    dplyr::left_join(y) %>%
-    dplyr::mutate(pvalue = purrr::map2(
-      x, y,
-      test2_global,
-      representation = representation,
-      distance = distance,
-      statistic = statistic,
-      B = B,
-      test = test,
-      k = k,
-      seed = seed
-    ) %>% purrr::map_dbl("pvalue")) %>%
-    dplyr::select(-x, -y) %>%
-    dplyr::mutate(Elements = stringr::str_split(Elements, ","))
+    purrr::map(rlang::as_function(fun), vids = subpartition) %>%
+    as_nvd()
+  test2_global(
+    x, y,
+    representation = representation,
+    distance = distance,
+    statistic = statistic,
+    B = B,
+    test = test,
+    k = k,
+    seed = seed
+  )$pvalue
 }
