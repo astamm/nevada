@@ -220,7 +220,7 @@ test2_local <- function(x, y, partition,
         next()
 
       individuals <- compositions[j] %>%
-        stringr::str_split(",") %>%
+        strsplit(",") %>%
         purrr::simplify()
 
       # Tests on full subgraphs
@@ -312,7 +312,7 @@ test2_local <- function(x, y, partition,
   output %>%
     dplyr::mutate(
       pvalue = purrr::map2_dbl(.data$E, .data$pvalue, ~ dplyr::if_else(.x %in% c, pmax(.y, p), .y)),
-      truncated = pvalue >= alpha
+      truncated = .data$pvalue >= alpha
     )
 }
 
@@ -323,7 +323,7 @@ test2_local <- function(x, y, partition,
         list(.data$E1, .data$E2, .data$pvalue),
         ~ dplyr::if_else(all(c(..1, ..2) %in% c), pmax(..3, p), ..3)
       ),
-      truncated = pvalue >= alpha
+      truncated = .data$pvalue >= alpha
     )
 }
 
