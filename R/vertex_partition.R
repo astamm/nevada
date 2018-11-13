@@ -56,7 +56,7 @@ as_vertex_partition.integer <- function(x) {
 #' @examples
 #' g <- igraph::make_ring(7)
 #' m <- as.integer(c(1, 2, 1, 3, 4, 4, 3))
-#' sa <- generate_sigma_algebra(m)
+#' sa <- generate_sigma_algebra(as_vertex_partition(m))
 #' all_full  <- purrr::modify_depth(sa, 2, ~ subgraph_full (g, .x))
 #' all_intra <- purrr::modify_depth(sa, 2, ~ subgraph_intra(g, .x))
 #' all_inter <- purrr::modify_depth(sa, 2, ~ subgraph_inter(g, .x))

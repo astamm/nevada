@@ -15,4 +15,5 @@
 #'
 #' @useDynLib nevada, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
+#' @importFrom rlang .data
 "_PACKAGE"

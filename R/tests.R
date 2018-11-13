@@ -311,7 +311,7 @@ test2_local <- function(x, y, partition,
 .update_intra_pvalues <- function(output, c, p, alpha) {
   output %>%
     dplyr::mutate(
-      pvalue = purrr::map2_dbl(E, pvalue, ~ dplyr::if_else(.x %in% c, pmax(.y, p), .y)),
+      pvalue = purrr::map2_dbl(.data$E, .data$pvalue, ~ dplyr::if_else(.x %in% c, pmax(.y, p), .y)),
       truncated = pvalue >= alpha
     )
 }
@@ -320,7 +320,7 @@ test2_local <- function(x, y, partition,
   output %>%
     dplyr::mutate(
       pvalue = purrr::pmap_dbl(
-        list(E1, E2, pvalue),
+        list(.data$E1, .data$E2, .data$pvalue),
         ~ dplyr::if_else(all(c(..1, ..2) %in% c), pmax(..3, p), ..3)
       ),
       truncated = pvalue >= alpha
