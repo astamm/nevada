@@ -5,7 +5,6 @@
 \alias{subgraph_full}
 \alias{subgraph_intra}
 \alias{subgraph_inter}
-\alias{subgraph_all}
 \title{Full, intra and inter subgraph generators}
 \usage{
 subgraph_full(g, vids)
@@ -13,8 +12,6 @@ subgraph_full(g, vids)
 subgraph_intra(g, vids)
 
 subgraph_inter(g, vids)
-
-subgraph_all(g, vids)
 }
 \arguments{
 \item{g}{An \code{\link[igraph]{igraph}} object.}
@@ -34,6 +31,5 @@ g <- igraph::make_ring(10)
 g_full  <- subgraph_full (g, list(1:3, 4:5, 8:10))
 g_intra <- subgraph_intra(g, list(1:3, 4:5, 8:10))
 g_inter <- subgraph_inter(g, list(1:3, 4:5, 8:10))
-g_all   <- subgraph_all  (g, list(1:3, 4:5, 8:10))
 
 }
