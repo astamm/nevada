@@ -56,15 +56,15 @@ as_vertex_partition.integer <- function(x) {
 #' @examples
 #' g <- igraph::make_ring(7)
 #' m <- as.integer(c(1, 2, 1, 3, 4, 4, 3))
-#' sa <- generate_sigma_algebra(as_vertex_partition(m))
+#' p <- as_vertex_partition(m)
+#' sa <- generate_sigma_algebra(p)
 #' all_full  <- purrr::modify_depth(sa, 2, ~ subgraph_full (g, .x))
 #' all_intra <- purrr::modify_depth(sa, 2, ~ subgraph_intra(g, .x))
 #' all_inter <- purrr::modify_depth(sa, 2, ~ subgraph_inter(g, .x))
-#' all       <- purrr::modify_depth(sa, 2, ~ subgraph_all  (g, .x))
 generate_sigma_algebra <- function(x) {
   N <- length(x)
   N:1 %>%
-    purrr::map(~ utils::combn(N, .x, rlang::as_function(~ x[.]), simplify = FALSE)) %>%
+    purrr::map(utils::combn, x = x, simplify = FALSE) %>%
     rlang::set_names(paste0("D", N:1)) %>%
     purrr::map(~ rlang::set_names(
       x = .x,
