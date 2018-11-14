@@ -6,7 +6,8 @@
 \usage{
 test2_local(x, y, partition, representation = "adjacency",
   distance = "frobenius", statistic = "lot", B = 1000L,
-  alpha = 0.05, test = "exact", k = 5L, seed = NULL)
+  alpha = 0.05, test = "exact", k = 5L, seed = NULL,
+  verbose = FALSE)
 }
 \arguments{
 \item{x}{An \code{\link{nvd}} object listing networks in sample 1.}
@@ -47,6 +48,9 @@ for the edge count statistics (default: \code{5L}).}
 
 \item{seed}{An integer for specifying the seed of the random generator for
 result reproducibility (default: \code{NULL}).}
+
+\item{verbose}{Boolean specifying whether information on intermediate tests
+should be printed in the process (default: \code{FALSE}).}
 }
 \value{
 A length-2 list reporting the adjusted p-values of each element of
