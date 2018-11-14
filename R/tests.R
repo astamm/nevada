@@ -191,6 +191,7 @@ test2_local <- function(x, y, partition,
 
   # Initialize output for intra-adjusted pvalues
   stop_intra <- FALSE
+  skip_intra <- NULL
   p_intra <- utils::combn(E, 1, simplify = FALSE) %>%
     purrr::transpose() %>%
     purrr::simplify_all() %>%
@@ -200,6 +201,7 @@ test2_local <- function(x, y, partition,
 
   # Intialize output for inter-adjusted pvalues
   stop_inter <- FALSE
+  skip_inter <- NULL
   p_inter <- utils::combn(E, 2, simplify = FALSE) %>%
     purrr::transpose() %>%
     purrr::simplify_all() %>%
@@ -207,10 +209,8 @@ test2_local <- function(x, y, partition,
     tibble::as_tibble() %>%
     dplyr::mutate(pvalue = 0, truncated = FALSE)
 
-  skip_intra <- NULL
-  skip_inter <- NULL
-
   for (i in 1:psize) {
+
     sas <- sa[[i]]
     compositions <- names(sas)
 
@@ -256,13 +256,13 @@ test2_local <- function(x, y, partition,
       # Update stopping and skipping conditions
       stop_intra <- all(p_intra$truncated)
       stop_inter <- all(p_inter$truncated)
-      # Grab combinations that do not require update anymore
       if (p >= alpha) {
         skip_intra <- .update_skip_list(skip_intra, individuals)
         skip_inter <- .update_skip_list(skip_inter, individuals)
       }
 
       update_intra <- !stop_intra && !(element_name %in% skip_intra)
+
       if (update_intra) {
         # Tests on intra subgraphs
         p <- test2_subgraph(
@@ -282,12 +282,12 @@ test2_local <- function(x, y, partition,
 
         # Update stopping and skipping conditions
         stop_intra <- all(p_intra$truncated)
-        # Grab combinations that do not require update anymore
         if (p >= alpha)
           skip_intra <- .update_skip_list(skip_intra, individuals)
       }
 
       update_inter <- !stop_inter && i < psize && !(element_name %in% skip_inter)
+
       if (update_inter) {
         # Tests on inter subgraphs
         p <- test2_subgraph(
@@ -307,7 +307,6 @@ test2_local <- function(x, y, partition,
 
         # Update stopping and skipping conditions
         stop_inter <- all(p_inter$truncated)
-        # Grab combinations that do not require update anymore
         if (p >= alpha)
           skip_inter <- .update_skip_list(skip_inter, individuals)
       }
