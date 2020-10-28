@@ -1,15 +1,3 @@
-rpois_network <- function(lambda, n) {
-  A <- diag(0, n)
-  A[upper.tri(A)] <- stats::rpois(n * (n - 1L) / 2L, lambda)
-  igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
-}
-
-rbinom_network <- function(size, prob, n) {
-  A <- diag(0, n)
-  A[upper.tri(A)] <- stats::rbinom(n * (n - 1L) / 2L, size, prob)
-  igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
-}
-
 #' Power Simulations for Permutation Tests
 #'
 #' This function provides a Monte-Carlo estimate of the power of the permutation

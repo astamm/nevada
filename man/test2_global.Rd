@@ -4,9 +4,17 @@
 \alias{test2_global}
 \title{Global Two-Sample Test for Network-Valued Data}
 \usage{
-test2_global(x, y, representation = "adjacency",
-  distance = "frobenius", statistic = "lot", B = 1000L,
-  test = "exact", k = 5L, seed = NULL)
+test2_global(
+  x,
+  y,
+  representation = "adjacency",
+  distance = "frobenius",
+  statistic = "lot",
+  B = 1000L,
+  test = "exact",
+  k = 5L,
+  seed = NULL
+)
 }
 \arguments{
 \item{x}{An \code{\link{nvd}} object listing networks in sample 1.}
