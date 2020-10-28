@@ -21,13 +21,13 @@ plot.nvd <- function(x, y, ...) {
   dchoices <- c("hamming", "frobenius", "spectral", "root-euclidean")
   tidyr::crossing(Representation = rchoices, Distance = dchoices) %>%
     dplyr::mutate(
-      dist_matrix = purrr::map2(Representation, Distance, dist_nvd, x = x, y = y),
-      mds = purrr::map(dist_matrix, stats::cmdscale) %>%
+      mds = purrr::map2(Representation, Distance, dist_nvd, x = x, y = y) %>%
+        purrr::map(stats::cmdscale) %>%
+        purrr::map(`colnames<-`, c("V1", "V2")) %>%
         purrr::map(tibble::as_tibble) %>%
         purrr::map(dplyr::mutate, Label = c(rep("1", length(x)), rep("2", length(y))))
     ) %>%
-    dplyr::select(-dist_matrix) %>%
-    tidyr::unnest() %>%
+    tidyr::unnest(cols = mds) %>%
     dplyr::mutate(
       Representation = Representation %>%
         forcats::as_factor() %>%
