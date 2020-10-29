@@ -256,6 +256,9 @@ double stat_t_euclidean_impl(const Rcpp::List &x, const Rcpp::List &y, const boo
 
   double varianceValue = (pooled) ? (ssd1 + ssd2) / (n1 + n2 - 2.0) * (1.0 / n1 + 1.0 / n2) : ssd1 / (n1 - 1.0) / n1 + ssd2 / (n2 - 1.0) / n2;
 
+  if (varianceValue < std::sqrt(std::numeric_limits<double>::epsilon()))
+    return meanDifference;
+
   return meanDifference / std::sqrt(varianceValue);
 }
 
