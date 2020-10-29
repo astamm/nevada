@@ -30,7 +30,15 @@ rsbm(n, num_vertices, pref_matrix, block_sizes)
 \item{prob}{The probability of success on each trial for the binomial
 distribution (default: 0.5).}
 
-\item{block_sizes}{}
+\item{pref_matrix}{The matrix giving the Bernoulli rates. This is a KxK
+matrix, where K is the number of groups. The probability of creating an
+edge between vertices from groups i and j is given by element (i,j). For
+undirected graphs, this matrix must be symmetric. See
+\code{\link[igraph]{sample_sbm}}.}
+
+\item{block_sizes}{Numeric vector giving the number of vertices in each
+group. The sum of the vector must match the number of vertices. See
+\code{\link[igraph]{sample_sbm}}.}
 }
 \value{
 A object of class \code{\link{nvd}} containing the sample of graphs.
