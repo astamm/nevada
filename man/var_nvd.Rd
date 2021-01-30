@@ -17,13 +17,13 @@ that the chosen matrix representation is extracted from this parameter.}
 (default: equally weighted).}
 
 \item{distance}{A string specifying the distance to be used. Possible choices
-are: hamming, frobenius [default], spectral or root-euclidean. When the
-Fréchet mean is used as \code{x0} parameter, the distance should match the
-one used to compute the mean. This is not currently checked.}
+are: hamming, frobenius, spectral or root-euclidean. Default is frobenius.
+When the Fréchet mean is used as \code{x0} parameter, the distance should
+match the one used to compute the mean. This is not currently checked.}
 }
 \value{
 A positive scalar value evaluating the amount of variability of the
-  sample around the specified network.
+sample around the specified network.
 }
 \description{
 This function computes the Fréchet variance around a specified network from

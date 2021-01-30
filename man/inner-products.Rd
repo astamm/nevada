@@ -15,8 +15,8 @@ underlying network.}
 underlying network. Should have the same number of vertices as \code{x}.}
 
 \item{representation}{A string specifying the desired type of representation,
-among: \code{"adjacency"}, \code{"laplacian"} [default],
-\code{"modularity"} or \code{"graphon"}.}
+among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
+\code{"graphon"}. Default is \code{"laplacian"}.}
 }
 \value{
 A scalar measuring the angle between the two input networks.

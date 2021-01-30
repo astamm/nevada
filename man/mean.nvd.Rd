@@ -12,15 +12,16 @@
 \item{weights}{A numeric vector specifying weights for each observation
 (default: equally weighted).}
 
-\item{representation}{A string specifying the graph representation to be used
-(choices: adjacency [default], laplacian, modularity, graphon).}
+\item{representation}{A string specifying the graph representation to be
+used. Choices are adjacency, laplacian, modularity, graphon. Default is
+adjacency.}
 
 \item{...}{Other argument to be parsed to the \code{\link[base]{mean}}
 function.}
 }
 \value{
 The mean network in the chosen matrix representation assuming
-  Euclidean geometry for now.
+Euclidean geometry for now.
 }
 \description{
 This function computes the sample Fréchet mean from an observed sample of

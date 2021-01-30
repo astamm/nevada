@@ -9,15 +9,16 @@ var2_nvd(x, representation = "adjacency", distance = "frobenius")
 \arguments{
 \item{x}{An \code{\link{nvd}} object listing a sample of networks.}
 
-\item{representation}{A string specifying the graph representation to be used
-(choices: adjacency [default], laplacian, modularity, graphon).}
+\item{representation}{A string specifying the graph representation to be
+used. Choices are adjacency, laplacian, modularity, graphon. Default is
+adjacency.}
 
 \item{distance}{A string specifying the distance to be used. Possible choices
-are: hamming, frobenius [default], spectral or root-euclidean.}
+are: hamming, frobenius, spectral or root-euclidean. Default is frobenius.}
 }
 \value{
 A positive scalar value evaluating the variance based on inter-point
-  distances.
+distances.
 }
 \description{
 This function computes the Fréchet variance using exclusively inter-point

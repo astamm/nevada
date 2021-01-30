@@ -24,7 +24,7 @@ class of its input (default: \code{TRUE}).}
 }
 \value{
 A numeric square matrix giving the desired network representation
-  recorded in the object's class.
+recorded in the object's class.
 }
 \description{
 This is a collection of functions that convert a graph stored as an

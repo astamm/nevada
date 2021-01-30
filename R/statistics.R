@@ -27,8 +27,8 @@
 #' @param standardize If \code{TRUE} (default), standardize the DoM statistic
 #'   using the pooled sample variance estimator.
 #' @param type A string specifying the version of the edge count test statistic
-#'   to be used. Choices are \code{"original"}, \code{"generalized"} [default]
-#'   or \code{"weighted"}.
+#'   to be used. Choices are \code{"original"}, \code{"generalized"} or
+#'   \code{"weighted"}. Default is \code{"generalized"}.
 #'
 #' @return A scalar giving the value of the desired test statistic.
 #'

@@ -16,8 +16,8 @@ nvd(
 \arguments{
 \item{model}{A string specifying the model to be used for sampling networks
 (current choices are: \code{"sbm"}, \code{"k_regular"}, \code{"gnp"},
-\code{"smallworld"} [default], \code{"pa"}, \code{"poisson"} and
-\code{"binomial"}).}
+\code{"smallworld"}, \code{"pa"}, \code{"poisson"} and \code{"binomial"}).
+Default is \code{"smallworld"}.}
 
 \item{n}{An integer specifying the sample size (default: \code{0L}).}
 
@@ -27,11 +27,11 @@ It is required for \code{model == "sbm"}.}
 
 \item{lambda}{A numeric value specifying the mean value for the Poisson
 generator. Default is \code{NULL}. It is required for \code{model ==
-"poisson"}.}
+  "poisson"}.}
 
 \item{size}{An integer value specifying the number of trials for the binomial
 distribution. Default is \code{NULL}. It is required for \code{model ==
-"binomial"}.}
+  "binomial"}.}
 
 \item{prob}{A numeric value specifying the probability of success of each
 trial for the binomial distribution. Default is \code{NULL}. It is required
@@ -39,7 +39,7 @@ for \code{model == "binomial"}.}
 }
 \value{
 A \code{nvd} object which is a list of \code{\link[igraph]{igraph}}
-  objects.
+objects.
 }
 \description{
 This is the constructor for objects of class \code{nvd}.

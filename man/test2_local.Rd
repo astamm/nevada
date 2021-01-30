@@ -28,18 +28,19 @@ test2_local(
 partition elements.}
 
 \item{representation}{A string specifying the desired type of representation,
-among: \code{"adjacency"} [default], \code{"laplacian"} and
-\code{"modularity"}.}
+among: \code{"adjacency"}, \code{"laplacian"} and \code{"modularity"}.
+Default is \code{"adjacency"}.}
 
 \item{distance}{A string specifying the chosen distance for calculating the
-test statistic, among: \code{"hamming"}, \code{"frobenius"} [default],
-\code{"spectral"} and \code{"root-euclidean"}.}
+test statistic, among: \code{"hamming"}, \code{"frobenius"},
+\code{"spectral"} and \code{"root-euclidean"}. Default is
+\code{"frobenius"}.}
 
 \item{statistic}{A string specifying the chosen test statistic(s), among:
-\code{"lot"} [default], \code{"sot"}, \code{"biswas"}, \code{"energy"},
+\code{"lot"}, \code{"sot"}, \code{"biswas"}, \code{"energy"},
 \code{"student"}, \code{"welch"}, \code{"original"}, \code{"generalized"},
 \code{"weighted"} or a combination from \code{c("lot", "sot", "biswas",
-"energy")}.}
+  "energy")}. Default is \code{"lot"}.}
 
 \item{B}{The number of permutation or the tolerance (default: \code{1000L}).
 If this number is lower than \code{1}, it is intended as a tolerance.
@@ -64,7 +65,7 @@ should be printed in the process (default: \code{FALSE}).}
 }
 \value{
 A length-2 list reporting the adjusted p-values of each element of
-  the partition for the intra- and inter-tests.
+the partition for the intra- and inter-tests.
 }
 \description{
 Local Two-Sample Test for Network-Valued Data

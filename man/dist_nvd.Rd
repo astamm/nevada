@@ -16,16 +16,17 @@ or matrix representations of underlying networks from a given second
 population.}
 
 \item{representation}{A string specifying the desired type of representation,
-among: \code{"adjacency"}, \code{"laplacian"} [default],
-\code{"modularity"} or \code{"graphon"}.}
+among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
+\code{"graphon"}. Default is \code{"laplacian"}.}
 
 \item{distance}{A string specifying the chosen distance for calculating the
-test statistic, among: \code{"hamming"}, \code{"frobenius"} [default],
-\code{"spectral"} and \code{"root-euclidean"}.}
+test statistic, among: \code{"hamming"}, \code{"frobenius"},
+\code{"spectral"} and \code{"root-euclidean"}. Default is
+\code{"frobenius"}.}
 }
 \value{
 A matrix of dimension \eqn{(n1+n2) \times (n1+n2)} containing the
-  distances between all the elements of the two samples put together.
+distances between all the elements of the two samples put together.
 }
 \description{
 This function computes the matrix of pairwise distances between all the

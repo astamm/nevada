@@ -26,8 +26,8 @@
 #' @param y An \code{\link[igraph]{igraph}} object or a matrix representing an
 #'   underlying network. Should have the same number of vertices as \code{x}.
 #' @param representation A string specifying the desired type of representation,
-#'   among: \code{"adjacency"}, \code{"laplacian"} [default],
-#'   \code{"modularity"} or \code{"graphon"}.
+#'   among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
+#'   \code{"graphon"}. Default is \code{"laplacian"}.
 #'
 #' @return A scalar measuring the distance between the two input networks.
 #'
@@ -102,8 +102,8 @@ dist_root_euclidean <- function(x, y, representation = "laplacian") {
 #' @param y An \code{\link[igraph]{igraph}} object or a matrix representing an
 #'   underlying network. Should have the same number of vertices as \code{x}.
 #' @param representation A string specifying the desired type of representation,
-#'   among: \code{"adjacency"}, \code{"laplacian"} [default],
-#'   \code{"modularity"} or \code{"graphon"}.
+#'   among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
+#'   \code{"graphon"}. Default is \code{"laplacian"}.
 #'
 #' @return A scalar measuring the angle between the two input networks.
 #'
@@ -139,11 +139,12 @@ ipro_frobenius <- function(x, y, representation = "laplacian") {
 #'   or matrix representations of underlying networks from a given second
 #'   population.
 #' @param representation A string specifying the desired type of representation,
-#'   among: \code{"adjacency"}, \code{"laplacian"} [default],
-#'   \code{"modularity"} or \code{"graphon"}.
+#'   among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
+#'   \code{"graphon"}. Default is \code{"laplacian"}.
 #' @param distance A string specifying the chosen distance for calculating the
-#'   test statistic, among: \code{"hamming"}, \code{"frobenius"} [default],
-#'   \code{"spectral"} and \code{"root-euclidean"}.
+#'   test statistic, among: \code{"hamming"}, \code{"frobenius"},
+#'   \code{"spectral"} and \code{"root-euclidean"}. Default is
+#'   \code{"frobenius"}.
 #'
 #' @return A matrix of dimension \eqn{(n1+n2) \times (n1+n2)} containing the
 #'   distances between all the elements of the two samples put together.

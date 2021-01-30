@@ -4,8 +4,8 @@
 #'
 #' @param model A string specifying the model to be used for sampling networks
 #'   (current choices are: \code{"sbm"}, \code{"k_regular"}, \code{"gnp"},
-#'   \code{"smallworld"} [default], \code{"pa"}, \code{"poisson"} and
-#'   \code{"binomial"}).
+#'   \code{"smallworld"}, \code{"pa"}, \code{"poisson"} and \code{"binomial"}).
+#'   Default is \code{"smallworld"}.
 #' @param n An integer specifying the sample size (default: \code{0L}).
 #' @param pref.matrix A matrix giving the Bernoulli rates for the SBM generator
 #'   (see \code{\link[igraph]{sample_sbm}} for details). Default is \code{NULL}.
@@ -170,8 +170,9 @@ sample2_sbm <- function(n, nv, p1, b1, p2 = p1, b2 = b1, seed = NULL) {
 #' @param x An \code{\link{nvd}} object.
 #' @param weights A numeric vector specifying weights for each observation
 #'   (default: equally weighted).
-#' @param representation A string specifying the graph representation to be used
-#'   (choices: adjacency [default], laplacian, modularity, graphon).
+#' @param representation A string specifying the graph representation to be
+#'   used. Choices are adjacency, laplacian, modularity, graphon. Default is
+#'   adjacency.
 #' @param ... Other argument to be parsed to the \code{\link[base]{mean}}
 #'   function.
 #'
@@ -213,9 +214,9 @@ mean.nvd <- function(x, weights = rep(1, length(x)), representation = "adjacency
 #' @param weights A numeric vector specifying weights for each observation
 #'   (default: equally weighted).
 #' @param distance A string specifying the distance to be used. Possible choices
-#'   are: hamming, frobenius [default], spectral or root-euclidean. When the
-#'   Fréchet mean is used as \code{x0} parameter, the distance should match the
-#'   one used to compute the mean. This is not currently checked.
+#'   are: hamming, frobenius, spectral or root-euclidean. Default is frobenius.
+#'   When the Fréchet mean is used as \code{x0} parameter, the distance should
+#'   match the one used to compute the mean. This is not currently checked.
 #'
 #' @return A positive scalar value evaluating the amount of variability of the
 #'   sample around the specified network.
@@ -263,10 +264,11 @@ var_nvd <- function(x, x0, weights = rep(1, length(x)), distance = "frobenius") 
 #' distance.
 #'
 #' @param x An \code{\link{nvd}} object listing a sample of networks.
-#' @param representation A string specifying the graph representation to be used
-#'   (choices: adjacency [default], laplacian, modularity, graphon).
+#' @param representation A string specifying the graph representation to be
+#'   used. Choices are adjacency, laplacian, modularity, graphon. Default is
+#'   adjacency.
 #' @param distance A string specifying the distance to be used. Possible choices
-#'   are: hamming, frobenius [default], spectral or root-euclidean.
+#'   are: hamming, frobenius, spectral or root-euclidean. Default is frobenius.
 #'
 #' @return A positive scalar value evaluating the variance based on inter-point
 #'   distances.

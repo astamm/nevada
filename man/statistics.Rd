@@ -49,8 +49,8 @@ distance of the energy-based statistic (default: 1L).}
 using the pooled sample variance estimator.}
 
 \item{type}{A string specifying the version of the edge count test statistic
-to be used. Choices are \code{"original"}, \code{"generalized"} [default]
-or \code{"weighted"}.}
+to be used. Choices are \code{"original"}, \code{"generalized"} or
+\code{"weighted"}. Default is \code{"generalized"}.}
 }
 \value{
 A scalar giving the value of the desired test statistic.

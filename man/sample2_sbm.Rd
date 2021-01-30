@@ -34,7 +34,7 @@ match the number of vertices.}
 }
 \value{
 A length-2 list containing the two samples stored as
-  \code{\link{nvd}} objects.
+\code{\link{nvd}} objects.
 }
 \description{
 This function generates two samples of networks according to the stochastic

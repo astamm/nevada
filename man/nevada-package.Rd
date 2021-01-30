@@ -18,5 +18,25 @@ It has three main goals:
 }
 
 To learn more about nevada, start with the vignettes:
-`browseVignettes(package = "nevada")`
+\code{browseVignettes(package = "nevada")}
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://astamm.github.io/nevada/}
+  \item \url{https://github.com/nevada/roahd}
+  \item Report bugs at \url{https://github.com/astamm/nevada/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Aymeric Stamm \email{aymeric.stamm@math.cnrs.fr} (\href{https://orcid.org/0000-0002-8725-3654}{ORCID})
+
+Authors:
+\itemize{
+  \item Ilenia Lovato \email{ilenia.lovato01@universitadipavia.it}
+  \item Alessia Pini \email{alessia.pini@unicatt.it}
+  \item Simone Vantini \email{simone.vantini@polimi.it}
+}
+
 }

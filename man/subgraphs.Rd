@@ -20,7 +20,7 @@ subgraph_inter(g, vids)
 }
 \value{
 An \code{\link[igraph]{igraph}} object storing a subgraph of type
-  full, intra or inter.
+full, intra or inter.
 }
 \description{
 This is a collection of functions for extracting full, intra and inter

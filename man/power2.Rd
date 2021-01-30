@@ -30,12 +30,14 @@ power2(
 }
 \arguments{
 \item{model1}{A string specifying the model to be used for sample 1 among
-\code{"sbm"}, \code{"k_regular"}, \code{"gnp"} [default],
-\code{"smallworld"}, \code{"pa"}, \code{"poisson"} and \code{"binomial"}.}
+\code{"sbm"}, \code{"k_regular"}, \code{"gnp"}, \code{"smallworld"},
+\code{"pa"}, \code{"poisson"} and \code{"binomial"}. Default is
+\code{"gnp"}.}
 
 \item{model2}{A string specifying the model to be used for sample 2 among
-\code{"sbm"}, \code{"k_regular"} [default], \code{"gnp"},
-\code{"smallworld"}, \code{"pa"}, \code{"poisson"} and \code{"binomial"}.}
+\code{"sbm"}, \code{"k_regular"}, \code{"gnp"}, \code{"smallworld"},
+\code{"pa"}, \code{"poisson"} and \code{"binomial"}. Default is
+\code{"k_regular"}.}
 
 \item{n1}{The size of sample 1 (default: 20L).}
 
@@ -63,25 +65,26 @@ distribution of sample 2 (default: \code{NULL}). Must be specified if
 
 \item{pref.matrix1}{A matrix giving the Bernoulli rates for the SBM generator
 of sample 1 (default: \code{NULL}). Must be specified if \code{model ==
-"sbm"}.}
+  "sbm"}.}
 
 \item{pref.matrix2}{A matrix giving the Bernoulli rates for the SBM generator
 of sample 2 (default: \code{NULL}). Must be specified if \code{model ==
-"sbm"}.}
+  "sbm"}.}
 
 \item{representation}{A string specifying the desired type of representation,
-among: \code{"adjacency"} [default], \code{"laplacian"} and
-\code{"modularity"}.}
+among: \code{"adjacency"}, \code{"laplacian"} and \code{"modularity"}.
+Default is \code{"adjacency"}.}
 
 \item{distance}{A string specifying the chosen distance for calculating the
-test statistic, among: \code{"hamming"}, \code{"frobenius"} [default],
-\code{"spectral"} and \code{"root-euclidean"}.}
+test statistic, among: \code{"hamming"}, \code{"frobenius"},
+\code{"spectral"} and \code{"root-euclidean"}. Default is
+\code{"frobenius"}.}
 
 \item{statistic}{A string specifying the chosen test statistic(s), among:
-\code{"lot"} [default], \code{"sot"}, \code{"biswas"}, \code{"energy"},
+\code{"lot"}, \code{"sot"}, \code{"biswas"}, \code{"energy"},
 \code{"student"}, \code{"welch"}, \code{"original"}, \code{"generalized"},
 \code{"weighted"} or a combination from \code{c("lot", "sot", "biswas",
-"energy")}.}
+  "energy")}. Default is \code{"lot"}.}
 
 \item{B}{The number of permutation or the tolerance (default: \code{1000L}).
 If this number is lower than \code{1}, it is intended as a tolerance.

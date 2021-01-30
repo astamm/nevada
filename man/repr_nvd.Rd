@@ -13,8 +13,8 @@ repr_nvd(x, y = NULL, representation = "adjacency")
 taken into account.}
 
 \item{representation}{A string specifying the requested matrix
-representation. Choices are: \code{"adjacency"} [default],
-\code{"laplacian"} or \code{"modularity"}.}
+representation. Choices are: \code{"adjacency"}, \code{"laplacian"} or
+\code{"modularity"}. Default is \code{"adjacency"}.}
 }
 \value{
 A list of matrices.

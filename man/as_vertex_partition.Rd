@@ -12,7 +12,7 @@ character vector of vertex memberships.}
 }
 \value{
 A \code{vertex_partition} object storing the corresponding vertex
-  partition.
+partition.
 }
 \description{
 This function converts a vector of memberships into a proper vertex partition
