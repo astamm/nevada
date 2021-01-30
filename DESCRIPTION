@@ -2,7 +2,7 @@ Package: nevada
 Type: Package
 Title: Network-Valued Data Analysis
 Version: 0.0.0.9000
-Author: c( 
+Authors@R: c( 
     person(given = "Ilenia", 
            family = "Lovato", 
            role = "aut", 
@@ -40,6 +40,9 @@ Imports:
     rlang,
     magrittr
 RoxygenNote: 7.1.1
+Roxygen: list(markdown = TRUE)
+URL: https://astamm.github.io/nevada/, https://github.com/nevada/roahd
+BugReports: https://github.com/astamm/nevada/issues
 Suggests: 
     knitr,
     rmarkdown,
