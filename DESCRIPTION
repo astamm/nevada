@@ -26,7 +26,8 @@ Imports:
     tibble,
     forcats,
     ggplot2,
-    rlang
+    rlang,
+    magrittr
 RoxygenNote: 7.1.1
 Suggests: 
     knitr,
