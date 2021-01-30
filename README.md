@@ -1,10 +1,18 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-[![Travis-CI Build
-Status](https://travis-ci.org/astamm/nevada.svg?branch=master)](https://travis-ci.org/astamm/nevada)
+# nevada <a href='https://astamm.github.io/nevada'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
-## Overview of the `nevada` package
+<!-- badges: start -->
+
+[![check-standard](https://github.com/astamm/nevada/workflows/R-CMD-check/badge.svg)](https://github.com/astamm/nevada/actions)
+[![test-coverage](https://github.com/astamm/nevada/workflows/test-coverage/badge.svg)](https://github.com/astamm/nevada/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/astamm/nevada/branch/master/graph/badge.svg)](https://codecov.io/gh/astamm/nevada?branch=master)
+[![pkgdown](https://github.com/astamm/nevada/workflows/pkgdown/badge.svg)](https://github.com/astamm/nevada/actions)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/nevada)](https://CRAN.R-project.org/package=nevada)
+<!-- badges: end -->
 
 The package `nevada` (NEtwork-VAlued Data Analysis) is an R package for
 the statistical analysis of network-valued datasets. In this setting, a
@@ -20,16 +28,16 @@ inter- and intra-sample distances is pre-computed, which alleviates the
 computational burden often associated with permutation tests. In
 details:
 
-  - the `repr_*()` functions return the chosen matrix representation of
+-   the `repr_*()` functions return the chosen matrix representation of
     the input graph,
-  - the `dist_*()` functions return the chosen distance between two
+-   the `dist_*()` functions return the chosen distance between two
     networks,
-  - the `stat_*()` functions return the value of the chosen test
+-   the `stat_*()` functions return the value of the chosen test
     statistic,
-  - the `test2_global()` function returns the p-value of a permutation
+-   the `test2_global()` function returns the p-value of a permutation
     test in which the null hypothesis is that the two samples come from
     the same distribution of networks,
-  - the `power2()` function returns a Monte-Carlo estimate of the power
+-   the `power2()` function returns a Monte-Carlo estimate of the power
     of the test in some specific scenarios.
 
 See the vignette *NEtwork-VAlued Data Analysis* for the details of each
@@ -63,7 +71,7 @@ x <- nevada::nvd("smallworld", n)
 y <- nevada::nvd("pa", n)
 t1 <- nevada::test2_global(x, y, representation = "modularity")
 t1$pvalue
-#> [1] 0.0009936031
+[1] 0.0009936031
 ```
 
 **Example 2**
@@ -80,5 +88,5 @@ x <- nevada::nvd("smallworld", n)
 y <- nevada::nvd("smallworld", n)
 t2 <- nevada::test2_global(x, y, representation = "modularity")
 t2$pvalue
-#> [1] 0.2227718
+[1] 0.9880066
 ```

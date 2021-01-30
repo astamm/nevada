@@ -1,5 +1,11 @@
+^\.github$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+codecov.yml
+^\.github$
 ^README\.Rmd$
 ^README-.*\.png$
-^\.travis\.yml$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^codecov\.yml$

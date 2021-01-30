@@ -4,12 +4,29 @@
 \alias{power2}
 \title{Power Simulations for Permutation Tests}
 \usage{
-power2(model1 = "gnp", model2 = "k_regular", n1 = 20L, n2 = 20L,
-  size1 = NULL, prob1 = NULL, size2 = NULL, prob2 = NULL,
-  lambda1 = NULL, lambda2 = NULL, pref.matrix1 = NULL,
-  pref.matrix2 = NULL, representation = "adjacency",
-  distance = "frobenius", statistic = "lot", B = 1000L,
-  alpha = 0.05, test = "exact", k = 5L, R = 1000L, seed = NULL)
+power2(
+  model1 = "gnp",
+  model2 = "k_regular",
+  n1 = 20L,
+  n2 = 20L,
+  size1 = NULL,
+  prob1 = NULL,
+  size2 = NULL,
+  prob2 = NULL,
+  lambda1 = NULL,
+  lambda2 = NULL,
+  pref.matrix1 = NULL,
+  pref.matrix2 = NULL,
+  representation = "adjacency",
+  distance = "frobenius",
+  statistic = "lot",
+  B = 1000L,
+  alpha = 0.05,
+  test = "exact",
+  k = 5L,
+  R = 1000L,
+  seed = NULL
+)
 }
 \arguments{
 \item{model1}{A string specifying the model to be used for sample 1 among
@@ -70,7 +87,8 @@ test statistic, among: \code{"hamming"}, \code{"frobenius"} [default],
 If this number is lower than \code{1}, it is intended as a tolerance.
 Otherwise, it is intended as the number of required permutations.}
 
-\item{alpha}{The significance level (default: \code{0.05}).}
+\item{alpha}{Significance level for hypothesis testing (default:
+\code{0.05}).}
 
 \item{test}{A character string specifying if performing an exact test through
 the use of Phipson-Smyth estimate of the p-value or an approximate test

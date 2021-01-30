@@ -40,7 +40,13 @@ double stat_lot_impl(const arma::mat &distanceMatrix, const arma::vec &firstGrou
   double var_x = xxMean / 2.0;
   double var_y = yyMean / 2.0;
   double var_c = var_x / n1 + var_y / n2;
-  return (xyMean - var_x - var_y) / var_c;
+
+  double resVal = xyMean - var_x - var_y;
+
+  if (var_c < std::sqrt(std::numeric_limits<double>::epsilon()))
+    return resVal;
+
+  return resVal / var_c;
 }
 
 double stat_sot_impl(const arma::mat &distanceMatrix, const arma::vec &firstGroupIndices, const arma::vec &secondGroupIndices)
@@ -76,7 +82,14 @@ double stat_sot_impl(const arma::mat &distanceMatrix, const arma::vec &firstGrou
 
   double var_x = xxMean / 2.0;
   double var_y = yyMean / 2.0;
-  return std::max(var_x, var_y) / std::min(var_x, var_y);
+  double var_c = std::min(var_x, var_y);
+
+  double resVal = std::max(var_x, var_y);
+
+  if (var_c < std::sqrt(std::numeric_limits<double>::epsilon()))
+    return resVal;
+
+  return resVal / var_c;
 }
 
 double stat_biswas_impl(const arma::mat &distanceMatrix, const arma::vec &firstGroupIndices, const arma::vec &secondGroupIndices)
@@ -242,6 +255,9 @@ double stat_t_euclidean_impl(const Rcpp::List &x, const Rcpp::List &y, const boo
   }
 
   double varianceValue = (pooled) ? (ssd1 + ssd2) / (n1 + n2 - 2.0) * (1.0 / n1 + 1.0 / n2) : ssd1 / (n1 - 1.0) / n1 + ssd2 / (n2 - 1.0) / n2;
+
+  if (varianceValue < std::sqrt(std::numeric_limits<double>::epsilon()))
+    return meanDifference;
 
   return meanDifference / std::sqrt(varianceValue);
 }

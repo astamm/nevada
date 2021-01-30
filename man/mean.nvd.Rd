@@ -4,8 +4,7 @@
 \alias{mean.nvd}
 \title{Fréchet Mean of Network-Valued Data}
 \usage{
-\method{mean}{nvd}(x, weights = rep(1, length(x)),
-  representation = "adjacency", ...)
+\method{mean}{nvd}(x, weights = rep(1, length(x)), representation = "adjacency", ...)
 }
 \arguments{
 \item{x}{An \code{\link{nvd}} object.}

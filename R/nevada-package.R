@@ -1,4 +1,4 @@
-#' nevada: network-valued data analysis
+#' nevada: NEtwork-VAlued Data Analysis
 #'
 #' nevada provides a ...
 #'
@@ -15,4 +15,7 @@
 #'
 #' @useDynLib nevada, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
+#' @importFrom rlang .data
+#' @importFrom tibble tibble
+#' @import ggplot2
 "_PACKAGE"

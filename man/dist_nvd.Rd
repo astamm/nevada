@@ -4,8 +4,7 @@
 \alias{dist_nvd}
 \title{Pairwise Distance Matrix Between Two Samples of Networks}
 \usage{
-dist_nvd(x, y = NULL, representation = "adjacency",
-  distance = "frobenius")
+dist_nvd(x, y = NULL, representation = "adjacency", distance = "frobenius")
 }
 \arguments{
 \item{x}{A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects

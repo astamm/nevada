@@ -1,15 +1,3 @@
-rpois_network <- function(lambda, n) {
-  A <- diag(0, n)
-  A[upper.tri(A)] <- stats::rpois(n * (n - 1L) / 2L, lambda)
-  igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
-}
-
-rbinom_network <- function(size, prob, n) {
-  A <- diag(0, n)
-  A[upper.tri(A)] <- stats::rbinom(n * (n - 1L) / 2L, size, prob)
-  igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
-}
-
 #' Power Simulations for Permutation Tests
 #'
 #' This function provides a Monte-Carlo estimate of the power of the permutation
@@ -47,6 +35,8 @@ rbinom_network <- function(size, prob, n) {
 #'   of sample 2 (default: \code{NULL}). Must be specified if \code{model ==
 #'   "sbm"}.
 #' @inheritParams test2_global
+#' @param alpha Significance level for hypothesis testing (default:
+#'   \code{0.05}).
 #' @param R The number of Monte-Carlo runs used to estimate the power (default:
 #'   1000L).
 #' @param seed An integer specifying the seed to start randomness from (default:
@@ -83,7 +73,6 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
       distance = distance,
       statistic = statistic,
       B = B,
-      alpha = alpha,
       test = test,
       k = k
     )$pvalue
