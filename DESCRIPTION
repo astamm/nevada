@@ -1,14 +1,25 @@
 Package: nevada
 Type: Package
-Title: NEtwork-VAlued Data Analysis
+Title: Network-Valued Data Analysis
 Version: 0.0.0.9000
-Author: as.person(c(
-    "Ilenia Lovato <ilenia.lovato01@universitadipavia.it> [aut]",
-    "Alessia Pini <alessia.pini@polimi.it> [aut]"
-    "Aymeric Stamm <aymeric@stamm.fr> [aut, cre]",
-    "Simone Vantini <simone.vantini@polimi.it> [aut]"
-    ))
-Maintainer: Ilenia Lovato <ilenia.lovato01@universitadipavia.it>
+Author: c( 
+    person(given = "Ilenia", 
+           family = "Lovato", 
+           role = "aut", 
+           email = "ilenia.lovato01@universitadipavia.it"), 
+    person(given = "Alessia", 
+           family = "Pini", 
+           role = "aut", 
+           email = "alessia.pini@unicatt.it"), 
+    person(given = "Aymeric",
+           family = "Stamm",
+           role = c("aut", "cre"), 
+           email = "aymeric.stamm@math.cnrs.fr",
+           comment = c(ORCID = "0000-0002-8725-3654")), 
+    person(given = "Simone", 
+           family = "Vantini", 
+           role = "aut", 
+           email = "simone.vantini@polimi.it"))
 Description: This package containes tools for the statistical analysis of network-valued data.
     Given two samples of networks it is possible to test if they came from the same population via two test
     statistics based on four different types of distances. The user can also choose which distance to use. 
