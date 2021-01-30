@@ -10,6 +10,7 @@
 #'
 #' @return Invisibly returns the dataset computed to generate the plot.
 #' @importFrom dplyr %>%
+#' @importFrom rlang .data
 #' @export
 #'
 #' @examples
@@ -21,13 +22,22 @@ plot.nvd <- function(x, y, ...) {
   dchoices <- c("hamming", "frobenius", "spectral", "root-euclidean")
   tidyr::crossing(Representation = rchoices, Distance = dchoices) %>%
     dplyr::mutate(
-      mds = purrr::map2(Representation, Distance, dist_nvd, x = x, y = y) %>%
+      mds = purrr::map2(
+        .x = Representation,
+        .y = Distance,
+        .f = dist_nvd,
+        x = x,
+        y = y
+      ) %>%
         purrr::map(stats::cmdscale) %>%
         purrr::map(`colnames<-`, c("V1", "V2")) %>%
         purrr::map(tibble::as_tibble) %>%
-        purrr::map(dplyr::mutate, Label = c(rep("1", length(x)), rep("2", length(y))))
+        purrr::map(
+          .f = dplyr::mutate,
+          Label = c(rep("1", length(x)), rep("2", length(y)))
+        )
     ) %>%
-    tidyr::unnest(cols = mds) %>%
+    tidyr::unnest(cols = .data$mds) %>%
     dplyr::mutate(
       Representation = Representation %>%
         forcats::as_factor() %>%
