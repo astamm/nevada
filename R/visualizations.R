@@ -9,8 +9,6 @@
 #' @param ... Extra arguments to be passed to the plot function.
 #'
 #' @return Invisibly returns the dataset computed to generate the plot.
-#' @importFrom dplyr %>%
-#' @importFrom rlang .data
 #' @export
 #'
 #' @examples
@@ -47,11 +45,17 @@ plot.nvd <- function(x, y, ...) {
         forcats::fct_relabel(capitalize),
       Label = forcats::as_factor(Label)
     ) %>%
-    ggplot2::ggplot(ggplot2::aes(x = V1, y = V2, color = Label)) +
-    ggplot2::geom_point() +
-    ggplot2::theme_bw() +
-    ggplot2::facet_wrap(~ Representation + Distance, scales = "free", labeller = "label_both") +
-    ggplot2::theme(legend.position = "none") +
-    ggplot2::xlab("First Principal Coordinate") +
-    ggplot2::ylab("Second Principal Coordinate")
+    ggplot(aes(x = V1, y = V2, color = Label)) +
+    geom_point() +
+    theme_bw() +
+    facet_wrap(
+      facets = ~ Representation + Distance,
+      scales = "free",
+      labeller = "label_both"
+    ) +
+    theme(legend.position = "none") +
+    labs(
+      x = "First Principal Coordinate",
+      y = "Second Principal Coordinate"
+    )
 }
