@@ -7,7 +7,8 @@
 
 [![check-standard](https://github.com/astamm/nevada/workflows/R-CMD-check/badge.svg)](https://github.com/astamm/nevada/actions)
 [![test-coverage](https://github.com/astamm/nevada/workflows/test-coverage/badge.svg)](https://github.com/astamm/nevada/actions)
-[![codecov](https://codecov.io/gh/astamm/nevada/branch/master/graph/badge.svg)](https://codecov.io/gh/astamm/nevada)
+[![Codecov test
+coverage](https://codecov.io/gh/astamm/nevada/branch/master/graph/badge.svg)](https://codecov.io/gh/astamm/nevada?branch=master)
 [![pkgdown](https://github.com/astamm/nevada/workflows/pkgdown/badge.svg)](https://github.com/astamm/nevada/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/nevada)](https://CRAN.R-project.org/package=nevada)
@@ -87,5 +88,5 @@ x <- nevada::nvd("smallworld", n)
 y <- nevada::nvd("smallworld", n)
 t2 <- nevada::test2_global(x, y, representation = "modularity")
 t2$pvalue
-[1] 0.7592353
+[1] 0.9880066
 ```

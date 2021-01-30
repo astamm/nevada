@@ -3,9 +3,9 @@ Type: Package
 Title: NEtwork-VAlued Data Analysis
 Version: 0.0.0.9000
 Author: as.person(c(
-    "Ilenia Lovato <ilenia.lovato01@universitadipavia.it> [aut, cre]",
+    "Ilenia Lovato <ilenia.lovato01@universitadipavia.it> [aut]",
     "Alessia Pini <alessia.pini@polimi.it> [aut]"
-    "Aymeric Stamm <aymeric@stamm.fr> [aut]",
+    "Aymeric Stamm <aymeric@stamm.fr> [aut, cre]",
     "Simone Vantini <simone.vantini@polimi.it> [aut]"
     ))
 Maintainer: Ilenia Lovato <ilenia.lovato01@universitadipavia.it>
@@ -31,6 +31,7 @@ Imports:
 RoxygenNote: 7.1.1
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    covr
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo
