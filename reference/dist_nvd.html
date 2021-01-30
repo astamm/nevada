@@ -102,7 +102,12 @@ is denoted by \(n1\) and that of the second one is denoted by \(n2\)." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/astamm/nevada/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -117,7 +122,7 @@ is denoted by \(n1\) and that of the second one is denoted by \(n2\)." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Pairwise Distance Matrix Between Two Samples of Networks</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/astamm/nevada/blob/master/R/distances.R'><code>R/distances.R</code></a></small>
     <div class="hidden name"><code>dist_nvd.Rd</code></div>
     </div>
 
@@ -147,21 +152,22 @@ population.</p></td>
     <tr>
       <th>representation</th>
       <td><p>A string specifying the desired type of representation,
-among: <code>"adjacency"</code>, <code>"laplacian"</code> [default],
-<code>"modularity"</code> or <code>"graphon"</code>.</p></td>
+among: <code>"adjacency"</code>, <code>"laplacian"</code>, <code>"modularity"</code> or
+<code>"graphon"</code>. Default is <code>"laplacian"</code>.</p></td>
     </tr>
     <tr>
       <th>distance</th>
       <td><p>A string specifying the chosen distance for calculating the
-test statistic, among: <code>"hamming"</code>, <code>"frobenius"</code> [default],
-<code>"spectral"</code> and <code>"root-euclidean"</code>.</p></td>
+test statistic, among: <code>"hamming"</code>, <code>"frobenius"</code>,
+<code>"spectral"</code> and <code>"root-euclidean"</code>. Default is
+<code>"frobenius"</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A matrix of dimension \((n1+n2) \times (n1+n2)\) containing the
-  distances between all the elements of the two samples put together.</p>
+distances between all the elements of the two samples put together.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='nvd.html'>nvd</a></span><span class='op'>(</span><span class='st'>"smallworld"</span>, <span class='fl'>10</span><span class='op'>)</span>
@@ -241,7 +247,7 @@ test statistic, among: <code>"hamming"</code>, <code>"frobenius"</code> [default
 
       <footer>
       <div class="copyright">
-  <p>Developed by Ilenia Lovato.</p>
+  <p>Developed by Ilenia Lovato, Alessia Pini, Aymeric Stamm, Simone Vantini.</p>
 </div>
 
 <div class="pkgdown">

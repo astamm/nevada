@@ -100,7 +100,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/astamm/nevada/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -115,7 +120,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Local Two-Sample Test for Network-Valued Data</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/astamm/nevada/blob/master/R/tests.R'><code>R/tests.R</code></a></small>
     <div class="hidden name"><code>test2_local.Rd</code></div>
     </div>
 
@@ -157,22 +162,23 @@ partition elements.</p></td>
     <tr>
       <th>representation</th>
       <td><p>A string specifying the desired type of representation,
-among: <code>"adjacency"</code> [default], <code>"laplacian"</code> and
-<code>"modularity"</code>.</p></td>
+among: <code>"adjacency"</code>, <code>"laplacian"</code> and <code>"modularity"</code>.
+Default is <code>"adjacency"</code>.</p></td>
     </tr>
     <tr>
       <th>distance</th>
       <td><p>A string specifying the chosen distance for calculating the
-test statistic, among: <code>"hamming"</code>, <code>"frobenius"</code> [default],
-<code>"spectral"</code> and <code>"root-euclidean"</code>.</p></td>
+test statistic, among: <code>"hamming"</code>, <code>"frobenius"</code>,
+<code>"spectral"</code> and <code>"root-euclidean"</code>. Default is
+<code>"frobenius"</code>.</p></td>
     </tr>
     <tr>
       <th>statistic</th>
       <td><p>A string specifying the chosen test statistic(s), among:
-<code>"lot"</code> [default], <code>"sot"</code>, <code>"biswas"</code>, <code>"energy"</code>,
+<code>"lot"</code>, <code>"sot"</code>, <code>"biswas"</code>, <code>"energy"</code>,
 <code>"student"</code>, <code>"welch"</code>, <code>"original"</code>, <code>"generalized"</code>,
 <code>"weighted"</code> or a combination from <code><a href='https://rdrr.io/r/base/c.html'>c("lot", "sot", "biswas",
-"energy")</a></code>.</p></td>
+  "energy")</a></code>. Default is <code>"lot"</code>.</p></td>
     </tr>
     <tr>
       <th>B</th>
@@ -212,7 +218,7 @@ should be printed in the process (default: <code>FALSE</code>).</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A length-2 list reporting the adjusted p-values of each element of
-  the partition for the intra- and inter-tests.</p>
+the partition for the intra- and inter-tests.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fl'>10</span>
@@ -250,7 +256,7 @@ should be printed in the process (default: <code>FALSE</code>).</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Ilenia Lovato.</p>
+  <p>Developed by Ilenia Lovato, Alessia Pini, Aymeric Stamm, Simone Vantini.</p>
 </div>
 
 <div class="pkgdown">

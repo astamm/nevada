@@ -106,7 +106,12 @@ distances between networks." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/astamm/nevada/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -121,7 +126,7 @@ distances between networks." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Global Two-Sample Test for Network-Valued Data</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/astamm/nevada/blob/master/R/tests.R'><code>R/tests.R</code></a></small>
     <div class="hidden name"><code>test2_global.Rd</code></div>
     </div>
 
@@ -161,22 +166,23 @@ distances between networks.</p>
     <tr>
       <th>representation</th>
       <td><p>A string specifying the desired type of representation,
-among: <code>"adjacency"</code> [default], <code>"laplacian"</code> and
-<code>"modularity"</code>.</p></td>
+among: <code>"adjacency"</code>, <code>"laplacian"</code> and <code>"modularity"</code>.
+Default is <code>"adjacency"</code>.</p></td>
     </tr>
     <tr>
       <th>distance</th>
       <td><p>A string specifying the chosen distance for calculating the
-test statistic, among: <code>"hamming"</code>, <code>"frobenius"</code> [default],
-<code>"spectral"</code> and <code>"root-euclidean"</code>.</p></td>
+test statistic, among: <code>"hamming"</code>, <code>"frobenius"</code>,
+<code>"spectral"</code> and <code>"root-euclidean"</code>. Default is
+<code>"frobenius"</code>.</p></td>
     </tr>
     <tr>
       <th>statistic</th>
       <td><p>A string specifying the chosen test statistic(s), among:
-<code>"lot"</code> [default], <code>"sot"</code>, <code>"biswas"</code>, <code>"energy"</code>,
+<code>"lot"</code>, <code>"sot"</code>, <code>"biswas"</code>, <code>"energy"</code>,
 <code>"student"</code>, <code>"welch"</code>, <code>"original"</code>, <code>"generalized"</code>,
 <code>"weighted"</code> or a combination from <code><a href='https://rdrr.io/r/base/c.html'>c("lot", "sot", "biswas",
-"energy")</a></code>.</p></td>
+  "energy")</a></code>. Default is <code>"lot"</code>.</p></td>
     </tr>
     <tr>
       <th>B</th>
@@ -205,9 +211,9 @@ result reproducibility (default: <code>NULL</code>).</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A <code><a href='https://rdrr.io/r/base/list.html'>list</a></code> with three components: the value of the
-  statistic for the original two samples, the p-value of the resulting
-  permutation test and a numeric vector storing the values of the permuted
-  statistics.</p>
+statistic for the original two samples, the p-value of the resulting
+permutation test and a numeric vector storing the values of the permuted
+statistics.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fl'>10L</span>
@@ -223,7 +229,7 @@ result reproducibility (default: <code>NULL</code>).</p></td>
 <span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='nvd.html'>nvd</a></span><span class='op'>(</span><span class='st'>"smallworld"</span>, <span class='va'>n</span><span class='op'>)</span>
 <span class='va'>t2</span> <span class='op'>&lt;-</span> <span class='fu'>test2_global</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='st'>"modularity"</span><span class='op'>)</span>
 <span class='va'>t2</span><span class='op'>$</span><span class='va'>pvalue</span>
-</div><div class='output co'>#&gt; [1] 0.0159786</div></pre>
+</div><div class='output co'>#&gt; [1] 0.7362583</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -235,7 +241,7 @@ result reproducibility (default: <code>NULL</code>).</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Ilenia Lovato.</p>
+  <p>Developed by Ilenia Lovato, Alessia Pini, Aymeric Stamm, Simone Vantini.</p>
 </div>
 
 <div class="pkgdown">

@@ -101,7 +101,12 @@ tests proposed in this package." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/astamm/nevada/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -116,7 +121,7 @@ tests proposed in this package." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Power Simulations for Permutation Tests</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/astamm/nevada/blob/master/R/simulations.R'><code>R/simulations.R</code></a></small>
     <div class="hidden name"><code>power2.Rd</code></div>
     </div>
 
@@ -155,14 +160,16 @@ tests proposed in this package.</p>
     <tr>
       <th>model1</th>
       <td><p>A string specifying the model to be used for sample 1 among
-<code>"sbm"</code>, <code>"k_regular"</code>, <code>"gnp"</code> [default],
-<code>"smallworld"</code>, <code>"pa"</code>, <code>"poisson"</code> and <code>"binomial"</code>.</p></td>
+<code>"sbm"</code>, <code>"k_regular"</code>, <code>"gnp"</code>, <code>"smallworld"</code>,
+<code>"pa"</code>, <code>"poisson"</code> and <code>"binomial"</code>. Default is
+<code>"gnp"</code>.</p></td>
     </tr>
     <tr>
       <th>model2</th>
       <td><p>A string specifying the model to be used for sample 2 among
-<code>"sbm"</code>, <code>"k_regular"</code> [default], <code>"gnp"</code>,
-<code>"smallworld"</code>, <code>"pa"</code>, <code>"poisson"</code> and <code>"binomial"</code>.</p></td>
+<code>"sbm"</code>, <code>"k_regular"</code>, <code>"gnp"</code>, <code>"smallworld"</code>,
+<code>"pa"</code>, <code>"poisson"</code> and <code>"binomial"</code>. Default is
+<code>"k_regular"</code>.</p></td>
     </tr>
     <tr>
       <th>n1</th>
@@ -208,33 +215,34 @@ distribution of sample 2 (default: <code>NULL</code>). Must be specified if
       <th>pref.matrix1</th>
       <td><p>A matrix giving the Bernoulli rates for the SBM generator
 of sample 1 (default: <code>NULL</code>). Must be specified if <code>model ==
-"sbm"</code>.</p></td>
+  "sbm"</code>.</p></td>
     </tr>
     <tr>
       <th>pref.matrix2</th>
       <td><p>A matrix giving the Bernoulli rates for the SBM generator
 of sample 2 (default: <code>NULL</code>). Must be specified if <code>model ==
-"sbm"</code>.</p></td>
+  "sbm"</code>.</p></td>
     </tr>
     <tr>
       <th>representation</th>
       <td><p>A string specifying the desired type of representation,
-among: <code>"adjacency"</code> [default], <code>"laplacian"</code> and
-<code>"modularity"</code>.</p></td>
+among: <code>"adjacency"</code>, <code>"laplacian"</code> and <code>"modularity"</code>.
+Default is <code>"adjacency"</code>.</p></td>
     </tr>
     <tr>
       <th>distance</th>
       <td><p>A string specifying the chosen distance for calculating the
-test statistic, among: <code>"hamming"</code>, <code>"frobenius"</code> [default],
-<code>"spectral"</code> and <code>"root-euclidean"</code>.</p></td>
+test statistic, among: <code>"hamming"</code>, <code>"frobenius"</code>,
+<code>"spectral"</code> and <code>"root-euclidean"</code>. Default is
+<code>"frobenius"</code>.</p></td>
     </tr>
     <tr>
       <th>statistic</th>
       <td><p>A string specifying the chosen test statistic(s), among:
-<code>"lot"</code> [default], <code>"sot"</code>, <code>"biswas"</code>, <code>"energy"</code>,
+<code>"lot"</code>, <code>"sot"</code>, <code>"biswas"</code>, <code>"energy"</code>,
 <code>"student"</code>, <code>"welch"</code>, <code>"original"</code>, <code>"generalized"</code>,
 <code>"weighted"</code> or a combination from <code><a href='https://rdrr.io/r/base/c.html'>c("lot", "sot", "biswas",
-"energy")</a></code>.</p></td>
+  "energy")</a></code>. Default is <code>"lot"</code>.</p></td>
     </tr>
     <tr>
       <th>B</th>
@@ -280,7 +288,7 @@ allows to make sure that all our permutation tests are exact.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>power2</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.042</div></pre>
+</div><div class='output co'>#&gt; [1] 0.051</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -292,7 +300,7 @@ allows to make sure that all our permutation tests are exact.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Ilenia Lovato.</p>
+  <p>Developed by Ilenia Lovato, Alessia Pini, Aymeric Stamm, Simone Vantini.</p>
 </div>
 
 <div class="pkgdown">
