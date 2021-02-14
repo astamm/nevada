@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# nevada <a href='https://astamm.github.io/nevada'><img src='man/figures/logo.png' align="right" height="139" /></a>
+# nevada <a href='https://astamm.github.io/nevada/'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
 
@@ -88,5 +88,5 @@ x <- nevada::nvd("smallworld", n)
 y <- nevada::nvd("smallworld", n)
 t2 <- nevada::test2_global(x, y, representation = "modularity")
 t2$pvalue
-[1] 0.9880066
+[1] 0.5064881
 ```
