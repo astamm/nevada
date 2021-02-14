@@ -92,6 +92,5 @@ p2 <- matrix(
 )
 sim <- sample2_sbm(n, 68, p1, c(17, 17, 17, 17), p2, seed = 1234)
 m <- as.integer(c(rep(1, 17), rep(2, 17), rep(3, 17), rep(4, 17)))
-t1 <- test2_local(sim$x, sim$y, m, statistic = c("lot", "sot"), seed = 1234, alpha = 1.00)
-t2 <- test2_local(sim$x, sim$y, m, statistic = c("lot", "sot"), seed = 1234, alpha = 0.05)
+test2_local(sim$x, sim$y, m, statistic = c("lot", "sot"), seed = 1234, alpha = 0.05)
 }
