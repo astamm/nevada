@@ -23,9 +23,9 @@ To learn more about nevada, start with the vignettes:
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://astamm.github.io/nevada}
-  \item \url{https://github.com/astamm/nevada}
-  \item Report bugs at \url{https://github.com/astamm/nevada/issues}
+  \item \url{https://astamm.github.io/nevada/}
+  \item \url{https://github.com/astamm/nevada/}
+  \item Report bugs at \url{https://github.com/astamm/nevada/issues/}
 }
 
 }
