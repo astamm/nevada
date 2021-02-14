@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEtwork-VAlued Data Analysis • nevada</title>
+<title>Network-Valued Data Analysis • nevada</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="NEtwork-VAlued Data Analysis">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Network-Valued Data Analysis">
 <meta property="og:description" content="nevada">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -77,10 +77,8 @@
       </header><script src="nevada_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>NEtwork-VAlued Data Analysis</h1>
-                        <h4 class="author">Ilenia Lovato</h4>
+      <h1 data-toc-skip>Network-Valued Data Analysis</h1>
             
-            <h4 class="date">2021-01-30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/astamm/nevada/blob/master/vignettes/nevada.Rmd"><code>vignettes/nevada.Rmd</code></a></small>
       <div class="hidden name"><code>nevada.Rmd</code></div>
@@ -93,7 +91,7 @@
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>A network <span class="math inline">\(G=(V,E)\)</span> is a complex object consisting of a set <span class="math inline">\(V\)</span> of vertices whose relationships are represented by the edges in the set <span class="math inline">\(E\)</span>. The package <code>nevada</code> contains some functions that allow not only to perform the test, but also to carry out all the intermediate steps that lead to the test itself. The theoretical details are contained in <span class="citation">(Lovato et al. 2018)</span>, as well as simulations and application to real data. The logical path followed in <span class="citation">(Lovato et al. 2018)</span> can be summarized as follow. First of all, choose a matrix representation for the networks and define some distances between two networks. Then, define two different test statistics and introduce the permuational framework to perform the test.</p>
+<p>A network <span class="math inline">\(G=(V,E)\)</span> is a complex object consisting of a set <span class="math inline">\(V\)</span> of vertices whose relationships are represented by the edges in the set <span class="math inline">\(E\)</span>. The package <code>nevada</code> contains some functions that allow not only to perform the test, but also to carry out all the intermediate steps that lead to the test itself. The theoretical details are contained in <span class="citation">Lovato et al. (2020)</span>, as well as simulations and application to real data. The logical path followed in <span class="citation">Lovato et al. (2020)</span> can be summarized as follow. First of all, choose a matrix representation for the networks and define some distances between two networks. Then, define two different test statistics and introduce the permutation framework to perform the test. Other ref is <span class="citation">Lovato et al. (2021)</span>.</p>
 </div>
 <div id="network-representation" class="section level2">
 <h2 class="hasAnchor">
@@ -148,8 +146,11 @@ L=D(W)-W
 <h2 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h2>
 <div id="refs" class="references">
-<div id="ref-mox">
-<p>Lovato, I., A. Pini, A. Stamm, and S. Vantini. 2018. “Model-Free Two-Population Test for Network-Valued Data.” <em>MOX REPORT, Department of Mathematics, Politecnico Di Milano</em>.</p>
+<div id="ref-lovato2021">
+<p>Lovato, Ilenia, Alessia Pini, Aymeric Stamm, Maxime Taquet, and Simone Vantini. 2021. “Multiscale Null Hypothesis Testing for Network-Valued Data: Analysis of Brain Networks of Patients with Autism.” <em>Journal of the Royal Statistical Society: Series C (Applied Statistics)</em>, January. <a href="https://doi.org/10.1111/rssc.12463">https://doi.org/10.1111/rssc.12463</a>.</p>
+</div>
+<div id="ref-lovato2020">
+<p>Lovato, Ilenia, Alessia Pini, Aymeric Stamm, and Simone Vantini. 2020. “Model-Free Two-Sample Test for Network-Valued Data.” <em>Computational Statistics &amp; Data Analysis</em> 144 (April): 106896. <a href="https://doi.org/10.1016/j.csda.2019.106896">https://doi.org/10.1016/j.csda.2019.106896</a>.</p>
 </div>
 </div>
 </div>
