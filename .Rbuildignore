@@ -10,3 +10,4 @@ codecov.yml
 ^pkgdown$
 ^codecov\.yml$
 ^LICENSE\.md$
+^cran-comments\.md$
