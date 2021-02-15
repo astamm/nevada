@@ -39,7 +39,7 @@ logical path followed in @lovato2020 can be summarized as follow. First
 of all, choose a matrix representation for the networks and define some
 distances between two networks. Then, define two different test
 statistics and introduce the permutation framework to perform the test.
-Other ref is @lovato2021.
+The local version of the test has been proposed in @lovato2021.
 
 ## Network representation
 
