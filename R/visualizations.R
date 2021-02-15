@@ -1,7 +1,7 @@
 #' MDS Visualization of Network Distributions
 #'
 #' This function generates 2-dimensional plots of samples of networks via
-#' multi-dimensional scaling using all represenations and distances included in
+#' multi-dimensional scaling using all representations and distances included in
 #' the package.
 #'
 #' @param x A \code{\link{nvd}} object.

@@ -18,7 +18,7 @@ Invisibly returns the dataset computed to generate the plot.
 }
 \description{
 This function generates 2-dimensional plots of samples of networks via
-multi-dimensional scaling using all represenations and distances included in
+multi-dimensional scaling using all representations and distances included in
 the package.
 }
 \examples{

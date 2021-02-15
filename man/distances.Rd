@@ -45,7 +45,7 @@ Y_{ij}|,} where \eqn{N} is the number of vertices in networks \eqn{x} and
 \eqn{a} and \eqn{b} of the eigenvalues of \eqn{X} and \eqn{Y}, respectively.
 This distance gives rise to classes of equivalence. Consider the spectral
 decomposition of \eqn{X} and \eqn{Y}: \deqn{X=VAV^{-1}} and \deqn{Y =
-UBU^{-1},} where \eqn{V} and \eqn{U} are the matrices whose colums are the
+UBU^{-1},} where \eqn{V} and \eqn{U} are the matrices whose columns are the
 eigenvectors of \eqn{X} and \eqn{Y}, respectively and \eqn{A} and \eqn{B} are
 the diagonal matrices with elements the eigenvalues of \eqn{X} and \eqn{Y},
 respectively. The root-Euclidean distance between \eqn{x} and \eqn{y} is

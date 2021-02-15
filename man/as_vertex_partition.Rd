@@ -2,7 +2,7 @@
 % Please edit documentation in R/vertex_partition.R
 \name{as_vertex_partition}
 \alias{as_vertex_partition}
-\title{Coerion to Vertex Partition}
+\title{Coercion to Vertex Partition}
 \usage{
 as_vertex_partition(x)
 }

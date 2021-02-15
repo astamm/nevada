@@ -1,4 +1,4 @@
-#' Coerion to Vertex Partition
+#' Coercion to Vertex Partition
 #'
 #' This function converts a vector of memberships into a proper vertex partition
 #' object.
@@ -50,7 +50,7 @@ as_vertex_partition.integer <- function(x) {
 #'
 #' @param x Input partition stored as a \code{vertex_partition} object.
 #'
-#' @return Sigma-alegbra
+#' @return Sigma-algebra
 #' @export
 #'
 #' @examples
