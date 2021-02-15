@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# nevada <a href='https://astamm.github.io/nevada/'><img src='man/figures/logo.png' align="right" height="139" /></a>
+# Overview <a href='https://astamm.github.io/nevada/'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
 
@@ -45,15 +45,19 @@ function.
 
 ## Installation
 
-You can install `nevada` from github with:
+You can install the latest stable version of **nevada** on CRAN with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("astamm/nevada")
+install.packages("nevada")
 ```
 
-It relies on the `igraph` package. If you encounter bugs or for
-questions and comments, please contact the maintainer of the package.
+Or you can install the development version from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("remotes")
+remotes::install_github("astamm/nevada")
+```
 
 ## Usage
 
@@ -88,5 +92,5 @@ x <- nevada::nvd("smallworld", n)
 y <- nevada::nvd("smallworld", n)
 t2 <- nevada::test2_global(x, y, representation = "modularity")
 t2$pvalue
-[1] 0.5064881
+[1] 0.1368577
 ```
