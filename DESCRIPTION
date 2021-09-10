@@ -35,7 +35,8 @@ Imports:
     forcats,
     ggplot2,
     rlang,
-    magrittr
+    magrittr,
+    flipr
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 URL: https://astamm.github.io/nevada/, https://github.com/astamm/nevada/

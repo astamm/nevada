@@ -17,7 +17,6 @@ double dist_hamming_impl(const arma::mat &x, const arma::mat &y)
     }
   }
 
-
   return absDiff / n / (n - 1.0);
 }
 

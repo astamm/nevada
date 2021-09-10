@@ -45,18 +45,18 @@
 #' # Two different models for the two populations
 #' x <- nvd("smallworld", n)
 #' y <- nvd("pa", n)
-#' t1 <- test2_global(x, y, "modularity")
+#' t1 <- test2_global(x, y, representation = "modularity")
 #' t1$pvalue
 #'
 #' # Same model for the two populations
 #' x <- nvd("smallworld", n)
 #' y <- nvd("smallworld", n)
-#' t2 <- test2_global(x, y, "modularity")
+#' t2 <- test2_global(x, y, representation = "modularity")
 #' t2$pvalue
 test2_global <- function(x, y,
                          representation = "adjacency",
                          distance = "frobenius",
-                         statistic = "lot",
+                         statistic = "stat_lot",
                          B = 1000L,
                          test = "exact",
                          k = 5L,
@@ -90,47 +90,36 @@ test2_global <- function(x, y,
   } else
     d <- dist_nvd(x, y, representation = representation, distance = distance)
 
-  M <- choose(n, n1)
-  if (n1 == n2)
-    M <- M / 2
-
-  test <- match.arg(test, c("approximate", "exact"))
-  if (test == "approximate" & M <= B) {
-    B <- M
-    group1.perm <- utils::combn(n, n1)[, 1:B]
-  } else
-    group1.perm <- replicate(B, sample.int(n))[1:n1, ]
-
-  if (!npc)
-    Tp <- sapply(0:B, get_permuted_statistic, indices1 = group1.perm, d = d, statistic = statistic)
-  else {
-    Tp <- statistic %>%
-      purrr::map(~ sapply(0:B, get_permuted_statistic, indices1 = group1.perm, d = d, statistic = .)) %>%
-      purrr::map(~ sapply(1:(B+1), stats2pvalue, Tp = ., test = "approximate", B = B, M = M)) %>%
-      purrr::transpose() %>%
-      purrr::simplify_all() %>%
-      purrr::map_dbl(combine_pvalues)
+  null_spec <- function(y, parameters) {
+    return(y)
   }
 
-  list(
-    statistic = Tp[1],
-    pvalue = stats2pvalue(1, Tp, test, B, M),
-    permuted_statistics = Tp[-1]
+  stat_functions <- statistic
+  if (!is.list(stat_functions))
+    stat_functions <- as.list(stat_functions)
+  stat_assignments <- list(delta = 1:length(stat_functions))
+
+  if (inherits(d, "dist")) {
+    xx <- d
+    yy <- as.integer(n1)
+  } else {
+    xx <- d[1:n1]
+    yy <- d[(n1 + 1):(n1 + n2)]
+  }
+
+  pf <- flipr::PlausibilityFunction$new(
+    null_spec = null_spec,
+    stat_functions = stat_functions,
+    stat_assignments = stat_assignments,
+    xx, yy,
+    seed = seed
   )
-}
+  pf$set_nperms(B)
+  pf$set_pvalue_formula(test)
+  pf$set_alternative("right_tail")
 
-stats2pvalue <- function(i, Tp, test = "exact", B, M) {
-  T0 <- Tp[i]
-  b <- sum(Tp >= T0) - 1
-  if (test == "approximate") return(b / B)
-  phipson_smyth_pvalue(b, B, M)
-}
-
-combine_pvalues <- function(p, method = "tippett") {
-  switch (
-    method,
-    tippett = 1 - min(p),
-    fisher = - 2 * sum(log(p))
+  list(
+    pvalue = pf$get_value(0)
   )
 }
 
