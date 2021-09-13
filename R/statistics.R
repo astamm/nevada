@@ -55,7 +55,7 @@ NULL
 #' @rdname statistics
 #' @export
 stat_lot <- function(d, indices) {
-  indices2 <- seq_len(nrow(d))[-indices]
+  indices2 <- seq_len(attr(d, "Size"))[-indices]
   stat_lot_impl(d, indices, indices2)
 }
 

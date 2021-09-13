@@ -9,7 +9,7 @@ test2_global(
   y,
   representation = "adjacency",
   distance = "frobenius",
-  statistic = "lot",
+  statistic = "stat_lot",
   B = 1000L,
   test = "exact",
   k = 5L,
@@ -71,12 +71,12 @@ n <- 10L
 # Two different models for the two populations
 x <- nvd("smallworld", n)
 y <- nvd("pa", n)
-t1 <- test2_global(x, y, "modularity")
+t1 <- test2_global(x, y, representation = "modularity")
 t1$pvalue
 
 # Same model for the two populations
 x <- nvd("smallworld", n)
 y <- nvd("smallworld", n)
-t2 <- test2_global(x, y, "modularity")
+t2 <- test2_global(x, y, representation = "modularity")
 t2$pvalue
 }

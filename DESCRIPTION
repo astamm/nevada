@@ -37,7 +37,7 @@ Imports:
     rlang,
     magrittr,
     flipr
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 URL: https://astamm.github.io/nevada/, https://github.com/astamm/nevada/
 BugReports: https://github.com/astamm/nevada/issues/

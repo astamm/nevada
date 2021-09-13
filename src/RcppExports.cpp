@@ -60,7 +60,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // dist_nvd_impl
-arma::mat dist_nvd_impl(const Rcpp::List& z, const std::string distance);
+Rcpp::NumericVector dist_nvd_impl(const Rcpp::List& z, const std::string distance);
 RcppExport SEXP _nevada_dist_nvd_impl(SEXP zSEXP, SEXP distanceSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
