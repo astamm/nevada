@@ -2,29 +2,11 @@
 % Please edit documentation in R/statistics.R
 \name{statistics}
 \alias{statistics}
-\alias{stat_lot}
-\alias{stat_sot}
-\alias{stat_biswas}
-\alias{stat_energy}
-\alias{stat_mod}
-\alias{stat_dom}
 \alias{stat_student_euclidean}
 \alias{stat_welch_euclidean}
 \alias{stat_edge_count}
 \title{Test Statistics for Network Populations}
 \usage{
-stat_lot(d, indices)
-
-stat_sot(d, indices)
-
-stat_biswas(d, indices)
-
-stat_energy(d, indices, alpha = 1)
-
-stat_mod(d, indices)
-
-stat_dom(d, indices, standardize = TRUE)
-
 stat_student_euclidean(d, indices)
 
 stat_welch_euclidean(d, indices)
@@ -41,12 +23,6 @@ count statistics.}
 
 \item{indices}{A vector of dimension \eqn{n1} containing the indices of the
 elements of the first sample.}
-
-\item{alpha}{An integer specifying to which power elevating the Euclidean
-distance of the energy-based statistic (default: 1L).}
-
-\item{standardize}{If \code{TRUE} (default), standardize the DoM statistic
-using the pooled sample variance estimator.}
 
 \item{type}{A string specifying the version of the edge count test statistic
 to be used. Choices are \code{"original"}, \code{"generalized"} or
@@ -76,14 +52,10 @@ n1 <- 30L
 n2 <- 10L
 x <- nvd("smallworld", n1)
 y <- nvd("pa", n2)
-d <- dist_nvd(x, y, representation = "laplacian", distance = "frobenius")
-stat_lot(d, 1:n1)
-stat_sot(d, 1:n1)
-stat_biswas(d, 1:n1)
-stat_energy(d, 1:n1)
 r <- repr_nvd(x, y, representation = "laplacian")
 stat_student_euclidean(r, 1:n1)
 stat_welch_euclidean(r, 1:n1)
+d <- dist_nvd(x, y, representation = "laplacian", distance = "frobenius")
 e <- edge_count_global_variables(d, n1, k = 5L)
 stat_edge_count(e, 1:n1, type = "original")
 stat_edge_count(e, 1:n1, type = "generalized")

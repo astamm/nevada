@@ -19,7 +19,7 @@ power2(
   pref.matrix2 = NULL,
   representation = "adjacency",
   distance = "frobenius",
-  statistic = "lot",
+  statistic = list(flipr::stat_t_ip, flipr::stat_f_ip),
   B = 1000L,
   alpha = 0.05,
   test = "exact",
@@ -84,7 +84,7 @@ test statistic, among: \code{"hamming"}, \code{"frobenius"},
 \code{"lot"}, \code{"sot"}, \code{"biswas"}, \code{"energy"},
 \code{"student"}, \code{"welch"}, \code{"original"}, \code{"generalized"},
 \code{"weighted"} or a combination from \code{c("lot", "sot", "biswas",
-  "energy")}. Default is \code{"lot"}.}
+  "energy")}. Default is \code{list(flipr::stat_t_ip, flipr::stat_f_ip)}.}
 
 \item{B}{The number of permutation or the tolerance (default: \code{1000L}).
 If this number is lower than \code{1}, it is intended as a tolerance.

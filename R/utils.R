@@ -165,37 +165,6 @@ rperm2 <- function(m, size=2) { # Obtain m unique permutations of 1:size
   list(failures=n.failures, sample=matrix(unlist(s), ncol=size))
 } # Returns an m by size matrix; each row is a permutation of 1:size.
 
-phipson_smyth_pvalue <- function(b, B, M) {
-  if (M <= 10000) {
-    pt <- seq_len(M) / M
-    return(mean(stats::pbinom(q = b, size = B, prob = pt)))
-  }
-
-  corr <- stats::integrate(stats::pbinom, 0, 0.5 / M, q = b, size = B)$value
-  (b + 1) / (B + 1) - corr
-}
-
-get_permuted_statistic <- function(i, indices1, d, statistic) {
-  if (i == 0)
-    indices <- seq_len(nrow(indices1))
-  else
-    indices <- indices1[, i]
-
-  switch(
-    statistic,
-    lot = stat_lot(d, indices),
-    sot = stat_sot(d, indices),
-    biswas = stat_biswas(d, indices),
-    energy = stat_energy(d, indices),
-    student = stat_student_euclidean(d, indices),
-    welch = stat_welch_euclidean(d, indices),
-    original = stat_edge_count(d, indices, type = "original"),
-    generalized = stat_edge_count(d, indices, type = "generalized"),
-    weighted = stat_edge_count(d, indices, type = "weighted"),
-    cq = stat_cq(d, indices)
-  )
-}
-
 capitalize <- function(x) {
   gsub("(?<=\\b)([a-z])", "\\U\\1", tolower(x), perl = TRUE)
 }
@@ -228,34 +197,4 @@ solve_partial <- function(M) {
     Minv <- Minv + (v %*% t(v)) / l
   }
   Minv
-}
-
-xi <- function(th) {
-  2 + th^2 - pi / 8 * ( (2 + th^2) * besselI(th^2 / 4, 0, expon.scaled = TRUE) + th^2 * besselI(th^2 / 4, 1, expon.scaled = TRUE) )^2
-}
-
-fixed_point <- function(th, r) {
-  sqrt(xi(th) * (1 + r^2) - 2)
-}
-
-rice_params <- function(x) {
-  mu <- mean(x)
-  sig <- stats::sd(x)
-  r <- mu / sig
-  lb <- sqrt(2 / xi(0) - 1)
-  if (r <= lb)
-    th <- 0
-  else {
-    th <- r - lb
-    th_new <- 0
-    iter <- 0
-    while (abs(th_new - th) > 1.0e-6) {
-      iter <- iter + 1
-      th_new <- th
-      th <- fixed_point(th, r)
-    }
-  }
-  sigma <- sig / sqrt(xi(th))
-  nu <- sqrt( mu^2 + (xi(th) - 2) * sig^2 )
-  list(nu = nu, sigma = sigma)
 }

@@ -10,7 +10,7 @@ test2_local(
   partition,
   representation = "adjacency",
   distance = "frobenius",
-  statistic = "lot",
+  statistic = list(flipr::stat_t_ip, flipr::stat_f_ip),
   B = 1000L,
   alpha = 0.05,
   test = "exact",
@@ -40,7 +40,7 @@ test statistic, among: \code{"hamming"}, \code{"frobenius"},
 \code{"lot"}, \code{"sot"}, \code{"biswas"}, \code{"energy"},
 \code{"student"}, \code{"welch"}, \code{"original"}, \code{"generalized"},
 \code{"weighted"} or a combination from \code{c("lot", "sot", "biswas",
-  "energy")}. Default is \code{"lot"}.}
+  "energy")}. Default is \code{list(flipr::stat_t_ip, flipr::stat_f_ip)}.}
 
 \item{B}{The number of permutation or the tolerance (default: \code{1000L}).
 If this number is lower than \code{1}, it is intended as a tolerance.
@@ -93,7 +93,7 @@ p2 <- matrix(
 sim <- sample2_sbm(n, 68, p1, c(17, 17, 17, 17), p2, seed = 1234)
 m <- as.integer(c(rep(1, 17), rep(2, 17), rep(3, 17), rep(4, 17)))
 test2_local(sim$x, sim$y, m,
-            statistic = c("lot", "sot"),
+            statistic = list(flipr::stat_t_ip, flipr::stat_f_ip),
             seed = 1234,
             alpha = 0.05,
             B = 100)

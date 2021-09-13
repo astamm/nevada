@@ -22,10 +22,6 @@
 #'   count statistics.
 #' @param indices A vector of dimension \eqn{n1} containing the indices of the
 #'   elements of the first sample.
-#' @param alpha An integer specifying to which power elevating the Euclidean
-#'   distance of the energy-based statistic (default: 1L).
-#' @param standardize If \code{TRUE} (default), standardize the DoM statistic
-#'   using the pooled sample variance estimator.
 #' @param type A string specifying the version of the edge count test statistic
 #'   to be used. Choices are \code{"original"}, \code{"generalized"} or
 #'   \code{"weighted"}. Default is \code{"generalized"}.
@@ -37,84 +33,16 @@
 #' n2 <- 10L
 #' x <- nvd("smallworld", n1)
 #' y <- nvd("pa", n2)
-#' d <- dist_nvd(x, y, representation = "laplacian", distance = "frobenius")
-#' stat_lot(d, 1:n1)
-#' stat_sot(d, 1:n1)
-#' stat_biswas(d, 1:n1)
-#' stat_energy(d, 1:n1)
 #' r <- repr_nvd(x, y, representation = "laplacian")
 #' stat_student_euclidean(r, 1:n1)
 #' stat_welch_euclidean(r, 1:n1)
+#' d <- dist_nvd(x, y, representation = "laplacian", distance = "frobenius")
 #' e <- edge_count_global_variables(d, n1, k = 5L)
 #' stat_edge_count(e, 1:n1, type = "original")
 #' stat_edge_count(e, 1:n1, type = "generalized")
 #' stat_edge_count(e, 1:n1, type = "weighted")
 #' @name statistics
 NULL
-
-#' @rdname statistics
-#' @export
-stat_lot <- function(d, indices) {
-  indices2 <- seq_len(attr(d, "Size"))[-indices]
-  stat_lot_impl(d, indices, indices2)
-}
-
-#' @rdname statistics
-#' @export
-stat_sot <- function(d, indices) {
-  indices2 <- seq_len(nrow(d))[-indices]
-  stat_sot_impl(d, indices, indices2)
-}
-
-#' @rdname statistics
-#' @export
-stat_biswas <- function(d, indices) {
-  indices2 <- seq_len(nrow(d))[-indices]
-  stat_biswas_impl(d, indices, indices2)
-}
-
-#' @rdname statistics
-#' @export
-stat_energy <- function(d, indices, alpha = 1) {
-  indices2 <- seq_len(nrow(d))[-indices]
-  stat_energy_impl(d, indices, indices2, alpha)
-}
-
-#' @rdname statistics
-#' @export
-stat_mod <- function(d, indices) {
-  xy <- d[indices, -indices]
-  mean(xy)
-}
-
-#' @rdname statistics
-#' @export
-stat_dom <- function(d, indices, standardize = TRUE) {
-  n <- nrow(d)
-  n1 <- length(indices)
-  n2 <- n - n1
-
-  ssd1_vec <- numeric(n1)
-  for (i in seq_along(indices))
-    ssd1_vec[i] <- sum(d[indices[i], indices]^2)
-  km1 <- indices[which.min(ssd1_vec)]
-
-  ssd2_vec <- numeric(n2)
-  indices <- seq_len(n)[-indices]
-  for (i in seq_along(indices))
-    ssd2_vec[i] <- sum(d[indices[i], indices]^2)
-  km2 <- indices[which.min(ssd2_vec)]
-
-  stat <- d[km1, km2]
-
-  if (!standardize)
-    return(stat)
-
-  ssd1 <- min(ssd1_vec)
-  ssd2 <- min(ssd2_vec)
-  pooled_variance <- (ssd1 + ssd2) / (n - 2)
-  stat / sqrt(pooled_variance)
-}
 
 #' @rdname statistics
 #' @export
@@ -159,11 +87,6 @@ stat_edge_count <- function(d, indices, type = "generalized") {
   )
 }
 
-stat_cq <- function(d, indices) {
-  indices2 <- seq_len(nrow(d))[-indices]
-  stat_cq_impl(d, indices, indices2)
-}
-
 #' Transform distance matrix in edge properties of minimal spanning tree
 #'
 #' @param d A matrix of dimension \eqn{(n1+n2)x(n1+n2)} containing the distances
@@ -183,11 +106,11 @@ stat_cq <- function(d, indices) {
 #' d <- dist_nvd(x, y, representation = "laplacian", distance = "frobenius")
 #' e <- edge_count_global_variables(d, n1, k = 5L)
 edge_count_global_variables <- function(d, n1, k = 1L) {
-  k <- min(k, ceiling(nrow(d) / 4))
-  g <- kmst(d, k)
-  E <- igraph::as_edgelist(g)
-  n <- nrow(d)
+  n <- attr(d, "Size")
   n2 <- n - n1
+  k <- min(k, ceiling(n / 4))
+  g <- kmst(as.matrix(d), k)
+  E <- igraph::as_edgelist(g, names = FALSE)
   Ebynode <- vector("list", n)
   for (i in 1:nrow(E)) {
     Ebynode[[E[i, 1]]] <- c(Ebynode[[E[i, 1]]], E[i, 2])
