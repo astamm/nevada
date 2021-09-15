@@ -10,7 +10,7 @@ test2_local(
   partition,
   representation = "adjacency",
   distance = "frobenius",
-  statistic = list(flipr::stat_t_ip, flipr::stat_f_ip),
+  stats = c("flipr:t_ip", "flipr:f_ip"),
   B = 1000L,
   alpha = 0.05,
   test = "exact",
@@ -36,7 +36,7 @@ test statistic, among: \code{"hamming"}, \code{"frobenius"},
 \code{"spectral"} and \code{"root-euclidean"}. Default is
 \code{"frobenius"}.}
 
-\item{statistic}{A string specifying the chosen test statistic(s), among:
+\item{stats}{A string specifying the chosen test statistic(s), among:
 \code{"lot"}, \code{"sot"}, \code{"biswas"}, \code{"energy"},
 \code{"student"}, \code{"welch"}, \code{"original"}, \code{"generalized"},
 \code{"weighted"} or a combination from \code{c("lot", "sot", "biswas",
@@ -93,7 +93,6 @@ p2 <- matrix(
 sim <- sample2_sbm(n, 68, p1, c(17, 17, 17, 17), p2, seed = 1234)
 m <- as.integer(c(rep(1, 17), rep(2, 17), rep(3, 17), rep(4, 17)))
 test2_local(sim$x, sim$y, m,
-            statistic = list(flipr::stat_t_ip, flipr::stat_f_ip),
             seed = 1234,
             alpha = 0.05,
             B = 100)

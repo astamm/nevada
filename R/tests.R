@@ -17,7 +17,7 @@
 #'   test statistic, among: \code{"hamming"}, \code{"frobenius"},
 #'   \code{"spectral"} and \code{"root-euclidean"}. Default is
 #'   \code{"frobenius"}.
-#' @param statistic A string specifying the chosen test statistic(s), among:
+#' @param stats A string specifying the chosen test statistic(s), among:
 #'   \code{"lot"}, \code{"sot"}, \code{"biswas"}, \code{"energy"},
 #'   \code{"student"}, \code{"welch"}, \code{"original"}, \code{"generalized"},
 #'   \code{"weighted"} or a combination from \code{c("lot", "sot", "biswas",
@@ -56,13 +56,13 @@
 test2_global <- function(x, y,
                          representation = "adjacency",
                          distance = "frobenius",
-                         statistic = list(flipr::stat_t_ip, flipr::stat_f_ip),
+                         stats = c("flipr:t_ip", "flipr:f_ip"),
                          B = 1000L,
                          test = "exact",
                          k = 5L,
                          seed = NULL) {
 
-  set.seed(seed)
+  withr::local_seed(seed)
   n1 <- length(x)
   n2 <- length(y)
   n <- n1 + n2
@@ -77,26 +77,37 @@ test2_global <- function(x, y,
     c("hamming", "frobenius", "spectral", "root-euclidean")
   )
 
-  npc <- length(statistic) > 1
+  use_frechet_stats <- any(grepl("student_euclidean", stats)) ||
+    any(grepl("welch_euclidean", stats))
+  if (use_frechet_stats &&
+      (any(grepl("_ip", stats)) ||
+       any(grepl("edge_count", stats))))
+    cli::cli_abort("It is not possible to mix statistics based on Frechet means and statistics based on inter-point distances.")
 
-  if (!npc) {
-    if (statistic %in% c("student", "welch"))
-      d <- repr_nvd(x, y, representation = representation)
-    else {
-      d <- dist_nvd(x, y, representation = representation, distance = distance)
-      if (statistic %in% c("original", "generalized", "weighted"))
-        d <- edge_count_global_variables(d, n1, k = k)
-    }
-  } else
+  ecp <- NULL
+  if (use_frechet_stats)
+    d <- repr_nvd(x, y, representation = representation)
+  else {
     d <- dist_nvd(x, y, representation = representation, distance = distance)
+    if (any(grepl("edge_count", stats)))
+      ecp <- edge_count_global_variables(d, n1, k = k)
+  }
 
   null_spec <- function(y, parameters) {
     return(y)
   }
 
-  stat_functions <- statistic
-  if (!is.list(stat_functions))
-    stat_functions <- as.list(stat_functions)
+  stat_functions <- stats |>
+    strsplit(split = ":") |>
+    purrr::map(~ {
+      if (length(.x) == 1) {
+        s <- paste0("stat_", .x)
+        return(rlang::as_function(s))
+      }
+      s <- paste0("stat_", .x[2])
+      getExportedValue(.x[1], s)
+    })
+
   stat_assignments <- list(delta = 1:length(stat_functions))
 
   if (inherits(d, "dist")) {
@@ -118,8 +129,10 @@ test2_global <- function(x, y,
   pf$set_pvalue_formula(test)
   pf$set_alternative("right_tail")
 
-  list(
-    pvalue = pf$get_value(0)
+  pf$get_value(
+    parameters = 0,
+    edge_count_prep = ecp,
+    keep_null_distribution = TRUE
   )
 }
 
@@ -161,14 +174,13 @@ test2_global <- function(x, y,
 #' sim <- sample2_sbm(n, 68, p1, c(17, 17, 17, 17), p2, seed = 1234)
 #' m <- as.integer(c(rep(1, 17), rep(2, 17), rep(3, 17), rep(4, 17)))
 #' test2_local(sim$x, sim$y, m,
-#'             statistic = list(flipr::stat_t_ip, flipr::stat_f_ip),
 #'             seed = 1234,
 #'             alpha = 0.05,
 #'             B = 100)
 test2_local <- function(x, y, partition,
                         representation = "adjacency",
                         distance = "frobenius",
-                        statistic = list(flipr::stat_t_ip, flipr::stat_f_ip),
+                        stats = c("flipr:t_ip", "flipr:f_ip"),
                         B = 1000L,
                         alpha = 0.05,
                         test = "exact",
@@ -229,7 +241,7 @@ test2_local <- function(x, y, partition,
       p <- test2_subgraph(
         x, y, element_value,
         subgraph_full,
-        representation, distance, statistic, B, test, k, seed
+        representation, distance, stats, B, test, k, seed
       )
 
       if (verbose) {
@@ -261,7 +273,7 @@ test2_local <- function(x, y, partition,
         p <- test2_subgraph(
           x, y, element_value,
           subgraph_intra,
-          representation, distance, statistic, B, test, k, seed
+          representation, distance, stats, B, test, k, seed
         )
 
         if (verbose) {
@@ -286,7 +298,7 @@ test2_local <- function(x, y, partition,
         p <- test2_subgraph(
           x, y, element_value,
           subgraph_inter,
-          representation, distance, statistic, B, test, k, seed
+          representation, distance, stats, B, test, k, seed
         )
 
         if (verbose) {
@@ -339,7 +351,7 @@ test2_local <- function(x, y, partition,
 }
 
 test2_subgraph <- function(x, y, subpartition, fun,
-                           representation, distance, statistic, B, test, k, seed) {
+                           representation, distance, stats, B, test, k, seed) {
   x <- x %>%
     purrr::map(rlang::as_function(fun), vids = subpartition) %>%
     as_nvd()
@@ -350,7 +362,7 @@ test2_subgraph <- function(x, y, subpartition, fun,
     x, y,
     representation = representation,
     distance = distance,
-    statistic = statistic,
+    stats = stats,
     B = B,
     test = test,
     k = k,

@@ -4,14 +4,20 @@
 \alias{statistics}
 \alias{stat_student_euclidean}
 \alias{stat_welch_euclidean}
-\alias{stat_edge_count}
+\alias{stat_original_edge_count}
+\alias{stat_generalized_edge_count}
+\alias{stat_weighted_edge_count}
 \title{Test Statistics for Network Populations}
 \usage{
-stat_student_euclidean(d, indices)
+stat_student_euclidean(d, indices, ...)
 
-stat_welch_euclidean(d, indices)
+stat_welch_euclidean(d, indices, ...)
 
-stat_edge_count(d, indices, type = "generalized")
+stat_original_edge_count(d, indices, edge_count_prep, ...)
+
+stat_generalized_edge_count(d, indices, edge_count_prep, ...)
+
+stat_weighted_edge_count(d, indices, edge_count_prep, ...)
 }
 \arguments{
 \item{d}{Either a matrix of dimension \eqn{(n1+n2)x(n1+n2)} containing the
@@ -24,9 +30,10 @@ count statistics.}
 \item{indices}{A vector of dimension \eqn{n1} containing the indices of the
 elements of the first sample.}
 
-\item{type}{A string specifying the version of the edge count test statistic
-to be used. Choices are \code{"original"}, \code{"generalized"} or
-\code{"weighted"}. Default is \code{"generalized"}.}
+\item{...}{Extra parameters specific to some statistics.}
+
+\item{edge_count_prep}{A list of preprocessed data information used by edge
+count statistics and produced by \code{\link{edge_count_global_variables}}.}
 }
 \value{
 A scalar giving the value of the desired test statistic.
@@ -56,8 +63,8 @@ r <- repr_nvd(x, y, representation = "laplacian")
 stat_student_euclidean(r, 1:n1)
 stat_welch_euclidean(r, 1:n1)
 d <- dist_nvd(x, y, representation = "laplacian", distance = "frobenius")
-e <- edge_count_global_variables(d, n1, k = 5L)
-stat_edge_count(e, 1:n1, type = "original")
-stat_edge_count(e, 1:n1, type = "generalized")
-stat_edge_count(e, 1:n1, type = "weighted")
+ecp <- edge_count_global_variables(d, n1, k = 5L)
+stat_original_edge_count(d, 1:n1, edge_count_prep = ecp)
+stat_generalized_edge_count(d, 1:n1, edge_count_prep = ecp)
+stat_weighted_edge_count(d, 1:n1, edge_count_prep = ecp)
 }
