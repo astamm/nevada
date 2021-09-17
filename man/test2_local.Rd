@@ -10,7 +10,7 @@ test2_local(
   partition,
   representation = "adjacency",
   distance = "frobenius",
-  statistic = "lot",
+  stats = c("flipr:t_ip", "flipr:f_ip"),
   B = 1000L,
   alpha = 0.05,
   test = "exact",
@@ -24,41 +24,42 @@ test2_local(
 
 \item{y}{An \code{\link{nvd}} object listing networks in sample 2.}
 
-\item{partition}{Either a list or a vector specifying vertex memberships into
-partition elements.}
+\item{partition}{Either a list or an integer vector specifying vertex
+memberships into partition elements.}
 
 \item{representation}{A string specifying the desired type of representation,
 among: \code{"adjacency"}, \code{"laplacian"} and \code{"modularity"}.
-Default is \code{"adjacency"}.}
+Defaults to \code{"adjacency"}.}
 
 \item{distance}{A string specifying the chosen distance for calculating the
 test statistic, among: \code{"hamming"}, \code{"frobenius"},
-\code{"spectral"} and \code{"root-euclidean"}. Default is
+\code{"spectral"} and \code{"root-euclidean"}. Defaults to
 \code{"frobenius"}.}
 
-\item{statistic}{A string specifying the chosen test statistic(s), among:
-\code{"lot"}, \code{"sot"}, \code{"biswas"}, \code{"energy"},
-\code{"student"}, \code{"welch"}, \code{"original"}, \code{"generalized"},
-\code{"weighted"} or a combination from \code{c("lot", "sot", "biswas",
-  "energy")}. Default is \code{"lot"}.}
+\item{stats}{A character vector specifying the chosen test statistic(s),
+among: \code{"original_edge_count"}, \code{"generalized_edge_count"},
+\code{"weighted_edge_count"}, \code{"student_euclidean"}, \code{"welch_euclidean"} or any
+statistics based on inter-point distances available in the \strong{flipr}
+package: \code{"flipr:student_ip"}, \code{"flipr:fisher_ip"}, \code{"flipr:bg_ip"},
+\code{"flipr:energy_ip"}, \code{"flipr:cq_ip"}. Defaults to \code{c("flipr:student_ip", "flipr:fisher_ip")}.}
 
-\item{B}{The number of permutation or the tolerance (default: \code{1000L}).
-If this number is lower than \code{1}, it is intended as a tolerance.
-Otherwise, it is intended as the number of required permutations.}
+\item{B}{The number of permutation or the tolerance. If this number is lower
+than \code{1}, it is intended as a tolerance. Otherwise, it is intended as
+the number of required permutations. Defaults to \code{1000L}.}
 
-\item{alpha}{Significance level for hypothesis testing (default:
-\code{0.05}). If set to 1, the function outputs properly adjusted p-values.
-If lower than 1, then only p-values lower than alpha are properly adjusted.}
+\item{alpha}{Significance level for hypothesis testing. If set to 1, the
+function outputs properly adjusted p-values. If lower than 1, then only
+p-values lower than alpha are properly adjusted. Defaults to \code{0.05}.}
 
-\item{test}{A character string specifying if performing an exact test through
-the use of Phipson-Smyth estimate of the p-value or an approximate test
-through a Monte-Carlo estimate of the p-value (default: \code{"exact"}).}
+\item{test}{A character string specifying the formula to be used to compute
+the permutation p-value. Choices are \code{"estimate"}, \code{"upper_bound"} and
+\code{"exact"}. Defaults to \code{"exact"} which provides exact tests.}
 
 \item{k}{An integer specifying the density of the minimum spanning tree used
-for the edge count statistics (default: \code{5L}).}
+for the edge count statistics. Defaults to \code{5L}.}
 
 \item{seed}{An integer for specifying the seed of the random generator for
-result reproducibility (default: \code{NULL}).}
+result reproducibility. Defaults to \code{NULL}.}
 
 \item{verbose}{Boolean specifying whether information on intermediate tests
 should be printed in the process (default: \code{FALSE}).}
@@ -93,7 +94,6 @@ p2 <- matrix(
 sim <- sample2_sbm(n, 68, p1, c(17, 17, 17, 17), p2, seed = 1234)
 m <- as.integer(c(rep(1, 17), rep(2, 17), rep(3, 17), rep(4, 17)))
 test2_local(sim$x, sim$y, m,
-            statistic = c("lot", "sot"),
             seed = 1234,
             alpha = 0.05,
             B = 100)

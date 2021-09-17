@@ -56,7 +56,7 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
                    pref.matrix1 = NULL, pref.matrix2 = NULL,
                    representation = "adjacency",
                    distance = "frobenius",
-                   statistic = "lot",
+                   stats = c("flipr:t_ip", "flipr:f_ip"),
                    B = 1000L,
                    alpha = 0.05,
                    test = "exact",
@@ -64,7 +64,7 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
                    R = 1000L,
                    seed = NULL) {
 
-  set.seed(seed)
+  withr::local_seed(seed)
 
   pvalues <- replicate(
     R,
@@ -73,7 +73,7 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
       y = nvd(model2, n2, pref.matrix2, lambda2, size2, prob2),
       representation = representation,
       distance = distance,
-      statistic = statistic,
+      stats = stats,
       B = B,
       test = test,
       k = k

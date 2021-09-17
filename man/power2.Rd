@@ -19,7 +19,7 @@ power2(
   pref.matrix2 = NULL,
   representation = "adjacency",
   distance = "frobenius",
-  statistic = "lot",
+  stats = c("flipr:t_ip", "flipr:f_ip"),
   B = 1000L,
   alpha = 0.05,
   test = "exact",
@@ -73,32 +73,33 @@ of sample 2 (default: \code{NULL}). Must be specified if \code{model ==
 
 \item{representation}{A string specifying the desired type of representation,
 among: \code{"adjacency"}, \code{"laplacian"} and \code{"modularity"}.
-Default is \code{"adjacency"}.}
+Defaults to \code{"adjacency"}.}
 
 \item{distance}{A string specifying the chosen distance for calculating the
 test statistic, among: \code{"hamming"}, \code{"frobenius"},
-\code{"spectral"} and \code{"root-euclidean"}. Default is
+\code{"spectral"} and \code{"root-euclidean"}. Defaults to
 \code{"frobenius"}.}
 
-\item{statistic}{A string specifying the chosen test statistic(s), among:
-\code{"lot"}, \code{"sot"}, \code{"biswas"}, \code{"energy"},
-\code{"student"}, \code{"welch"}, \code{"original"}, \code{"generalized"},
-\code{"weighted"} or a combination from \code{c("lot", "sot", "biswas",
-  "energy")}. Default is \code{"lot"}.}
+\item{stats}{A character vector specifying the chosen test statistic(s),
+among: \code{"original_edge_count"}, \code{"generalized_edge_count"},
+\code{"weighted_edge_count"}, \code{"student_euclidean"}, \code{"welch_euclidean"} or any
+statistics based on inter-point distances available in the \strong{flipr}
+package: \code{"flipr:student_ip"}, \code{"flipr:fisher_ip"}, \code{"flipr:bg_ip"},
+\code{"flipr:energy_ip"}, \code{"flipr:cq_ip"}. Defaults to \code{c("flipr:student_ip", "flipr:fisher_ip")}.}
 
-\item{B}{The number of permutation or the tolerance (default: \code{1000L}).
-If this number is lower than \code{1}, it is intended as a tolerance.
-Otherwise, it is intended as the number of required permutations.}
+\item{B}{The number of permutation or the tolerance. If this number is lower
+than \code{1}, it is intended as a tolerance. Otherwise, it is intended as
+the number of required permutations. Defaults to \code{1000L}.}
 
 \item{alpha}{Significance level for hypothesis testing (default:
 \code{0.05}).}
 
-\item{test}{A character string specifying if performing an exact test through
-the use of Phipson-Smyth estimate of the p-value or an approximate test
-through a Monte-Carlo estimate of the p-value (default: \code{"exact"}).}
+\item{test}{A character string specifying the formula to be used to compute
+the permutation p-value. Choices are \code{"estimate"}, \code{"upper_bound"} and
+\code{"exact"}. Defaults to \code{"exact"} which provides exact tests.}
 
 \item{k}{An integer specifying the density of the minimum spanning tree used
-for the edge count statistics (default: \code{5L}).}
+for the edge count statistics. Defaults to \code{5L}.}
 
 \item{R}{The number of Monte-Carlo runs used to estimate the power (default:
 1000L).}

@@ -14,7 +14,19 @@
 \item{...}{Extra arguments to be passed to the plot function.}
 }
 \value{
-Invisibly returns the dataset computed to generate the plot.
+Invisibly returns a \code{\link[ggplot2]{ggplot}} object. In
+particular, the data set computed to generate the plot can be retrieved via
+\verb{$data}. This is a \code{\link[tibble]{tibble}} containing the following
+variables:
+\itemize{
+\item \code{V1}: the x-coordinate of each observation in the plane,
+\item \code{V2}: the y-coordinate of each observation in the plane,
+\item \code{Label}: the sample membership of each observation,
+\item \code{Representation}: the type of matrix representation used to manipulate each
+observation,
+\item \code{Distance}: the distance used to measure how far each observation is from
+the others.
+}
 }
 \description{
 This function generates 2-dimensional plots of samples of networks via

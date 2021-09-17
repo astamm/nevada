@@ -17,7 +17,6 @@ double dist_hamming_impl(const arma::mat &x, const arma::mat &y)
     }
   }
 
-
   return absDiff / n / (n - 1.0);
 }
 
@@ -92,10 +91,10 @@ double dist_root_euclidean_impl(const arma::mat &x, const arma::mat &y)
   return std::sqrt(squaredDiff);
 }
 
-arma::mat dist_nvd_impl(const Rcpp::List &z, const std::string distance)
+Rcpp::NumericVector dist_nvd_impl(const Rcpp::List &z, const std::string distance)
 {
   unsigned int n = z.size();
-  arma::mat out(n, n, arma::fill::zeros);
+  Rcpp::NumericVector outValue(n * (n - 1) / 2);
   arma::mat net1, net2;
 
   for (unsigned int i = 0;i < n-1;++i)
@@ -118,12 +117,18 @@ arma::mat dist_nvd_impl(const Rcpp::List &z, const std::string distance)
       else
         Rcpp::stop("Unavailable distance.\n");
 
-      out(i,j) = distanceValue;
-      out(j,i) = distanceValue;
+      double rowIndex = i + 1;
+      double colIndex = j + 1;
+      double indexValue = n * (rowIndex - 1) - rowIndex * (rowIndex - 1) / 2 + colIndex - rowIndex -1;
+      outValue(indexValue) = distanceValue;
     }
   }
 
-  return out;
+  outValue.attr("class") = "dist";
+  outValue.attr("Size") = n;
+  outValue.attr("Diag") = false;
+  outValue.attr("Upper") = false;
+  return outValue;
 }
 
 double ipro_frobenius_impl(const arma::mat &x, const arma::mat &y)

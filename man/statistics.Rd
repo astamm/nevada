@@ -2,55 +2,36 @@
 % Please edit documentation in R/statistics.R
 \name{statistics}
 \alias{statistics}
-\alias{stat_lot}
-\alias{stat_sot}
-\alias{stat_biswas}
-\alias{stat_energy}
-\alias{stat_mod}
-\alias{stat_dom}
 \alias{stat_student_euclidean}
 \alias{stat_welch_euclidean}
-\alias{stat_edge_count}
+\alias{stat_original_edge_count}
+\alias{stat_generalized_edge_count}
+\alias{stat_weighted_edge_count}
 \title{Test Statistics for Network Populations}
 \usage{
-stat_lot(d, indices)
+stat_student_euclidean(d, indices, ...)
 
-stat_sot(d, indices)
+stat_welch_euclidean(d, indices, ...)
 
-stat_biswas(d, indices)
+stat_original_edge_count(d, indices, edge_count_prep, ...)
 
-stat_energy(d, indices, alpha = 1)
+stat_generalized_edge_count(d, indices, edge_count_prep, ...)
 
-stat_mod(d, indices)
-
-stat_dom(d, indices, standardize = TRUE)
-
-stat_student_euclidean(d, indices)
-
-stat_welch_euclidean(d, indices)
-
-stat_edge_count(d, indices, type = "generalized")
+stat_weighted_edge_count(d, indices, edge_count_prep, ...)
 }
 \arguments{
 \item{d}{Either a matrix of dimension \eqn{(n1+n2)x(n1+n2)} containing the
 distances between all the elements of the two samples put together (for
 distance-based statistics) or the concatenation of the lists of matrix
-representations of networks in samples 1 and 2 for Euclidean t-Statistics
-or a list of edge properties of a similarity graph for the graph-based edge
-count statistics.}
+representations of networks in samples 1 and 2 for Euclidean t-Statistics.}
 
 \item{indices}{A vector of dimension \eqn{n1} containing the indices of the
 elements of the first sample.}
 
-\item{alpha}{An integer specifying to which power elevating the Euclidean
-distance of the energy-based statistic (default: 1L).}
+\item{...}{Extra parameters specific to some statistics.}
 
-\item{standardize}{If \code{TRUE} (default), standardize the DoM statistic
-using the pooled sample variance estimator.}
-
-\item{type}{A string specifying the version of the edge count test statistic
-to be used. Choices are \code{"original"}, \code{"generalized"} or
-\code{"weighted"}. Default is \code{"generalized"}.}
+\item{edge_count_prep}{A list of preprocessed data information used by edge
+count statistics and produced by \code{\link{edge_count_global_variables}}.}
 }
 \value{
 A scalar giving the value of the desired test statistic.
@@ -61,31 +42,24 @@ equality in distribution between samples of networks.
 }
 \details{
 In details, there are three main categories of statistics:
-
-\itemize{ \item distance-based statistics: such as \code{stat_lot} which is a
-distance-based version of the t statistic, \code{stat_sot} which is a
-distance-based version of the F statistic, \code{stat_energy} which is the
-class of energy-based statistics and \code{stat_biswas} which is the
-Biswas-Ghosh statistic. \item Euclidean t-Statistics: both Student
-\code{stat_student_euclidean} version for equal variances and Welch
-\code{stat_welch_euclidean} version for unequal variances, \item Statistics
-based on similarity graphs: three types of edge count statistics. }
+\itemize{
+\item \emph{Euclidean t-Statistics}: both Student \code{stat_student_euclidean} version for
+equal variances and Welch \code{stat_welch_euclidean} version for unequal
+variances,
+\item \emph{Statistics based on similarity graphs}: 3 types of edge count statistics.
+}
 }
 \examples{
 n1 <- 30L
 n2 <- 10L
 x <- nvd("smallworld", n1)
 y <- nvd("pa", n2)
-d <- dist_nvd(x, y, representation = "laplacian", distance = "frobenius")
-stat_lot(d, 1:n1)
-stat_sot(d, 1:n1)
-stat_biswas(d, 1:n1)
-stat_energy(d, 1:n1)
 r <- repr_nvd(x, y, representation = "laplacian")
 stat_student_euclidean(r, 1:n1)
 stat_welch_euclidean(r, 1:n1)
-e <- edge_count_global_variables(d, n1, k = 5L)
-stat_edge_count(e, 1:n1, type = "original")
-stat_edge_count(e, 1:n1, type = "generalized")
-stat_edge_count(e, 1:n1, type = "weighted")
+d <- dist_nvd(x, y, representation = "laplacian", distance = "frobenius")
+ecp <- edge_count_global_variables(d, n1, k = 5L)
+stat_original_edge_count(d, 1:n1, edge_count_prep = ecp)
+stat_generalized_edge_count(d, 1:n1, edge_count_prep = ecp)
+stat_weighted_edge_count(d, 1:n1, edge_count_prep = ecp)
 }

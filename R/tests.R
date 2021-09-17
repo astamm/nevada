@@ -12,26 +12,28 @@
 #' @param y An \code{\link{nvd}} object listing networks in sample 2.
 #' @param representation A string specifying the desired type of representation,
 #'   among: \code{"adjacency"}, \code{"laplacian"} and \code{"modularity"}.
-#'   Default is \code{"adjacency"}.
+#'   Defaults to \code{"adjacency"}.
 #' @param distance A string specifying the chosen distance for calculating the
 #'   test statistic, among: \code{"hamming"}, \code{"frobenius"},
-#'   \code{"spectral"} and \code{"root-euclidean"}. Default is
+#'   \code{"spectral"} and \code{"root-euclidean"}. Defaults to
 #'   \code{"frobenius"}.
-#' @param statistic A string specifying the chosen test statistic(s), among:
-#'   \code{"lot"}, \code{"sot"}, \code{"biswas"}, \code{"energy"},
-#'   \code{"student"}, \code{"welch"}, \code{"original"}, \code{"generalized"},
-#'   \code{"weighted"} or a combination from \code{c("lot", "sot", "biswas",
-#'   "energy")}. Default is \code{"lot"}.
-#' @param B The number of permutation or the tolerance (default: \code{1000L}).
-#'   If this number is lower than \code{1}, it is intended as a tolerance.
-#'   Otherwise, it is intended as the number of required permutations.
-#' @param test A character string specifying if performing an exact test through
-#'   the use of Phipson-Smyth estimate of the p-value or an approximate test
-#'   through a Monte-Carlo estimate of the p-value (default: \code{"exact"}).
+#' @param stats A character vector specifying the chosen test statistic(s),
+#'   among: `"original_edge_count"`, `"generalized_edge_count"`,
+#'   `"weighted_edge_count"`, `"student_euclidean"`, `"welch_euclidean"` or any
+#'   statistics based on inter-point distances available in the **flipr**
+#'   package: `"flipr:student_ip"`, `"flipr:fisher_ip"`, `"flipr:bg_ip"`,
+#'   `"flipr:energy_ip"`, `"flipr:cq_ip"`. Defaults to `c("flipr:student_ip",
+#'   "flipr:fisher_ip")`.
+#' @param B The number of permutation or the tolerance. If this number is lower
+#'   than \code{1}, it is intended as a tolerance. Otherwise, it is intended as
+#'   the number of required permutations. Defaults to `1000L`.
+#' @param test A character string specifying the formula to be used to compute
+#'   the permutation p-value. Choices are `"estimate"`, `"upper_bound"` and
+#'   `"exact"`. Defaults to `"exact"` which provides exact tests.
 #' @param k An integer specifying the density of the minimum spanning tree used
-#'   for the edge count statistics (default: \code{5L}).
+#'   for the edge count statistics. Defaults to `5L`.
 #' @param seed An integer for specifying the seed of the random generator for
-#'   result reproducibility (default: \code{NULL}).
+#'   result reproducibility. Defaults to `NULL`.
 #'
 #' @return A \code{\link[base]{list}} with three components: the value of the
 #'   statistic for the original two samples, the p-value of the resulting
@@ -45,24 +47,24 @@
 #' # Two different models for the two populations
 #' x <- nvd("smallworld", n)
 #' y <- nvd("pa", n)
-#' t1 <- test2_global(x, y, "modularity")
+#' t1 <- test2_global(x, y, representation = "modularity")
 #' t1$pvalue
 #'
 #' # Same model for the two populations
 #' x <- nvd("smallworld", n)
 #' y <- nvd("smallworld", n)
-#' t2 <- test2_global(x, y, "modularity")
+#' t2 <- test2_global(x, y, representation = "modularity")
 #' t2$pvalue
 test2_global <- function(x, y,
                          representation = "adjacency",
                          distance = "frobenius",
-                         statistic = "lot",
+                         stats = c("flipr:t_ip", "flipr:f_ip"),
                          B = 1000L,
                          test = "exact",
                          k = 5L,
                          seed = NULL) {
 
-  set.seed(seed)
+  withr::local_seed(seed)
   n1 <- length(x)
   n2 <- length(y)
   n <- n1 + n2
@@ -77,71 +79,73 @@ test2_global <- function(x, y,
     c("hamming", "frobenius", "spectral", "root-euclidean")
   )
 
-  npc <- length(statistic) > 1
+  use_frechet_stats <- any(grepl("student_euclidean", stats)) ||
+    any(grepl("welch_euclidean", stats))
+  if (use_frechet_stats &&
+      (any(grepl("_ip", stats)) ||
+       any(grepl("edge_count", stats))))
+    cli::cli_abort("It is not possible to mix statistics based on Frechet means and statistics based on inter-point distances.")
 
-  if (!npc) {
-    if (statistic %in% c("student", "welch"))
-      d <- repr_nvd(x, y, representation = representation)
-    else {
-      d <- dist_nvd(x, y, representation = representation, distance = distance)
-      if (statistic %in% c("original", "generalized", "weighted"))
-        d <- edge_count_global_variables(d, n1, k = k)
-    }
-  } else
-    d <- dist_nvd(x, y, representation = representation, distance = distance)
-
-  M <- choose(n, n1)
-  if (n1 == n2)
-    M <- M / 2
-
-  test <- match.arg(test, c("approximate", "exact"))
-  if (test == "approximate" & M <= B) {
-    B <- M
-    group1.perm <- utils::combn(n, n1)[, 1:B]
-  } else
-    group1.perm <- replicate(B, sample.int(n))[1:n1, ]
-
-  if (!npc)
-    Tp <- sapply(0:B, get_permuted_statistic, indices1 = group1.perm, d = d, statistic = statistic)
+  ecp <- NULL
+  if (use_frechet_stats)
+    d <- repr_nvd(x, y, representation = representation)
   else {
-    Tp <- statistic %>%
-      purrr::map(~ sapply(0:B, get_permuted_statistic, indices1 = group1.perm, d = d, statistic = .)) %>%
-      purrr::map(~ sapply(1:(B+1), stats2pvalue, Tp = ., test = "approximate", B = B, M = M)) %>%
-      purrr::transpose() %>%
-      purrr::simplify_all() %>%
-      purrr::map_dbl(combine_pvalues)
+    d <- dist_nvd(x, y, representation = representation, distance = distance)
+    if (any(grepl("edge_count", stats)))
+      ecp <- edge_count_global_variables(d, n1, k = k)
   }
 
-  list(
-    statistic = Tp[1],
-    pvalue = stats2pvalue(1, Tp, test, B, M),
-    permuted_statistics = Tp[-1]
+  null_spec <- function(y, parameters) {
+    return(y)
+  }
+
+  stat_functions <- stats %>%
+    strsplit(split = ":") %>%
+    purrr::map(~ {
+      if (length(.x) == 1) {
+        s <- paste0("stat_", .x)
+        return(rlang::as_function(s))
+      }
+      s <- paste0("stat_", .x[2])
+      getExportedValue(.x[1], s)
+    })
+
+  stat_assignments <- list(delta = 1:length(stat_functions))
+
+  if (inherits(d, "dist")) {
+    xx <- d
+    yy <- as.integer(n1)
+  } else {
+    xx <- d[1:n1]
+    yy <- d[(n1 + 1):(n1 + n2)]
+  }
+
+  pf <- flipr::PlausibilityFunction$new(
+    null_spec = null_spec,
+    stat_functions = stat_functions,
+    stat_assignments = stat_assignments,
+    xx, yy,
+    seed = seed
   )
-}
+  pf$set_nperms(B)
+  pf$set_pvalue_formula(test)
+  pf$set_alternative("right_tail")
 
-stats2pvalue <- function(i, Tp, test = "exact", B, M) {
-  T0 <- Tp[i]
-  b <- sum(Tp >= T0) - 1
-  if (test == "approximate") return(b / B)
-  phipson_smyth_pvalue(b, B, M)
-}
-
-combine_pvalues <- function(p, method = "tippett") {
-  switch (
-    method,
-    tippett = 1 - min(p),
-    fisher = - 2 * sum(log(p))
+  pf$get_value(
+    parameters = 0,
+    edge_count_prep = ecp,
+    keep_null_distribution = TRUE
   )
 }
 
 #' Local Two-Sample Test for Network-Valued Data
 #'
 #' @inheritParams test2_global
-#' @param partition Either a list or a vector specifying vertex memberships into
-#'   partition elements.
-#' @param alpha Significance level for hypothesis testing (default:
-#'   \code{0.05}). If set to 1, the function outputs properly adjusted p-values.
-#'   If lower than 1, then only p-values lower than alpha are properly adjusted.
+#' @param partition Either a list or an integer vector specifying vertex
+#'   memberships into partition elements.
+#' @param alpha Significance level for hypothesis testing. If set to 1, the
+#'   function outputs properly adjusted p-values. If lower than 1, then only
+#'   p-values lower than alpha are properly adjusted. Defaults to `0.05`.
 #' @param verbose Boolean specifying whether information on intermediate tests
 #'   should be printed in the process (default: \code{FALSE}).
 #'
@@ -172,14 +176,13 @@ combine_pvalues <- function(p, method = "tippett") {
 #' sim <- sample2_sbm(n, 68, p1, c(17, 17, 17, 17), p2, seed = 1234)
 #' m <- as.integer(c(rep(1, 17), rep(2, 17), rep(3, 17), rep(4, 17)))
 #' test2_local(sim$x, sim$y, m,
-#'             statistic = c("lot", "sot"),
 #'             seed = 1234,
 #'             alpha = 0.05,
 #'             B = 100)
 test2_local <- function(x, y, partition,
                         representation = "adjacency",
                         distance = "frobenius",
-                        statistic = "lot",
+                        stats = c("flipr:t_ip", "flipr:f_ip"),
                         B = 1000L,
                         alpha = 0.05,
                         test = "exact",
@@ -187,7 +190,7 @@ test2_local <- function(x, y, partition,
                         seed = NULL,
                         verbose = FALSE) {
 
-  # Creating sigma-albebra generated by the partition
+  # Creating sigma-algebra generated by the partition
   partition <- as_vertex_partition(partition)
   E <- names(partition)
   sa <- generate_sigma_algebra(partition)
@@ -240,7 +243,7 @@ test2_local <- function(x, y, partition,
       p <- test2_subgraph(
         x, y, element_value,
         subgraph_full,
-        representation, distance, statistic, B, test, k, seed
+        representation, distance, stats, B, test, k, seed
       )
 
       if (verbose) {
@@ -272,7 +275,7 @@ test2_local <- function(x, y, partition,
         p <- test2_subgraph(
           x, y, element_value,
           subgraph_intra,
-          representation, distance, statistic, B, test, k, seed
+          representation, distance, stats, B, test, k, seed
         )
 
         if (verbose) {
@@ -297,7 +300,7 @@ test2_local <- function(x, y, partition,
         p <- test2_subgraph(
           x, y, element_value,
           subgraph_inter,
-          representation, distance, statistic, B, test, k, seed
+          representation, distance, stats, B, test, k, seed
         )
 
         if (verbose) {
@@ -350,7 +353,7 @@ test2_local <- function(x, y, partition,
 }
 
 test2_subgraph <- function(x, y, subpartition, fun,
-                           representation, distance, statistic, B, test, k, seed) {
+                           representation, distance, stats, B, test, k, seed) {
   x <- x %>%
     purrr::map(rlang::as_function(fun), vids = subpartition) %>%
     as_nvd()
@@ -361,7 +364,7 @@ test2_subgraph <- function(x, y, subpartition, fun,
     x, y,
     representation = representation,
     distance = distance,
-    statistic = statistic,
+    stats = stats,
     B = B,
     test = test,
     k = k,

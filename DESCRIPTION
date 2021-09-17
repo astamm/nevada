@@ -20,8 +20,24 @@ Authors@R: c(
            family = "Vantini", 
            role = "aut", 
            email = "simone.vantini@polimi.it"))
-Description: A flexible statistical framework for network-valued data 
-    analysis.
+Description: A flexible statistical framework for network-valued data analysis. 
+    It leverages the complexity of the space of distributions on graphs by using 
+    the permutation framework for inference as implemented in the flipr package. 
+    Currently, only the two-sample testing problem is covered and generalization 
+    to k samples and regression will be added in the future as well. It is a 
+    4-step procedure where the user chooses a suitable representation of the 
+    networks, a suitable metric to embed the representation into a metric space, 
+    one or more test statistics to target specific aspects of the distributions 
+    to be compared and a formula to compute the permutation p-value. Two types 
+    of inference is provided: a global test answering whether there is a 
+    difference between the distributions that generated the two samples and a 
+    local test for localizing differences on the network structure. The latter 
+    is assumed to be shared by all networks of both samples. References: Lovato, 
+    I., Pini, A., Stamm, A., Vantini, S. (2020) "Model-free two-sample test for 
+    network-valued data" <doi:10.1016/j.csda.2019.106896>; Lovato, I., Pini, A., 
+    Stamm, A., Taquet, M., Vantini, S. (2021) "Multiscale null hypothesis 
+    testing for network-valued data: Analysis of brain networks of patients with 
+    autism" <doi:10.1111/rssc.12463>.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
@@ -35,8 +51,11 @@ Imports:
     forcats,
     ggplot2,
     rlang,
-    magrittr
-RoxygenNote: 7.1.1
+    magrittr,
+    flipr,
+    cli,
+    withr
+RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 URL: https://astamm.github.io/nevada/, https://github.com/astamm/nevada/
 BugReports: https://github.com/astamm/nevada/issues/
