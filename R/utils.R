@@ -50,8 +50,8 @@ compatible_networks <- function(x, y) {
   compatible <- TRUE
 
   if (igraph::is_igraph(x)) {
-    nx <- igraph::vcount(x)
-    ny <- igraph::vcount(y)
+    nx <- igraph::gorder(x)
+    ny <- igraph::gorder(y)
   } else {
     nx <- nrow(x)
     ny <- nrow(y)
