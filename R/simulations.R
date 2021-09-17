@@ -64,7 +64,7 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
                    R = 1000L,
                    seed = NULL) {
 
-  set.seed(seed)
+  withr::local_seed(seed)
 
   pvalues <- replicate(
     R,

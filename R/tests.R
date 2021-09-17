@@ -12,26 +12,28 @@
 #' @param y An \code{\link{nvd}} object listing networks in sample 2.
 #' @param representation A string specifying the desired type of representation,
 #'   among: \code{"adjacency"}, \code{"laplacian"} and \code{"modularity"}.
-#'   Default is \code{"adjacency"}.
+#'   Defaults to \code{"adjacency"}.
 #' @param distance A string specifying the chosen distance for calculating the
 #'   test statistic, among: \code{"hamming"}, \code{"frobenius"},
-#'   \code{"spectral"} and \code{"root-euclidean"}. Default is
+#'   \code{"spectral"} and \code{"root-euclidean"}. Defaults to
 #'   \code{"frobenius"}.
-#' @param stats A string specifying the chosen test statistic(s), among:
-#'   \code{"lot"}, \code{"sot"}, \code{"biswas"}, \code{"energy"},
-#'   \code{"student"}, \code{"welch"}, \code{"original"}, \code{"generalized"},
-#'   \code{"weighted"} or a combination from \code{c("lot", "sot", "biswas",
-#'   "energy")}. Default is `list(flipr::stat_t_ip, flipr::stat_f_ip)`.
-#' @param B The number of permutation or the tolerance (default: \code{1000L}).
-#'   If this number is lower than \code{1}, it is intended as a tolerance.
-#'   Otherwise, it is intended as the number of required permutations.
-#' @param test A character string specifying if performing an exact test through
-#'   the use of Phipson-Smyth estimate of the p-value or an approximate test
-#'   through a Monte-Carlo estimate of the p-value (default: \code{"exact"}).
+#' @param stats A character vector specifying the chosen test statistic(s),
+#'   among: `"original_edge_count"`, `"generalized_edge_count"`,
+#'   `"weighted_edge_count"`, `"student_euclidean"`, `"welch_euclidean"` or any
+#'   statistics based on inter-point distances available in the **flipr**
+#'   package: `"flipr:student_ip"`, `"flipr:fisher_ip"`, `"flipr:bg_ip"`,
+#'   `"flipr:energy_ip"`, `"flipr:cq_ip"`. Defaults to `c("flipr:student_ip",
+#'   "flipr:fisher_ip")`.
+#' @param B The number of permutation or the tolerance. If this number is lower
+#'   than \code{1}, it is intended as a tolerance. Otherwise, it is intended as
+#'   the number of required permutations. Defaults to `1000L`.
+#' @param test A character string specifying the formula to be used to compute
+#'   the permutation p-value. Choices are `"estimate"`, `"upper_bound"` and
+#'   `"exact"`. Defaults to `"exact"` which provides exact tests.
 #' @param k An integer specifying the density of the minimum spanning tree used
-#'   for the edge count statistics (default: \code{5L}).
+#'   for the edge count statistics. Defaults to `5L`.
 #' @param seed An integer for specifying the seed of the random generator for
-#'   result reproducibility (default: \code{NULL}).
+#'   result reproducibility. Defaults to `NULL`.
 #'
 #' @return A \code{\link[base]{list}} with three components: the value of the
 #'   statistic for the original two samples, the p-value of the resulting
@@ -139,11 +141,11 @@ test2_global <- function(x, y,
 #' Local Two-Sample Test for Network-Valued Data
 #'
 #' @inheritParams test2_global
-#' @param partition Either a list or a vector specifying vertex memberships into
-#'   partition elements.
-#' @param alpha Significance level for hypothesis testing (default:
-#'   \code{0.05}). If set to 1, the function outputs properly adjusted p-values.
-#'   If lower than 1, then only p-values lower than alpha are properly adjusted.
+#' @param partition Either a list or an integer vector specifying vertex
+#'   memberships into partition elements.
+#' @param alpha Significance level for hypothesis testing. If set to 1, the
+#'   function outputs properly adjusted p-values. If lower than 1, then only
+#'   p-values lower than alpha are properly adjusted. Defaults to `0.05`.
 #' @param verbose Boolean specifying whether information on intermediate tests
 #'   should be printed in the process (default: \code{FALSE}).
 #'

@@ -8,7 +8,19 @@
 #' @param y A \code{\link{nvd}} object.
 #' @param ... Extra arguments to be passed to the plot function.
 #'
-#' @return Invisibly returns the dataset computed to generate the plot.
+#' @return Invisibly returns a \code{\link[ggplot2]{ggplot}} object. In
+#'   particular, the data set computed to generate the plot can be retrieved via
+#'   `$data`. This is a \code{\link[tibble]{tibble}} containing the following
+#'   variables:
+#'
+#' - `V1`: the x-coordinate of each observation in the plane,
+#' - `V2`: the y-coordinate of each observation in the plane,
+#' - `Label`: the sample membership of each observation,
+#' - `Representation`: the type of matrix representation used to manipulate each
+#' observation,
+#' - `Distance`: the distance used to measure how far each observation is from
+#' the others.
+#'
 #' @export
 #'
 #' @examples

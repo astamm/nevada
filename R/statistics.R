@@ -5,21 +5,15 @@
 #'
 #' In details, there are three main categories of statistics:
 #'
-#' \itemize{ \item distance-based statistics: such as \code{stat_lot} which is a
-#' distance-based version of the t statistic, \code{stat_sot} which is a
-#' distance-based version of the F statistic, \code{stat_energy} which is the
-#' class of energy-based statistics and \code{stat_biswas} which is the
-#' Biswas-Ghosh statistic. \item Euclidean t-Statistics: both Student
-#' \code{stat_student_euclidean} version for equal variances and Welch
-#' \code{stat_welch_euclidean} version for unequal variances, \item Statistics
-#' based on similarity graphs: three types of edge count statistics. }
+#' - *Euclidean t-Statistics*: both Student `stat_student_euclidean` version for
+#' equal variances and Welch `stat_welch_euclidean` version for unequal
+#' variances,
+#' - *Statistics based on similarity graphs*: 3 types of edge count statistics.
 #'
 #' @param d Either a matrix of dimension \eqn{(n1+n2)x(n1+n2)} containing the
 #'   distances between all the elements of the two samples put together (for
 #'   distance-based statistics) or the concatenation of the lists of matrix
-#'   representations of networks in samples 1 and 2 for Euclidean t-Statistics
-#'   or a list of edge properties of a similarity graph for the graph-based edge
-#'   count statistics.
+#'   representations of networks in samples 1 and 2 for Euclidean t-Statistics.
 #' @param indices A vector of dimension \eqn{n1} containing the indices of the
 #'   elements of the first sample.
 #' @param edge_count_prep A list of preprocessed data information used by edge

@@ -32,7 +32,12 @@ Description: A flexible statistical framework for network-valued data analysis.
     of inference is provided: a global test answering whether there is a 
     difference between the distributions that generated the two samples and a 
     local test for localizing differences on the network structure. The latter 
-    is assumed to be shared by all networks of both samples.
+    is assumed to be shared by all networks of both samples. References: Lovato, 
+    I., Pini, A., Stamm, A., Vantini, S. (2020) "Model-free two-sample test for 
+    network-valued data" <doi:10.1016/j.csda.2019.106896>; Lovato, I., Pini, A., 
+    Stamm, A., Taquet, M., Vantini, S. (2021) "Multiscale null hypothesis 
+    testing for network-valued data: Analysis of brain networks of patients with 
+    autism" <doi:10.1111/rssc.12463>.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
