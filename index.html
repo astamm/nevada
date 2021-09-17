@@ -18,8 +18,24 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Network-Valued Data Analysis">
-<meta property="og:description" content="A flexible statistical framework for network-valued data 
-    analysis.">
+<meta property="og:description" content='A flexible statistical framework for network-valued data analysis. 
+    It leverages the complexity of the space of distributions on graphs by using 
+    the permutation framework for inference as implemented in the flipr package. 
+    Currently, only the two-sample testing problem is covered and generalization 
+    to k samples and regression will be added in the future as well. It is a 
+    4-step procedure where the user chooses a suitable representation of the 
+    networks, a suitable metric to embed the representation into a metric space, 
+    one or more test statistics to target specific aspects of the distributions 
+    to be compared and a formula to compute the permutation p-value. Two types 
+    of inference is provided: a global test answering whether there is a 
+    difference between the distributions that generated the two samples and a 
+    local test for localizing differences on the network structure. The latter 
+    is assumed to be shared by all networks of both samples. References: Lovato, 
+    I., Pini, A., Stamm, A., Vantini, S. (2020) "Model-free two-sample test for 
+    network-valued data" &lt;doi:10.1016/j.csda.2019.106896&gt;; Lovato, I., Pini, A., 
+    Stamm, A., Taquet, M., Vantini, S. (2021) "Multiscale null hypothesis 
+    testing for network-valued data: Analysis of brain networks of patients with 
+    autism" &lt;doi:10.1111/rssc.12463&gt;.'>
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -86,15 +102,7 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The package <code>nevada</code> (NEtwork-VAlued Data Analysis) is an R package for the statistical analysis of network-valued datasets. In this setting, a sample is made of statistical units that are networks themselves. The package provides a set of matrix representations for networks so that network-valued data can be transformed into matrix-valued data. Subsequently, a number of distances between matrices is provided as well to quantify how far two networks are from each other and a number of distance-based statistics is proposed for testing equality in distribution between samples of networks using exact permutation testing procedures. The implementation is largely made in C++ and the matrix of inter- and intra-sample distances is pre-computed, which alleviates the computational burden often associated with permutation tests. In details:</p>
-<ul>
-<li>the <code>repr_*()</code> functions return the chosen matrix representation of the input graph,</li>
-<li>the <code>dist_*()</code> functions return the chosen distance between two networks,</li>
-<li>the <code>stat_*()</code> functions return the value of the chosen test statistic,</li>
-<li>the <code><a href="reference/test2_global.html">test2_global()</a></code> function returns the p-value of a permutation test in which the null hypothesis is that the two samples come from the same distribution of networks,</li>
-<li>the <code><a href="reference/power2.html">power2()</a></code> function returns a Monte-Carlo estimate of the power of the test in some specific scenarios.</li>
-</ul>
-<p>See the vignette <em>NEtwork-VAlued Data Analysis</em> for the details of each function.</p>
+<p>The package <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a> (NEtwork-VAlued Data Analysis) is an R package for the statistical analysis of network-valued data. In this setting, a sample is made of statistical units that are networks themselves. The package provides a set of matrix representations for networks so that network-valued data can be transformed into matrix-valued data. Subsequently, a number of distances between matrices is provided as well to quantify how far two networks are from each other and several test statistics are proposed for testing equality in distribution between samples of networks using exact permutation testing procedures. The permutation scheme is carried out by the <a href="https://astamm.github.io/flipr/"><strong>flipr</strong></a> package which also provides a number of test statistics based on inter-point distances that play nicely with network-valued data. The implementation is largely made in C++ and the matrix of inter- and intra-sample distances is pre-computed, which alleviates the computational burden often associated with permutation tests.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -109,22 +117,65 @@
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
-<p><strong>Example 1</strong></p>
-<p>In this first example, we compare two populations of networks generated according to two different models (Watts-Strogatz and Barabasi), using the modularity matrix representation of networks, the Hamming distance to compare single networks and the average statistic to summarize information and perform the permutation test.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>n &lt;-<span class="st"> </span>10L</span>
-<span id="cb3-2"><a href="#cb3-2"></a>x &lt;-<span class="st"> </span>nevada<span class="op">::</span><span class="kw">nvd</span>(<span class="st">"smallworld"</span>, n)</span>
-<span id="cb3-3"><a href="#cb3-3"></a>y &lt;-<span class="st"> </span>nevada<span class="op">::</span><span class="kw">nvd</span>(<span class="st">"pa"</span>, n)</span>
-<span id="cb3-4"><a href="#cb3-4"></a>t1 &lt;-<span class="st"> </span>nevada<span class="op">::</span><span class="kw">test2_global</span>(x, y, <span class="dt">representation =</span> <span class="st">"modularity"</span>)</span>
-<span id="cb3-5"><a href="#cb3-5"></a>t1<span class="op">$</span>pvalue</span>
-<span id="cb3-6"><a href="#cb3-6"></a>[<span class="dv">1</span>] <span class="fl">0.0009936031</span></span></code></pre></div>
-<p><strong>Example 2</strong></p>
-<p>In this second example, we compare two populations of networks generated according to the sane model (Watts-Strogatz), using once again the modularity matrix representation of networks, the Hamming distance to compare single networks and the average statistic to summarize information and perform the permutation test.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>n &lt;-<span class="st"> </span>10L</span>
-<span id="cb4-2"><a href="#cb4-2"></a>x &lt;-<span class="st"> </span>nevada<span class="op">::</span><span class="kw">nvd</span>(<span class="st">"smallworld"</span>, n)</span>
-<span id="cb4-3"><a href="#cb4-3"></a>y &lt;-<span class="st"> </span>nevada<span class="op">::</span><span class="kw">nvd</span>(<span class="st">"smallworld"</span>, n)</span>
-<span id="cb4-4"><a href="#cb4-4"></a>t2 &lt;-<span class="st"> </span>nevada<span class="op">::</span><span class="kw">test2_global</span>(x, y, <span class="dt">representation =</span> <span class="st">"modularity"</span>)</span>
-<span id="cb4-5"><a href="#cb4-5"></a>t2<span class="op">$</span>pvalue</span>
-<span id="cb4-6"><a href="#cb4-6"></a>[<span class="dv">1</span>] <span class="fl">0.1368577</span></span></code></pre></div>
+<div id="example-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#example-1" class="anchor"></a>Example 1</h3>
+<p>In this first example, we compare two populations of networks generated according to two different models (Watts-Strogatz and Barabasi), using the adjacency matrix representation of networks, the Frobenius distance to compare single networks and the combination of Student-like and Fisher-like statistics based on inter-point distances to summarize information and perform the permutation test.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10L</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">nevada</span><span class="fu">::</span><span class="fu"><a href="reference/nvd.html">nvd</a></span><span class="op">(</span><span class="st">"smallworld"</span>, <span class="va">n</span><span class="op">)</span>
+<span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">nevada</span><span class="fu">::</span><span class="fu"><a href="reference/nvd.html">nvd</a></span><span class="op">(</span><span class="st">"pa"</span>, <span class="va">n</span><span class="op">)</span></code></pre></div>
+<p>By default the <code><a href="reference/nvd.html">nvd()</a></code> constructor generates networks with 25 nodes. One can wonder whether there is a difference between the distributions that generated these two samples (which there is given the models that we used). The <code><a href="reference/test2_global.html">test2_global()</a></code> function provides an answer to this question:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>t1_global &lt;-<span class="st"> </span>nevada<span class="op">::</span><span class="kw">test2_global</span>(x, y, <span class="dt">seed =</span> <span class="dv">1234</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>t1_global<span class="op">$</span>pvalue</span>
+<span id="cb4-3"><a href="#cb4-3"></a>[<span class="dv">1</span>] <span class="fl">0.0009962984</span></span></code></pre></div>
+<p>The p-value is very small, leading to the conclusion that we should reject the null hypothesis of equal distributions.</p>
+<p>Although this is a fake example, we could create a partition to try to localize differences along this partition:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">partition</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, each <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>The <code><a href="reference/test2_local.html">test2_local()</a></code> function provides an answer to this question:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>t1_local &lt;-<span class="st"> </span>nevada<span class="op">::</span><span class="kw">test2_local</span>(x, y, partition, <span class="dt">seed =</span> <span class="dv">1234</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a>t1_local</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="op">$</span>intra</span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co"># A tibble: 5 × 3</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>  E     pvalue truncated</span>
+<span id="cb6-6"><a href="#cb6-6"></a>  <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st">  </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>lgl<span class="op">&gt;</span><span class="st">    </span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="dv">1</span> P1     <span class="fl">0.549</span> <span class="ot">TRUE</span>     </span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="dv">2</span> P2     <span class="fl">0.549</span> <span class="ot">TRUE</span>     </span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="dv">3</span> P3     <span class="fl">0.549</span> <span class="ot">TRUE</span>     </span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="dv">4</span> P4     <span class="fl">0.549</span> <span class="ot">TRUE</span>     </span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="dv">5</span> P5     <span class="fl">0.549</span> <span class="ot">TRUE</span>     </span>
+<span id="cb6-12"><a href="#cb6-12"></a></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="op">$</span>inter</span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="co"># A tibble: 10 × 4</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a>   E1    E2      pvalue truncated</span>
+<span id="cb6-16"><a href="#cb6-16"></a>   <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>chr<span class="op">&gt;</span><span class="st">    </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>lgl<span class="op">&gt;</span><span class="st">    </span></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="st"> </span><span class="dv">1</span> P1    P2    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span>
+<span id="cb6-18"><a href="#cb6-18"></a> <span class="dv">2</span> P1    P3    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span>
+<span id="cb6-19"><a href="#cb6-19"></a> <span class="dv">3</span> P1    P4    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span>
+<span id="cb6-20"><a href="#cb6-20"></a> <span class="dv">4</span> P1    P5    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span>
+<span id="cb6-21"><a href="#cb6-21"></a> <span class="dv">5</span> P2    P3    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span>
+<span id="cb6-22"><a href="#cb6-22"></a> <span class="dv">6</span> P2    P4    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span>
+<span id="cb6-23"><a href="#cb6-23"></a> <span class="dv">7</span> P2    P5    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span>
+<span id="cb6-24"><a href="#cb6-24"></a> <span class="dv">8</span> P3    P4    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span>
+<span id="cb6-25"><a href="#cb6-25"></a> <span class="dv">9</span> P3    P5    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span>
+<span id="cb6-26"><a href="#cb6-26"></a><span class="dv">10</span> P4    P5    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span></code></pre></div>
+</div>
+<div id="example-2" class="section level3">
+<h3 class="hasAnchor">
+<a href="#example-2" class="anchor"></a>Example 2</h3>
+<p>In this second example, we compare two populations of networks generated according to the same model (Watts-Strogatz), using the adjacency matrix representation of networks, the Frobenius distance to compare single networks and the combination of Student-like and Fisher-like statistics based on inter-point distances to summarize information and perform the permutation test.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10L</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">nevada</span><span class="fu">::</span><span class="fu"><a href="reference/nvd.html">nvd</a></span><span class="op">(</span><span class="st">"smallworld"</span>, <span class="va">n</span><span class="op">)</span>
+<span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">nevada</span><span class="fu">::</span><span class="fu"><a href="reference/nvd.html">nvd</a></span><span class="op">(</span><span class="st">"smallworld"</span>, <span class="va">n</span><span class="op">)</span></code></pre></div>
+<p>One can wonder whether there is a difference between the distributions that generated these two samples (which there is given the models that we used). The <code><a href="reference/test2_global.html">test2_global()</a></code> function provides an answer to this question:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>t2 &lt;-<span class="st"> </span>nevada<span class="op">::</span><span class="kw">test2_global</span>(x, y, <span class="dt">seed =</span> <span class="dv">1234</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>t2<span class="op">$</span>pvalue</span>
+<span id="cb8-3"><a href="#cb8-3"></a>[<span class="dv">1</span>] <span class="fl">0.2257715</span></span></code></pre></div>
+<p>The p-value is larger than 5% or even 10%, leading us to failing to reject the null hypothesis of equal distributions at these significance thresholds.</p>
+</div>
 </div>
 </div>
   </div>

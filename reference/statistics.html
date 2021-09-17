@@ -133,23 +133,15 @@ equality in distribution between samples of networks." />
 equality in distribution between samples of networks.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>stat_lot</span><span class='op'>(</span><span class='va'>d</span>, <span class='va'>indices</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>stat_student_euclidean</span><span class='op'>(</span><span class='va'>d</span>, <span class='va'>indices</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>stat_sot</span><span class='op'>(</span><span class='va'>d</span>, <span class='va'>indices</span><span class='op'>)</span>
+<span class='fu'>stat_welch_euclidean</span><span class='op'>(</span><span class='va'>d</span>, <span class='va'>indices</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>stat_biswas</span><span class='op'>(</span><span class='va'>d</span>, <span class='va'>indices</span><span class='op'>)</span>
+<span class='fu'>stat_original_edge_count</span><span class='op'>(</span><span class='va'>d</span>, <span class='va'>indices</span>, <span class='va'>edge_count_prep</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>stat_energy</span><span class='op'>(</span><span class='va'>d</span>, <span class='va'>indices</span>, alpha <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+<span class='fu'>stat_generalized_edge_count</span><span class='op'>(</span><span class='va'>d</span>, <span class='va'>indices</span>, <span class='va'>edge_count_prep</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>stat_mod</span><span class='op'>(</span><span class='va'>d</span>, <span class='va'>indices</span><span class='op'>)</span>
-
-<span class='fu'>stat_dom</span><span class='op'>(</span><span class='va'>d</span>, <span class='va'>indices</span>, standardize <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
-<span class='fu'>stat_student_euclidean</span><span class='op'>(</span><span class='va'>d</span>, <span class='va'>indices</span><span class='op'>)</span>
-
-<span class='fu'>stat_welch_euclidean</span><span class='op'>(</span><span class='va'>d</span>, <span class='va'>indices</span><span class='op'>)</span>
-
-<span class='fu'>stat_edge_count</span><span class='op'>(</span><span class='va'>d</span>, <span class='va'>indices</span>, type <span class='op'>=</span> <span class='st'>"generalized"</span><span class='op'>)</span></pre>
+<span class='fu'>stat_weighted_edge_count</span><span class='op'>(</span><span class='va'>d</span>, <span class='va'>indices</span>, <span class='va'>edge_count_prep</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,9 +151,7 @@ equality in distribution between samples of networks.</p>
       <td><p>Either a matrix of dimension \((n1+n2)x(n1+n2)\) containing the
 distances between all the elements of the two samples put together (for
 distance-based statistics) or the concatenation of the lists of matrix
-representations of networks in samples 1 and 2 for Euclidean t-Statistics
-or a list of edge properties of a similarity graph for the graph-based edge
-count statistics.</p></td>
+representations of networks in samples 1 and 2 for Euclidean t-Statistics.</p></td>
     </tr>
     <tr>
       <th>indices</th>
@@ -169,20 +159,13 @@ count statistics.</p></td>
 elements of the first sample.</p></td>
     </tr>
     <tr>
-      <th>alpha</th>
-      <td><p>An integer specifying to which power elevating the Euclidean
-distance of the energy-based statistic (default: 1L).</p></td>
+      <th>...</th>
+      <td><p>Extra parameters specific to some statistics.</p></td>
     </tr>
     <tr>
-      <th>standardize</th>
-      <td><p>If <code>TRUE</code> (default), standardize the DoM statistic
-using the pooled sample variance estimator.</p></td>
-    </tr>
-    <tr>
-      <th>type</th>
-      <td><p>A string specifying the version of the edge count test statistic
-to be used. Choices are <code>"original"</code>, <code>"generalized"</code> or
-<code>"weighted"</code>. Default is <code>"generalized"</code>.</p></td>
+      <th>edge_count_prep</th>
+      <td><p>A list of preprocessed data information used by edge
+count statistics and produced by <code><a href='edge_count_global_variables.html'>edge_count_global_variables</a></code>.</p></td>
     </tr>
     </table>
 
@@ -191,18 +174,11 @@ to be used. Choices are <code>"original"</code>, <code>"generalized"</code> or
     <p>A scalar giving the value of the desired test statistic.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>In details, there are three main categories of statistics:</p>
-<ul>
-<li><p>distance-based statistics: such as <code>stat_lot</code> which is a
-distance-based version of the t statistic, <code>stat_sot</code> which is a
-distance-based version of the F statistic, <code>stat_energy</code> which is the
-class of energy-based statistics and <code>stat_biswas</code> which is the
-Biswas-Ghosh statistic.</p></li>
-<li><p>Euclidean t-Statistics: both Student
-<code>stat_student_euclidean</code> version for equal variances and Welch
-<code>stat_welch_euclidean</code> version for unequal variances,</p></li>
-<li><p>Statistics
-based on similarity graphs: three types of edge count statistics.</p></li>
+    <p>In details, there are three main categories of statistics:</p><ul>
+<li><p><em>Euclidean t-Statistics</em>: both Student <code>stat_student_euclidean</code> version for
+equal variances and Welch <code>stat_welch_euclidean</code> version for unequal
+variances,</p></li>
+<li><p><em>Statistics based on similarity graphs</em>: 3 types of edge count statistics.</p></li>
 </ul>
 
 
@@ -211,19 +187,15 @@ based on similarity graphs: three types of edge count statistics.</p></li>
 <span class='va'>n2</span> <span class='op'>&lt;-</span> <span class='fl'>10L</span>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='nvd.html'>nvd</a></span><span class='op'>(</span><span class='st'>"smallworld"</span>, <span class='va'>n1</span><span class='op'>)</span>
 <span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='nvd.html'>nvd</a></span><span class='op'>(</span><span class='st'>"pa"</span>, <span class='va'>n2</span><span class='op'>)</span>
-<span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='dist_nvd.html'>dist_nvd</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, representation <span class='op'>=</span> <span class='st'>"laplacian"</span>, distance <span class='op'>=</span> <span class='st'>"frobenius"</span><span class='op'>)</span>
-<span class='fu'>stat_lot</span><span class='op'>(</span><span class='va'>d</span>, <span class='fl'>1</span><span class='op'>:</span><span class='va'>n1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 16.10669</div><div class='input'><span class='fu'>stat_sot</span><span class='op'>(</span><span class='va'>d</span>, <span class='fl'>1</span><span class='op'>:</span><span class='va'>n1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 1.964544</div><div class='input'><span class='fu'>stat_biswas</span><span class='op'>(</span><span class='va'>d</span>, <span class='fl'>1</span><span class='op'>:</span><span class='va'>n1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 212.6454</div><div class='input'><span class='fu'>stat_energy</span><span class='op'>(</span><span class='va'>d</span>, <span class='fl'>1</span><span class='op'>:</span><span class='va'>n1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 11.19189</div><div class='input'><span class='va'>r</span> <span class='op'>&lt;-</span> <span class='fu'><a href='repr_nvd.html'>repr_nvd</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, representation <span class='op'>=</span> <span class='st'>"laplacian"</span><span class='op'>)</span>
+<span class='va'>r</span> <span class='op'>&lt;-</span> <span class='fu'><a href='repr_nvd.html'>repr_nvd</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, representation <span class='op'>=</span> <span class='st'>"laplacian"</span><span class='op'>)</span>
 <span class='fu'>stat_student_euclidean</span><span class='op'>(</span><span class='va'>r</span>, <span class='fl'>1</span><span class='op'>:</span><span class='va'>n1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 4.898908</div><div class='input'><span class='fu'>stat_welch_euclidean</span><span class='op'>(</span><span class='va'>r</span>, <span class='fl'>1</span><span class='op'>:</span><span class='va'>n1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 4.136024</div><div class='input'><span class='va'>e</span> <span class='op'>&lt;-</span> <span class='fu'><a href='edge_count_global_variables.html'>edge_count_global_variables</a></span><span class='op'>(</span><span class='va'>d</span>, <span class='va'>n1</span>, k <span class='op'>=</span> <span class='fl'>5L</span><span class='op'>)</span>
-<span class='fu'>stat_edge_count</span><span class='op'>(</span><span class='va'>e</span>, <span class='fl'>1</span><span class='op'>:</span><span class='va'>n1</span>, type <span class='op'>=</span> <span class='st'>"original"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 8.625382</div><div class='input'><span class='fu'>stat_edge_count</span><span class='op'>(</span><span class='va'>e</span>, <span class='fl'>1</span><span class='op'>:</span><span class='va'>n1</span>, type <span class='op'>=</span> <span class='st'>"generalized"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 242.7804</div><div class='input'><span class='fu'>stat_edge_count</span><span class='op'>(</span><span class='va'>e</span>, <span class='fl'>1</span><span class='op'>:</span><span class='va'>n1</span>, type <span class='op'>=</span> <span class='st'>"weighted"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 15.5569</div></pre>
+</div><div class='output co'>#&gt; [1] 4.687092</div><div class='input'><span class='fu'>stat_welch_euclidean</span><span class='op'>(</span><span class='va'>r</span>, <span class='fl'>1</span><span class='op'>:</span><span class='va'>n1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 4.012595</div><div class='input'><span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='dist_nvd.html'>dist_nvd</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, representation <span class='op'>=</span> <span class='st'>"laplacian"</span>, distance <span class='op'>=</span> <span class='st'>"frobenius"</span><span class='op'>)</span>
+<span class='va'>ecp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='edge_count_global_variables.html'>edge_count_global_variables</a></span><span class='op'>(</span><span class='va'>d</span>, <span class='va'>n1</span>, k <span class='op'>=</span> <span class='fl'>5L</span><span class='op'>)</span>
+<span class='fu'>stat_original_edge_count</span><span class='op'>(</span><span class='va'>d</span>, <span class='fl'>1</span><span class='op'>:</span><span class='va'>n1</span>, edge_count_prep <span class='op'>=</span> <span class='va'>ecp</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 8.772176</div><div class='input'><span class='fu'>stat_generalized_edge_count</span><span class='op'>(</span><span class='va'>d</span>, <span class='fl'>1</span><span class='op'>:</span><span class='va'>n1</span>, edge_count_prep <span class='op'>=</span> <span class='va'>ecp</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 215.8019</div><div class='input'><span class='fu'>stat_weighted_edge_count</span><span class='op'>(</span><span class='va'>d</span>, <span class='fl'>1</span><span class='op'>:</span><span class='va'>n1</span>, edge_count_prep <span class='op'>=</span> <span class='va'>ecp</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 14.68119</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

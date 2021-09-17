@@ -137,7 +137,7 @@
   <span class='va'>partition</span>,
   representation <span class='op'>=</span> <span class='st'>"adjacency"</span>,
   distance <span class='op'>=</span> <span class='st'>"frobenius"</span>,
-  statistic <span class='op'>=</span> <span class='st'>"lot"</span>,
+  stats <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"flipr:t_ip"</span>, <span class='st'>"flipr:f_ip"</span><span class='op'>)</span>,
   B <span class='op'>=</span> <span class='fl'>1000L</span>,
   alpha <span class='op'>=</span> <span class='fl'>0.05</span>,
   test <span class='op'>=</span> <span class='st'>"exact"</span>,
@@ -159,57 +159,58 @@
     </tr>
     <tr>
       <th>partition</th>
-      <td><p>Either a list or a vector specifying vertex memberships into
-partition elements.</p></td>
+      <td><p>Either a list or an integer vector specifying vertex
+memberships into partition elements.</p></td>
     </tr>
     <tr>
       <th>representation</th>
       <td><p>A string specifying the desired type of representation,
 among: <code>"adjacency"</code>, <code>"laplacian"</code> and <code>"modularity"</code>.
-Default is <code>"adjacency"</code>.</p></td>
+Defaults to <code>"adjacency"</code>.</p></td>
     </tr>
     <tr>
       <th>distance</th>
       <td><p>A string specifying the chosen distance for calculating the
 test statistic, among: <code>"hamming"</code>, <code>"frobenius"</code>,
-<code>"spectral"</code> and <code>"root-euclidean"</code>. Default is
+<code>"spectral"</code> and <code>"root-euclidean"</code>. Defaults to
 <code>"frobenius"</code>.</p></td>
     </tr>
     <tr>
-      <th>statistic</th>
-      <td><p>A string specifying the chosen test statistic(s), among:
-<code>"lot"</code>, <code>"sot"</code>, <code>"biswas"</code>, <code>"energy"</code>,
-<code>"student"</code>, <code>"welch"</code>, <code>"original"</code>, <code>"generalized"</code>,
-<code>"weighted"</code> or a combination from <code><a href='https://rdrr.io/r/base/c.html'>c("lot", "sot", "biswas",
-  "energy")</a></code>. Default is <code>"lot"</code>.</p></td>
+      <th>stats</th>
+      <td><p>A character vector specifying the chosen test statistic(s),
+among: <code>"original_edge_count"</code>, <code>"generalized_edge_count"</code>,
+<code>"weighted_edge_count"</code>, <code>"student_euclidean"</code>, <code>"welch_euclidean"</code> or any
+statistics based on inter-point distances available in the <strong>flipr</strong>
+package: <code>"flipr:student_ip"</code>, <code>"flipr:fisher_ip"</code>, <code>"flipr:bg_ip"</code>,
+<code>"flipr:energy_ip"</code>, <code>"flipr:cq_ip"</code>. Defaults to <code><a href='https://rdrr.io/r/base/c.html'>c("flipr:student_ip", "flipr:fisher_ip")</a></code>.</p></td>
     </tr>
     <tr>
       <th>B</th>
-      <td><p>The number of permutation or the tolerance (default: <code>1000L</code>).
-If this number is lower than <code>1</code>, it is intended as a tolerance.
-Otherwise, it is intended as the number of required permutations.</p></td>
+      <td><p>The number of permutation or the tolerance. If this number is lower
+than <code>1</code>, it is intended as a tolerance. Otherwise, it is intended as
+the number of required permutations. Defaults to <code>1000L</code>.</p></td>
     </tr>
     <tr>
       <th>alpha</th>
-      <td><p>Significance level for hypothesis testing (default:
-<code>0.05</code>). If set to 1, the function outputs properly adjusted p-values.
-If lower than 1, then only p-values lower than alpha are properly adjusted.</p></td>
+      <td><p>Significance level for hypothesis testing. If set to 1, the
+function outputs properly adjusted p-values. If lower than 1, then only
+p-values lower than alpha are properly adjusted. Defaults to <code>0.05</code>.</p></td>
     </tr>
     <tr>
       <th>test</th>
-      <td><p>A character string specifying if performing an exact test through
-the use of Phipson-Smyth estimate of the p-value or an approximate test
-through a Monte-Carlo estimate of the p-value (default: <code>"exact"</code>).</p></td>
+      <td><p>A character string specifying the formula to be used to compute
+the permutation p-value. Choices are <code>"estimate"</code>, <code>"upper_bound"</code> and
+<code>"exact"</code>. Defaults to <code>"exact"</code> which provides exact tests.</p></td>
     </tr>
     <tr>
       <th>k</th>
       <td><p>An integer specifying the density of the minimum spanning tree used
-for the edge count statistics (default: <code>5L</code>).</p></td>
+for the edge count statistics. Defaults to <code>5L</code>.</p></td>
     </tr>
     <tr>
       <th>seed</th>
       <td><p>An integer for specifying the seed of the random generator for
-result reproducibility (default: <code>NULL</code>).</p></td>
+result reproducibility. Defaults to <code>NULL</code>.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -246,7 +247,6 @@ the partition for the intra- and inter-tests.</p>
 <span class='va'>sim</span> <span class='op'>&lt;-</span> <span class='fu'><a href='sample2_sbm.html'>sample2_sbm</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='fl'>68</span>, <span class='va'>p1</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>17</span>, <span class='fl'>17</span>, <span class='fl'>17</span>, <span class='fl'>17</span><span class='op'>)</span>, <span class='va'>p2</span>, seed <span class='op'>=</span> <span class='fl'>1234</span><span class='op'>)</span>
 <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>17</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>17</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>17</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>4</span>, <span class='fl'>17</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>test2_local</span><span class='op'>(</span><span class='va'>sim</span><span class='op'>$</span><span class='va'>x</span>, <span class='va'>sim</span><span class='op'>$</span><span class='va'>y</span>, <span class='va'>m</span>,
-            statistic <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"lot"</span>, <span class='st'>"sot"</span><span class='op'>)</span>,
             seed <span class='op'>=</span> <span class='fl'>1234</span>,
             alpha <span class='op'>=</span> <span class='fl'>0.05</span>,
             B <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
@@ -254,21 +254,21 @@ the partition for the intra- and inter-tests.</p>
 #&gt; <span style='color: #949494;'># A tibble: 4 × 3</span>
 #&gt;   E      pvalue truncated
 #&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;lgl&gt;</span>    
-#&gt; <span style='color: #BCBCBC;'>1</span> P1    0.079<span style='text-decoration: underline;'>2</span>  TRUE     
-#&gt; <span style='color: #BCBCBC;'>2</span> P2    0.079<span style='text-decoration: underline;'>2</span>  TRUE     
+#&gt; <span style='color: #BCBCBC;'>1</span> P1    0.069<span style='text-decoration: underline;'>3</span>  TRUE     
+#&gt; <span style='color: #BCBCBC;'>2</span> P2    0.069<span style='text-decoration: underline;'>3</span>  TRUE     
 #&gt; <span style='color: #BCBCBC;'>3</span> P3    0.009<span style='text-decoration: underline;'>90</span> FALSE    
-#&gt; <span style='color: #BCBCBC;'>4</span> P4    0.079<span style='text-decoration: underline;'>2</span>  TRUE     
+#&gt; <span style='color: #BCBCBC;'>4</span> P4    0.069<span style='text-decoration: underline;'>3</span>  TRUE     
 #&gt; 
 #&gt; $inter
 #&gt; <span style='color: #949494;'># A tibble: 6 × 4</span>
-#&gt;   E1    E2    pvalue truncated
-#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;lgl&gt;</span>    
-#&gt; <span style='color: #BCBCBC;'>1</span> P1    P2    0.069<span style='text-decoration: underline;'>3</span> TRUE     
-#&gt; <span style='color: #BCBCBC;'>2</span> P1    P3    0.019<span style='text-decoration: underline;'>8</span> FALSE    
-#&gt; <span style='color: #BCBCBC;'>3</span> P1    P4    0.069<span style='text-decoration: underline;'>3</span> TRUE     
-#&gt; <span style='color: #BCBCBC;'>4</span> P2    P3    0.019<span style='text-decoration: underline;'>8</span> FALSE    
-#&gt; <span style='color: #BCBCBC;'>5</span> P2    P4    0.069<span style='text-decoration: underline;'>3</span> TRUE     
-#&gt; <span style='color: #BCBCBC;'>6</span> P3    P4    0.019<span style='text-decoration: underline;'>8</span> FALSE    
+#&gt;   E1    E2     pvalue truncated
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;lgl&gt;</span>    
+#&gt; <span style='color: #BCBCBC;'>1</span> P1    P2    0.059<span style='text-decoration: underline;'>4</span>  TRUE     
+#&gt; <span style='color: #BCBCBC;'>2</span> P1    P3    0.009<span style='text-decoration: underline;'>90</span> FALSE    
+#&gt; <span style='color: #BCBCBC;'>3</span> P1    P4    0.059<span style='text-decoration: underline;'>4</span>  TRUE     
+#&gt; <span style='color: #BCBCBC;'>4</span> P2    P3    0.009<span style='text-decoration: underline;'>90</span> FALSE    
+#&gt; <span style='color: #BCBCBC;'>5</span> P2    P4    0.059<span style='text-decoration: underline;'>4</span>  TRUE     
+#&gt; <span style='color: #BCBCBC;'>6</span> P3    P4    0.009<span style='text-decoration: underline;'>90</span> FALSE    
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -157,7 +157,19 @@ the package.</p>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Invisibly returns the dataset computed to generate the plot.</p>
+    <p>Invisibly returns a <code><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></code> object. In
+particular, the data set computed to generate the plot can be retrieved via
+<code>$data</code>. This is a <code><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></code> containing the following
+variables:</p><ul>
+<li><p><code>V1</code>: the x-coordinate of each observation in the plane,</p></li>
+<li><p><code>V2</code>: the y-coordinate of each observation in the plane,</p></li>
+<li><p><code>Label</code>: the sample membership of each observation,</p></li>
+<li><p><code>Representation</code>: the type of matrix representation used to manipulate each
+observation,</p></li>
+<li><p><code>Distance</code>: the distance used to measure how far each observation is from
+the others.</p></li>
+</ul>
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='nvd.html'>nvd</a></span><span class='op'>(</span><span class='st'>"smallworld"</span>, <span class='fl'>10</span><span class='op'>)</span>
