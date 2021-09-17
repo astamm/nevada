@@ -21,7 +21,7 @@ statistical units that are networks themselves. The package provides a
 set of matrix representations for networks so that network-valued data
 can be transformed into matrix-valued data. Subsequently, a number of
 distances between matrices is provided as well to quantify how far two
-networks are from each other and a several test statistics are proposed
+networks are from each other and several test statistics are proposed
 for testing equality in distribution between samples of networks using
 exact permutation testing procedures. The permutation scheme is carried
 out by the [**flipr**](https://astamm.github.io/flipr/) package which
@@ -29,22 +29,7 @@ also provides a number of test statistics based on inter-point distances
 that play nicely with network-valued data. The implementation is largely
 made in C++ and the matrix of inter- and intra-sample distances is
 pre-computed, which alleviates the computational burden often associated
-with permutation tests. In details:
-
--   the `repr_*()` functions return the chosen matrix representation of
-    the input graph,
--   the `dist_*()` functions return the chosen distance between two
-    networks,
--   the `stat_*()` functions return the value of the chosen test
-    statistic,
--   the `test2_global()` function returns the p-value of a permutation
-    test in which the null hypothesis is that the two samples come from
-    the same distribution of networks,
--   the `power2()` function returns a Monte-Carlo estimate of the power
-    of the test in some specific scenarios.
-
-See the vignette *NEtwork-VAlued Data Analysis* for the details of each
-function.
+with permutation tests.
 
 ## Installation
 
@@ -74,6 +59,7 @@ Fisher-like statistics based on inter-point distances to summarize
 information and perform the permutation test.
 
 ``` r
+set.seed(123)
 n <- 10L
 x <- nevada::nvd("smallworld", n)
 y <- nevada::nvd("pa", n)
@@ -110,11 +96,11 @@ $intra
 # A tibble: 5 × 3
   E     pvalue truncated
   <chr>  <dbl> <lgl>    
-1 P1     0.101 TRUE     
-2 P2     0.101 TRUE     
-3 P3     0.101 TRUE     
-4 P4     0.101 TRUE     
-5 P5     0.101 TRUE     
+1 P1     0.549 TRUE     
+2 P2     0.549 TRUE     
+3 P3     0.549 TRUE     
+4 P4     0.549 TRUE     
+5 P5     0.549 TRUE     
 
 $inter
 # A tibble: 10 × 4
@@ -155,7 +141,7 @@ question:
 ``` r
 t2 <- nevada::test2_global(x, y, seed = 1234)
 t2$pvalue
-[1] 0.5824149
+[1] 0.2257715
 ```
 
 The p-value is larger than 5% or even 10%, leading us to failing to

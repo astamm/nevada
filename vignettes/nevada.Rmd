@@ -141,7 +141,7 @@ In [**nevada**](https://astamm.github.io/nevada), this distance can be computed 
 
 ### Computing a matrix of pairwise distances for an object of class `nvd`
 
-It alleviates the computational burden of permutation testing to pre-compute the matrix of pairwise distances for samples of networks. This is why [**nevada**](https://astamm.github.io/nevada) provides the convenient [`dist_nvd()`](https://astamm.github.io/nevada/reference/dist_nvd.html) function which does exactly that for an object of class `nvd`.
+Pre-computation of the matrix of pairwise distances for samples of networks alleviates the computational burden of permutation testing. This is why [**nevada**](https://astamm.github.io/nevada) provides the convenient [`dist_nvd()`](https://astamm.github.io/nevada/reference/dist_nvd.html) function which does exactly that for an object of class `nvd`.
 
 ```{r}
 x <- nvd(model = "gnp", n = 3)
@@ -150,11 +150,25 @@ dist_nvd(x, representation = "laplacian", distance = "hamming")
 
 ## Test statistics
 
-The nevada package has been designed to work well with the flipr package, which handles the permutation scheme once suitable representation, distance and test statistics have been chosen. The most efficient way to two-sample testing with network-valued data pertains to use statistics based on inter-point distances, that is pairwise distances between observations.
+The [**nevada**](https://astamm.github.io/nevada) package has been designed to work well with the [**flipr**](https://astamm.github.io/flipr/) package, which handles the permutation scheme once suitable representation, distance and test statistics have been chosen. The most efficient way to two-sample testing with network-valued data pertains to use statistics based on inter-point distances, that is pairwise distances between observations.
 
-There has been a number of test statistics along this line that have been proposed in the literature, including ours [@lovato2020]. As these test statistics rely on inter-point distances, they are not specific to network-valued data. As such, they can be found in flipr. We adopt the naming convention that a test statistic function shall start with the prefix `stat_`. All statistics based on inter-point distances are named with the suffix `_ip`.
+### Available statistics
 
-In nevada, there are also 3 statistics proposed in @chen2018weighted that are based on a similarity graph built on top of the distance matrix:
+#### From [**flipr**](https://astamm.github.io/flipr/)
+
+A number of test statistics along this line have been proposed in the literature, including ours [@lovato2020]. As these test statistics rely on inter-point distances, they are not specific to network-valued data. As such, they can be found in [**flipr**](https://astamm.github.io/flipr/). We adopt the naming convention that a test statistic function shall start with the prefix `stat_`. All statistics based on inter-point distances are named with the suffix `_ip`. Here is the list of test statistics based on inter-point distances that are currently available in [**flipr**](https://astamm.github.io/flipr/):
+
+- [`stat_student_ip()`](https://astamm.github.io/flipr/reference/two-sample-stats.html) and its alias `stat_t_ip()` implement a Student-like test statistic based on inter-point distances proposed by @lovato2020;
+- [`stat_fisher_ip()`](https://astamm.github.io/flipr/reference/two-sample-stats.html) and its alias `stat_f_ip()` implement a Fisher-like test statistic based on inter-point distances proposed by @lovato2020;
+- [`stat_bg_ip()`](https://astamm.github.io/flipr/reference/two-sample-stats.html) implements the statistic proposed by @biswas2014nonparametric;
+- [`stat_energy_ip()`](https://astamm.github.io/flipr/reference/two-sample-stats.html) implements the class of energy-based statistics as proposed by @szekely2013energy;
+- [`stat_cq_ip()`](https://astamm.github.io/flipr/reference/two-sample-stats.html) implements the statistic proposed by @chen2010two;
+- [`stat_mod_ip()`](https://astamm.github.io/flipr/reference/two-sample-stats.html) implements a statistic that computes the mean of inter-point distances;
+- [`stat_dom_ip()`](https://astamm.github.io/flipr/reference/two-sample-stats.html) implements a statistic that computes the distance between the medoids of the two samples, possibly standardized by the pooled corresponding variances.
+
+#### From [**nevada**](https://astamm.github.io/nevada)
+
+There are also 3 statistics proposed in @chen2018weighted that are based on a similarity graph built on top of the distance matrix:
 
 - [`stat_original_edge_count()`](https://astamm.github.io/nevada/reference/statistics.html),
 - [`stat_generalized_edge_count()`](https://astamm.github.io/nevada/reference/statistics.html),
@@ -165,47 +179,104 @@ There are also Student-like statistics available only for Frobenius distance for
 - [`stat_student_euclidean()`](https://astamm.github.io/nevada/reference/statistics.html),
 - [`stat_welch_euclidean()`](https://astamm.github.io/nevada/reference/statistics.html).
 
+#### Write your own test statistic function
+
+In addition to the test statistic functions already implemented in [**flipr**](https://astamm.github.io/flipr/) and [**nevada**](https://astamm.github.io/nevada), you can also implement your own function. Test statistic functions compatible with [**flipr**](https://astamm.github.io/flipr/) should have at least two mandatory input arguments:
+
+- `data` which is either a concatenated list of size $n_x + n_y$ regrouping the data points of both samples or a distance matrix of size $(n_x + n_y) \times (n_x + n_y)$ stored as an object of class `dist`.
+- `indices1` which is an integer vector of size $n_x$ storing the indices of the data points belonging to the first sample in the current permuted version of the data.
+
+The [**flipr**](https://astamm.github.io/flipr/) package provides a helper function `use_stat(nsamples = 2, stat_name = )` which makes it easy for users to create their own test statistic ready to be used by [**nevada**](https://astamm.github.io/nevada). This function creates and saves a `.R` file in the `R/` folder of the current working directory and populates it with the following template:
+```{r, eval=FALSE}
+#' Test Statistic for the Two-Sample Problem
+#'
+#' This function computes the test statistic...
+#'
+#' @param data A list storing the concatenation of the two samples from which
+#'   the user wants to make inference. Alternatively, a distance matrix stored
+#'   in an object of class \code{\link[stats]{dist}} of pairwise distances
+#'   between data points.
+#' @param indices1 An integer vector that contains the indices of the data
+#'   points belong to the first sample in the current permuted version of the
+#'   data.
+#'
+#' @return A numeric value evaluating the desired test statistic.
+#' @export
+#'
+#' @examples
+#' # TO BE DONE BY THE DEVELOPER OF THE PACKAGE
+stat_{{{name}}} <- function(data, indices1) {
+  n <- if (inherits(data, "dist"))
+    attr(data, "Size")
+  else if (inherits(data, "list"))
+    length(data)
+  else
+    stop("The `data` input should be of class either list or dist.")
+
+  indices2 <- seq_len(n)[-indices1]
+
+  x <- data[indices1]
+  y <- data[indices2]
+
+  # Here comes the code that computes the desired test
+  # statistic from input samples stored in lists x and y
+
+}
+```
+
+For instance, a [**flipr**](https://astamm.github.io/flipr/)-compatible version of the $t$-statistic with pooled variance will look like:
+```{r, eval=FALSE}
+stat_student <- function(data, indices1) {
+  n <- if (inherits(data, "dist"))
+    attr(data, "Size")
+  else if (inherits(data, "list"))
+    length(data)
+  else
+    stop("The `data` input should be of class either list or dist.")
+
+  indices2 <- seq_len(n)[-indices1]
+
+  x <- data[indices1]
+  y <- data[indices2]
+  
+  # Here comes the code that computes the desired test
+  # statistic from input samples stored in lists x and y
+  x <- unlist(x)
+  y <- unlist(y)
+  
+  stats::t.test(x, y, var.equal = TRUE)$statistic
+}
+```
+
+### Usage
+
+#### Naming conventions
+
 Test statistics are passed to the functions `test2_global()` and `test2_local()` via the argument `stats` which accepts a character vector in which:
 
-- statistics from nevada expected to be named without the `stat_` prefix (e.g. `"original_edge_count"` or `"student_euclideam"`).
-- statistics from flipr are expected to be named without the `stat_` prefix but adding the `flipr:` prefix (e.g., `"flipr:student_ip"`).
+- statistics from [**nevada**](https://astamm.github.io/nevada) expected to be named without the `stat_` prefix (e.g. `"original_edge_count"` or `"student_euclidean"`).
+- statistics from [**flipr**](https://astamm.github.io/flipr/) are expected to be named without the `stat_` prefix but adding the `flipr:` prefix (e.g., `"flipr:student_ip"`).
 - statistics from any other package **pkg** are expected to be named without the `stat_` prefix but adding the `pkg:` prefix.
 
 ```{r}
 x <- nvd(model = "gnp", n = 10)
-y <- nvd(model = "pa", n = 10)
+y <- nvd(model = "pa" , n = 10)
 test2_global(
   x = x, 
   y = y, 
   representation = "laplacian", 
   distance = "frobenius", 
-  stats = c("flipr:student_ip", "flipr:fisher_ip")
-)
+  stats = c("flipr:student_ip", "flipr:fisher_ip"), 
+  seed = 1234
+)$pvalue
 ```
 
-The package `nevada` allows to use two different test statistics. The
-first one is given by the distance between the restricted Frechet means
-of the two samples. The Frechet mean of a set of objects is a sort of
-mean element and this concept of average has been widely used in the
-literature. The second test statistic is given by the mean of the
-distances between all the elements of the first sample and those of the
-second one.
+Note that you can also refer to test statistic function from [**nevada**](https://astamm.github.io/nevada) using the naming `"nevada:original_edge_count"` as you would do for test statistics from [**flipr**](https://astamm.github.io/flipr/). This is mandatory for instance if you have not yet loaded [**nevada**](https://astamm.github.io/nevada) in your environment via `library(nevada)`.
 
-It is possible to obtain the values of the test statistics using the
-functions `stat_*()`.
+#### Using multiple test statistics
 
-## The permutational framework
+In permutation testing, the choice of a test statistic determines the alternative hypothesis, while the null hypothesis is always that the distributions that generated the observed samples are the same. This means that if you were to use the Student statistic `stat_student_ip()` for instance, then what you would be actually testing is whether the means of the distributions are different. If you'd rather be sensitive to differences in variances of the distributions, then you should go with the Fisher statistic `stat_fisher_ip()`.
 
-The hypothesis is tested in a permutational framework. The null
-distribution is obtained by permuting the labels of the subjects of the
-two populations. The exhaustive list of all possible permutations is
-used if its length is smaller than either the user-defined number of
-random permutations requested or the number of permutations required for
-achieving a user-defined p-value resolution. Otherwise, the p-value is
-estimated via Monte-Carlo simulations.
-
-The function `network_test2p()` returns the value of the statistic for
-the original two samples and the p-value of the resulting permutation
-test.
+You can also be sensitive to multiple aspects of a distribution when testing via the permutation framework. This is achieved under the hood by the [**flipr**](https://astamm.github.io/flipr/) package which implements the so-called *non-parametric combination* (NPC) approach proposed by @pesarin2010permutation when you provide more than one test statistics in the `stats` argument. You can read [this article](https://astamm.github.io/flipr/articles/alternative.html) to know more about its implementation in [**flipr**](https://astamm.github.io/flipr/). The bottom line is that, for example, you can choose both the Student and Fisher statistics to test simultaneously for differences in mean and in variance.
 
 ## References
