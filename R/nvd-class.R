@@ -75,7 +75,7 @@ nvd <- function(model = "smallworld",
 #' as_nvd(nvd("smallworld", 10))
 as_nvd <- function(obj) {
   if (!is.list(obj))
-    stop("Input should be a list.")
+    cli::cli_abort("Input should be a list.")
 
   # check that entries are igraph objects
   input_ok <- TRUE
@@ -87,7 +87,7 @@ as_nvd <- function(obj) {
   }
 
   if (!input_ok)
-    stop("List elements should be igraph objects.")
+    cli::cli_abort("List elements should be igraph objects.")
 
   class(obj) <- c("nvd", "list")
   obj
@@ -149,7 +149,7 @@ is_nvd <- function(obj) {
 #' )
 #' sim <- sample2_sbm(n, 68, p1, c(17, 17, 17, 17), p2, seed = 1234)
 sample2_sbm <- function(n, nv, p1, b1, p2 = p1, b2 = b1, seed = NULL) {
-  set.seed(seed)
+  withr::local_seed(seed)
   sim <- n %>%
     purrr::rerun(
       x = igraph::sample_sbm(nv, p1, b1),

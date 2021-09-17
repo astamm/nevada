@@ -97,8 +97,8 @@ test2_global <- function(x, y,
     return(y)
   }
 
-  stat_functions <- stats |>
-    strsplit(split = ":") |>
+  stat_functions <- stats %>%
+    strsplit(split = ":") %>%
     purrr::map(~ {
       if (length(.x) == 1) {
         s <- paste0("stat_", .x)

@@ -19,84 +19,169 @@ knitr::opts_chunk$set(
 library(nevada)
 ```
 
-In the framework of Object Oriented Data Analysis (OODA), statistical
-tools for the analysis of network-valued data are almost lacking,
-whereas data sets composed of networks are more and more increasing. The
-package `nevada` allows to test if two samples of networks came from the
-same population via two test statistics based on three possible
-mathematical representation of a network and on four different types of
-distances.
+*Network-valued data* are data in which the statistical unit is a network itself. This is the data with which we can make inference on *populations of networks* from *samples of networks*. The [**nevada**](https://astamm.github.io/nevada) package proposes a specific `nvd` class to handle network-valued data. Inference from such samples is made possible though a 4-step procedure:
 
-## Introduction
+- Choose a suitable representation of your samples of networks.
+- Choose a suitable distance to embed your representation into a nice metric space.
+- Choose one or more test statistics to define your alternative hypothesis.
+- Compute an empirical permutation-based approximation of the null distribution.
 
-A network $G=(V,E)$ is a complex object consisting of a set $V$ of
-vertices whose relationships are represented by the edges in the set
-$E$. The package `nevada` contains some functions that allow not only to
-perform the test, but also to carry out all the intermediate steps that
-lead to the test itself. The theoretical details are contained in
-@lovato2020, as well as simulations and application to real data. The
-logical path followed in @lovato2020 can be summarized as follow. First
-of all, choose a matrix representation for the networks and define some
-distances between two networks. Then, define two different test
-statistics and introduce the permutation framework to perform the test.
-The local version of the test has been proposed in @lovato2021.
+The package focuses for now on the two-sample testing problem and assumes that all networks from both samples share the same node structure.
+
+There are two types of questions that one can ask:
+
+1. Is there a difference between the distributions that generated the two observed samples?
+2. Can we localize the differences between the distributions on the node structure?
+
+The [**nevada**](https://astamm.github.io/nevada) package offers a dedicated function for answering each of these two questions:
+
+- [`test2_global()`](https://astamm.github.io/nevada/reference/test2_global.html); for more details, please see @lovato2020,
+- [`test2_local()`](https://astamm.github.io/nevada/reference/test2_local.html); for more details, please see @lovato2021.
+
+## The `nvd` class for network-valued data
+
+In [**nevada**](https://astamm.github.io/nevada), network-valued data are stored in an object of class `nvd`, which is basically a list of [**igraph**](https://igraph.org/r/) objects. We provide:
+
+- a constructor [`nvd()`](https://astamm.github.io/nevada/reference/nvd.html) which allows the user to simulate samples of networks using some of the popular models from [**igraph**](https://igraph.org/r/). Currently, one can use:
+
+  - the stochastic block model,
+  - the $k$-regular model,
+  - the GNP model,
+  - the small-world model,
+  - the PA model,
+  - the Poisson model,
+  - the binomial model.
+
+The constructor simulates networks with 25 nodes.
+
+- a function [`as_nvd()`](https://astamm.github.io/nevada/reference/as_nvd.html) to coerce lists of [**igraph**](https://igraph.org/r/) objects into an object of class `nvd`.
 
 ## Network representation
 
-There are three possible matrix representations for a network. Let $G$
+There are currently 3 possible matrix representations for a network. Let $G$
 be a network with $N$ nodes.
 
-**Adjacency matrix** A $N$ x $N$ matrix $W$ is an adjacency matrix for
+### Adjacency matrix
+
+A $N$ x $N$ matrix $W$ is an *adjacency matrix* for
 $G$ if element $W_{ij}$ indicates if there is an edge between vertex $i$
 and vertex $j$: $$
 W_{ij}=
 \begin{cases}
-w_{i,j}, \quad if \quad (i,j) \in E \quad with \quad weight \quad  w_{i,j}\\
-0, \quad if \quad (i,j) \not \in E
+w_{i,j}, & \mbox{if } (i,j) \in E \mbox{ with weight } w_{i,j}\\
+0, & \mbox{otherwise.}
 \end{cases}
 $$
 
-**Laplacian matrix** The Laplacian matrix $L$ of the network $G$ is
-defined in the following way: $$
-L=D(W)-W
-$$ where $D(W)$ is the diagonal matrix whose $\{ i,i \}$ element is the
+In [**nevada**](https://astamm.github.io/nevada), this representation can be achieved with [`repr_adjacency()`](https://astamm.github.io/nevada/reference/representations.html).
+
+### Laplacian matrix
+
+The *Laplacian matrix* $L$ of the network $G$ is
+defined in the following way:
+
+$$ L = D(W) - W, $$ 
+where $D(W)$ is the diagonal matrix whose $i$-*th* diagonal element is the
 degree of vertex $i$.
 
-**Modularity matrix** The elements of the modularity matrix $B$ are
-given by \begin{equation*}
-    B_{ij} = W_{ij} - \frac{d_i d_j}{2m}
-\end{equation*} where $d_i$ and $d_j$ are the degree of vertices $i$ and
-$j$, respectively, and $m$ is the total number of edges in the network.
+In [**nevada**](https://astamm.github.io/nevada), this representation can be achieved with [`repr_laplacian()`](https://astamm.github.io/nevada/reference/representations.html).
 
-The functions `repr_*()`, having as input an igraph object, return the
-chosen representation.
+### Modularity matrix
+
+The elements of the *modularity matrix* $B$ are
+given by
+
+$$ B_{ij} = W_{ij} - \frac{d_i d_j}{2m}, $$
+where $d_i$ and $d_j$ are the degrees of vertices $i$ and
+$j$ respectively, and $m$ is the total number of edges in the network.
+
+In [**nevada**](https://astamm.github.io/nevada), this representation can be achieved with [`repr_modularity()`](https://astamm.github.io/nevada/reference/representations.html).
+
+### Choosing a representation for an object of class `nvd`
+
+Instead of going through every single network in a sample to make its representation, [**nevada**](https://astamm.github.io/nevada) provides the [`repr_nvd()`](https://astamm.github.io/nevada/reference/repr_nvd.html) function which does exactly that for an object of class `nvd`.
+
+```{r}
+x <- nvd(model = "gnp", n = 3)
+repr_nvd(x, representation = "laplacian")
+```
 
 ## Distances between networks
 
-In the package `nevada` it is possible to choose which distance consider
-in the analysis. Let $G$ and $H$ be two networks with $N$ nodes each and
-suppose that $X$ and $Y$ are the matrix representations of $G$ and $H$,
-respectively. The user can choose between the following distances:
+It is possible to choose which distance consider in the analysis. Let $G$ and $H$ be two networks with $N$ nodes each and suppose that $X$ and $Y$ are the matrix representations of $G$ and $H$, respectively. The user can currently choose among 4 distances: Hamming, Frobenius, spectral and root-Euclidean.
 
--   **Hamming distance**
-    $\rho_H(G,H)=\frac{1}{N(N-1)}\sum_{i \neq j}^N \bigl\arrowvert X_{i,j}-Y_{i,j} \bigr\arrowvert$
--   **Frobenius distance**
-    $\rho_F(G,H)=\sum_{i \neq j}^N \bigl ( X_{i,j}-Y_{i,j} \bigr )^2$
--   **Spectral distance**
-    $\rho_S(G,H)=\sum_{i \neq j}^N \bigl ( \Lambda^X_{i,j}-\Lambda^Y_{i,j} \bigr )^2$,
-    where $\Lambda^X$ and $\Lambda^Y$ are the diagonal matrices with
-    eigenvalues on the diagonal given by the spectral decomposition of
-    the matrix representations of $G$ and $H$,
--   **Root Euclidean distance**
-    $\rho_{RE}(G,H)=\rho_F \bigl (\sqrt{L_X}, \sqrt{L_Y}\bigr )$, where
-    $\sqrt S=U\sqrt{\Lambda} U^T$ and
-    $(\sqrt\Lambda)_{i,j}=\sqrt{\Lambda_{i,j}}$, where $S=U\Lambda U^T$
-    from the spectral decomposition of $S$.
+### Hamming distance
 
-The functions `dist_*()` return the chosen distance between two networks
-and moreover request the choice of the matrix representation as input.
+$$ \rho_H(G,H)=\frac{1}{N(N-1)}\sum_{i \neq j}^N \bigl\arrowvert X_{i,j}-Y_{i,j} \bigr\arrowvert. $$
+
+In [**nevada**](https://astamm.github.io/nevada), this distance can be computed with [`dist_hamming()`](https://astamm.github.io/nevada/reference/distances.html).
+
+### Frobenius distance
+
+$$ \rho_F(G,H) = \left\| X - Y \right\|_F^2 = \sum_{i \neq j}^N \bigl ( X_{i,j}-Y_{i,j} \bigr )^2. $$
+
+In [**nevada**](https://astamm.github.io/nevada), this distance can be computed with [`dist_frobenius()`](https://astamm.github.io/nevada/reference/distances.html).
+
+### Spectral distance
+
+$$ \rho_S(G,H)=\sum_{i \neq j}^N \bigl ( \Lambda^X_{i,j}-\Lambda^Y_{i,j} \bigr )^2, $$
+where $\Lambda^X$ and $\Lambda^Y$ are the diagonal matrices with
+eigenvalues on the diagonal given by the spectral decomposition of
+the matrix representations of $G$ and $H$.
+
+In [**nevada**](https://astamm.github.io/nevada), this distance can be computed with [`dist_spectral()`](https://astamm.github.io/nevada/reference/distances.html).
+
+### Root Euclidean distance
+
+$$ \rho_{RE}(G,H) = \left\| X^{1/2} - Y^{1/2} \right\|_F^2. $$
+
+Note that this distance is not compatible with all matrix representations as it requires that the representation be semi-positive definite.
+
+In [**nevada**](https://astamm.github.io/nevada), this distance can be computed with [`dist_root_euclidean()`](https://astamm.github.io/nevada/reference/distances.html).
+
+### Computing a matrix of pairwise distances for an object of class `nvd`
+
+It alleviates the computational burden of permutation testing to pre-compute the matrix of pairwise distances for samples of networks. This is why [**nevada**](https://astamm.github.io/nevada) provides the convenient [`dist_nvd()`](https://astamm.github.io/nevada/reference/dist_nvd.html) function which does exactly that for an object of class `nvd`.
+
+```{r}
+x <- nvd(model = "gnp", n = 3)
+dist_nvd(x, representation = "laplacian", distance = "hamming")
+```
 
 ## Test statistics
+
+The nevada package has been designed to work well with the flipr package, which handles the permutation scheme once suitable representation, distance and test statistics have been chosen. The most efficient way to two-sample testing with network-valued data pertains to use statistics based on inter-point distances, that is pairwise distances between observations.
+
+There has been a number of test statistics along this line that have been proposed in the literature, including ours [@lovato2020]. As these test statistics rely on inter-point distances, they are not specific to network-valued data. As such, they can be found in flipr. We adopt the naming convention that a test statistic function shall start with the prefix `stat_`. All statistics based on inter-point distances are named with the suffix `_ip`.
+
+In nevada, there are also 3 statistics proposed in @chen2018weighted that are based on a similarity graph built on top of the distance matrix:
+
+- [`stat_original_edge_count()`](https://astamm.github.io/nevada/reference/statistics.html),
+- [`stat_generalized_edge_count()`](https://astamm.github.io/nevada/reference/statistics.html),
+- [`stat_weighted_edge_count()`](https://astamm.github.io/nevada/reference/statistics.html).
+
+There are also Student-like statistics available only for Frobenius distance for which we can easily compute the Fréchet mean. These are:
+
+- [`stat_student_euclidean()`](https://astamm.github.io/nevada/reference/statistics.html),
+- [`stat_welch_euclidean()`](https://astamm.github.io/nevada/reference/statistics.html).
+
+Test statistics are passed to the functions `test2_global()` and `test2_local()` via the argument `stats` which accepts a character vector in which:
+
+- statistics from nevada expected to be named without the `stat_` prefix (e.g. `"original_edge_count"` or `"student_euclideam"`).
+- statistics from flipr are expected to be named without the `stat_` prefix but adding the `flipr:` prefix (e.g., `"flipr:student_ip"`).
+- statistics from any other package **pkg** are expected to be named without the `stat_` prefix but adding the `pkg:` prefix.
+
+```{r}
+x <- nvd(model = "gnp", n = 10)
+y <- nvd(model = "pa", n = 10)
+test2_global(
+  x = x, 
+  y = y, 
+  representation = "laplacian", 
+  distance = "frobenius", 
+  stats = c("flipr:student_ip", "flipr:fisher_ip")
+)
+```
 
 The package `nevada` allows to use two different test statistics. The
 first one is given by the distance between the restricted Frechet means
