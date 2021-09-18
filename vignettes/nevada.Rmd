@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 library(nevada)
 ```
 
-*Network-valued data* are data in which the statistical unit is a network itself. This is the data with which we can make inference on *populations of networks* from *samples of networks*. The [**nevada**](https://astamm.github.io/nevada) package proposes a specific `nvd` class to handle network-valued data. Inference from such samples is made possible though a 4-step procedure:
+*Network-valued data* are data in which the statistical unit is a network itself. This is the data with which we can make inference on *populations of networks* from *samples of networks*. The [**nevada**](https://astamm.github.io/nevada/) package proposes a specific `nvd` class to handle network-valued data. Inference from such samples is made possible though a 4-step procedure:
 
 - Choose a suitable representation of your samples of networks.
 - Choose a suitable distance to embed your representation into a nice metric space.
@@ -33,14 +33,14 @@ There are two types of questions that one can ask:
 1. Is there a difference between the distributions that generated the two observed samples?
 2. Can we localize the differences between the distributions on the node structure?
 
-The [**nevada**](https://astamm.github.io/nevada) package offers a dedicated function for answering each of these two questions:
+The [**nevada**](https://astamm.github.io/nevada/) package offers a dedicated function for answering each of these two questions:
 
 - [`test2_global()`](https://astamm.github.io/nevada/reference/test2_global.html); for more details, please see @lovato2020,
 - [`test2_local()`](https://astamm.github.io/nevada/reference/test2_local.html); for more details, please see @lovato2021.
 
 ## The `nvd` class for network-valued data
 
-In [**nevada**](https://astamm.github.io/nevada), network-valued data are stored in an object of class `nvd`, which is basically a list of [**igraph**](https://igraph.org/r/) objects. We provide:
+In [**nevada**](https://astamm.github.io/nevada/), network-valued data are stored in an object of class `nvd`, which is basically a list of [**igraph**](https://igraph.org/r/) objects. We provide:
 
 - a constructor [`nvd()`](https://astamm.github.io/nevada/reference/nvd.html) which allows the user to simulate samples of networks using some of the popular models from [**igraph**](https://igraph.org/r/). Currently, one can use:
 
@@ -73,7 +73,7 @@ w_{i,j}, & \mbox{if } (i,j) \in E \mbox{ with weight } w_{i,j}\\
 \end{cases}
 $$
 
-In [**nevada**](https://astamm.github.io/nevada), this representation can be achieved with [`repr_adjacency()`](https://astamm.github.io/nevada/reference/representations.html).
+In [**nevada**](https://astamm.github.io/nevada/), this representation can be achieved with [`repr_adjacency()`](https://astamm.github.io/nevada/reference/representations.html).
 
 ### Laplacian matrix
 
@@ -84,7 +84,7 @@ $$ L = D(W) - W, $$
 where $D(W)$ is the diagonal matrix whose $i$-*th* diagonal element is the
 degree of vertex $i$.
 
-In [**nevada**](https://astamm.github.io/nevada), this representation can be achieved with [`repr_laplacian()`](https://astamm.github.io/nevada/reference/representations.html).
+In [**nevada**](https://astamm.github.io/nevada/), this representation can be achieved with [`repr_laplacian()`](https://astamm.github.io/nevada/reference/representations.html).
 
 ### Modularity matrix
 
@@ -95,11 +95,11 @@ $$ B_{ij} = W_{ij} - \frac{d_i d_j}{2m}, $$
 where $d_i$ and $d_j$ are the degrees of vertices $i$ and
 $j$ respectively, and $m$ is the total number of edges in the network.
 
-In [**nevada**](https://astamm.github.io/nevada), this representation can be achieved with [`repr_modularity()`](https://astamm.github.io/nevada/reference/representations.html).
+In [**nevada**](https://astamm.github.io/nevada/), this representation can be achieved with [`repr_modularity()`](https://astamm.github.io/nevada/reference/representations.html).
 
 ### Choosing a representation for an object of class `nvd`
 
-Instead of going through every single network in a sample to make its representation, [**nevada**](https://astamm.github.io/nevada) provides the [`repr_nvd()`](https://astamm.github.io/nevada/reference/repr_nvd.html) function which does exactly that for an object of class `nvd`.
+Instead of going through every single network in a sample to make its representation, [**nevada**](https://astamm.github.io/nevada/) provides the [`repr_nvd()`](https://astamm.github.io/nevada/reference/repr_nvd.html) function which does exactly that for an object of class `nvd`.
 
 ```{r}
 x <- nvd(model = "gnp", n = 3)
@@ -114,13 +114,13 @@ It is possible to choose which distance consider in the analysis. Let $G$ and $H
 
 $$ \rho_H(G,H)=\frac{1}{N(N-1)}\sum_{i \neq j}^N \bigl\arrowvert X_{i,j}-Y_{i,j} \bigr\arrowvert. $$
 
-In [**nevada**](https://astamm.github.io/nevada), this distance can be computed with [`dist_hamming()`](https://astamm.github.io/nevada/reference/distances.html).
+In [**nevada**](https://astamm.github.io/nevada/), this distance can be computed with [`dist_hamming()`](https://astamm.github.io/nevada/reference/distances.html).
 
 ### Frobenius distance
 
 $$ \rho_F(G,H) = \left\| X - Y \right\|_F^2 = \sum_{i \neq j}^N \bigl ( X_{i,j}-Y_{i,j} \bigr )^2. $$
 
-In [**nevada**](https://astamm.github.io/nevada), this distance can be computed with [`dist_frobenius()`](https://astamm.github.io/nevada/reference/distances.html).
+In [**nevada**](https://astamm.github.io/nevada/), this distance can be computed with [`dist_frobenius()`](https://astamm.github.io/nevada/reference/distances.html).
 
 ### Spectral distance
 
@@ -129,7 +129,7 @@ where $\Lambda^X$ and $\Lambda^Y$ are the diagonal matrices with
 eigenvalues on the diagonal given by the spectral decomposition of
 the matrix representations of $G$ and $H$.
 
-In [**nevada**](https://astamm.github.io/nevada), this distance can be computed with [`dist_spectral()`](https://astamm.github.io/nevada/reference/distances.html).
+In [**nevada**](https://astamm.github.io/nevada/), this distance can be computed with [`dist_spectral()`](https://astamm.github.io/nevada/reference/distances.html).
 
 ### Root Euclidean distance
 
@@ -137,11 +137,11 @@ $$ \rho_{RE}(G,H) = \left\| X^{1/2} - Y^{1/2} \right\|_F^2. $$
 
 Note that this distance is not compatible with all matrix representations as it requires that the representation be semi-positive definite.
 
-In [**nevada**](https://astamm.github.io/nevada), this distance can be computed with [`dist_root_euclidean()`](https://astamm.github.io/nevada/reference/distances.html).
+In [**nevada**](https://astamm.github.io/nevada/), this distance can be computed with [`dist_root_euclidean()`](https://astamm.github.io/nevada/reference/distances.html).
 
 ### Computing a matrix of pairwise distances for an object of class `nvd`
 
-Pre-computation of the matrix of pairwise distances for samples of networks alleviates the computational burden of permutation testing. This is why [**nevada**](https://astamm.github.io/nevada) provides the convenient [`dist_nvd()`](https://astamm.github.io/nevada/reference/dist_nvd.html) function which does exactly that for an object of class `nvd`.
+Pre-computation of the matrix of pairwise distances for samples of networks alleviates the computational burden of permutation testing. This is why [**nevada**](https://astamm.github.io/nevada/) provides the convenient [`dist_nvd()`](https://astamm.github.io/nevada/reference/dist_nvd.html) function which does exactly that for an object of class `nvd`.
 
 ```{r}
 x <- nvd(model = "gnp", n = 3)
@@ -150,7 +150,7 @@ dist_nvd(x, representation = "laplacian", distance = "hamming")
 
 ## Test statistics
 
-The [**nevada**](https://astamm.github.io/nevada) package has been designed to work well with the [**flipr**](https://astamm.github.io/flipr/) package, which handles the permutation scheme once suitable representation, distance and test statistics have been chosen. The most efficient way to two-sample testing with network-valued data pertains to use statistics based on inter-point distances, that is pairwise distances between observations.
+The [**nevada**](https://astamm.github.io/nevada/) package has been designed to work well with the [**flipr**](https://astamm.github.io/flipr/) package, which handles the permutation scheme once suitable representation, distance and test statistics have been chosen. The most efficient way to two-sample testing with network-valued data pertains to use statistics based on inter-point distances, that is pairwise distances between observations.
 
 ### Available statistics
 
@@ -166,7 +166,7 @@ A number of test statistics along this line have been proposed in the literature
 - [`stat_mod_ip()`](https://astamm.github.io/flipr/reference/two-sample-stats.html) implements a statistic that computes the mean of inter-point distances;
 - [`stat_dom_ip()`](https://astamm.github.io/flipr/reference/two-sample-stats.html) implements a statistic that computes the distance between the medoids of the two samples, possibly standardized by the pooled corresponding variances.
 
-#### From [**nevada**](https://astamm.github.io/nevada)
+#### From [**nevada**](https://astamm.github.io/nevada/)
 
 There are also 3 statistics proposed in @chen2018weighted that are based on a similarity graph built on top of the distance matrix:
 
@@ -181,12 +181,12 @@ There are also Student-like statistics available only for Frobenius distance for
 
 #### Write your own test statistic function
 
-In addition to the test statistic functions already implemented in [**flipr**](https://astamm.github.io/flipr/) and [**nevada**](https://astamm.github.io/nevada), you can also implement your own function. Test statistic functions compatible with [**flipr**](https://astamm.github.io/flipr/) should have at least two mandatory input arguments:
+In addition to the test statistic functions already implemented in [**flipr**](https://astamm.github.io/flipr/) and [**nevada**](https://astamm.github.io/nevada/), you can also implement your own function. Test statistic functions compatible with [**flipr**](https://astamm.github.io/flipr/) should have at least two mandatory input arguments:
 
 - `data` which is either a concatenated list of size $n_x + n_y$ regrouping the data points of both samples or a distance matrix of size $(n_x + n_y) \times (n_x + n_y)$ stored as an object of class `dist`.
 - `indices1` which is an integer vector of size $n_x$ storing the indices of the data points belonging to the first sample in the current permuted version of the data.
 
-The [**flipr**](https://astamm.github.io/flipr/) package provides a helper function `use_stat(nsamples = 2, stat_name = )` which makes it easy for users to create their own test statistic ready to be used by [**nevada**](https://astamm.github.io/nevada). This function creates and saves a `.R` file in the `R/` folder of the current working directory and populates it with the following template:
+The [**flipr**](https://astamm.github.io/flipr/) package provides a helper function `use_stat(nsamples = 2, stat_name = )` which makes it easy for users to create their own test statistic ready to be used by [**nevada**](https://astamm.github.io/nevada/). This function creates and saves a `.R` file in the `R/` folder of the current working directory and populates it with the following template:
 ```{r, eval=FALSE}
 #' Test Statistic for the Two-Sample Problem
 #'
@@ -254,7 +254,7 @@ stat_student <- function(data, indices1) {
 
 Test statistics are passed to the functions `test2_global()` and `test2_local()` via the argument `stats` which accepts a character vector in which:
 
-- statistics from [**nevada**](https://astamm.github.io/nevada) expected to be named without the `stat_` prefix (e.g. `"original_edge_count"` or `"student_euclidean"`).
+- statistics from [**nevada**](https://astamm.github.io/nevada/) expected to be named without the `stat_` prefix (e.g. `"original_edge_count"` or `"student_euclidean"`).
 - statistics from [**flipr**](https://astamm.github.io/flipr/) are expected to be named without the `stat_` prefix but adding the `flipr:` prefix (e.g., `"flipr:student_ip"`).
 - statistics from any other package **pkg** are expected to be named without the `stat_` prefix but adding the `pkg:` prefix.
 
@@ -271,7 +271,7 @@ test2_global(
 )$pvalue
 ```
 
-Note that you can also refer to test statistic function from [**nevada**](https://astamm.github.io/nevada) using the naming `"nevada:original_edge_count"` as you would do for test statistics from [**flipr**](https://astamm.github.io/flipr/). This is mandatory for instance if you have not yet loaded [**nevada**](https://astamm.github.io/nevada) in your environment via `library(nevada)`.
+Note that you can also refer to test statistic function from [**nevada**](https://astamm.github.io/nevada/) using the naming `"nevada:original_edge_count"` as you would do for test statistics from [**flipr**](https://astamm.github.io/flipr/). This is mandatory for instance if you have not yet loaded [**nevada**](https://astamm.github.io/nevada/) in your environment via `library(nevada)`.
 
 #### Using multiple test statistics
 

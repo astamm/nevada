@@ -119,5 +119,5 @@ Currently, six scenarios of pairs of populations are implemented. Scenario 0
 allows to make sure that all our permutation tests are exact.
 }
 \examples{
-power2(R = 100, B = 100)
+power2(R = 10, B = 100, seed = 1234)
 }

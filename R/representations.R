@@ -57,7 +57,16 @@ repr_modularity <- function(network, validate = TRUE) {
     if (!igraph::is_igraph(network))
       stop("Input network should be of class igraph.")
   }
-  repr <- igraph::modularity_matrix(network, rep(1, igraph::gorder(network)))
+
+  if (length(formals(igraph::modularity_matrix)) == 3) {
+    repr <- igraph::modularity_matrix(
+      graph = network,
+      membership = rep(1, igraph::gorder(network))
+    )
+  } else {
+    repr <- igraph::modularity_matrix(network)
+  }
+
   as_modularity(repr)
 }
 

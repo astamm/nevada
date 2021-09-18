@@ -36,3 +36,62 @@ ggraph(xxx, layout = 'stress') +
   # geom_node_point(aes(size = Popularity)) +
   facet_edges(vars(id), nrow = 2) +
   theme_graph(foreground = 'steelblue', fg_text_colour = 'white')
+
+library(nevada)
+library(tidygraph)
+library(ggraph)
+n <- 10
+p1 <- matrix(
+  data = c(0.1, 0.4, 0.1, 0.4,
+           0.4, 0.4, 0.1, 0.4,
+           0.1, 0.1, 0.4, 0.4,
+           0.4, 0.4, 0.4, 0.4),
+  nrow = 4,
+  ncol = 4,
+  byrow = TRUE
+)
+p2 <- matrix(
+  data = c(0.1, 0.4, 0.4, 0.4,
+           0.4, 0.4, 0.4, 0.4,
+           0.4, 0.4, 0.1, 0.1,
+           0.4, 0.4, 0.1, 0.4),
+  nrow = 4,
+  ncol = 4,
+  byrow = TRUE
+)
+sim <- sample2_sbm(n, 68, p1, c(17, 17, 17, 17), p2, seed = 1234)
+m <- as.integer(c(rep(1, 17), rep(2, 17), rep(3, 17), rep(4, 17)))
+res <- test2_local(sim$x, sim$y, m,
+                   seed = 1234,
+                   # alpha = 0.05,
+                   B = 100)
+alpha <- 0.05
+edge_width_min <- 1 - max(res$inter$pvalue)
+edge_width_max <- 1 - min(res$inter$pvalue)
+node_width_min <- 1 - max(res$intra$pvalue)
+node_width_max <- 1 - min(res$intra$pvalue)
+g <- tbl_graph(
+  nodes = res$intra |>
+    mutate(
+      signif = pvalue <= alpha,
+      weight = 1 - pvalue,
+      weight = (weight - node_width_min) / (node_width_max - node_width_min)
+    ),
+  edges = res$inter |>
+    rename(from = E1, to = E2) |>
+    mutate(
+      signif = pvalue <= alpha,
+      weight = 1 - pvalue,
+      weight = (weight - edge_width_min) / (edge_width_max - edge_width_min)
+    ),
+  directed = FALSE,
+  node_key = "E"
+)
+
+ggraph(g, layout = 'stress') +
+  geom_edge_link(aes(width = weight, edge_colour = signif), show.legend = FALSE) +
+  geom_node_point(aes(size = weight, fill = signif), shape = 21) +
+  geom_node_text(aes(label = E), repel = TRUE) +
+  scale_size(range = c(0, 5)) +
+  scale_edge_width(range = c(0, 1)) +
+  theme_graph()

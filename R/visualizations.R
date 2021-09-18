@@ -33,8 +33,8 @@ plot.nvd <- function(x, y, ...) {
   tidyr::crossing(Representation = rchoices, Distance = dchoices) %>%
     dplyr::mutate(
       mds = purrr::map2(
-        .x = Representation,
-        .y = Distance,
+        .x = .data$Representation,
+        .y = .data$Distance,
         .f = dist_nvd,
         x = x,
         y = y
@@ -49,19 +49,19 @@ plot.nvd <- function(x, y, ...) {
     ) %>%
     tidyr::unnest(cols = .data$mds) %>%
     dplyr::mutate(
-      Representation = Representation %>%
+      Representation = .data$Representation %>%
         forcats::as_factor() %>%
         forcats::fct_relabel(capitalize),
-      Distance = Distance %>%
+      Distance = .data$Distance %>%
         forcats::as_factor() %>%
         forcats::fct_relabel(capitalize),
-      Label = forcats::as_factor(Label)
+      Label = forcats::as_factor(.data$Label)
     ) %>%
-    ggplot(aes(x = V1, y = V2, color = Label)) +
+    ggplot(aes(x = .data$V1, y = .data$V2, color = .data$Label)) +
     geom_point() +
     theme_bw() +
     facet_wrap(
-      facets = ~ Representation + Distance,
+      facets = vars(.data$Representation, .data$Distance),
       scales = "free",
       labeller = "label_both"
     ) +

@@ -48,7 +48,7 @@
 #' @export
 #'
 #' @examples
-#' power2(R = 100, B = 100)
+#' power2(R = 10, B = 100, seed = 1234)
 power2 <- function(model1 = "gnp", model2 = "k_regular",
                    n1 = 20L, n2 = 20L,
                    size1 = NULL, prob1 = NULL, size2 = NULL, prob2 = NULL,
