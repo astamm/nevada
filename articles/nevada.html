@@ -90,7 +90,7 @@
 
     
     
-<p><em>Network-valued data</em> are data in which the statistical unit is a network itself. This is the data with which we can make inference on <em>populations of networks</em> from <em>samples of networks</em>. The <a href="https://astamm.github.io/nevada"><strong>nevada</strong></a> package proposes a specific <code>nvd</code> class to handle network-valued data. Inference from such samples is made possible though a 4-step procedure:</p>
+<p><em>Network-valued data</em> are data in which the statistical unit is a network itself. This is the data with which we can make inference on <em>populations of networks</em> from <em>samples of networks</em>. The <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a> package proposes a specific <code>nvd</code> class to handle network-valued data. Inference from such samples is made possible though a 4-step procedure:</p>
 <ul>
 <li>Choose a suitable representation of your samples of networks.</li>
 <li>Choose a suitable distance to embed your representation into a nice metric space.</li>
@@ -103,7 +103,7 @@
 <li>Is there a difference between the distributions that generated the two observed samples?</li>
 <li>Can we localize the differences between the distributions on the node structure?</li>
 </ol>
-<p>The <a href="https://astamm.github.io/nevada"><strong>nevada</strong></a> package offers a dedicated function for answering each of these two questions:</p>
+<p>The <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a> package offers a dedicated function for answering each of these two questions:</p>
 <ul>
 <li>
 <a href="https://astamm.github.io/nevada/reference/test2_global.html"><code>test2_global()</code></a>; for more details, please see <span class="citation">Lovato et al. (2020)</span>,</li>
@@ -113,7 +113,7 @@
 <div id="the-nvd-class-for-network-valued-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#the-nvd-class-for-network-valued-data" class="anchor"></a>The <code>nvd</code> class for network-valued data</h2>
-<p>In <a href="https://astamm.github.io/nevada"><strong>nevada</strong></a>, network-valued data are stored in an object of class <code>nvd</code>, which is basically a list of <a href="https://igraph.org/r/"><strong>igraph</strong></a> objects. We provide:</p>
+<p>In <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a>, network-valued data are stored in an object of class <code>nvd</code>, which is basically a list of <a href="https://igraph.org/r/"><strong>igraph</strong></a> objects. We provide:</p>
 <ul>
 <li>
 <p>a constructor <a href="https://astamm.github.io/nevada/reference/nvd.html"><code>nvd()</code></a> which allows the user to simulate samples of networks using some of the popular models from <a href="https://igraph.org/r/"><strong>igraph</strong></a>. Currently, one can use:</p>
@@ -147,195 +147,195 @@ w_{i,j}, &amp; \mbox{if } (i,j) \in E \mbox{ with weight } w_{i,j}\\
 0, &amp; \mbox{otherwise.}
 \end{cases}
 \]</span></p>
-<p>In <a href="https://astamm.github.io/nevada"><strong>nevada</strong></a>, this representation can be achieved with <a href="https://astamm.github.io/nevada/reference/representations.html"><code>repr_adjacency()</code></a>.</p>
+<p>In <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a>, this representation can be achieved with <a href="https://astamm.github.io/nevada/reference/representations.html"><code>repr_adjacency()</code></a>.</p>
 </div>
 <div id="laplacian-matrix" class="section level3">
 <h3 class="hasAnchor">
 <a href="#laplacian-matrix" class="anchor"></a>Laplacian matrix</h3>
 <p>The <em>Laplacian matrix</em> <span class="math inline">\(L\)</span> of the network <span class="math inline">\(G\)</span> is defined in the following way:</p>
 <p><span class="math display">\[ L = D(W) - W, \]</span> where <span class="math inline">\(D(W)\)</span> is the diagonal matrix whose <span class="math inline">\(i\)</span>-<em>th</em> diagonal element is the degree of vertex <span class="math inline">\(i\)</span>.</p>
-<p>In <a href="https://astamm.github.io/nevada"><strong>nevada</strong></a>, this representation can be achieved with <a href="https://astamm.github.io/nevada/reference/representations.html"><code>repr_laplacian()</code></a>.</p>
+<p>In <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a>, this representation can be achieved with <a href="https://astamm.github.io/nevada/reference/representations.html"><code>repr_laplacian()</code></a>.</p>
 </div>
 <div id="modularity-matrix" class="section level3">
 <h3 class="hasAnchor">
 <a href="#modularity-matrix" class="anchor"></a>Modularity matrix</h3>
 <p>The elements of the <em>modularity matrix</em> <span class="math inline">\(B\)</span> are given by</p>
 <p><span class="math display">\[ B_{ij} = W_{ij} - \frac{d_i d_j}{2m}, \]</span> where <span class="math inline">\(d_i\)</span> and <span class="math inline">\(d_j\)</span> are the degrees of vertices <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> respectively, and <span class="math inline">\(m\)</span> is the total number of edges in the network.</p>
-<p>In <a href="https://astamm.github.io/nevada"><strong>nevada</strong></a>, this representation can be achieved with <a href="https://astamm.github.io/nevada/reference/representations.html"><code>repr_modularity()</code></a>.</p>
+<p>In <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a>, this representation can be achieved with <a href="https://astamm.github.io/nevada/reference/representations.html"><code>repr_modularity()</code></a>.</p>
 </div>
 <div id="choosing-a-representation-for-an-object-of-class-nvd" class="section level3">
 <h3 class="hasAnchor">
 <a href="#choosing-a-representation-for-an-object-of-class-nvd" class="anchor"></a>Choosing a representation for an object of class <code>nvd</code>
 </h3>
-<p>Instead of going through every single network in a sample to make its representation, <a href="https://astamm.github.io/nevada"><strong>nevada</strong></a> provides the <a href="https://astamm.github.io/nevada/reference/repr_nvd.html"><code>repr_nvd()</code></a> function which does exactly that for an object of class <code>nvd</code>.</p>
+<p>Instead of going through every single network in a sample to make its representation, <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a> provides the <a href="https://astamm.github.io/nevada/reference/repr_nvd.html"><code>repr_nvd()</code></a> function which does exactly that for an object of class <code>nvd</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nvd.html">nvd</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gnp"</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 <span class="fu"><a href="../reference/repr_nvd.html">repr_nvd</a></span><span class="op">(</span><span class="va">x</span>, representation <span class="op">=</span> <span class="st">"laplacian"</span><span class="op">)</span>
 <span class="co">#&gt; [[1]]</span>
 <span class="co">#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]</span>
-<span class="co">#&gt;  [1,]   10    0    0    0   -1    0    0    0    0    -1    -1     0     0</span>
-<span class="co">#&gt;  [2,]    0    8    0    0   -1    0    0    0    0    -1    -1    -1     0</span>
-<span class="co">#&gt;  [3,]    0    0    7   -1   -1    0    0   -1    0    -1     0     0     0</span>
-<span class="co">#&gt;  [4,]    0    0   -1    6   -1    0    0    0   -1     0    -1     0    -1</span>
-<span class="co">#&gt;  [5,]   -1   -1   -1   -1    8    0    0    0    0     0     0     0     0</span>
-<span class="co">#&gt;  [6,]    0    0    0    0    0    9    0   -1    0     0    -1     0    -1</span>
-<span class="co">#&gt;  [7,]    0    0    0    0    0    0    4   -1    0    -1     0     0    -1</span>
-<span class="co">#&gt;  [8,]    0    0   -1    0    0   -1   -1    7    0     0     0     0     0</span>
-<span class="co">#&gt;  [9,]    0    0    0   -1    0    0    0    0    6     0    -1     0     0</span>
-<span class="co">#&gt; [10,]   -1   -1   -1    0    0    0   -1    0    0     8    -1     0     0</span>
-<span class="co">#&gt; [11,]   -1   -1    0   -1    0   -1    0    0   -1    -1    11    -1     0</span>
-<span class="co">#&gt; [12,]    0   -1    0    0    0    0    0    0    0     0    -1     9     0</span>
-<span class="co">#&gt; [13,]    0    0    0   -1    0   -1   -1    0    0     0     0     0     7</span>
-<span class="co">#&gt; [14,]    0    0    0    0    0   -1    0    0   -1     0     0     0    -1</span>
-<span class="co">#&gt; [15,]   -1    0    0    0    0    0    0    0    0     0     0    -1     0</span>
-<span class="co">#&gt; [16,]    0   -1    0    0   -1    0    0   -1    0     0     0    -1     0</span>
-<span class="co">#&gt; [17,]   -1    0    0    0   -1    0    0    0    0    -1     0     0     0</span>
-<span class="co">#&gt; [18,]    0   -1    0   -1    0   -1    0    0    0     0    -1    -1     0</span>
-<span class="co">#&gt; [19,]   -1   -1    0    0    0   -1    0    0   -1     0    -1     0    -1</span>
-<span class="co">#&gt; [20,]   -1    0   -1    0   -1    0    0   -1   -1     0     0     0    -1</span>
-<span class="co">#&gt; [21,]   -1    0   -1    0    0    0    0    0    0     0     0    -1     0</span>
-<span class="co">#&gt; [22,]   -1    0   -1    0    0    0   -1    0    0    -1    -1    -1    -1</span>
-<span class="co">#&gt; [23,]    0   -1    0    0   -1   -1    0   -1    0    -1     0    -1     0</span>
-<span class="co">#&gt; [24,]    0    0    0    0    0   -1    0    0    0     0     0    -1     0</span>
-<span class="co">#&gt; [25,]   -1    0    0    0    0   -1    0   -1   -1     0    -1     0     0</span>
+<span class="co">#&gt;  [1,]    5    0    0   -1    0    0   -1    0    0     0     0     0    -1</span>
+<span class="co">#&gt;  [2,]    0    7    0    0   -1   -1   -1    0    0     0     0     0     0</span>
+<span class="co">#&gt;  [3,]    0    0   10   -1    0   -1    0    0    0     0     0    -1     0</span>
+<span class="co">#&gt;  [4,]   -1    0   -1   11   -1   -1    0    0    0     0     0     0     0</span>
+<span class="co">#&gt;  [5,]    0   -1    0   -1    8    0   -1    0    0     0     0     0    -1</span>
+<span class="co">#&gt;  [6,]    0   -1   -1   -1    0    7   -1    0    0    -1     0     0     0</span>
+<span class="co">#&gt;  [7,]   -1   -1    0    0   -1   -1   13   -1   -1     0    -1     0     0</span>
+<span class="co">#&gt;  [8,]    0    0    0    0    0    0   -1    8   -1    -1     0     0    -1</span>
+<span class="co">#&gt;  [9,]    0    0    0    0    0    0   -1   -1    6     0    -1     0     0</span>
+<span class="co">#&gt; [10,]    0    0    0    0    0   -1    0   -1    0    12     0     0     0</span>
+<span class="co">#&gt; [11,]    0    0    0    0    0    0   -1    0   -1     0     6     0     0</span>
+<span class="co">#&gt; [12,]    0    0   -1    0    0    0    0    0    0     0     0     8    -1</span>
+<span class="co">#&gt; [13,]   -1    0    0    0   -1    0    0   -1    0     0     0    -1    10</span>
+<span class="co">#&gt; [14,]    0    0    0   -1   -1   -1   -1    0   -1    -1     0     0    -1</span>
+<span class="co">#&gt; [15,]    0    0   -1   -1   -1   -1    0    0    0    -1     0     0     0</span>
+<span class="co">#&gt; [16,]    0    0   -1   -1    0    0   -1   -1    0    -1     0    -1     0</span>
+<span class="co">#&gt; [17,]    0    0   -1    0    0    0    0   -1    0    -1    -1     0     0</span>
+<span class="co">#&gt; [18,]    0    0   -1   -1    0    0   -1   -1    0     0    -1     0     0</span>
+<span class="co">#&gt; [19,]    0   -1   -1   -1    0    0   -1    0   -1    -1    -1     0     0</span>
+<span class="co">#&gt; [20,]    0   -1    0   -1    0    0    0    0    0    -1    -1    -1    -1</span>
+<span class="co">#&gt; [21,]    0   -1   -1    0    0    0    0    0    0    -1     0    -1    -1</span>
+<span class="co">#&gt; [22,]   -1    0    0   -1   -1    0    0    0    0     0     0     0    -1</span>
+<span class="co">#&gt; [23,]    0    0    0    0    0    0   -1    0    0    -1     0    -1    -1</span>
+<span class="co">#&gt; [24,]    0    0   -1    0    0    0   -1   -1   -1    -1     0    -1     0</span>
+<span class="co">#&gt; [25,]   -1   -1    0    0   -1    0    0    0    0    -1     0    -1    -1</span>
 <span class="co">#&gt;       [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24] [,25]</span>
-<span class="co">#&gt;  [1,]     0    -1     0    -1     0    -1    -1    -1    -1     0     0    -1</span>
-<span class="co">#&gt;  [2,]     0     0    -1     0    -1    -1     0     0     0    -1     0     0</span>
-<span class="co">#&gt;  [3,]     0     0     0     0     0     0    -1    -1    -1     0     0     0</span>
-<span class="co">#&gt;  [4,]     0     0     0     0    -1     0     0     0     0     0     0     0</span>
-<span class="co">#&gt;  [5,]     0     0    -1    -1     0     0    -1     0     0    -1     0     0</span>
-<span class="co">#&gt;  [6,]    -1     0     0     0    -1    -1     0     0     0    -1    -1    -1</span>
-<span class="co">#&gt;  [7,]     0     0     0     0     0     0     0     0    -1     0     0     0</span>
-<span class="co">#&gt;  [8,]     0     0    -1     0     0     0    -1     0     0    -1     0    -1</span>
-<span class="co">#&gt;  [9,]    -1     0     0     0     0    -1    -1     0     0     0     0    -1</span>
-<span class="co">#&gt; [10,]     0     0     0    -1     0     0     0     0    -1    -1     0     0</span>
-<span class="co">#&gt; [11,]     0     0     0     0    -1    -1     0     0    -1     0     0    -1</span>
-<span class="co">#&gt; [12,]     0    -1    -1     0    -1     0     0    -1    -1    -1    -1     0</span>
-<span class="co">#&gt; [13,]    -1     0     0     0     0    -1    -1     0    -1     0     0     0</span>
-<span class="co">#&gt; [14,]     7     0     0    -1     0    -1     0    -1    -1     0     0     0</span>
-<span class="co">#&gt; [15,]     0     7     0     0    -1    -1    -1    -1     0     0    -1     0</span>
-<span class="co">#&gt; [16,]     0     0     5     0     0     0     0     0     0     0     0    -1</span>
-<span class="co">#&gt; [17,]    -1     0     0     8    -1    -1    -1    -1     0     0     0     0</span>
-<span class="co">#&gt; [18,]     0    -1     0    -1    12     0    -1    -1    -1     0    -1    -1</span>
-<span class="co">#&gt; [19,]    -1    -1     0    -1     0    13    -1     0    -1     0    -1    -1</span>
-<span class="co">#&gt; [20,]     0    -1     0    -1    -1    -1    12    -1     0    -1     0     0</span>
-<span class="co">#&gt; [21,]    -1    -1     0    -1    -1     0    -1    10     0    -1     0    -1</span>
-<span class="co">#&gt; [22,]    -1     0     0     0    -1    -1     0     0    12     0    -1    -1</span>
-<span class="co">#&gt; [23,]     0     0     0     0     0     0    -1    -1     0     8     0     0</span>
-<span class="co">#&gt; [24,]     0    -1     0     0    -1    -1     0     0    -1     0     6     0</span>
-<span class="co">#&gt; [25,]     0     0    -1     0    -1    -1     0    -1    -1     0     0    10</span>
+<span class="co">#&gt;  [1,]     0     0     0     0     0     0     0     0    -1     0     0    -1</span>
+<span class="co">#&gt;  [2,]     0     0     0     0     0    -1    -1    -1     0     0     0    -1</span>
+<span class="co">#&gt;  [3,]     0    -1    -1    -1    -1    -1     0    -1     0     0    -1     0</span>
+<span class="co">#&gt;  [4,]    -1    -1    -1     0    -1    -1    -1     0    -1     0     0     0</span>
+<span class="co">#&gt;  [5,]    -1    -1     0     0     0     0     0     0    -1     0     0    -1</span>
+<span class="co">#&gt;  [6,]    -1    -1     0     0     0     0     0     0     0     0     0     0</span>
+<span class="co">#&gt;  [7,]    -1     0    -1     0    -1    -1     0     0     0    -1    -1     0</span>
+<span class="co">#&gt;  [8,]     0     0    -1    -1    -1     0     0     0     0     0    -1     0</span>
+<span class="co">#&gt;  [9,]    -1     0     0     0     0    -1     0     0     0     0    -1     0</span>
+<span class="co">#&gt; [10,]    -1    -1    -1    -1     0    -1    -1    -1     0    -1    -1    -1</span>
+<span class="co">#&gt; [11,]     0     0     0    -1    -1    -1    -1     0     0     0     0     0</span>
+<span class="co">#&gt; [12,]     0     0    -1     0     0     0    -1    -1     0    -1    -1    -1</span>
+<span class="co">#&gt; [13,]    -1     0     0     0     0     0    -1    -1    -1    -1     0    -1</span>
+<span class="co">#&gt; [14,]    13     0    -1    -1    -1    -1     0     0    -1     0     0    -1</span>
+<span class="co">#&gt; [15,]     0     9     0    -1    -1     0     0     0    -1     0    -1     0</span>
+<span class="co">#&gt; [16,]    -1     0    10     0    -1    -1     0     0     0    -1     0     0</span>
+<span class="co">#&gt; [17,]    -1    -1     0     8     0    -1     0    -1     0     0     0     0</span>
+<span class="co">#&gt; [18,]    -1    -1    -1     0    10     0     0     0    -1     0    -1     0</span>
+<span class="co">#&gt; [19,]    -1     0    -1    -1     0    10     0     0     0     0     0     0</span>
+<span class="co">#&gt; [20,]     0     0     0     0     0     0     6     0     0     0     0     0</span>
+<span class="co">#&gt; [21,]     0     0     0    -1     0     0     0     6     0     0     0     0</span>
+<span class="co">#&gt; [22,]    -1    -1     0     0    -1     0     0     0     8     0    -1     0</span>
+<span class="co">#&gt; [23,]     0     0    -1     0     0     0     0     0     0     5     0     0</span>
+<span class="co">#&gt; [24,]     0    -1     0     0    -1     0     0     0    -1     0     9     0</span>
+<span class="co">#&gt; [25,]    -1     0     0     0     0     0     0     0     0     0     0     7</span>
 <span class="co">#&gt; attr(,"representation")</span>
 <span class="co">#&gt; [1] "laplacian"</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[2]]</span>
 <span class="co">#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]</span>
-<span class="co">#&gt;  [1,]   11   -1   -1   -1    0    0   -1    0    0    -1     0     0    -1</span>
-<span class="co">#&gt;  [2,]   -1   10    0   -1    0    0   -1    0   -1    -1    -1     0     0</span>
-<span class="co">#&gt;  [3,]   -1    0   11   -1    0    0    0   -1    0    -1     0    -1    -1</span>
-<span class="co">#&gt;  [4,]   -1   -1   -1    8   -1    0    0    0    0     0     0     0     0</span>
-<span class="co">#&gt;  [5,]    0    0    0   -1    5    0    0    0    0     0     0     0     0</span>
-<span class="co">#&gt;  [6,]    0    0    0    0    0    3    0   -1    0     0     0    -1     0</span>
-<span class="co">#&gt;  [7,]   -1   -1    0    0    0    0    9   -1   -1     0    -1     0    -1</span>
-<span class="co">#&gt;  [8,]    0    0   -1    0    0   -1   -1   11   -1     0    -1     0    -1</span>
-<span class="co">#&gt;  [9,]    0   -1    0    0    0    0   -1   -1   10    -1    -1     0     0</span>
-<span class="co">#&gt; [10,]   -1   -1   -1    0    0    0    0    0   -1     7     0     0    -1</span>
-<span class="co">#&gt; [11,]    0   -1    0    0    0    0   -1   -1   -1     0     8    -1     0</span>
-<span class="co">#&gt; [12,]    0    0   -1    0    0   -1    0    0    0     0    -1     8    -1</span>
-<span class="co">#&gt; [13,]   -1    0   -1    0    0    0   -1   -1    0    -1     0    -1    11</span>
-<span class="co">#&gt; [14,]    0   -1    0    0    0    0    0   -1    0     0     0    -1     0</span>
-<span class="co">#&gt; [15,]    0   -1   -1   -1   -1    0    0   -1    0    -1     0     0    -1</span>
-<span class="co">#&gt; [16,]   -1    0   -1    0    0    0    0   -1   -1     0     0     0     0</span>
-<span class="co">#&gt; [17,]   -1    0    0    0    0    0   -1   -1    0     0     0     0    -1</span>
-<span class="co">#&gt; [18,]   -1    0    0    0    0    0    0    0    0     0     0     0     0</span>
-<span class="co">#&gt; [19,]    0    0   -1    0   -1    0    0    0   -1    -1    -1    -1     0</span>
-<span class="co">#&gt; [20,]   -1    0    0    0    0    0    0    0    0     0    -1     0    -1</span>
-<span class="co">#&gt; [21,]    0    0   -1   -1    0    0    0    0    0     0     0     0     0</span>
-<span class="co">#&gt; [22,]    0    0    0    0   -1   -1    0    0   -1     0     0    -1     0</span>
-<span class="co">#&gt; [23,]    0    0    0    0    0    0   -1   -1    0     0    -1    -1     0</span>
-<span class="co">#&gt; [24,]   -1   -1   -1   -1   -1    0    0    0   -1     0     0     0    -1</span>
-<span class="co">#&gt; [25,]    0   -1    0   -1    0    0   -1    0   -1     0     0     0    -1</span>
+<span class="co">#&gt;  [1,]    9    0    0    0    0    0   -1    0   -1    -1    -1    -1     0</span>
+<span class="co">#&gt;  [2,]    0    7    0    0    0    0    0   -1    0    -1    -1     0     0</span>
+<span class="co">#&gt;  [3,]    0    0   12    0    0    0    0   -1   -1    -1    -1     0    -1</span>
+<span class="co">#&gt;  [4,]    0    0    0    8   -1   -1   -1    0    0     0    -1     0     0</span>
+<span class="co">#&gt;  [5,]    0    0    0   -1    5    0    0    0   -1    -1     0     0    -1</span>
+<span class="co">#&gt;  [6,]    0    0    0   -1    0    8    0   -1    0     0     0    -1     0</span>
+<span class="co">#&gt;  [7,]   -1    0    0   -1    0    0   10   -1    0    -1     0     0     0</span>
+<span class="co">#&gt;  [8,]    0   -1   -1    0    0   -1   -1    6    0     0     0    -1     0</span>
+<span class="co">#&gt;  [9,]   -1    0   -1    0   -1    0    0    0    6     0     0     0     0</span>
+<span class="co">#&gt; [10,]   -1   -1   -1    0   -1    0   -1    0    0    10    -1    -1    -1</span>
+<span class="co">#&gt; [11,]   -1   -1   -1   -1    0    0    0    0    0    -1     9    -1     0</span>
+<span class="co">#&gt; [12,]   -1    0    0    0    0   -1    0   -1    0    -1    -1     6     0</span>
+<span class="co">#&gt; [13,]    0    0   -1    0   -1    0    0    0    0    -1     0     0     7</span>
+<span class="co">#&gt; [14,]    0   -1   -1   -1    0    0    0    0    0    -1     0     0    -1</span>
+<span class="co">#&gt; [15,]    0    0    0    0    0    0    0    0    0     0     0     0     0</span>
+<span class="co">#&gt; [16,]   -1    0    0    0    0   -1    0    0    0     0    -1     0    -1</span>
+<span class="co">#&gt; [17,]    0    0    0    0   -1    0    0    0    0     0     0     0    -1</span>
+<span class="co">#&gt; [18,]   -1    0   -1    0    0   -1    0    0    0     0     0     0     0</span>
+<span class="co">#&gt; [19,]    0   -1    0   -1    0    0   -1    0   -1     0     0     0    -1</span>
+<span class="co">#&gt; [20,]    0    0   -1    0    0    0   -1    0   -1     0     0     0     0</span>
+<span class="co">#&gt; [21,]    0    0    0   -1    0    0   -1    0    0    -1     0    -1     0</span>
+<span class="co">#&gt; [22,]    0    0   -1    0    0    0    0    0    0     0     0     0     0</span>
+<span class="co">#&gt; [23,]   -1    0   -1   -1    0   -1   -1    0   -1     0    -1     0     0</span>
+<span class="co">#&gt; [24,]   -1   -1   -1    0    0   -1   -1   -1    0     0     0     0     0</span>
+<span class="co">#&gt; [25,]    0   -1   -1    0    0   -1   -1    0    0     0    -1     0     0</span>
 <span class="co">#&gt;       [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24] [,25]</span>
-<span class="co">#&gt;  [1,]     0     0    -1    -1    -1     0    -1     0     0     0    -1     0</span>
-<span class="co">#&gt;  [2,]    -1    -1     0     0     0     0     0     0     0     0    -1    -1</span>
-<span class="co">#&gt;  [3,]     0    -1    -1     0     0    -1     0    -1     0     0    -1     0</span>
-<span class="co">#&gt;  [4,]     0    -1     0     0     0     0     0    -1     0     0    -1    -1</span>
-<span class="co">#&gt;  [5,]     0    -1     0     0     0    -1     0     0    -1     0    -1     0</span>
-<span class="co">#&gt;  [6,]     0     0     0     0     0     0     0     0    -1     0     0     0</span>
-<span class="co">#&gt;  [7,]     0     0     0    -1     0     0     0     0     0    -1     0    -1</span>
-<span class="co">#&gt;  [8,]    -1    -1    -1    -1     0     0     0     0     0    -1     0     0</span>
-<span class="co">#&gt;  [9,]     0     0    -1     0     0    -1     0     0    -1     0    -1    -1</span>
-<span class="co">#&gt; [10,]     0    -1     0     0     0    -1     0     0     0     0     0     0</span>
-<span class="co">#&gt; [11,]     0     0     0     0     0    -1    -1     0     0    -1     0     0</span>
-<span class="co">#&gt; [12,]    -1     0     0     0     0    -1     0     0    -1    -1     0     0</span>
-<span class="co">#&gt; [13,]     0    -1     0    -1     0     0    -1     0     0     0    -1    -1</span>
-<span class="co">#&gt; [14,]     5     0     0     0     0    -1     0     0     0     0    -1     0</span>
-<span class="co">#&gt; [15,]     0     8     0     0     0     0     0     0    -1     0     0     0</span>
-<span class="co">#&gt; [16,]     0     0     6    -1    -1     0     0     0     0     0     0     0</span>
-<span class="co">#&gt; [17,]     0     0    -1     8     0     0    -1     0    -1     0    -1     0</span>
-<span class="co">#&gt; [18,]     0     0    -1     0     4     0    -1     0     0     0    -1     0</span>
-<span class="co">#&gt; [19,]    -1     0     0     0     0     9     0    -1     0     0     0    -1</span>
-<span class="co">#&gt; [20,]     0     0     0    -1    -1     0     6     0     0     0     0    -1</span>
-<span class="co">#&gt; [21,]     0     0     0     0     0    -1     0     3     0     0     0     0</span>
-<span class="co">#&gt; [22,]     0    -1     0    -1     0     0     0     0     7     0    -1     0</span>
-<span class="co">#&gt; [23,]     0     0     0     0     0     0     0     0     0     5     0    -1</span>
-<span class="co">#&gt; [24,]    -1     0     0    -1    -1     0     0     0    -1     0    12    -1</span>
-<span class="co">#&gt; [25,]     0     0     0     0     0    -1    -1     0     0    -1    -1     9</span>
+<span class="co">#&gt;  [1,]     0     0    -1     0    -1     0     0     0     0    -1    -1     0</span>
+<span class="co">#&gt;  [2,]    -1     0     0     0     0    -1     0     0     0     0    -1    -1</span>
+<span class="co">#&gt;  [3,]    -1     0     0     0    -1     0    -1     0    -1    -1    -1    -1</span>
+<span class="co">#&gt;  [4,]    -1     0     0     0     0    -1     0    -1     0    -1     0     0</span>
+<span class="co">#&gt;  [5,]     0     0     0    -1     0     0     0     0     0     0     0     0</span>
+<span class="co">#&gt;  [6,]     0     0    -1     0    -1     0     0     0     0    -1    -1    -1</span>
+<span class="co">#&gt;  [7,]     0     0     0     0     0    -1    -1    -1     0    -1    -1    -1</span>
+<span class="co">#&gt;  [8,]     0     0     0     0     0     0     0     0     0     0    -1     0</span>
+<span class="co">#&gt;  [9,]     0     0     0     0     0    -1    -1     0     0    -1     0     0</span>
+<span class="co">#&gt; [10,]    -1     0     0     0     0     0     0    -1     0     0     0     0</span>
+<span class="co">#&gt; [11,]     0     0    -1     0     0     0     0     0     0    -1     0    -1</span>
+<span class="co">#&gt; [12,]     0     0     0     0     0     0     0    -1     0     0     0     0</span>
+<span class="co">#&gt; [13,]    -1     0    -1    -1     0    -1     0     0     0     0     0     0</span>
+<span class="co">#&gt; [14,]    10    -1    -1     0     0    -1     0     0    -1     0     0    -1</span>
+<span class="co">#&gt; [15,]    -1     4     0     0     0     0    -1    -1     0     0     0    -1</span>
+<span class="co">#&gt; [16,]    -1     0     7     0     0     0    -1     0     0    -1     0     0</span>
+<span class="co">#&gt; [17,]     0     0     0     6     0     0    -1     0    -1     0    -1    -1</span>
+<span class="co">#&gt; [18,]     0     0     0     0     3     0     0     0     0     0     0     0</span>
+<span class="co">#&gt; [19,]    -1     0     0     0     0     9    -1     0     0    -1     0    -1</span>
+<span class="co">#&gt; [20,]     0    -1    -1    -1     0    -1    10     0    -1     0    -1    -1</span>
+<span class="co">#&gt; [21,]     0    -1     0     0     0     0     0     6     0    -1     0     0</span>
+<span class="co">#&gt; [22,]    -1     0     0    -1     0     0    -1     0     4     0     0     0</span>
+<span class="co">#&gt; [23,]     0     0    -1     0     0    -1     0    -1     0    10     0     0</span>
+<span class="co">#&gt; [24,]     0     0     0    -1     0     0    -1     0     0     0     8     0</span>
+<span class="co">#&gt; [25,]    -1    -1     0    -1     0    -1    -1     0     0     0     0    10</span>
 <span class="co">#&gt; attr(,"representation")</span>
 <span class="co">#&gt; [1] "laplacian"</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[3]]</span>
 <span class="co">#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]</span>
-<span class="co">#&gt;  [1,]   12   -1   -1   -1    0    0   -1    0   -1     0     0    -1     0</span>
-<span class="co">#&gt;  [2,]   -1   11    0    0    0   -1    0   -1    0    -1     0    -1    -1</span>
-<span class="co">#&gt;  [3,]   -1    0    6    0    0    0    0    0    0     0     0    -1     0</span>
-<span class="co">#&gt;  [4,]   -1    0    0    9   -1   -1   -1    0    0     0     0     0     0</span>
-<span class="co">#&gt;  [5,]    0    0    0   -1    1    0    0    0    0     0     0     0     0</span>
-<span class="co">#&gt;  [6,]    0   -1    0   -1    0    7    0    0    0     0    -1     0     0</span>
-<span class="co">#&gt;  [7,]   -1    0    0   -1    0    0    7    0    0     0    -1    -1     0</span>
-<span class="co">#&gt;  [8,]    0   -1    0    0    0    0    0   10   -1    -1     0    -1    -1</span>
-<span class="co">#&gt;  [9,]   -1    0    0    0    0    0    0   -1    6     0     0     0     0</span>
-<span class="co">#&gt; [10,]    0   -1    0    0    0    0    0   -1    0     5     0     0    -1</span>
-<span class="co">#&gt; [11,]    0    0    0    0    0   -1   -1    0    0     0     4     0     0</span>
-<span class="co">#&gt; [12,]   -1   -1   -1    0    0    0   -1   -1    0     0     0     9    -1</span>
-<span class="co">#&gt; [13,]    0   -1    0    0    0    0    0   -1    0    -1     0    -1     8</span>
-<span class="co">#&gt; [14,]    0    0    0    0    0   -1   -1    0    0     0     0     0    -1</span>
-<span class="co">#&gt; [15,]    0   -1   -1    0    0   -1    0   -1   -1     0     0     0     0</span>
-<span class="co">#&gt; [16,]   -1    0    0   -1    0    0   -1    0    0     0     0     0     0</span>
-<span class="co">#&gt; [17,]   -1   -1    0    0    0   -1    0   -1   -1     0     0    -1     0</span>
-<span class="co">#&gt; [18,]    0    0   -1    0    0    0    0    0   -1    -1     0     0     0</span>
-<span class="co">#&gt; [19,]    0   -1   -1   -1    0    0   -1    0    0     0     0     0    -1</span>
-<span class="co">#&gt; [20,]   -1   -1    0    0    0    0    0   -1    0     0    -1     0     0</span>
-<span class="co">#&gt; [21,]   -1   -1    0   -1    0   -1    0    0    0     0     0     0     0</span>
-<span class="co">#&gt; [22,]    0    0    0   -1    0    0    0   -1    0     0    -1    -1     0</span>
-<span class="co">#&gt; [23,]   -1    0    0   -1    0    0    0    0    0    -1     0    -1     0</span>
-<span class="co">#&gt; [24,]   -1    0    0    0    0    0    0    0    0     0     0     0    -1</span>
-<span class="co">#&gt; [25,]    0    0   -1    0    0    0    0   -1   -1     0     0     0    -1</span>
+<span class="co">#&gt;  [1,]    7    0    0   -1    0    0   -1    0    0     0    -1     0     0</span>
+<span class="co">#&gt;  [2,]    0    6   -1    0    0    0    0    0    0    -1     0     0    -1</span>
+<span class="co">#&gt;  [3,]    0   -1    6    0    0    0    0   -1    0     0     0     0     0</span>
+<span class="co">#&gt;  [4,]   -1    0    0    7    0    0   -1   -1    0     0    -1     0     0</span>
+<span class="co">#&gt;  [5,]    0    0    0    0    4    0    0    0    0     0     0     0    -1</span>
+<span class="co">#&gt;  [6,]    0    0    0    0    0   10   -1   -1   -1     0     0    -1     0</span>
+<span class="co">#&gt;  [7,]   -1    0    0   -1    0   -1    8    0    0     0     0     0    -1</span>
+<span class="co">#&gt;  [8,]    0    0   -1   -1    0   -1    0    4    0     0     0     0     0</span>
+<span class="co">#&gt;  [9,]    0    0    0    0    0   -1    0    0    5     0     0     0     0</span>
+<span class="co">#&gt; [10,]    0   -1    0    0    0    0    0    0    0     5     0     0     0</span>
+<span class="co">#&gt; [11,]   -1    0    0   -1    0    0    0    0    0     0    10     0    -1</span>
+<span class="co">#&gt; [12,]    0    0    0    0    0   -1    0    0    0     0     0     4     0</span>
+<span class="co">#&gt; [13,]    0   -1    0    0   -1    0   -1    0    0     0    -1     0     6</span>
+<span class="co">#&gt; [14,]    0    0    0   -1    0    0   -1    0    0     0     0     0     0</span>
+<span class="co">#&gt; [15,]    0    0   -1    0   -1   -1    0    0    0     0    -1     0     0</span>
+<span class="co">#&gt; [16,]    0    0    0    0    0   -1    0    0   -1     0    -1     0     0</span>
+<span class="co">#&gt; [17,]    0    0   -1    0    0   -1    0    0    0    -1    -1     0     0</span>
+<span class="co">#&gt; [18,]    0    0    0    0   -1    0   -1    0   -1    -1     0    -1     0</span>
+<span class="co">#&gt; [19,]   -1    0    0    0    0   -1    0    0    0     0    -1     0    -1</span>
+<span class="co">#&gt; [20,]   -1   -1   -1    0    0    0    0    0   -1    -1     0     0     0</span>
+<span class="co">#&gt; [21,]   -1   -1   -1    0    0    0   -1    0   -1     0     0     0     0</span>
+<span class="co">#&gt; [22,]    0    0    0   -1    0    0    0    0    0     0     0     0     0</span>
+<span class="co">#&gt; [23,]   -1    0    0   -1    0    0    0    0    0     0    -1    -1     0</span>
+<span class="co">#&gt; [24,]    0    0    0    0   -1   -1   -1    0    0     0    -1     0    -1</span>
+<span class="co">#&gt; [25,]    0   -1    0    0    0   -1    0   -1    0    -1    -1    -1     0</span>
 <span class="co">#&gt;       [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24] [,25]</span>
-<span class="co">#&gt;  [1,]     0     0    -1    -1     0     0    -1    -1     0    -1    -1     0</span>
-<span class="co">#&gt;  [2,]     0    -1     0    -1     0    -1    -1    -1     0     0     0     0</span>
-<span class="co">#&gt;  [3,]     0    -1     0     0    -1    -1     0     0     0     0     0    -1</span>
-<span class="co">#&gt;  [4,]     0     0    -1     0     0    -1     0    -1    -1    -1     0     0</span>
-<span class="co">#&gt;  [5,]     0     0     0     0     0     0     0     0     0     0     0     0</span>
-<span class="co">#&gt;  [6,]    -1    -1     0    -1     0     0     0    -1     0     0     0     0</span>
-<span class="co">#&gt;  [7,]    -1     0    -1     0     0    -1     0     0     0     0     0     0</span>
-<span class="co">#&gt;  [8,]     0    -1     0    -1     0     0    -1     0    -1     0     0    -1</span>
-<span class="co">#&gt;  [9,]     0    -1     0    -1    -1     0     0     0     0     0     0    -1</span>
-<span class="co">#&gt; [10,]     0     0     0     0    -1     0     0     0     0    -1     0     0</span>
-<span class="co">#&gt; [11,]     0     0     0     0     0     0    -1     0    -1     0     0     0</span>
-<span class="co">#&gt; [12,]     0     0     0    -1     0     0     0     0    -1    -1     0     0</span>
-<span class="co">#&gt; [13,]    -1     0     0     0     0    -1     0     0     0     0    -1    -1</span>
-<span class="co">#&gt; [14,]     7     0     0     0     0     0     0    -1    -1     0    -1    -1</span>
-<span class="co">#&gt; [15,]     0     7     0     0     0     0     0     0     0    -1    -1     0</span>
-<span class="co">#&gt; [16,]     0     0     6    -1     0     0     0     0    -1     0     0    -1</span>
-<span class="co">#&gt; [17,]     0     0    -1    11    -1     0    -1     0    -1     0     0    -1</span>
-<span class="co">#&gt; [18,]     0     0     0    -1     7     0     0    -1     0     0    -1    -1</span>
-<span class="co">#&gt; [19,]     0     0     0     0     0     6     0     0     0     0     0    -1</span>
-<span class="co">#&gt; [20,]     0     0     0    -1     0     0     7     0    -1     0     0    -1</span>
-<span class="co">#&gt; [21,]    -1     0     0     0    -1     0     0     7     0     0    -1     0</span>
-<span class="co">#&gt; [22,]    -1     0    -1    -1     0     0    -1     0    10    -1    -1     0</span>
-<span class="co">#&gt; [23,]     0    -1     0     0     0     0     0     0    -1     7    -1     0</span>
-<span class="co">#&gt; [24,]    -1    -1     0     0    -1     0     0    -1    -1    -1     8     0</span>
-<span class="co">#&gt; [25,]    -1     0    -1    -1    -1    -1    -1     0     0     0     0    10</span>
+<span class="co">#&gt;  [1,]     0     0     0     0     0    -1    -1    -1     0    -1     0     0</span>
+<span class="co">#&gt;  [2,]     0     0     0     0     0     0    -1    -1     0     0     0    -1</span>
+<span class="co">#&gt;  [3,]     0    -1     0    -1     0     0    -1    -1     0     0     0     0</span>
+<span class="co">#&gt;  [4,]    -1     0     0     0     0     0     0     0    -1    -1     0     0</span>
+<span class="co">#&gt;  [5,]     0    -1     0     0    -1     0     0     0     0     0    -1     0</span>
+<span class="co">#&gt;  [6,]     0    -1    -1    -1     0    -1     0     0     0     0    -1    -1</span>
+<span class="co">#&gt;  [7,]    -1     0     0     0    -1     0     0    -1     0     0    -1     0</span>
+<span class="co">#&gt;  [8,]     0     0     0     0     0     0     0     0     0     0     0    -1</span>
+<span class="co">#&gt;  [9,]     0     0    -1     0    -1     0    -1    -1     0     0     0     0</span>
+<span class="co">#&gt; [10,]     0     0     0    -1    -1     0    -1     0     0     0     0    -1</span>
+<span class="co">#&gt; [11,]     0    -1    -1    -1     0    -1     0     0     0    -1    -1    -1</span>
+<span class="co">#&gt; [12,]     0     0     0     0    -1     0     0     0     0    -1     0    -1</span>
+<span class="co">#&gt; [13,]     0     0     0     0     0    -1     0     0     0     0    -1     0</span>
+<span class="co">#&gt; [14,]     5     0     0    -1     0     0     0     0     0    -1     0    -1</span>
+<span class="co">#&gt; [15,]     0     7    -1     0     0     0     0     0     0    -1    -1     0</span>
+<span class="co">#&gt; [16,]     0    -1     8    -1    -1     0     0    -1     0    -1     0     0</span>
+<span class="co">#&gt; [17,]    -1     0    -1     9     0     0    -1     0    -1    -1     0     0</span>
+<span class="co">#&gt; [18,]     0     0    -1     0     9     0     0    -1    -1     0    -1     0</span>
+<span class="co">#&gt; [19,]     0     0     0     0     0     6     0    -1    -1     0     0     0</span>
+<span class="co">#&gt; [20,]     0     0     0    -1     0     0     8     0     0    -1     0    -1</span>
+<span class="co">#&gt; [21,]     0     0    -1     0    -1    -1     0    10     0    -1    -1     0</span>
+<span class="co">#&gt; [22,]     0     0     0    -1    -1    -1     0     0     5     0    -1     0</span>
+<span class="co">#&gt; [23,]    -1    -1    -1    -1     0     0    -1    -1     0    11     0    -1</span>
+<span class="co">#&gt; [24,]     0    -1     0     0    -1     0     0    -1    -1     0     9     0</span>
+<span class="co">#&gt; [25,]    -1     0     0     0     0     0    -1     0     0    -1     0     9</span>
 <span class="co">#&gt; attr(,"representation")</span>
 <span class="co">#&gt; [1] "laplacian"</span></code></pre></div>
 </div>
@@ -348,44 +348,44 @@ w_{i,j}, &amp; \mbox{if } (i,j) \in E \mbox{ with weight } w_{i,j}\\
 <h3 class="hasAnchor">
 <a href="#hamming-distance" class="anchor"></a>Hamming distance</h3>
 <p><span class="math display">\[ \rho_H(G,H)=\frac{1}{N(N-1)}\sum_{i \neq j}^N \bigl\arrowvert X_{i,j}-Y_{i,j} \bigr\arrowvert. \]</span></p>
-<p>In <a href="https://astamm.github.io/nevada"><strong>nevada</strong></a>, this distance can be computed with <a href="https://astamm.github.io/nevada/reference/distances.html"><code>dist_hamming()</code></a>.</p>
+<p>In <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a>, this distance can be computed with <a href="https://astamm.github.io/nevada/reference/distances.html"><code>dist_hamming()</code></a>.</p>
 </div>
 <div id="frobenius-distance" class="section level3">
 <h3 class="hasAnchor">
 <a href="#frobenius-distance" class="anchor"></a>Frobenius distance</h3>
 <p><span class="math display">\[ \rho_F(G,H) = \left\| X - Y \right\|_F^2 = \sum_{i \neq j}^N \bigl ( X_{i,j}-Y_{i,j} \bigr )^2. \]</span></p>
-<p>In <a href="https://astamm.github.io/nevada"><strong>nevada</strong></a>, this distance can be computed with <a href="https://astamm.github.io/nevada/reference/distances.html"><code>dist_frobenius()</code></a>.</p>
+<p>In <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a>, this distance can be computed with <a href="https://astamm.github.io/nevada/reference/distances.html"><code>dist_frobenius()</code></a>.</p>
 </div>
 <div id="spectral-distance" class="section level3">
 <h3 class="hasAnchor">
 <a href="#spectral-distance" class="anchor"></a>Spectral distance</h3>
 <p><span class="math display">\[ \rho_S(G,H)=\sum_{i \neq j}^N \bigl ( \Lambda^X_{i,j}-\Lambda^Y_{i,j} \bigr )^2, \]</span> where <span class="math inline">\(\Lambda^X\)</span> and <span class="math inline">\(\Lambda^Y\)</span> are the diagonal matrices with eigenvalues on the diagonal given by the spectral decomposition of the matrix representations of <span class="math inline">\(G\)</span> and <span class="math inline">\(H\)</span>.</p>
-<p>In <a href="https://astamm.github.io/nevada"><strong>nevada</strong></a>, this distance can be computed with <a href="https://astamm.github.io/nevada/reference/distances.html"><code>dist_spectral()</code></a>.</p>
+<p>In <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a>, this distance can be computed with <a href="https://astamm.github.io/nevada/reference/distances.html"><code>dist_spectral()</code></a>.</p>
 </div>
 <div id="root-euclidean-distance" class="section level3">
 <h3 class="hasAnchor">
 <a href="#root-euclidean-distance" class="anchor"></a>Root Euclidean distance</h3>
 <p><span class="math display">\[ \rho_{RE}(G,H) = \left\| X^{1/2} - Y^{1/2} \right\|_F^2. \]</span></p>
 <p>Note that this distance is not compatible with all matrix representations as it requires that the representation be semi-positive definite.</p>
-<p>In <a href="https://astamm.github.io/nevada"><strong>nevada</strong></a>, this distance can be computed with <a href="https://astamm.github.io/nevada/reference/distances.html"><code>dist_root_euclidean()</code></a>.</p>
+<p>In <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a>, this distance can be computed with <a href="https://astamm.github.io/nevada/reference/distances.html"><code>dist_root_euclidean()</code></a>.</p>
 </div>
 <div id="computing-a-matrix-of-pairwise-distances-for-an-object-of-class-nvd" class="section level3">
 <h3 class="hasAnchor">
 <a href="#computing-a-matrix-of-pairwise-distances-for-an-object-of-class-nvd" class="anchor"></a>Computing a matrix of pairwise distances for an object of class <code>nvd</code>
 </h3>
-<p>Pre-computation of the matrix of pairwise distances for samples of networks alleviates the computational burden of permutation testing. This is why <a href="https://astamm.github.io/nevada"><strong>nevada</strong></a> provides the convenient <a href="https://astamm.github.io/nevada/reference/dist_nvd.html"><code>dist_nvd()</code></a> function which does exactly that for an object of class <code>nvd</code>.</p>
+<p>Pre-computation of the matrix of pairwise distances for samples of networks alleviates the computational burden of permutation testing. This is why <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a> provides the convenient <a href="https://astamm.github.io/nevada/reference/dist_nvd.html"><code>dist_nvd()</code></a> function which does exactly that for an object of class <code>nvd</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nvd.html">nvd</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gnp"</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 <span class="fu"><a href="../reference/dist_nvd.html">dist_nvd</a></span><span class="op">(</span><span class="va">x</span>, representation <span class="op">=</span> <span class="st">"laplacian"</span>, distance <span class="op">=</span> <span class="st">"hamming"</span><span class="op">)</span>
 <span class="co">#&gt;           1         2</span>
-<span class="co">#&gt; 2 0.5400000          </span>
-<span class="co">#&gt; 3 0.5866667 0.5800000</span></code></pre></div>
+<span class="co">#&gt; 2 0.5700000          </span>
+<span class="co">#&gt; 3 0.5433333 0.5566667</span></code></pre></div>
 </div>
 </div>
 <div id="test-statistics" class="section level2">
 <h2 class="hasAnchor">
 <a href="#test-statistics" class="anchor"></a>Test statistics</h2>
-<p>The <a href="https://astamm.github.io/nevada"><strong>nevada</strong></a> package has been designed to work well with the <a href="https://astamm.github.io/flipr/"><strong>flipr</strong></a> package, which handles the permutation scheme once suitable representation, distance and test statistics have been chosen. The most efficient way to two-sample testing with network-valued data pertains to use statistics based on inter-point distances, that is pairwise distances between observations.</p>
+<p>The <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a> package has been designed to work well with the <a href="https://astamm.github.io/flipr/"><strong>flipr</strong></a> package, which handles the permutation scheme once suitable representation, distance and test statistics have been chosen. The most efficient way to two-sample testing with network-valued data pertains to use statistics based on inter-point distances, that is pairwise distances between observations.</p>
 <div id="available-statistics" class="section level3">
 <h3 class="hasAnchor">
 <a href="#available-statistics" class="anchor"></a>Available statistics</h3>
@@ -413,7 +413,7 @@ w_{i,j}, &amp; \mbox{if } (i,j) \in E \mbox{ with weight } w_{i,j}\\
 </div>
 <div id="from-nevada" class="section level4">
 <h4 class="hasAnchor">
-<a href="#from-nevada" class="anchor"></a>From <a href="https://astamm.github.io/nevada"><strong>nevada</strong></a>
+<a href="#from-nevada" class="anchor"></a>From <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a>
 </h4>
 <p>There are also 3 statistics proposed in <span class="citation">Chen, Chen, and Su (2018)</span> that are based on a similarity graph built on top of the distance matrix:</p>
 <ul>
@@ -435,14 +435,14 @@ w_{i,j}, &amp; \mbox{if } (i,j) \in E \mbox{ with weight } w_{i,j}\\
 <div id="write-your-own-test-statistic-function" class="section level4">
 <h4 class="hasAnchor">
 <a href="#write-your-own-test-statistic-function" class="anchor"></a>Write your own test statistic function</h4>
-<p>In addition to the test statistic functions already implemented in <a href="https://astamm.github.io/flipr/"><strong>flipr</strong></a> and <a href="https://astamm.github.io/nevada"><strong>nevada</strong></a>, you can also implement your own function. Test statistic functions compatible with <a href="https://astamm.github.io/flipr/"><strong>flipr</strong></a> should have at least two mandatory input arguments:</p>
+<p>In addition to the test statistic functions already implemented in <a href="https://astamm.github.io/flipr/"><strong>flipr</strong></a> and <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a>, you can also implement your own function. Test statistic functions compatible with <a href="https://astamm.github.io/flipr/"><strong>flipr</strong></a> should have at least two mandatory input arguments:</p>
 <ul>
 <li>
 <code>data</code> which is either a concatenated list of size <span class="math inline">\(n_x + n_y\)</span> regrouping the data points of both samples or a distance matrix of size <span class="math inline">\((n_x + n_y) \times (n_x + n_y)\)</span> stored as an object of class <code>dist</code>.</li>
 <li>
 <code>indices1</code> which is an integer vector of size <span class="math inline">\(n_x\)</span> storing the indices of the data points belonging to the first sample in the current permuted version of the data.</li>
 </ul>
-<p>The <a href="https://astamm.github.io/flipr/"><strong>flipr</strong></a> package provides a helper function <code>use_stat(nsamples = 2, stat_name = )</code> which makes it easy for users to create their own test statistic ready to be used by <a href="https://astamm.github.io/nevada"><strong>nevada</strong></a>. This function creates and saves a <code>.R</code> file in the <code>R/</code> folder of the current working directory and populates it with the following template:</p>
+<p>The <a href="https://astamm.github.io/flipr/"><strong>flipr</strong></a> package provides a helper function <code>use_stat(nsamples = 2, stat_name = )</code> which makes it easy for users to create their own test statistic ready to be used by <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a>. This function creates and saves a <code>.R</code> file in the <code>R/</code> folder of the current working directory and populates it with the following template:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">#' Test Statistic for the Two-Sample Problem</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="co">#'</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="co">#' This function computes the test statistic...</span></span>
@@ -509,7 +509,7 @@ w_{i,j}, &amp; \mbox{if } (i,j) \in E \mbox{ with weight } w_{i,j}\\
 <a href="#naming-conventions" class="anchor"></a>Naming conventions</h4>
 <p>Test statistics are passed to the functions <code><a href="../reference/test2_global.html">test2_global()</a></code> and <code><a href="../reference/test2_local.html">test2_local()</a></code> via the argument <code>stats</code> which accepts a character vector in which:</p>
 <ul>
-<li>statistics from <a href="https://astamm.github.io/nevada"><strong>nevada</strong></a> expected to be named without the <code>stat_</code> prefix (e.g. <code>"original_edge_count"</code> or <code>"student_euclidean"</code>).</li>
+<li>statistics from <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a> expected to be named without the <code>stat_</code> prefix (e.g. <code>"original_edge_count"</code> or <code>"student_euclidean"</code>).</li>
 <li>statistics from <a href="https://astamm.github.io/flipr/"><strong>flipr</strong></a> are expected to be named without the <code>stat_</code> prefix but adding the <code>flipr:</code> prefix (e.g., <code>"flipr:student_ip"</code>).</li>
 <li>statistics from any other package <strong>pkg</strong> are expected to be named without the <code>stat_</code> prefix but adding the <code>pkg:</code> prefix.</li>
 </ul>
@@ -525,7 +525,7 @@ w_{i,j}, &amp; \mbox{if } (i,j) \in E \mbox{ with weight } w_{i,j}\\
   seed <span class="op">=</span> <span class="fl">1234</span>
 <span class="op">)</span><span class="op">$</span><span class="va">pvalue</span>
 <span class="co">#&gt; [1] 0.0009962984</span></code></pre></div>
-<p>Note that you can also refer to test statistic function from <a href="https://astamm.github.io/nevada"><strong>nevada</strong></a> using the naming <code>"nevada:original_edge_count"</code> as you would do for test statistics from <a href="https://astamm.github.io/flipr/"><strong>flipr</strong></a>. This is mandatory for instance if you have not yet loaded <a href="https://astamm.github.io/nevada"><strong>nevada</strong></a> in your environment via <code><a href="https://astamm.github.io/nevada/">library(nevada)</a></code>.</p>
+<p>Note that you can also refer to test statistic function from <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a> using the naming <code>"nevada:original_edge_count"</code> as you would do for test statistics from <a href="https://astamm.github.io/flipr/"><strong>flipr</strong></a>. This is mandatory for instance if you have not yet loaded <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a> in your environment via <code><a href="https://astamm.github.io/nevada/">library(nevada)</a></code>.</p>
 </div>
 <div id="using-multiple-test-statistics" class="section level4">
 <h4 class="hasAnchor">
