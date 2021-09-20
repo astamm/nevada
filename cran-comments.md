@@ -1,3 +1,10 @@
+## Resubmission
+This is a resubmission. In this version I have:
+
+* Written package names, software names and API (application programming interface) names in single quotes in `Title` and `Description` fields in the DESCRIPTION file.
+
+* Changed 'Two types of inference is provided' to 'Two types of inference are provided' in the `Description` field of the DESCRIPTION file.
+
 ## Test environments
 * local macOS R installation, R 4.1.0
 * macOS latest release (via [R-CMD-check](https://github.com/r-lib/actions/blob/master/examples/check-standard.yaml) github action)
