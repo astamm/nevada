@@ -5,9 +5,12 @@ output: html_document
 
 ```{r setup, include=FALSE}
 library(reticulate)
-virtualenv_create("graph-space")
-py_install("~/Softs/GraphSpace/", envname = "graph-space")
-use_virtualenv("graph-space")
+py_install(
+  packages = "~/Softs/GraphSpace/", 
+  envname = "r-reticulate", 
+  method = "conda"
+)
+use_condaenv("r-reticulate")
 ```
 
 ```{python}
