@@ -149,8 +149,9 @@ test2_global <- function(x, y,
 #' @param verbose Boolean specifying whether information on intermediate tests
 #'   should be printed in the process (default: \code{FALSE}).
 #'
-#' @return A length-2 list reporting the adjusted p-values of each element of
-#'   the partition for the intra- and inter-tests.
+#' @return A \code{\link[tidygraph]{tbl_graph}} object with node and edge
+#'   attributes `pvalue` and `truncated`, which is a boolean that says whether
+#'   p-values are properly adjusted (`truncated = FALSE`).
 #' @export
 #'
 #' @examples
@@ -202,7 +203,7 @@ test2_local <- function(x, y, partition,
   p_intra <- utils::combn(E, 1, simplify = FALSE) %>%
     purrr::transpose() %>%
     purrr::simplify_all() %>%
-    rlang::set_names("E") %>%
+    rlang::set_names("name") %>%
     tibble::as_tibble() %>%
     dplyr::mutate(pvalue = 0, truncated = FALSE)
 
@@ -212,7 +213,7 @@ test2_local <- function(x, y, partition,
   p_inter <- utils::combn(E, 2, simplify = FALSE) %>%
     purrr::transpose() %>%
     purrr::simplify_all() %>%
-    rlang::set_names(c("E1", "E2")) %>%
+    rlang::set_names(c("from", "to")) %>%
     tibble::as_tibble() %>%
     dplyr::mutate(pvalue = 0, truncated = FALSE)
 
@@ -320,13 +321,25 @@ test2_local <- function(x, y, partition,
     }
   }
 
-  list(intra = p_intra, inter = p_inter)
+  p_intra$signif <- p_intra$pvalue <= alpha
+  p_inter$signif <- p_inter$pvalue <= alpha
+
+  p_intra$from <- p_intra$name
+  p_intra$to <- p_intra$name
+  p_inter <- rbind(p_inter, p_intra[c(5:6, 2:4)])
+  p_intra[-1] <- NULL
+
+  tidygraph::tbl_graph(
+    nodes = p_intra,
+    edges = p_inter,
+    directed = FALSE
+  )
 }
 
 .update_intra_pvalues <- function(output, c, p, alpha) {
   output %>%
     dplyr::mutate(
-      pvalue = purrr::map2_dbl(.data$E, .data$pvalue, ~ dplyr::if_else(.x %in% c, pmax(.y, p), .y)),
+      pvalue = purrr::map2_dbl(.data$name, .data$pvalue, ~ dplyr::if_else(.x %in% c, pmax(.y, p), .y)),
       truncated = .data$pvalue >= alpha
     )
 }
@@ -335,7 +348,7 @@ test2_local <- function(x, y, partition,
   output %>%
     dplyr::mutate(
       pvalue = purrr::pmap_dbl(
-        list(.data$E1, .data$E2, .data$pvalue),
+        list(.data$from, .data$to, .data$pvalue),
         ~ dplyr::if_else(all(c(..1, ..2) %in% c), pmax(..3, p), ..3)
       ),
       truncated = .data$pvalue >= alpha
