@@ -65,8 +65,9 @@ result reproducibility. Defaults to \code{NULL}.}
 should be printed in the process (default: \code{FALSE}).}
 }
 \value{
-A length-2 list reporting the adjusted p-values of each element of
-the partition for the intra- and inter-tests.
+A \code{\link[tidygraph]{tbl_graph}} object with node and edge
+attributes \code{pvalue} and \code{truncated}, which is a boolean that says whether
+p-values are properly adjusted (\code{truncated = FALSE}).
 }
 \description{
 Local Two-Sample Test for Network-Valued Data

@@ -58,43 +58,124 @@ nvd <- function(model = "smallworld",
     "binomial" = rbinom_network(size = size, prob = prob, n = 25L)
   ), simplify = FALSE)
 
-  as_nvd(obj)
+  as_nvd(obj, matched = TRUE)
 }
 
-#' Coercion to Network-Valued Data Object
+is_named <- function(x) {
+  if (!tidygraph::is.tbl_graph(x))
+    cli::cli_abort(c("x" = "The input argument {.var x} should be of class {.cls tbl_graph}."))
+  "name" %in% names(tidygraph::as_tibble(x, active = "nodes"))
+}
+
+#' Network-Valued Data Class
 #'
 #' This function flags a list of \code{\link[igraph]{igraph}} objects as an
 #' \code{\link{nvd}} object as defined in this package.
 #'
-#' @param obj A list of \code{\link[igraph]{igraph}} objects.
+#' @param obj A list of R objects convertible into
+#'   \code{\link[tidygraph]{tbl_graph}} objects.
+#' @param matched A boolean specifying whether graphs should be considered
+#'   node-matched or not. Defaults to `FALSE`.
+#' @param verbose A boolean specifying whether to print some information about
+#'   the sample. Defaults to `FALSE`.
 #'
 #' @return An \code{\link{nvd}} object.
 #' @export
 #'
 #' @examples
 #' as_nvd(nvd("smallworld", 10))
-as_nvd <- function(obj) {
+as_nvd <- function(obj, matched = FALSE, verbose = FALSE) {
   if (!is.list(obj))
-    cli::cli_abort("Input should be a list.")
+    cli::cli_abort(c("x" = "The input argument {.var obj} should be of class {.cls list}."))
 
-  # check that entries are igraph objects
-  input_ok <- TRUE
-  for (l in obj) {
-    if (!igraph::is_igraph(l)) {
-      input_ok <- FALSE
-      break()
-    }
+  # Transform elements in the list into tbl_graph objects
+  obj <- purrr::map(obj, tidygraph::as_tbl_graph)
+
+  # if some of the graph only are node-labelled --> abort
+  num_graphs <- length(obj)
+  if (verbose)
+    cli::cli_alert_info("Number of graphs in the sample: {num_graphs}")
+  are_named <- purrr::map_lgl(obj, is_named)
+  num_named <- sum(are_named)
+  if (num_named > 0 && num_named < num_graphs) {
+    cli::cli_abort(c(
+      "i" = "Graphs should be either completely node-labelled or completely node-unlabelled.",
+      "x" = "In your sample, {num_named}/{num_graphs} {cli::qty(num_named)} graph{?s} {?is/are} named."
+    ))
   }
 
-  if (!input_ok)
-    cli::cli_abort("List elements should be igraph objects.")
+  # Ensure each graph has a name
+  graph_names <- names(obj)
+  if (is.null(graph_names)) {
+    names(obj) <- paste0("G", formatC(
+      x = 1:num_graphs,
+      width = nchar(num_graphs),
+      flag = "0"
+    ))
+  }
 
   class(obj) <- c("nvd", "list")
+
+  # if all graphs are node-labeled --> output as is, even if different orders
+  if (num_named == num_graphs)
+    return(obj)
+
+  # if all graphs are node-unlabelled -->
+  orders <- purrr::map_dbl(obj, igraph::gorder)
+
+  if (stats::var(orders) > 0 || !matched) {
+    # --> if different orders, distinct labels for each node of each graph
+    obj <- purrr::imap(obj, ~ {
+      .x |>
+        tidygraph::activate(nodes) |>
+        tidygraph::mutate(name = paste0(
+          "G", formatC(.y, width = nchar(num_graphs), flag = "0"),
+          "V", formatC(1:orders[.y], width = nchar(orders[.y]), flag = "0")
+        ))
+    })
+  } else {
+    # --> if same order, labels according to the matched argument
+    obj <- purrr::imap(obj, ~ {
+      .x |>
+        tidygraph::activate(nodes) |>
+        tidygraph::mutate(name = paste0(
+          "V", formatC(1:orders[1], width = nchar(orders[1]), flag = "0")
+        ))
+    })
+  }
+
   obj
 }
 
+#' Test nvd
+#'
+#' @param obj An R object.
+#'
+#' @return A boolean specifying whether the input R object is of class
+#'   \code{\link{nvd}}.
+#'
+#' @export
+#' @examples
 is_nvd <- function(obj) {
   "nvd" %in% class(obj)
+}
+
+#' Concatenation of `nvd` objects
+#'
+#' @param ... A number of \code{\link{nvd}} objects.
+#'
+#' @return A network-valued data set as \code{\link{nvd}} object.
+#' @export
+#'
+#' @examples
+#' x <- nvd("pa", 5)
+#' y <- nvd("smallworld", 5)
+#' z <- bind_nvd(x, y)
+bind_nvd <- function(...) {
+  l <- rlang::list2(...)
+  l <- purrr::imap(l, ~ `names<-`(.x, paste0("S", .y, "-G", 1:length(.x))))
+  l <- purrr::flatten(l)
+  as_nvd(l)
 }
 
 #' Two-Sample Stochastic Block Model Generator
@@ -170,9 +251,6 @@ sample2_sbm <- function(n, nv, p1, b1, p2 = p1, b2 = b1, seed = NULL) {
 #' @param x An \code{\link{nvd}} object.
 #' @param weights A numeric vector specifying weights for each observation
 #'   (default: equally weighted).
-#' @param representation A string specifying the graph representation to be
-#'   used. Choices are adjacency, laplacian, modularity, graphon. Default is
-#'   adjacency.
 #' @param ... Other argument to be parsed to the \code{\link[base]{mean}}
 #'   function.
 #'
@@ -183,17 +261,14 @@ sample2_sbm <- function(n, nv, p1, b1, p2 = p1, b2 = b1, seed = NULL) {
 #' @examples
 #' d <- nvd(n = 10L)
 #' mean(d)
-mean.nvd <- function(x, weights = rep(1, length(x)), representation = "adjacency", ...) {
-  x <- repr_nvd(x, representation = representation)
+mean.nvd <- function(x, weights = rep(1, length(x)), ...) {
+  node_df <- tidygraph::as_tibble(x[[1]], active = "nodes")
+  x <- repr_nvd(x, representation = "adjacency")
   if (is.null(weights)) weights <- rep(1, length(x))
   x <- mean_nvd_impl(x, weights)
-  switch(
-    representation,
-    adjacency = as_adjacency(x),
-    laplacian = as_laplacian(x),
-    modularity = as_modularity(x),
-    graphon = as_graphon(x)
-  )
+  x <- tidygraph::as_tbl_graph(x, directed = FALSE)
+  x <- tidygraph::mutate(x, name = node_df$name)
+  x
 }
 
 #' Fréchet Variance of Network-Valued Data Around a Given Network

@@ -8,24 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-A flexible statistical framework for network-valued data analysis. 
-    It leverages the complexity of the space of distributions on graphs by using 
-    the permutation framework for inference as implemented in the 'flipr' package. 
-    Currently, only the two-sample testing problem is covered and generalization 
-    to k samples and regression will be added in the future as well. It is a 
-    4-step procedure where the user chooses a suitable representation of the 
-    networks, a suitable metric to embed the representation into a metric space, 
-    one or more test statistics to target specific aspects of the distributions 
-    to be compared and a formula to compute the permutation p-value. Two types 
-    of inference are provided: a global test answering whether there is a 
-    difference between the distributions that generated the two samples and a 
-    local test for localizing differences on the network structure. The latter 
-    is assumed to be shared by all networks of both samples. References: Lovato, 
-    I., Pini, A., Stamm, A., Vantini, S. (2020) "Model-free two-sample test for 
-    network-valued data" <doi:10.1016/j.csda.2019.106896>; Lovato, I., Pini, A., 
-    Stamm, A., Taquet, M., Vantini, S. (2021) "Multiscale null hypothesis 
-    testing for network-valued data: Analysis of brain networks of patients with 
-    autism" <doi:10.1111/rssc.12463>.
+A flexible statistical framework for network-valued data analysis. It leverages the complexity of the space of distributions on graphs by using the permutation framework for inference as implemented in the 'flipr' package. Currently, only the two-sample testing problem is covered and generalization to k samples and regression will be added in the future as well. It is a 4-step procedure where the user chooses a suitable representation of the networks, a suitable metric to embed the representation into a metric space, one or more test statistics to target specific aspects of the distributions to be compared and a formula to compute the permutation p-value. Two types of inference are provided: a global test answering whether there is a difference between the distributions that generated the two samples and a local test for localizing differences on the network structure. The latter is assumed to be shared by all networks of both samples. References: Lovato, I., Pini, A., Stamm, A., Vantini, S. (2020) "Model-free two-sample test for network-valued data" <doi:10.1016/j.csda.2019.106896>; Lovato, I., Pini, A., Stamm, A., Taquet, M., Vantini, S. (2021) "Multiscale null hypothesis testing for network-valued data: Analysis of brain networks of patients with autism" <doi:10.1111/rssc.12463>.
 }
 \seealso{
 Useful links:

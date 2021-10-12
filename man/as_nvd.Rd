@@ -2,12 +2,19 @@
 % Please edit documentation in R/nvd-class.R
 \name{as_nvd}
 \alias{as_nvd}
-\title{Coercion to Network-Valued Data Object}
+\title{Network-Valued Data Class}
 \usage{
-as_nvd(obj)
+as_nvd(obj, matched = FALSE, verbose = FALSE)
 }
 \arguments{
-\item{obj}{A list of \code{\link[igraph]{igraph}} objects.}
+\item{obj}{A list of R objects convertible into
+\code{\link[tidygraph]{tbl_graph}} objects.}
+
+\item{matched}{A boolean specifying whether graphs should be considered
+node-matched or not. Defaults to \code{FALSE}.}
+
+\item{verbose}{A boolean specifying whether to print some information about
+the sample. Defaults to \code{FALSE}.}
 }
 \value{
 An \code{\link{nvd}} object.
