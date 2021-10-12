@@ -1,0 +1,401 @@
+---
+title: "wip-tidygraph"
+author: "Aymeric Stamm"
+date: "9/30/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(nevada)
+library(ggraph)
+library(tidygraph)
+library(graphlayouts)
+
+as_tbl_graph.nvd <- function(x, ...) {
+  x |>
+    purrr::map(as_tbl_graph) |>
+    purrr::imap(~ mutate(activate(.x, "edges"), id = .y)) |>
+    # imap(~ mutate(activate(.x, "nodes"), id = .y)) |>
+    purrr::reduce(graph_join)
+}
+
+sample_islands <- function(n, n_islands, size_islands, p_within, m_between) {
+  l <- replicate(n, {
+    g <- igraph::sample_islands(n_islands, size_islands, p_within, m_between)
+    g <- igraph::simplify(g)
+    igraph::V(g)$grp <- paste0("I", rep(1:n_islands, each = size_islands))
+    g
+  }, simplify = FALSE)
+  as_nvd(l, matched = TRUE)
+}
+
+m <- rep(1:3, each = 10)
+```
+
+## Only intra changes
+
+### Data generation
+
+```{r}
+withr::with_seed(123, {
+  x1 <- sample_islands(
+    n = 5,
+    n_islands = 3,
+    size_islands = 10,
+    p_within = 0.1,
+    m_between = 5
+  )
+  y1 <- sample_islands(
+    n = 5,
+    n_islands = 3,
+    size_islands = 10,
+    p_within = 0.9,
+    m_between = 5
+  ) 
+})
+```
+
+### Visualisation
+
+```{r, fig.height=3.5, out.width="100%"}
+z1 <- bind_nvd(x1, y1)
+g1 <- as_tbl_graph(z1)
+bb1 <- layout_as_backbone(y1[[1]], keep = 0.4)
+igraph::E(g1)$col <- FALSE
+igraph::E(g1)$col[bb1$backbone] <- TRUE
+ggraph(g1, layout = "manual", x = bb1$xy[, 1], y = bb1$xy[, 2]) +
+  geom_edge_link0(colour = rgb(0, 0, 0, 0.5), width = 0.1) +
+  geom_node_point(aes(col = grp)) +
+  scale_color_brewer(palette = "Set1") +
+  facet_edges(vars(id), nrow = 2) +
+  theme_graph() +
+  theme(legend.position = "none")
+```
+
+### Local test
+
+```{r}
+t1 <- test2_local(
+  x1, y1, m,
+  seed = 1234,
+  alpha = 0.05,
+  B = 1000
+)
+t1
+ggraph(t1, layout = 'stress') +
+  geom_edge_link0(aes(filter = signif)) + 
+  geom_edge_loop0(aes(filter = signif)) + 
+  geom_node_point(shape = 21) +
+  geom_node_text(aes(label = name), repel = TRUE) + 
+  theme_graph()
+```
+
+Attempt to better viz
+
+```{r, fig.height=3.5, out.width="100%"}
+augment_graph <- function(x, t) {
+  x <- x |> 
+    as_tbl_graph() |> 
+    mutate(memb = paste0("P", rep(1:3, each = 10))) |> 
+    activate(edges) |> 
+    mutate(key = paste0(.N()$memb[from], "-", .N()$memb[to]))
+  t <- t |>
+    activate(edges) |>
+    mutate(key = paste0(.N()$name[from], "-", .N()$name[to]))
+  x |> 
+    left_join(t, by = "key", copy = TRUE)
+}
+x1aug <- imap(x1, ~ .x |> augment_graph(t = t1) |> mutate(id = paste0("S1", .y)))
+y1aug <- imap(y1, ~ .x |> augment_graph(t = t1) |> mutate(id = paste0("S2", .y)))
+g1aug <- bind_graphs(
+  reduce(x1aug, bind_graphs), 
+  reduce(y1aug, bind_graphs)
+)
+g1aug |> 
+  ggraph(layout = "manual", x = bb1$xy[, 1], y = bb1$xy[, 2]) +
+  geom_edge_link0(aes(color = !signif)) +
+  scale_edge_color_grey() + 
+  geom_node_point(aes(color = grp)) + 
+  scale_color_viridis_d() +
+  facet_edges(vars(id), nrow = 2) +
+  theme_graph() +
+  theme(legend.position = "none")
+```
+
+## Only inter changes
+
+### Data generation
+
+```{r}
+withr::with_seed(123, {
+  x2 <- sample_islands(
+    n = 5,
+    n_islands = 3,
+    size_islands = 10,
+    p_within = 0.5,
+    m_between = 2
+  )
+  y2 <- sample_islands(
+    n = 5,
+    n_islands = 3,
+    size_islands = 10,
+    p_within = 0.5,
+    m_between = 8
+  ) 
+})
+```
+
+### Visualisation
+
+```{r, fig.height=4, out.width="100%"}
+z2 <- bind_nvd(x2, y2)
+g2 <- as_tbl_graph(z2)
+bb2 <- layout_as_backbone(y2[[1]], keep = 0.4)
+igraph::E(g2)$col <- FALSE
+igraph::E(g2)$col[bb2$backbone] <- TRUE
+ggraph(g2, layout = "manual", x = bb2$xy[, 1], y = bb2$xy[, 2]) +
+  geom_edge_link0(colour = rgb(0, 0, 0, 0.5), width = 0.1) +
+  geom_node_point(aes(col = grp)) +
+  scale_color_brewer(palette = "Set1") +
+  facet_edges(vars(id), nrow = 2) +
+  theme_graph() +
+  theme(legend.position = "none")
+```
+
+### Local test
+
+```{r}
+t2 <- test2_local(
+  x2, y2, m,
+  seed = 1234,
+  alpha = 0.05,
+  B = 1000
+)
+t2
+ggraph(t2, layout = 'stress') +
+  geom_edge_link0(aes(filter = signif)) +
+  geom_edge_loop0(aes(filter = signif)) + 
+  geom_node_point(shape = 21) +
+  geom_node_text(aes(label = name), repel = TRUE) + 
+  theme_graph()
+```
+
+```{r, fig.height=3.5, out.width="100%"}
+x2aug <- x2 |>
+  nevada:::mean.nvd() |> 
+  augment_graph(t = t2) |> 
+  activate(edges) |> 
+  mutate(id = "Sample 1 Mean") |> 
+  activate(nodes) |> 
+  mutate(grp = paste0("P", m))
+y2aug <- y2 |>
+  nevada:::mean.nvd() |> 
+  augment_graph(t = t2) |>
+  activate(edges) |> 
+  mutate(id = "Sample 2 Mean") |> 
+  activate(nodes) |> 
+  mutate(grp = paste0("P", m))
+g2aug <- bind_graphs(x2aug, y2aug)
+g2aug
+bb <- layout_as_backbone(y2aug, keep = 0.4)
+igraph::E(g2aug)$col <- FALSE
+igraph::E(g2aug)$col[bb$backbone] <- TRUE
+g2aug |>
+  ggraph(layout = "manual", x = bb$xy[, 1], y = bb$xy[, 2]) +
+  facet_edges(vars(id), nrow = 1) +
+  geom_node_voronoi(aes(fill = grp), alpha = 0.3, max.radius = 1) +
+  scale_fill_viridis_d() +
+  geom_edge_link0(aes(color = !signif, width = weight)) +
+  scale_edge_width(range = c(0, 1)) + 
+  scale_edge_color_grey() +
+  geom_node_point(aes(fill = grp), shape = 21, size = 2, color = "black") +
+  scale_color_viridis_d() +
+  theme_graph() +
+  theme(legend.position = "none")
+```
+
+## Both intra and inter changes (1/2)
+
+### Data generation
+
+```{r}
+withr::with_seed(123, {
+  x3 <- sample_islands(
+    n = 5,
+    n_islands = 3,
+    size_islands = 10,
+    p_within = 0.1,
+    m_between = 2
+  )
+  y3 <- sample_islands(
+    n = 5,
+    n_islands = 3,
+    size_islands = 10,
+    p_within = 0.9,
+    m_between = 8
+  ) 
+})
+```
+
+### Visualisation
+
+```{r, fig.height=4, out.width="100%"}
+z3 <- bind_nvd(x3, y3)
+g3 <- as_tbl_graph(z3)
+bb3 <- layout_as_backbone(y3[[1]], keep = 0.4)
+igraph::E(g3)$col <- FALSE
+igraph::E(g3)$col[bb3$backbone] <- TRUE
+ggraph(g3, layout = "manual", x = bb3$xy[, 1], y = bb3$xy[, 2]) +
+  geom_edge_link0(colour = rgb(0, 0, 0, 0.5), width = 0.1) +
+  geom_node_point(aes(col = grp)) +
+  scale_color_brewer(palette = "Set1") +
+  facet_edges(vars(id), nrow = 2) +
+  theme_graph() +
+  theme(legend.position = "none")
+```
+
+### Local test
+
+```{r}
+t3 <- test2_local(
+  x3, y3, m,
+  seed = 1234,
+  alpha = 0.05,
+  B = 1000
+)
+t3
+ggraph(t3, layout = 'stress') +
+  geom_edge_link0(aes(filter = signif)) +
+  geom_edge_loop0(aes(filter = signif)) + 
+  geom_node_point(shape = 21) +
+  geom_node_text(aes(label = name), repel = TRUE) + 
+  theme_graph()
+```
+
+```{r, fig.height=3.5, out.width="100%"}
+x3aug <- x3 |>
+  nevada:::mean.nvd() |> 
+  augment_graph(t = t3) |> 
+  activate(edges) |> 
+  mutate(id = "Sample 1 Mean") |> 
+  activate(nodes) |> 
+  mutate(grp = paste0("P", m))
+y3aug <- y3 |>
+  nevada:::mean.nvd() |> 
+  augment_graph(t = t3) |>
+  activate(edges) |> 
+  mutate(id = "Sample 2 Mean") |> 
+  activate(nodes) |> 
+  mutate(grp = paste0("P", m))
+g3aug <- bind_graphs(x3aug, y3aug)
+g3aug
+bb <- layout_as_backbone(y3aug, keep = 0.4)
+igraph::E(g3aug)$col <- FALSE
+igraph::E(g3aug)$col[bb$backbone] <- TRUE
+g3aug |>
+  ggraph(layout = "manual", x = bb$xy[, 1], y = bb$xy[, 2]) +
+  facet_edges(vars(id), nrow = 1) +
+  geom_node_voronoi(aes(fill = grp), alpha = 0.3, max.radius = 1) +
+  scale_fill_viridis_d() +
+  geom_edge_link0(aes(color = !signif, width = weight)) +
+  scale_edge_width(range = c(0, 1)) + 
+  scale_edge_color_grey() +
+  geom_node_point(aes(fill = grp), shape = 21, size = 2, color = "black") +
+  scale_color_viridis_d() +
+  theme_graph() +
+  theme(legend.position = "none")
+```
+
+## Both intra and inter changes (2/2)
+
+### Data generation
+
+```{r}
+withr::with_seed(123, {
+  x4 <- sample_islands(
+    n = 5,
+    n_islands = 3,
+    size_islands = 10,
+    p_within = 0.1,
+    m_between = 8
+  )
+  y4 <- sample_islands(
+    n = 5,
+    n_islands = 3,
+    size_islands = 10,
+    p_within = 0.9,
+    m_between = 2
+  ) 
+})
+```
+
+### Visualisation
+
+```{r, fig.height=4, out.width="100%"}
+z4 <- bind_nvd(x4, y4)
+g4 <- as_tbl_graph(z4)
+bb4 <- layout_as_backbone(y4[[1]], keep = 0.4)
+igraph::E(g4)$col <- FALSE
+igraph::E(g4)$col[bb4$backbone] <- TRUE
+ggraph(g4, layout = "manual", x = bb4$xy[, 1], y = bb4$xy[, 2]) +
+  geom_edge_link0(colour = rgb(0, 0, 0, 0.5), width = 0.1) +
+  geom_node_point(aes(col = grp)) +
+  scale_color_brewer(palette = "Set1") +
+  facet_edges(vars(id), nrow = 2) +
+  theme_graph() +
+  theme(legend.position = "none")
+```
+
+### Local test
+
+```{r}
+t4 <- test2_local(
+  x4, y4, m,
+  seed = 1234,
+  alpha = 0.05,
+  B = 1000
+)
+t4
+ggraph(t4, layout = 'stress') +
+  geom_edge_link0(aes(filter = signif)) +
+  geom_edge_loop0(aes(filter = signif)) + 
+  geom_node_point(shape = 21) +
+  geom_node_text(aes(label = name), repel = TRUE) + 
+  theme_graph()
+```
+
+```{r, fig.height=3.5, out.width="100%"}
+x4aug <- x4 |>
+  nevada:::mean.nvd() |> 
+  augment_graph(t = t4) |> 
+  activate(edges) |> 
+  mutate(id = "Sample 1 Mean") |> 
+  activate(nodes) |> 
+  mutate(grp = paste0("P", m))
+y4aug <- y4 |>
+  nevada:::mean.nvd() |> 
+  augment_graph(t = t4) |>
+  activate(edges) |> 
+  mutate(id = "Sample 2 Mean") |> 
+  activate(nodes) |> 
+  mutate(grp = paste0("P", m))
+g4aug <- bind_graphs(x4aug, y4aug)
+g4aug
+bb <- layout_as_backbone(y4aug, keep = 0.4)
+igraph::E(g4aug)$col <- FALSE
+igraph::E(g4aug)$col[bb$backbone] <- TRUE
+g4aug |>
+  ggraph(layout = "manual", x = bb$xy[, 1], y = bb$xy[, 2]) +
+  facet_edges(vars(id), nrow = 1) +
+  geom_node_voronoi(aes(fill = grp), alpha = 0.3, max.radius = 1) +
+  scale_fill_viridis_d() +
+  geom_edge_link0(aes(color = !signif, width = weight)) +
+  scale_edge_width(range = c(0, 1)) + 
+  scale_edge_color_grey() +
+  geom_node_point(aes(fill = grp), shape = 21, size = 2, color = "black") +
+  scale_color_viridis_d() +
+  theme_graph() +
+  theme(legend.position = "none")
+```

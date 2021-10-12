@@ -3,86 +3,79 @@ library(ggraph)
 library(tidygraph)
 library(graphlayouts)
 
-as_tbl_graph.nvd <- function(x, directed = TRUE, ...) {
-  nm <- names(x)
-  if (is.null(nm)) nm <- seq_len(length(x))
+as_tbl_graph.nvd <- function(x, ...) {
   x |>
-    purrr::map(igraph::as_edgelist, names = FALSE) |>
-    purrr::map2(nm, cbind) |>
-    purrr::map(`colnames<-`, c("from", "to", "id")) |>
-    purrr::map(tibble::as_tibble) |>
-    purrr::reduce(rbind) |>
-    as_tbl_graph(directed = directed)
+    map(as_tbl_graph) |>
+    imap(~ mutate(activate(.x, "edges"), id = .y)) |>
+    # imap(~ mutate(activate(.x, "nodes"), id = .y)) |>
+    reduce(graph_join)
 }
 
-x <- nvd("pa", 6)
-xx <- purrr::map(x, igraph::as_edgelist, names = FALSE) |>
-  purrr::imap(~ cbind(.x, .y)) |>
-  purrr::map(`colnames<-`, c("from", "to", "id")) |>
-  purrr::map(tibble::as_tibble) |>
-  bind_rows() |>
-  as_tbl_graph(directed = FALSE) |>
-  mutate(Popularity = centrality_degree(mode = 'in'))
+sample_islands <- function(n, n_islands, size_islands, p_within, m_between) {
+  l <- replicate(n, {
+    g <- igraph::sample_islands(n_islands, size_islands, p_within, m_between)
+    g <- igraph::simplify(g)
+    igraph::V(g)$grp <- paste0("I", rep(1:n_islands, each = size_islands))
+    g
+  }, simplify = FALSE)
+  as_nvd(l, matched = TRUE)
+}
 
-ggraph(xx, layout = 'kk') +
-  geom_edge_fan(aes(alpha = stat(index)), show.legend = FALSE) +
-  geom_node_point(aes(size = Popularity)) +
-  facet_edges(~id, nrow = 2) +
-  theme_graph(foreground = 'steelblue', fg_text_colour = 'white')
+# Only intra changes ------------------------------------------------------
 
-xxx <- as_tbl_graph(x)
-ggraph(xxx, layout = 'stress') +
-  geom_edge_fan(aes(alpha = after_stat(index)), show.legend = FALSE) +
-  # geom_node_point(aes(size = Popularity)) +
+# Data generation
+x <- sample_islands(
+  n = 5,
+  n_islands = 3,
+  size_islands = 10,
+  p_within = 0.1,
+  m_between = 5
+)
+y <- sample_islands(
+  n = 5,
+  n_islands = 3,
+  size_islands = 10,
+  p_within = 0.9,
+  m_between = 5
+)
+
+# Viz graphs
+z <- bind_nvd(x, y)
+g <- as_tbl_graph(z)
+bb <- layout_as_backbone(y[[1]], keep = 0.4)
+igraph::E(g)$col <- FALSE
+igraph::E(g)$col[bb$backbone] <- TRUE
+ggraph(g, layout = "manual", x = bb$xy[, 1], y = bb$xy[, 2]) +
+  geom_edge_link0(colour = rgb(0, 0, 0, 0.5), width = 0.1) +
+  geom_node_point(aes(col = grp)) +
+  scale_color_brewer(palette = "Set1") +
   facet_edges(vars(id), nrow = 2) +
-  theme_graph(foreground = 'steelblue', fg_text_colour = 'white')
+  theme_graph() +
+  theme(legend.position = "none")
 
-library(nevada)
-library(tidygraph)
-library(ggraph)
-n <- 10
-p1 <- matrix(
-  data = c(0.1, 0.4, 0.1, 0.4,
-           0.4, 0.4, 0.1, 0.4,
-           0.1, 0.1, 0.4, 0.4,
-           0.4, 0.4, 0.4, 0.4),
-  nrow = 4,
-  ncol = 4,
-  byrow = TRUE
-)
-p2 <- matrix(
-  data = c(0.1, 0.4, 0.4, 0.4,
-           0.4, 0.4, 0.4, 0.4,
-           0.4, 0.4, 0.1, 0.1,
-           0.4, 0.4, 0.1, 0.4),
-  nrow = 4,
-  ncol = 4,
-  byrow = TRUE
-)
-sim <- sample2_sbm(n, 68, p1, c(17, 17, 17, 17), p2, seed = 1234)
-m <- as.integer(c(rep(1, 17), rep(2, 17), rep(3, 17), rep(4, 17)))
-res <- test2_local(sim$x, sim$y, m,
+# Test
+m <- rep(1:3, each = 10)
+res <- test2_local(x, y, m,
                    seed = 1234,
-                   # alpha = 0.05,
-                   B = 100)
+                   alpha = 0.05,
+                   B = 1000)
+res
 alpha <- 0.05
-edge_width_min <- 1 - max(res$inter$pvalue)
-edge_width_max <- 1 - min(res$inter$pvalue)
-node_width_min <- 1 - max(res$intra$pvalue)
-node_width_max <- 1 - min(res$intra$pvalue)
-g <- tbl_graph(
+width_min <- 1 - max(res$inter$pvalue, res$intra$pvalue)
+width_max <- 1 - min(res$inter$pvalue, res$intra$pvalue)
+g2 <- tbl_graph(
   nodes = res$intra |>
     mutate(
-      signif = pvalue <= alpha,
+      signif = factor(pvalue <= alpha, levels = c(TRUE, FALSE)),
       weight = 1 - pvalue,
-      weight = (weight - node_width_min) / (node_width_max - node_width_min)
+      weight = (weight - width_min) / (width_max - width_min)
     ),
   edges = res$inter |>
     rename(from = E1, to = E2) |>
     mutate(
-      signif = pvalue <= alpha,
+      signif = factor(pvalue <= alpha, levels = c(TRUE, FALSE)),
       weight = 1 - pvalue,
-      weight = (weight - edge_width_min) / (edge_width_max - edge_width_min)
+      weight = (weight - width_min) / (width_max - width_min)
     ),
   directed = FALSE,
   node_key = "E"
@@ -94,4 +87,12 @@ ggraph(g, layout = 'stress') +
   geom_node_text(aes(label = E), repel = TRUE) +
   scale_size(range = c(0, 5)) +
   scale_edge_width(range = c(0, 1)) +
+  theme_graph()
+
+ggraph(g, layout = 'stress') +
+  geom_edge_link(aes(colour = signif), show.legend = FALSE) +
+  geom_node_point(aes(fill = signif), shape = 21) +
+  geom_node_text(aes(label = E), repel = TRUE) +
+  # scale_size(range = c(0, 5)) +
+  # scale_edge_width(range = c(0, 1)) +
   theme_graph()
