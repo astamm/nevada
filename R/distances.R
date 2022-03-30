@@ -151,8 +151,10 @@ ipro_frobenius <- function(x, y, representation = "laplacian") {
 #' @export
 #'
 #' @examples
-#' x <- nvd("smallworld", 10)
-#' y <- nvd("pa", 10)
+#' gnp_params <- list(p = 1/3)
+#' k_regular_params <- list(k = 8L)
+#' x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
+#' y <- nvd(model = "k_regular", n = 10L, model_params = k_regular_params)
 #' dist_nvd(x, y, "adjacency", "spectral")
 dist_nvd <- function(x,
                      y = NULL,

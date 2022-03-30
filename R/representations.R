@@ -149,7 +149,8 @@ repr_transitivity <- function(network, validate = TRUE) {
 #' @export
 #'
 #' @examples
-#' x <- nvd("gnp", 10)
+#' gnp_params <- list(p = 1/3)
+#' x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
 #' xm <- repr_nvd(x)
 repr_nvd <- function(x, y = NULL, representation = "adjacency") {
   x <- lapply(x, format_input, representation)

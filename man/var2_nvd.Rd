@@ -26,6 +26,7 @@ distances. As such, it can accommodate any pair of representation and
 distance.
 }
 \examples{
-d <- nvd(n = 10L)
-var2_nvd(x = d, representation = "graphon", distance = "frobenius")
+gnp_params <- list(p = 1/3)
+x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
+var2_nvd(x = x, representation = "graphon", distance = "frobenius")
 }

@@ -102,7 +102,7 @@ In [**nevada**](https://astamm.github.io/nevada/), this representation can be ac
 Instead of going through every single network in a sample to make its representation, [**nevada**](https://astamm.github.io/nevada/) provides the [`repr_nvd()`](https://astamm.github.io/nevada/reference/repr_nvd.html) function which does exactly that for an object of class `nvd`.
 
 ```{r}
-x <- nvd(model = "gnp", n = 3)
+x <- nvd(model = "gnp", n = 3, model_params = list(p = 1/3))
 repr_nvd(x, representation = "laplacian")
 ```
 
@@ -144,7 +144,7 @@ In [**nevada**](https://astamm.github.io/nevada/), this distance can be computed
 Pre-computation of the matrix of pairwise distances for samples of networks alleviates the computational burden of permutation testing. This is why [**nevada**](https://astamm.github.io/nevada/) provides the convenient [`dist_nvd()`](https://astamm.github.io/nevada/reference/dist_nvd.html) function which does exactly that for an object of class `nvd`.
 
 ```{r}
-x <- nvd(model = "gnp", n = 3)
+x <- nvd(model = "gnp", n = 3, model_params = list(p = 1/3))
 dist_nvd(x, representation = "laplacian", distance = "hamming")
 ```
 
@@ -259,8 +259,8 @@ Test statistics are passed to the functions `test2_global()` and `test2_local()`
 - statistics from any other package **pkg** are expected to be named without the `stat_` prefix but adding the `pkg:` prefix.
 
 ```{r}
-x <- nvd(model = "gnp", n = 10)
-y <- nvd(model = "pa" , n = 10)
+x <- nvd(model = "gnp", n = 10, model_params = list(p = 1/3))
+y <- nvd(model = "k_regular" , n = 10, model_params = list(k = 8L))
 test2_global(
   x = x, 
   y = y, 

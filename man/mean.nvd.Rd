@@ -31,6 +31,7 @@ sample Fréchet mean is obtained as the argmin of the sum of squared Frobenius
 distances.
 }
 \examples{
-d <- nvd(n = 10L)
-mean(d)
+gnp_params <- list(p = 1/3)
+x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
+mean(x)
 }

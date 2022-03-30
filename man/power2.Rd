@@ -9,14 +9,9 @@ power2(
   model2 = "k_regular",
   n1 = 20L,
   n2 = 20L,
-  size1 = NULL,
-  prob1 = NULL,
-  size2 = NULL,
-  prob2 = NULL,
-  lambda1 = NULL,
-  lambda2 = NULL,
-  pref.matrix1 = NULL,
-  pref.matrix2 = NULL,
+  num_vertices = 25L,
+  model1_params = NULL,
+  model2_params = NULL,
   representation = "adjacency",
   distance = "frobenius",
   stats = c("flipr:t_ip", "flipr:f_ip"),
@@ -29,47 +24,26 @@ power2(
 )
 }
 \arguments{
-\item{model1}{A string specifying the model to be used for sample 1 among
-\code{"sbm"}, \code{"k_regular"}, \code{"gnp"}, \code{"smallworld"},
-\code{"pa"}, \code{"poisson"} and \code{"binomial"}. Default is
-\code{"gnp"}.}
+\item{model1}{A string specifying the model to be used for generating the
+first sample. Choices are \code{"sbm"}, \code{"k_regular"}, \code{"gnp"}, \code{"smallworld"},
+\code{"pa"}, \code{"poisson"} and \code{"binomial"}. Defaults to \code{"gnp"}.}
 
-\item{model2}{A string specifying the model to be used for sample 2 among
-\code{"sbm"}, \code{"k_regular"}, \code{"gnp"}, \code{"smallworld"},
-\code{"pa"}, \code{"poisson"} and \code{"binomial"}. Default is
-\code{"k_regular"}.}
+\item{model2}{A string specifying the model to be used for generating the
+second sample. Choices are \code{"sbm"}, \code{"k_regular"}, \code{"gnp"}, \code{"smallworld"},
+\code{"pa"}, \code{"poisson"} and \code{"binomial"}. Defaults to \code{"k_regular"}.}
 
-\item{n1}{The size of sample 1 (default: 20L).}
+\item{n1}{The size of the first sample. Defaults to \code{20L}.}
 
-\item{n2}{The size of sample 2 (default: 20L).}
+\item{n2}{The size of the second sample. Defaults to \code{20L}.}
 
-\item{size1}{The number of trials for the binomial distribution of sample 1
-(default: \code{NULL}). Must be specified if \code{model == "binomial"}.}
+\item{num_vertices}{The number of nodes in the generated graphs. Defaults to
+\code{25L}.}
 
-\item{prob1}{The probability of success of each trial for the binomial
-distribution of sample 1 (default: \code{NULL}). Must be specified if
-\code{model == "binomial"}.}
+\item{model1_params}{A named list setting the parameters of the first chosen
+model. Defaults to \code{list(p = 1/3)}.}
 
-\item{size2}{The number of trials for the binomial distribution of sample 2
-(default: \code{NULL}). Must be specified if \code{model == "binomial"}.}
-
-\item{prob2}{The probability of success of each trial for the binomial
-distribution of sample 2 (default: \code{NULL}). Must be specified if
-\code{model == "binomial"}.}
-
-\item{lambda1}{The mean of the Poisson distribution of sample 1 (default:
-\code{NULL}). Must be specified if \code{model == "poisson"}.}
-
-\item{lambda2}{The mean of the Poisson distribution of sample 2 (default:
-\code{NULL}). Must be specified if \code{model == "poisson"}.}
-
-\item{pref.matrix1}{A matrix giving the Bernoulli rates for the SBM generator
-of sample 1 (default: \code{NULL}). Must be specified if \code{model ==
-  "sbm"}.}
-
-\item{pref.matrix2}{A matrix giving the Bernoulli rates for the SBM generator
-of sample 2 (default: \code{NULL}). Must be specified if \code{model ==
-  "sbm"}.}
+\item{model2_params}{A named list setting the parameters of the second chosen
+model. Defaults to \code{list(k = 8L)}.}
 
 \item{representation}{A string specifying the desired type of representation,
 among: \code{"adjacency"}, \code{"laplacian"} and \code{"modularity"}.
@@ -91,8 +65,7 @@ package: \code{"flipr:student_ip"}, \code{"flipr:fisher_ip"}, \code{"flipr:bg_ip
 than \code{1}, it is intended as a tolerance. Otherwise, it is intended as
 the number of required permutations. Defaults to \code{1000L}.}
 
-\item{alpha}{Significance level for hypothesis testing (default:
-\code{0.05}).}
+\item{alpha}{Significance level for hypothesis testing. Defaults to \code{0.05}.}
 
 \item{test}{A character string specifying the formula to be used to compute
 the permutation p-value. Choices are \code{"estimate"}, \code{"upper_bound"} and
@@ -101,11 +74,11 @@ the permutation p-value. Choices are \code{"estimate"}, \code{"upper_bound"} and
 \item{k}{An integer specifying the density of the minimum spanning tree used
 for the edge count statistics. Defaults to \code{5L}.}
 
-\item{R}{The number of Monte-Carlo runs used to estimate the power (default:
-1000L).}
+\item{R}{Number of Monte-Carlo trials used to estimate the power. Defaults to
+\code{1000L}.}
 
-\item{seed}{An integer specifying the seed to start randomness from (default:
-uses clock).}
+\item{seed}{An integer specifying the seed to start randomness from. Defaults
+to using clock time.}
 }
 \value{
 A numeric value estimating the power of the test.
@@ -119,5 +92,13 @@ Currently, six scenarios of pairs of populations are implemented. Scenario 0
 allows to make sure that all our permutation tests are exact.
 }
 \examples{
-power2(R = 10, B = 100, seed = 1234)
+gnp_params <- list(p = 1/3)
+k_regular_params <- list(k = 8L)
+power2(
+  model1_params = gnp_params,
+  model2_params = k_regular_params,
+  R = 10,
+  B = 100,
+  seed = 1234
+)
 }
