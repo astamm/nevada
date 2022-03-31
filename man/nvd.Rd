@@ -4,7 +4,13 @@
 \alias{nvd}
 \title{Network-Valued Data Constructor}
 \usage{
-nvd(model = "smallworld", n = 1L, num_vertices = 25L, model_params = NULL)
+nvd(
+  model = "smallworld",
+  n = 1L,
+  num_vertices = 25L,
+  model_params = NULL,
+  seed = 1234
+)
 }
 \arguments{
 \item{model}{A string specifying the model to be used for sampling networks
@@ -18,6 +24,9 @@ generated (i.e. the number of nodes). Defaults to \code{25L}.}
 
 \item{model_params}{A named list setting the parameters of the model you are
 considering. Defaults to \code{NULL}.}
+
+\item{seed}{An integer specifying the random generator seed. Defaults to
+\code{1234}.}
 }
 \value{
 A \code{nvd} object which is a list of \code{\link[igraph]{igraph}}

@@ -65,8 +65,6 @@ test2_global <- function(x, y,
                          test = "exact",
                          k = 5L,
                          seed = NULL) {
-
-  withr::local_seed(seed)
   n1 <- length(x)
   n2 <- length(y)
   n <- n1 + n2

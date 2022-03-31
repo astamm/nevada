@@ -20,7 +20,7 @@ power2(
   test = "exact",
   k = 5L,
   R = 1000L,
-  seed = NULL
+  seed = 1234
 )
 }
 \arguments{
@@ -77,8 +77,8 @@ for the edge count statistics. Defaults to \code{5L}.}
 \item{R}{Number of Monte-Carlo trials used to estimate the power. Defaults to
 \code{1000L}.}
 
-\item{seed}{An integer specifying the seed to start randomness from. Defaults
-to using clock time.}
+\item{seed}{An integer specifying the random generator seed. Defaults to
+`1234.}
 }
 \value{
 A numeric value estimating the power of the test.

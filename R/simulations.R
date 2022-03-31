@@ -24,8 +24,8 @@
 #' @param alpha Significance level for hypothesis testing. Defaults to `0.05`.
 #' @param R Number of Monte-Carlo trials used to estimate the power. Defaults to
 #'   `1000L`.
-#' @param seed An integer specifying the seed to start randomness from. Defaults
-#'   to using clock time.
+#' @param seed An integer specifying the random generator seed. Defaults to
+#'   `1234.
 #'
 #' @return A numeric value estimating the power of the test.
 #' @export
@@ -52,9 +52,9 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
                    test = "exact",
                    k = 5L,
                    R = 1000L,
-                   seed = NULL) {
-
-  withr::local_seed(seed)
+                   seed = 1234) {
+  if (!is.null(seed))
+    withr::local_seed(seed)
 
   pvalues <- replicate(
     R,
@@ -63,20 +63,23 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
         model = model1,
         n = n1,
         num_vertices = num_vertices,
-        model_params = model1_params
+        model_params = model1_params,
+        seed = NULL
       ),
       y = nvd(
         model = model2,
         n = n2,
         num_vertices = num_vertices,
-        model_params = model2_params
+        model_params = model2_params,
+        seed = NULL
       ),
       representation = representation,
       distance = distance,
       stats = stats,
       B = B,
       test = test,
-      k = k
+      k = k,
+      seed = 1234
     )$pvalue
   )
 
