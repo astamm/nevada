@@ -63,14 +63,9 @@ tests proposed in this package.</p>
   model2 <span class="op">=</span> <span class="st">"k_regular"</span>,
   n1 <span class="op">=</span> <span class="fl">20L</span>,
   n2 <span class="op">=</span> <span class="fl">20L</span>,
-  size1 <span class="op">=</span> <span class="cn">NULL</span>,
-  prob1 <span class="op">=</span> <span class="cn">NULL</span>,
-  size2 <span class="op">=</span> <span class="cn">NULL</span>,
-  prob2 <span class="op">=</span> <span class="cn">NULL</span>,
-  lambda1 <span class="op">=</span> <span class="cn">NULL</span>,
-  lambda2 <span class="op">=</span> <span class="cn">NULL</span>,
-  pref.matrix1 <span class="op">=</span> <span class="cn">NULL</span>,
-  pref.matrix2 <span class="op">=</span> <span class="cn">NULL</span>,
+  num_vertices <span class="op">=</span> <span class="fl">25L</span>,
+  model1_params <span class="op">=</span> <span class="cn">NULL</span>,
+  model2_params <span class="op">=</span> <span class="cn">NULL</span>,
   representation <span class="op">=</span> <span class="st">"adjacency"</span>,
   distance <span class="op">=</span> <span class="st">"frobenius"</span>,
   stats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"flipr:t_ip"</span>, <span class="st">"flipr:f_ip"</span><span class="op">)</span>,
@@ -79,54 +74,33 @@ tests proposed in this package.</p>
   test <span class="op">=</span> <span class="st">"exact"</span>,
   k <span class="op">=</span> <span class="fl">5L</span>,
   R <span class="op">=</span> <span class="fl">1000L</span>,
-  seed <span class="op">=</span> <span class="cn">NULL</span>
+  seed <span class="op">=</span> <span class="fl">1234</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>model1</dt>
-<dd><p>A string specifying the model to be used for sample 1 among
-<code>"sbm"</code>, <code>"k_regular"</code>, <code>"gnp"</code>, <code>"smallworld"</code>,
-<code>"pa"</code>, <code>"poisson"</code> and <code>"binomial"</code>. Default is
-<code>"gnp"</code>.</p></dd>
+<dd><p>A string specifying the model to be used for generating the
+first sample. Choices are <code>"sbm"</code>, <code>"k_regular"</code>, <code>"gnp"</code>, <code>"smallworld"</code>,
+<code>"pa"</code>, <code>"poisson"</code> and <code>"binomial"</code>. Defaults to <code>"gnp"</code>.</p></dd>
 <dt>model2</dt>
-<dd><p>A string specifying the model to be used for sample 2 among
-<code>"sbm"</code>, <code>"k_regular"</code>, <code>"gnp"</code>, <code>"smallworld"</code>,
-<code>"pa"</code>, <code>"poisson"</code> and <code>"binomial"</code>. Default is
-<code>"k_regular"</code>.</p></dd>
+<dd><p>A string specifying the model to be used for generating the
+second sample. Choices are <code>"sbm"</code>, <code>"k_regular"</code>, <code>"gnp"</code>, <code>"smallworld"</code>,
+<code>"pa"</code>, <code>"poisson"</code> and <code>"binomial"</code>. Defaults to <code>"k_regular"</code>.</p></dd>
 <dt>n1</dt>
-<dd><p>The size of sample 1 (default: 20L).</p></dd>
+<dd><p>The size of the first sample. Defaults to <code>20L</code>.</p></dd>
 <dt>n2</dt>
-<dd><p>The size of sample 2 (default: 20L).</p></dd>
-<dt>size1</dt>
-<dd><p>The number of trials for the binomial distribution of sample 1
-(default: <code>NULL</code>). Must be specified if <code>model == "binomial"</code>.</p></dd>
-<dt>prob1</dt>
-<dd><p>The probability of success of each trial for the binomial
-distribution of sample 1 (default: <code>NULL</code>). Must be specified if
-<code>model == "binomial"</code>.</p></dd>
-<dt>size2</dt>
-<dd><p>The number of trials for the binomial distribution of sample 2
-(default: <code>NULL</code>). Must be specified if <code>model == "binomial"</code>.</p></dd>
-<dt>prob2</dt>
-<dd><p>The probability of success of each trial for the binomial
-distribution of sample 2 (default: <code>NULL</code>). Must be specified if
-<code>model == "binomial"</code>.</p></dd>
-<dt>lambda1</dt>
-<dd><p>The mean of the Poisson distribution of sample 1 (default:
-<code>NULL</code>). Must be specified if <code>model == "poisson"</code>.</p></dd>
-<dt>lambda2</dt>
-<dd><p>The mean of the Poisson distribution of sample 2 (default:
-<code>NULL</code>). Must be specified if <code>model == "poisson"</code>.</p></dd>
-<dt>pref.matrix1</dt>
-<dd><p>A matrix giving the Bernoulli rates for the SBM generator
-of sample 1 (default: <code>NULL</code>). Must be specified if <code>model ==
-  "sbm"</code>.</p></dd>
-<dt>pref.matrix2</dt>
-<dd><p>A matrix giving the Bernoulli rates for the SBM generator
-of sample 2 (default: <code>NULL</code>). Must be specified if <code>model ==
-  "sbm"</code>.</p></dd>
+<dd><p>The size of the second sample. Defaults to <code>20L</code>.</p></dd>
+<dt>num_vertices</dt>
+<dd><p>The number of nodes in the generated graphs. Defaults to
+<code>25L</code>.</p></dd>
+<dt>model1_params</dt>
+<dd><p>A named list setting the parameters of the first chosen
+model. Defaults to <code>list(p = 1/3)</code>.</p></dd>
+<dt>model2_params</dt>
+<dd><p>A named list setting the parameters of the second chosen
+model. Defaults to <code>list(k = 8L)</code>.</p></dd>
 <dt>representation</dt>
 <dd><p>A string specifying the desired type of representation,
 among: <code>"adjacency"</code>, <code>"laplacian"</code> and <code>"modularity"</code>.
@@ -148,8 +122,7 @@ package: <code>"flipr:student_ip"</code>, <code>"flipr:fisher_ip"</code>, <code>
 than <code>1</code>, it is intended as a tolerance. Otherwise, it is intended as
 the number of required permutations. Defaults to <code>1000L</code>.</p></dd>
 <dt>alpha</dt>
-<dd><p>Significance level for hypothesis testing (default:
-<code>0.05</code>).</p></dd>
+<dd><p>Significance level for hypothesis testing. Defaults to <code>0.05</code>.</p></dd>
 <dt>test</dt>
 <dd><p>A character string specifying the formula to be used to compute
 the permutation p-value. Choices are <code>"estimate"</code>, <code>"upper_bound"</code> and
@@ -158,11 +131,11 @@ the permutation p-value. Choices are <code>"estimate"</code>, <code>"upper_bound
 <dd><p>An integer specifying the density of the minimum spanning tree used
 for the edge count statistics. Defaults to <code>5L</code>.</p></dd>
 <dt>R</dt>
-<dd><p>The number of Monte-Carlo runs used to estimate the power (default:
-1000L).</p></dd>
+<dd><p>Number of Monte-Carlo trials used to estimate the power. Defaults to
+<code>1000L</code>.</p></dd>
 <dt>seed</dt>
-<dd><p>An integer specifying the seed to start randomness from (default:
-uses clock).</p></dd>
+<dd><p>An integer specifying the random generator seed. Defaults to
+`1234.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -176,28 +149,16 @@ allows to make sure that all our permutation tests are exact.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">power2</span><span class="op">(</span>R <span class="op">=</span> <span class="fl">10</span>, B <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1234</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'.Random.seed' is not an integer vector but of type 'NULL', so ignored</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Setting the seed for sampling permutations is mandatory for obtaining a continuous p-value function. Using `seed = 1234`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'.Random.seed' is not an integer vector but of type 'NULL', so ignored</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Setting the seed for sampling permutations is mandatory for obtaining a continuous p-value function. Using `seed = 1234`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'.Random.seed' is not an integer vector but of type 'NULL', so ignored</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Setting the seed for sampling permutations is mandatory for obtaining a continuous p-value function. Using `seed = 1234`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'.Random.seed' is not an integer vector but of type 'NULL', so ignored</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Setting the seed for sampling permutations is mandatory for obtaining a continuous p-value function. Using `seed = 1234`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'.Random.seed' is not an integer vector but of type 'NULL', so ignored</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Setting the seed for sampling permutations is mandatory for obtaining a continuous p-value function. Using `seed = 1234`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'.Random.seed' is not an integer vector but of type 'NULL', so ignored</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Setting the seed for sampling permutations is mandatory for obtaining a continuous p-value function. Using `seed = 1234`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'.Random.seed' is not an integer vector but of type 'NULL', so ignored</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Setting the seed for sampling permutations is mandatory for obtaining a continuous p-value function. Using `seed = 1234`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'.Random.seed' is not an integer vector but of type 'NULL', so ignored</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Setting the seed for sampling permutations is mandatory for obtaining a continuous p-value function. Using `seed = 1234`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'.Random.seed' is not an integer vector but of type 'NULL', so ignored</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Setting the seed for sampling permutations is mandatory for obtaining a continuous p-value function. Using `seed = 1234`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'.Random.seed' is not an integer vector but of type 'NULL', so ignored</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Setting the seed for sampling permutations is mandatory for obtaining a continuous p-value function. Using `seed = 1234`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">gnp_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">k_regular_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">8L</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">power2</span><span class="op">(</span></span>
+<span class="r-in">  model1_params <span class="op">=</span> <span class="va">gnp_params</span>,</span>
+<span class="r-in">  model2_params <span class="op">=</span> <span class="va">k_regular_params</span>,</span>
+<span class="r-in">  R <span class="op">=</span> <span class="fl">10</span>,</span>
+<span class="r-in">  B <span class="op">=</span> <span class="fl">100</span>,</span>
+<span class="r-in">  seed <span class="op">=</span> <span class="fl">1234</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1</span>
 </code></pre></div>
     </div>
   </div>

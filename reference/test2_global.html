@@ -129,24 +129,24 @@ statistics.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10L</span></span>
+<span class="r-in"><span class="va">gnp_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">k_regular_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">8L</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Two different models for the two populations</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span><span class="st">"smallworld"</span>, <span class="va">n</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span><span class="st">"pa"</span>, <span class="va">n</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gnp"</span>, n <span class="op">=</span> <span class="va">n</span>, model_params <span class="op">=</span> <span class="va">gnp_params</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"k_regular"</span>, n <span class="op">=</span> <span class="va">n</span>, model_params <span class="op">=</span> <span class="va">k_regular_params</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu">test2_global</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, representation <span class="op">=</span> <span class="st">"modularity"</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'.Random.seed' is not an integer vector but of type 'NULL', so ignored</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Setting the seed for sampling permutations is mandatory for obtaining a continuous p-value function. Using `seed = 1234`.</span>
 <span class="r-in"><span class="va">t1</span><span class="op">$</span><span class="va">pvalue</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0009962984</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Same model for the two populations</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span><span class="st">"smallworld"</span>, <span class="va">n</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span><span class="st">"smallworld"</span>, <span class="va">n</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gnp"</span>, n <span class="op">=</span> <span class="fl">10L</span>, model_params <span class="op">=</span> <span class="va">gnp_params</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gnp"</span>, n <span class="op">=</span> <span class="fl">10L</span>, model_params <span class="op">=</span> <span class="va">gnp_params</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">t2</span> <span class="op">&lt;-</span> <span class="fu">test2_global</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, representation <span class="op">=</span> <span class="st">"modularity"</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'.Random.seed' is not an integer vector but of type 'NULL', so ignored</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Setting the seed for sampling permutations is mandatory for obtaining a continuous p-value function. Using `seed = 1234`.</span>
 <span class="r-in"><span class="va">t2</span><span class="op">$</span><span class="va">pvalue</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8461511</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9960013</span>
 </code></pre></div>
     </div>
   </div>

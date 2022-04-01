@@ -91,29 +91,31 @@ distances between all the elements of the two samples put together.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span><span class="st">"smallworld"</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span><span class="st">"pa"</span>, <span class="fl">10</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">gnp_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">k_regular_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">8L</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gnp"</span>, n <span class="op">=</span> <span class="fl">10L</span>, model_params <span class="op">=</span> <span class="va">gnp_params</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"k_regular"</span>, n <span class="op">=</span> <span class="fl">10L</span>, model_params <span class="op">=</span> <span class="va">k_regular_params</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">dist_nvd</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="st">"adjacency"</span>, <span class="st">"spectral"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            1         2         3         4         5         6         7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1.1566368                                                            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.2601810 1.3411933                                                  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1.2749521 1.1768785 0.9300257                                        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.8443828 1.0669229 1.5025727 1.2622301                              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  1.0930980 1.1084447 0.9995221 1.0390337 0.9852690                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  0.9201113 1.3870476 1.4631999 1.3960026 0.8579388 1.2568171          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  1.1832640 1.4690673 1.6691708 1.5364905 1.1762486 1.4323420 1.1481597</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  1.4006560 0.9346580 1.2223635 0.7555474 1.1916947 1.0795872 1.4265552</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 1.2722955 1.2992231 1.8925405 1.7125831 0.9209590 1.6140310 0.9846860</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 3.1073122 3.1060601 3.4464836 3.5887442 3.0255314 3.3221248 3.1778723</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 3.1879384 3.3191669 3.4975100 3.6781690 3.1353831 3.3955332 3.1834717</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 3.1837557 3.1737505 3.5329639 3.6336105 3.0479597 3.3481222 3.2574449</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 3.2871167 3.3786864 3.7070220 3.8153547 3.2007999 3.5347696 3.3322937</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 3.3426881 3.5652935 3.7262332 3.9248025 3.3100023 3.6041455 3.3561185</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 2.8235669 2.8551133 3.0932029 3.2285598 2.7342289 2.9860511 2.7605582</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17 2.6694547 2.7168399 3.0793105 3.1778938 2.5895959 2.8677899 2.7331380</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18 3.7037988 3.7751855 3.9526122 4.1991903 3.6185253 3.8094123 3.6916754</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19 2.8418849 2.8963570 3.0089075 3.1974952 2.7718239 2.8650277 2.8661679</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 2.8018894 2.8440907 3.2456416 3.2636229 2.8185163 3.1325635 2.8923671</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1.6182188                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2.3346721 1.8292590                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1.1531221 1.5285844 2.5969306                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.8849856 1.2821958 2.2823249 1.0825085                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  1.1944673 1.2631468 2.4347225 1.1013615 1.1837482                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  1.4816634 1.6130956 2.7044969 1.1519232 1.4293345 1.1551931          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  1.2675737 1.6677161 2.7477164 1.1587275 1.0161804 1.4433108 1.7222259</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  1.5200807 2.2334176 3.3293784 1.2728087 1.5360785 1.5198496 1.5080376</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 1.1989887 1.8202534 2.7900044 1.2341221 1.4323267 1.2228828 1.2262272</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 1.3799029 1.2210804 2.2104139 1.4272643 1.2482246 1.3794947 1.5615544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 1.5065074 1.4035111 2.4710310 1.3771665 1.3514119 1.4426534 1.7548539</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1.4777033 1.2213123 2.0421018 1.5941241 1.2728615 1.4757652 1.6173610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 1.6664067 1.5421312 2.5617738 1.6018197 1.6861799 1.3584400 1.2822114</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 1.4427592 1.1229369 2.1406727 1.3791808 1.2686269 1.1478232 1.4754556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 1.4327936 1.4111002 2.4645590 1.3333968 1.2160554 1.3709074 1.3885566</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 1.4648136 1.2742107 2.2761069 1.4325438 1.2693468 1.3526787 1.5062059</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 1.5270568 1.4930275 2.3607668 1.6232515 1.3603132 1.5680684 2.0364625</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 1.3928919 1.5892228 2.3596383 1.5310815 1.2051446 1.6146943 1.8975035</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 1.7283923 1.4877085 2.3210077 1.4488521 1.3263064 1.5835656 1.6908042</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            8         9        10        11        12        13        14</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2                                                                       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3                                                                       </span>
@@ -122,18 +124,18 @@ distances between all the elements of the two samples put together.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6                                                                       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7                                                                       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8                                                                       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  1.6505871                                                            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 1.2626476 1.6070975                                                  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 3.0840007 3.4316930 2.8939864                                        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 2.9491028 3.6148550 2.9579458 1.0117928                              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 2.9153186 3.5560113 2.9097468 1.2190257 1.0056189                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 3.0729330 3.7554841 3.0078042 1.0914123 0.7968985 0.7559222          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 3.1917418 3.8385185 3.1935868 1.2637625 0.9474017 1.1594916 1.0208161</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 2.4979174 3.1148881 2.5003078 1.1432857 0.8621630 1.1700429 1.1279800</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17 2.4816054 3.1190851 2.4707604 1.2715193 1.1573898 1.0454702 1.0701343</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18 3.4311955 4.0869485 3.4833791 1.4050886 0.9388028 1.2471901 1.0876737</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19 2.5617663 3.1394131 2.7545358 1.3322348 0.8734087 1.0785706 1.1673490</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 2.5893518 3.2448150 2.5682035 1.3617717 1.2567021 1.3076623 1.1356702</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  1.5010048                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 1.4222375 1.3748589                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 1.4823946 1.9455131 1.4660343                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 1.4864470 2.0268137 1.5520215 1.0716433                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1.4769877 2.0357477 1.5942977 0.8594279 1.2982404                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 1.8755046 2.0566363 1.4582723 1.2956923 1.3396139 1.3400074          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 1.5533715 1.9264916 1.5444548 0.8429685 1.0458866 0.7268204 1.2391291</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 1.4852218 1.9958873 1.5289911 0.9200683 1.0118756 1.1940376 1.1871331</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 1.5338335 2.0371814 1.4846165 0.7740232 1.0488428 1.0707331 1.3950533</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 1.5877497 2.1721092 1.7670378 1.1324135 0.9822233 1.3807056 1.6875522</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 1.5269017 2.1036968 1.7910394 1.1033057 1.0519179 1.4021658 1.5831592</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 1.4956007 2.0057310 1.7761849 1.1231756 1.1355052 1.3252517 1.6285054</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           15        16        17        18        19</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2                                                   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3                                                   </span>
@@ -149,11 +151,11 @@ distances between all the elements of the two samples put together.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 13                                                  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14                                                  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15                                                  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 1.2665330                                        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17 1.3816502 1.0985205                              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18 1.1173613 1.3131937 1.5177459                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19 1.2713185 0.8748664 1.0691929 1.1833933          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 1.5642751 1.1367619 0.9583662 1.8574839 1.3617492</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 1.0022083                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 0.8794542 0.6886927                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 1.1450239 1.3628452 1.1477949                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 1.2047551 0.8621763 1.0255236 1.2025500          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 1.0938690 1.0275766 0.9739499 1.2014374 1.1457005</span>
 </code></pre></div>
     </div>
   </div>

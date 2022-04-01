@@ -58,11 +58,10 @@
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">nvd</span><span class="op">(</span>
   model <span class="op">=</span> <span class="st">"smallworld"</span>,
-  n <span class="op">=</span> <span class="fl">0L</span>,
-  pref.matrix <span class="op">=</span> <span class="cn">NULL</span>,
-  lambda <span class="op">=</span> <span class="cn">NULL</span>,
-  size <span class="op">=</span> <span class="cn">NULL</span>,
-  prob <span class="op">=</span> <span class="cn">NULL</span>
+  n <span class="op">=</span> <span class="fl">1L</span>,
+  num_vertices <span class="op">=</span> <span class="fl">25L</span>,
+  model_params <span class="op">=</span> <span class="cn">NULL</span>,
+  seed <span class="op">=</span> <span class="fl">1234</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -70,27 +69,19 @@
     <h2>Arguments</h2>
     <dl><dt>model</dt>
 <dd><p>A string specifying the model to be used for sampling networks
-(current choices are: <code>"sbm"</code>, <code>"k_regular"</code>, <code>"gnp"</code>,
-<code>"smallworld"</code>, <code>"pa"</code>, <code>"poisson"</code> and <code>"binomial"</code>).
-Default is <code>"smallworld"</code>.</p></dd>
+(current choices are: <code>"sbm"</code>, <code>"k_regular"</code>, <code>"gnp"</code>, <code>"smallworld"</code>,
+<code>"pa"</code>, <code>"poisson"</code> and <code>"binomial"</code>). Defaults to <code>"smallworld"</code>.</p></dd>
 <dt>n</dt>
-<dd><p>An integer specifying the sample size (default: <code>0L</code>).</p></dd>
-<dt>pref.matrix</dt>
-<dd><p>A matrix giving the Bernoulli rates for the SBM generator
-(see <code><a href="https://rdrr.io/pkg/igraph/man/sample_sbm.html" class="external-link">sample_sbm</a></code> for details). Default is <code>NULL</code>.
-It is required for <code>model == "sbm"</code>.</p></dd>
-<dt>lambda</dt>
-<dd><p>A numeric value specifying the mean value for the Poisson
-generator. Default is <code>NULL</code>. It is required for <code>model ==
-  "poisson"</code>.</p></dd>
-<dt>size</dt>
-<dd><p>An integer value specifying the number of trials for the binomial
-distribution. Default is <code>NULL</code>. It is required for <code>model ==
-  "binomial"</code>.</p></dd>
-<dt>prob</dt>
-<dd><p>A numeric value specifying the probability of success of each
-trial for the binomial distribution. Default is <code>NULL</code>. It is required
-for <code>model == "binomial"</code>.</p></dd>
+<dd><p>An integer specifying the sample size. Defaults to <code>1L</code>.</p></dd>
+<dt>num_vertices</dt>
+<dd><p>An integer specifying the order of the graphs to be
+generated (i.e. the number of nodes). Defaults to <code>25L</code>.</p></dd>
+<dt>model_params</dt>
+<dd><p>A named list setting the parameters of the model you are
+considering. Defaults to <code>NULL</code>.</p></dd>
+<dt>seed</dt>
+<dd><p>An integer specifying the random generator seed. Defaults to
+<code>1234</code>.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -99,145 +90,20 @@ for <code>model == "binomial"</code>.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">nvd</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">smallworld_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>dim <span class="op">=</span> <span class="fl">1L</span>, nei <span class="op">=</span> <span class="fl">4L</span>, p <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">nvd</span><span class="op">(</span>model_params <span class="op">=</span> <span class="va">smallworld_params</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> IGRAPH 330d279 U--- 25 100 -- Watts-Strogatz random graph</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> IGRAPH f08f657 U--- 25 100 -- Watts-Strogatz random graph</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> + attr: name (g/c), dim (g/n), size (g/n), nei (g/n), p (g/n), loops</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> | (g/l), multiple (g/l)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + edges from 330d279:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1--16  2-- 3  3-- 8  4-- 5  5-- 6  6-- 7  7-- 8  8-- 9  9--22 10--11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 12--20 12--13 14--20 14--15 15--16 16--17 18--20 18--19 19--20 11--21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 21--22  1--15  3--23 24--25  1--25  1-- 8  1--24  4--15  1--23 10--18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31]  1--22 13--25  2-- 4  2--24  2--12  2--23  2-- 6  3--18 19--25  3-- 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [41]  3--24  3-- 7  1-- 6  2-- 7  4--25  4-- 8  3--14  5--11  3-- 9  6-- 8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [51]  6-- 9  6--10  7-- 9  7--10  7--11  8--10 10--17  8--12  9--21  9--12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [61]  9--13  6--12 10--19 10--14  1--13 11--14 15--24 12--14 12--15 12--16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + ... omitted several edges</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> IGRAPH 1778140 U--- 25 100 -- Watts-Strogatz random graph</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + attr: name (g/c), dim (g/n), size (g/n), nei (g/n), p (g/n), loops</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | (g/l), multiple (g/l)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + edges from 1778140:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1-- 2  2--13  3-- 4  4-- 5  5-- 6  6-- 7  7-- 8  8-- 9  9--10 10--11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 12--24 12--13 13--14 14--15 15--16 16--17 17--18 18--19 19--20 20--21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 21--22 14--22 23--24 24--25  1--25  1-- 3  1--24  4--13  1--23 12--17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31]  1--22  2--25  2-- 4  4--11  2-- 5  2--23  2-- 6  3-- 5  3--25  3-- 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [41]  3--24  3--12  6--25  4-- 7  4--25  8--14  5-- 7  9--16  9--24  6-- 8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [51]  6-- 9  6--10  7-- 9  7--10  7--11  8--17 11--17  8--12  9--11  9--12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [61]  3-- 9 10--12 13--19 10--14 11--13 11--14 11--15 12--14 12--15 12--16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + ... omitted several edges</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> IGRAPH fc78a53 U--- 25 100 -- Watts-Strogatz random graph</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + attr: name (g/c), dim (g/n), size (g/n), nei (g/n), p (g/n), loops</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | (g/l), multiple (g/l)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + edges from fc78a53:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1-- 2  2-- 3  3-- 4  4-- 5  6--12  6-- 7  3-- 8  8-- 9  9--10 10--11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 11--12  5--12 13--14 14--15 15--16 16--20 17--18 18--19  9--20 20--21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 21--22 22--23 23--24 24--25  1--25  1-- 3  1--20  1-- 4  1--23  1-- 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31]  1--12  2--25  2-- 4  2--24  2-- 5 14--23  2-- 6  3--23  3--25  3-- 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [41]  3--24  3-- 7  4-- 6  4-- 7  4--14  4-- 8  5-- 7  5-- 8  5-- 9  6-- 8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [51]  9--19  6--10  7-- 9  7--10  7--18 10--16  8--11  8--23  5--11  9--12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [61]  9--13 10--12 10--13  9--14 11--13 11--14  7--15  3--12  8--12 12--22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + ... omitted several edges</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> IGRAPH 57a132d U--- 25 100 -- Watts-Strogatz random graph</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + attr: name (g/c), dim (g/n), size (g/n), nei (g/n), p (g/n), loops</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | (g/l), multiple (g/l)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + edges from 57a132d:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1-- 2  2-- 3  3-- 4  4-- 5  5-- 6  5-- 7  7-- 8  8-- 9  9--10 11--25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 11--12 12--13 14--21 14--15 15--16 16--17 17--18 18--19 19--20 20--21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 21--22 22--23 23--24 24--25  1--25  1-- 3  1--24  1-- 4  1--23  5--20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31]  1--22  2--25  2-- 4  2--24  2-- 5  2--23  2-- 6  5--12  3--12  3--13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [41]  5--24  3-- 7  4-- 6  4-- 7  4--25  4-- 8  6--25  5-- 8  5-- 9  6--24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [51]  6-- 9  6--10  7-- 9  7--14 12--25  8--10  8--11  8--12  9--11  9--12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [61]  9--13  4--10 10--13  2--14 11--13  1--14 11--22 12--24 12--15 16--23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + ... omitted several edges</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> IGRAPH d00a15e U--- 25 100 -- Watts-Strogatz random graph</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + attr: name (g/c), dim (g/n), size (g/n), nei (g/n), p (g/n), loops</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | (g/l), multiple (g/l)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + edges from d00a15e:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  2--21  2--22  3-- 4  4--22  5-- 6  6-- 7  4-- 7  8-- 9  9--10 10--11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 11--25 12--13 13--14 14--15 15--16 16--17  5--18 18--19 19--20 14--21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 21--22 22--23 23--24 24--25  1--25  3--10  1--15  1-- 4  1--23  1-- 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31] 16--22  2--25  2-- 4  2--24  5--20  2--23  2-- 6  3-- 5  3--25  8--17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [41]  3--24  3-- 7  4-- 6  1--20 15--25  4-- 8  5-- 7  8--19  5-- 9  6-- 8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [51]  6--21  5--10  7-- 9 10--24 11--12  8--10  8--11  8--12  9--11  9--12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [61]  9--13 10--12 10--13 10--14 11--13 11--14 11--15 12--14 12--15 12--16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + ... omitted several edges</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> IGRAPH f47bccc U--- 25 100 -- Watts-Strogatz random graph</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + attr: name (g/c), dim (g/n), size (g/n), nei (g/n), p (g/n), loops</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | (g/l), multiple (g/l)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + edges from f47bccc:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1--17  2-- 3  3--13  4-- 5  6--15  6-- 7  7-- 8  8-- 9  9--19 10--11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 11--12 12--13 13--14 15--22 15--20 16--17  7--17  1--19  4--20 20--21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 21--22 22--23 23--24 24--25  1--25  1-- 3  1--24  4--18 11--23  1-- 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31]  1--22 18--25  2-- 4  2--24  2-- 5  2--23  2-- 6  5--20  3--25  3--10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [41]  3--24  3-- 7  4-- 6  4-- 7  4--25  4--23  5-- 7  5--19  5-- 9  6-- 8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [51]  6--21  6--10  4-- 9  7--10  7--11  8--10  8--11 12--19  9--11  9--12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [61] 13--21 12--20 10--13 10--14 11--13 11--16 11--15  6--12 12--15 12--16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + ... omitted several edges</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> IGRAPH 3615c9d U--- 25 100 -- Watts-Strogatz random graph</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + attr: name (g/c), dim (g/n), size (g/n), nei (g/n), p (g/n), loops</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | (g/l), multiple (g/l)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + edges from 3615c9d:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  2-- 8  2-- 3  3-- 4  4-- 5  5-- 6  1-- 6  7-- 8  8-- 9  9--10 10--11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 11--16 12--13  5--14 14--15 15--16  7--17 17--18 18--19 19--20 20--21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 21--22  5--23 23--24 24--25  1--25  1-- 3  1--24  1--10  1--23  1-- 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31]  6--22 12--25  2-- 4  2--24  2-- 5  2--23  2-- 6  3-- 5  3--25  4--22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [41]  3--24  3--12  4--24  4-- 7  4--25  8--14  3-- 7  5-- 8  5-- 9  6-- 8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [51]  6-- 9  6--10  7-- 9 10--18  7--15  8--10  8--11  8--12  9--11  9--12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [61]  9--13 10--12  6--13 10--14 11--13 11--14 11--15 12--14 12--22 12--16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + ... omitted several edges</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> IGRAPH 7833fb8 U--- 25 100 -- Watts-Strogatz random graph</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + attr: name (g/c), dim (g/n), size (g/n), nei (g/n), p (g/n), loops</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | (g/l), multiple (g/l)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + edges from 7833fb8:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1--14  2-- 3  3-- 4  4-- 5  5-- 6  6-- 7  7-- 8  8-- 9  9--10 10--11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 11--12 12--13 13--14 14--15 15--16 16--17 17--18 18--23 14--19 20--21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 21--22 22--23 23--24 24--25  1--25  1-- 3  1--24  1-- 4  1--23  1-- 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31]  1--22  2--18  2-- 4  2--24  2-- 5  2--23  2-- 6  3-- 5  3--25  3-- 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [41]  3--24  3-- 7  4-- 6  4-- 7  4--25  4-- 8  5-- 7  5-- 8  9--20  6-- 8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [51]  6-- 9  6--10  7-- 9  7--10  7--11  8--10  8--11  8--12  9--11  9--12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [61]  9--13 10--12  4--13 10--14 11--13 11--14 11--15 12--14 12--15 16--25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + ... omitted several edges</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> IGRAPH 53b351b U--- 25 100 -- Watts-Strogatz random graph</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + attr: name (g/c), dim (g/n), size (g/n), nei (g/n), p (g/n), loops</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | (g/l), multiple (g/l)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + edges from 53b351b:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1-- 2  2-- 3  3-- 4  4-- 5  5-- 6  6--12  7-- 8  9--19  9--10 10--11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 11--12 12--23 13--14 16--25 10--23 17--23 17--18 12--19 19--20 20--21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 21--22 22--23 23--24 24--25  1--25  1-- 3  1--24  1-- 4  1--23  1-- 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31]  1--22 13--25  2--10  2-- 8  2-- 5  2--23  2--14  3-- 5  3--25  3-- 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [41]  3--24  3-- 9  4-- 6  4-- 7  4--25  4-- 8  5-- 7  5-- 8  5-- 9  6-- 8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [51]  6-- 9  6--10  2-- 9  7--21  7--11  8--10  8--11  8--12  9--11  9--12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [61]  9--13 10--12 10--13 10--14 11--13 11--18 11--15  3-- 8 12--15 12--16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + ... omitted several edges</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> IGRAPH 7747883 U--- 25 100 -- Watts-Strogatz random graph</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + attr: name (g/c), dim (g/n), size (g/n), nei (g/n), p (g/n), loops</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | (g/l), multiple (g/l)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + edges from 7747883:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1-- 2  2--21  3-- 4  4-- 5  5-- 6  6-- 7  7-- 8  8-- 9  9--10 10--11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] 12--18 12--13 13--14 14--15 15--16  6--17 17--18 17--19 19--20 20--21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21]  8--24  4--22  5--23 24--25  1--23  1-- 3  1--24  1-- 4  1--21  1-- 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31]  1--22  2--25  2-- 4 11--24  2-- 5  2--23  2-- 6  3-- 5  3--25  3-- 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [41]  3--24  3-- 7  6--15  4-- 7  4--25  4-- 8  5-- 7  5-- 8  5-- 9  6-- 8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [51]  6-- 9  6--19  7--25  7--10  7--23  8--10  8--11  8--12  9--11  9--12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [61] 13--23  3--10 10--13 10--14 11--13 11--14 11--15  1--12 15--22  9--21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> + edges from f08f657:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1-- 2  2-- 3  4--13  4-- 5  5-- 6  6-- 7  7--17  8-- 9 10--19 10--11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11]  1--11 12--13 13--14 14--15 15--16 16--17 17--18 18--19 19--20  2--21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] 21--22 22--23 20--23 24--25  1--25  1-- 3  1--24  1-- 4  1--23  1-- 5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [31]  1--22  2--25  2-- 4  2--24  2-- 5  2--23  2-- 6  5--19  3--25  3-- 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [41]  3--24  3--16  4-- 6  4-- 7  4--25  4-- 8  5-- 7  5-- 8  5-- 9  8--13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [51]  6-- 9  6--10  7-- 9  7--10  7--11  8--10  8--11  8--23  9--11  9--12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [61]  9--13 10--12 10--13  5--10 11--13 11--14  6--15 12--14 12--15 12--16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> + ... omitted several edges</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
