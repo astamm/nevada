@@ -6,36 +6,27 @@
 \usage{
 nvd(
   model = "smallworld",
-  n = 0L,
-  pref.matrix = NULL,
-  lambda = NULL,
-  size = NULL,
-  prob = NULL
+  n = 1L,
+  num_vertices = 25L,
+  model_params = NULL,
+  seed = 1234
 )
 }
 \arguments{
 \item{model}{A string specifying the model to be used for sampling networks
-(current choices are: \code{"sbm"}, \code{"k_regular"}, \code{"gnp"},
-\code{"smallworld"}, \code{"pa"}, \code{"poisson"} and \code{"binomial"}).
-Default is \code{"smallworld"}.}
+(current choices are: \code{"sbm"}, \code{"k_regular"}, \code{"gnp"}, \code{"smallworld"},
+\code{"pa"}, \code{"poisson"} and \code{"binomial"}). Defaults to \code{"smallworld"}.}
 
-\item{n}{An integer specifying the sample size (default: \code{0L}).}
+\item{n}{An integer specifying the sample size. Defaults to \code{1L}.}
 
-\item{pref.matrix}{A matrix giving the Bernoulli rates for the SBM generator
-(see \code{\link[igraph]{sample_sbm}} for details). Default is \code{NULL}.
-It is required for \code{model == "sbm"}.}
+\item{num_vertices}{An integer specifying the order of the graphs to be
+generated (i.e. the number of nodes). Defaults to \code{25L}.}
 
-\item{lambda}{A numeric value specifying the mean value for the Poisson
-generator. Default is \code{NULL}. It is required for \code{model ==
-  "poisson"}.}
+\item{model_params}{A named list setting the parameters of the model you are
+considering. Defaults to \code{NULL}.}
 
-\item{size}{An integer value specifying the number of trials for the binomial
-distribution. Default is \code{NULL}. It is required for \code{model ==
-  "binomial"}.}
-
-\item{prob}{A numeric value specifying the probability of success of each
-trial for the binomial distribution. Default is \code{NULL}. It is required
-for \code{model == "binomial"}.}
+\item{seed}{An integer specifying the random generator seed. Defaults to
+\code{1234}.}
 }
 \value{
 A \code{nvd} object which is a list of \code{\link[igraph]{igraph}}
@@ -45,5 +36,6 @@ objects.
 This is the constructor for objects of class \code{nvd}.
 }
 \examples{
-nvd(n = 10L)
+smallworld_params <- list(dim = 1L, nei = 4L, p = 0.15)
+nvd(model_params = smallworld_params)
 }

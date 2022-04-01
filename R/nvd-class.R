@@ -3,60 +3,95 @@
 #' This is the constructor for objects of class \code{nvd}.
 #'
 #' @param model A string specifying the model to be used for sampling networks
-#'   (current choices are: \code{"sbm"}, \code{"k_regular"}, \code{"gnp"},
-#'   \code{"smallworld"}, \code{"pa"}, \code{"poisson"} and \code{"binomial"}).
-#'   Default is \code{"smallworld"}.
-#' @param n An integer specifying the sample size (default: \code{0L}).
-#' @param pref.matrix A matrix giving the Bernoulli rates for the SBM generator
-#'   (see \code{\link[igraph]{sample_sbm}} for details). Default is \code{NULL}.
-#'   It is required for \code{model == "sbm"}.
-#' @param lambda A numeric value specifying the mean value for the Poisson
-#'   generator. Default is \code{NULL}. It is required for \code{model ==
-#'   "poisson"}.
-#' @param size An integer value specifying the number of trials for the binomial
-#'   distribution. Default is \code{NULL}. It is required for \code{model ==
-#'   "binomial"}.
-#' @param prob A numeric value specifying the probability of success of each
-#'   trial for the binomial distribution. Default is \code{NULL}. It is required
-#'   for \code{model == "binomial"}.
+#'   (current choices are: `"sbm"`, `"k_regular"`, `"gnp"`, `"smallworld"`,
+#'   `"pa"`, `"poisson"` and `"binomial"`). Defaults to `"smallworld"`.
+#' @param n An integer specifying the sample size. Defaults to `1L`.
+#' @param num_vertices An integer specifying the order of the graphs to be
+#'   generated (i.e. the number of nodes). Defaults to `25L`.
+#' @param model_params A named list setting the parameters of the model you are
+#'   considering. Defaults to `NULL`.
+#' @param seed An integer specifying the random generator seed. Defaults to
+#'   `1234`.
 #'
 #' @return A \code{nvd} object which is a list of \code{\link[igraph]{igraph}}
 #'   objects.
 #' @export
 #'
 #' @examples
-#' nvd(n = 10L)
+#' smallworld_params <- list(dim = 1L, nei = 4L, p = 0.15)
+#' nvd(model_params = smallworld_params)
 nvd <- function(model = "smallworld",
-                n = 0L,
-                pref.matrix = NULL,
-                lambda = NULL,
-                size = NULL,
-                prob = NULL) {
+                n = 1L,
+                num_vertices = 25L,
+                model_params = NULL,
+                seed = 1234) {
+  if (!is.null(seed))
+    withr::local_seed(seed)
 
   model <- match.arg(
     model,
     c("sbm", "k_regular", "gnp", "smallworld", "pa", "poisson", "binomial")
   )
 
-  if (model == "sbm" & is.null(pref.matrix))
-    stop("The pref.matrix argument should be specified to use the SBM generator.")
+  if (!rlang::is_named2(model_params))
+    cli::cli_abort("The {.code model_params} list should be named after the parameters of the model you are considering but is not.")
 
-  if (model == "poisson" & is.null(lambda))
-    stop("The lambda argument should be specified to use the Poisson generator.")
+  if (model == "poisson") {
+    if (!all(c("lambda") %in% names(model_params)))
+      cli::cli_abort("The {.code model_params} list should contain the field {.field lambda} to use the Poisson generator.")
+    return(rlang::eval_tidy(rlang::quo(
+      rpois_network(n = n, num_vertices = num_vertices, !!!model_params)
+    )))
+  }
 
-  if (model == "binomial" & (is.null(size) | is.null(prob)))
-    stop("The size and prob arguments should be specified to use the Binomial generator.")
+  if (model == "binomial") {
+    if (!all(c("size", "prob") %in% names(model_params)))
+      cli::cli_abort("The {.code model_params} list should contain the fields {.field size} and {.field prob} to use the binomial generator.")
+    return(rlang::eval_tidy(rlang::quo(
+      rbinom_network(n = n, num_vertices = num_vertices, !!!model_params)
+    )))
+  }
 
-  obj <- replicate(n, switch(
-    model,
-    "sbm" = igraph::sample_sbm(n = 25L, pref.matrix = pref.matrix, block.sizes = c(12L, 1L, 12L)),
-    "k_regular" = igraph::sample_k_regular(no.of.nodes = 25L, k = 8L),
-    "gnp" = igraph::sample_gnp(n = 25L, p = 1/3),
-    "smallworld" = igraph::sample_smallworld(dim = 1L, size = 25L, nei = 4L, p = 0.15),
-    "pa" = igraph::sample_pa(n = 25L, power = 2L, m = 4L, directed = FALSE),
-    "poisson" = rpois_network(lambda = lambda, n = 25L),
-    "binomial" = rbinom_network(size = size, prob = prob, n = 25L)
-  ), simplify = FALSE)
+  if (model == "sbm" && !all(c("pref.matrix", "block.sizes") %in% names(model_params)))
+    cli::cli_abort("The {.code model_params} list should contain the fields {.field pref.matrix} and {.field block.sizes} to use the SBM generator.")
+
+  if (model == "k_regular" && !all(c("k") %in% names(model_params)))
+    cli::cli_abort("The {.code model_params} list should contain the field {.field k} to use the k-regular model generator.")
+
+  if (model == "gnp" && !all(c("p") %in% names(model_params)))
+    cli::cli_abort("The {.code model_params} list should contain the field {.field p} to use the GNP model generator.")
+
+  if (model == "smallworld" && !all(c("dim", "nei", "p") %in% names(model_params)))
+    cli::cli_abort("The {.code model_params} list should contain the fields {.field dim}, {.field nei} and {.field p} to use the Watts-Strogatz small-world model generator.")
+
+  if (model == "pa" && !all(c("power", "m", "directed") %in% names(model_params)))
+    cli::cli_abort("The {.code model_params} list should contain the fields {.field power}, {.field m} and {.field directed} to use the Barabasi-Albert scale-free model generator.")
+
+  obj <- replicate(n, {
+    rlang::eval_tidy(rlang::quo(switch(
+      model,
+      "sbm" = igraph::sample_sbm(
+        n = num_vertices,
+        !!!model_params
+      ),
+      "k_regular" = igraph::sample_k_regular(
+        no.of.nodes = num_vertices,
+        !!!model_params
+      ),
+      "gnp" = igraph::sample_gnp(
+        n = num_vertices,
+        !!!model_params
+      ),
+      "smallworld" = igraph::sample_smallworld(
+        size = num_vertices,
+        !!!model_params
+      ),
+      "pa" = igraph::sample_pa(
+        n = num_vertices,
+        !!!model_params
+      )
+    )))
+  }, simplify = FALSE)
 
   as_nvd(obj)
 }
@@ -72,7 +107,8 @@ nvd <- function(model = "smallworld",
 #' @export
 #'
 #' @examples
-#' as_nvd(nvd("smallworld", 10))
+#' gnp_params <- list(p = 1/3)
+#' as_nvd(nvd(model = "gnp", n = 10L, model_params = gnp_params))
 as_nvd <- function(obj) {
   if (!is.list(obj))
     cli::cli_abort("Input should be a list.")
@@ -181,8 +217,9 @@ sample2_sbm <- function(n, nv, p1, b1, p2 = p1, b2 = b1, seed = NULL) {
 #' @export
 #'
 #' @examples
-#' d <- nvd(n = 10L)
-#' mean(d)
+#' gnp_params <- list(p = 1/3)
+#' x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
+#' mean(x)
 mean.nvd <- function(x, weights = rep(1, length(x)), representation = "adjacency", ...) {
   x <- repr_nvd(x, representation = representation)
   if (is.null(weights)) weights <- rep(1, length(x))
@@ -223,9 +260,10 @@ mean.nvd <- function(x, weights = rep(1, length(x)), representation = "adjacency
 #' @export
 #'
 #' @examples
-#' d <- nvd(n = 10L)
-#' m <- mean(d)
-#' var_nvd(x = d, x0 = m, distance = "frobenius")
+#' gnp_params <- list(p = 1/3)
+#' x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
+#' m <- mean(x)
+#' var_nvd(x = x, x0 = m, distance = "frobenius")
 var_nvd <- function(x, x0, weights = rep(1, length(x)), distance = "frobenius") {
   if (!is_nvd(x))
     stop("The input x should be of class nvd.")
@@ -275,8 +313,9 @@ var_nvd <- function(x, x0, weights = rep(1, length(x)), distance = "frobenius") 
 #' @export
 #'
 #' @examples
-#' d <- nvd(n = 10L)
-#' var2_nvd(x = d, representation = "graphon", distance = "frobenius")
+#' gnp_params <- list(p = 1/3)
+#' x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
+#' var2_nvd(x = x, representation = "graphon", distance = "frobenius")
 var2_nvd <- function(x, representation = "adjacency", distance = "frobenius") {
   if (!is_nvd(x))
     stop("The input x should be of class nvd.")

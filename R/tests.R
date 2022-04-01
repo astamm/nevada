@@ -43,16 +43,18 @@
 #'
 #' @examples
 #' n <- 10L
+#' gnp_params <- list(p = 1/3)
+#' k_regular_params <- list(k = 8L)
 #'
 #' # Two different models for the two populations
-#' x <- nvd("smallworld", n)
-#' y <- nvd("pa", n)
+#' x <- nvd(model = "gnp", n = n, model_params = gnp_params)
+#' y <- nvd(model = "k_regular", n = n, model_params = k_regular_params)
 #' t1 <- test2_global(x, y, representation = "modularity")
 #' t1$pvalue
 #'
 #' # Same model for the two populations
-#' x <- nvd("smallworld", n)
-#' y <- nvd("smallworld", n)
+#' x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
+#' y <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
 #' t2 <- test2_global(x, y, representation = "modularity")
 #' t2$pvalue
 test2_global <- function(x, y,
@@ -63,8 +65,6 @@ test2_global <- function(x, y,
                          test = "exact",
                          k = 5L,
                          seed = NULL) {
-
-  withr::local_seed(seed)
   n1 <- length(x)
   n2 <- length(y)
   n <- n1 + n2

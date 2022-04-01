@@ -25,8 +25,10 @@
 #' @examples
 #' n1 <- 30L
 #' n2 <- 10L
-#' x <- nvd("smallworld", n1)
-#' y <- nvd("pa", n2)
+#' gnp_params <- list(p = 1/3)
+#' k_regular_params <- list(k = 8L)
+#' x <- nvd(model = "gnp", n = n1, model_params = gnp_params)
+#' y <- nvd(model = "k_regular", n = n2, model_params = k_regular_params)
 #' r <- repr_nvd(x, y, representation = "laplacian")
 #' stat_student_euclidean(r, 1:n1)
 #' stat_welch_euclidean(r, 1:n1)
@@ -111,8 +113,10 @@ stat_weighted_edge_count <- function(d, indices, edge_count_prep, ...) {
 #' @examples
 #' n1 <- 30L
 #' n2 <- 10L
-#' x <- nvd("smallworld", n1)
-#' y <- nvd("pa", n2)
+#' gnp_params <- list(p = 1/3)
+#' k_regular_params <- list(k = 8L)
+#' x <- nvd(model = "gnp", n = n1, model_params = gnp_params)
+#' y <- nvd(model = "k_regular", n = n2, model_params = k_regular_params)
 #' d <- dist_nvd(x, y, representation = "laplacian", distance = "frobenius")
 #' e <- edge_count_global_variables(d, n1, k = 5L)
 edge_count_global_variables <- function(d, n1, k = 1L) {
