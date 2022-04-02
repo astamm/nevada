@@ -59,6 +59,7 @@ repr_modularity <- function(network, validate = TRUE) {
   }
 
   repr <- igraph::modularity_matrix(network)
+  repr[is.nan(repr)] <- 0
   as_modularity(repr)
 }
 

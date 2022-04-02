@@ -8,6 +8,5 @@
 #' @importFrom Rcpp sourceCpp
 #' @importFrom rlang .data
 #' @importFrom tibble tibble
-#' @import ggplot2
 ## usethis namespace: end
 NULL
