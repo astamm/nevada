@@ -73,7 +73,7 @@
 
       
 
-      </header><script src="nevada_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Network-Valued Data Analysis</h1>
@@ -397,7 +397,7 @@ w_{i,j}, &amp; \mbox{if } (i,j) \in E \mbox{ with weight } w_{i,j}\\
 <li>
 <a href="https://astamm.github.io/flipr/reference/two-sample-stats.html" class="external-link"><code>stat_energy_ip()</code></a> implements the class of energy-based statistics as proposed by <span class="citation">Székely and Rizzo (2013)</span>;</li>
 <li>
-<a href="https://astamm.github.io/flipr/reference/two-sample-stats.html" class="external-link"><code>stat_cq_ip()</code></a> implements the statistic proposed by <span class="citation">Chen and Qin (2010)</span>;</li>
+<a href="https://astamm.github.io/flipr/reference/two-sample-stats.html" class="external-link"><code>stat_cq_ip()</code></a> implements the statistic proposed by <span class="citation">S. X. Chen and Qin (2010)</span>;</li>
 <li>
 <a href="https://astamm.github.io/flipr/reference/two-sample-stats.html" class="external-link"><code>stat_mod_ip()</code></a> implements a statistic that computes the mean of inter-point distances;</li>
 <li>
@@ -407,7 +407,7 @@ w_{i,j}, &amp; \mbox{if } (i,j) \in E \mbox{ with weight } w_{i,j}\\
 <div class="section level4">
 <h4 id="from-nevada">From <a href="https://astamm.github.io/nevada/" class="external-link"><strong>nevada</strong></a><a class="anchor" aria-label="anchor" href="#from-nevada"></a>
 </h4>
-<p>There are also 3 statistics proposed in <span class="citation">Chen, Chen, and Su (2018)</span> that are based on a similarity graph built on top of the distance matrix:</p>
+<p>There are also 3 statistics proposed in <span class="citation">H. Chen, Chen, and Su (2018)</span> that are based on a similarity graph built on top of the distance matrix:</p>
 <ul>
 <li>
 <a href="https://astamm.github.io/nevada/reference/statistics.html" class="external-link"><code>stat_original_edge_count()</code></a>,</li>
@@ -435,40 +435,40 @@ w_{i,j}, &amp; \mbox{if } (i,j) \in E \mbox{ with weight } w_{i,j}\\
 <code>indices1</code> which is an integer vector of size <span class="math inline">\(n_x\)</span> storing the indices of the data points belonging to the first sample in the current permuted version of the data.</li>
 </ul>
 <p>The <a href="https://astamm.github.io/flipr/" class="external-link"><strong>flipr</strong></a> package provides a helper function <code>use_stat(nsamples = 2, stat_name = )</code> which makes it easy for users to create their own test statistic ready to be used by <a href="https://astamm.github.io/nevada/" class="external-link"><strong>nevada</strong></a>. This function creates and saves a <code>.R</code> file in the <code>R/</code> folder of the current working directory and populates it with the following template:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">#' Test Statistic for the Two-Sample Problem</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#'</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#' This function computes the test statistic...</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#'</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#' @param data A list storing the concatenation of the two samples from which</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#'   the user wants to make inference. Alternatively, a distance matrix stored</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="co">#'   in an object of class \code{\link[stats]{dist}} of pairwise distances</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a><span class="co">#'   between data points.</span></span>
-<span id="cb3-9"><a href="#cb3-9"></a><span class="co">#' @param indices1 An integer vector that contains the indices of the data</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a><span class="co">#'   points belong to the first sample in the current permuted version of the</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a><span class="co">#'   data.</span></span>
-<span id="cb3-12"><a href="#cb3-12"></a><span class="co">#'</span></span>
-<span id="cb3-13"><a href="#cb3-13"></a><span class="co">#' @return A numeric value evaluating the desired test statistic.</span></span>
-<span id="cb3-14"><a href="#cb3-14"></a><span class="co">#' @export</span></span>
-<span id="cb3-15"><a href="#cb3-15"></a><span class="co">#'</span></span>
-<span id="cb3-16"><a href="#cb3-16"></a><span class="co">#' @examples</span></span>
-<span id="cb3-17"><a href="#cb3-17"></a><span class="co">#' # TO BE DONE BY THE DEVELOPER OF THE PACKAGE</span></span>
-<span id="cb3-18"><a href="#cb3-18"></a>stat_{{{name}}} &lt;-<span class="st"> </span><span class="cf">function</span>(data, indices1) {</span>
-<span id="cb3-19"><a href="#cb3-19"></a>  n &lt;-<span class="st"> </span><span class="cf">if</span> (<span class="kw">inherits</span>(data, <span class="st">"dist"</span>))</span>
-<span id="cb3-20"><a href="#cb3-20"></a>    <span class="kw">attr</span>(data, <span class="st">"Size"</span>)</span>
-<span id="cb3-21"><a href="#cb3-21"></a>  <span class="cf">else</span> <span class="cf">if</span> (<span class="kw">inherits</span>(data, <span class="st">"list"</span>))</span>
-<span id="cb3-22"><a href="#cb3-22"></a>    <span class="kw">length</span>(data)</span>
-<span id="cb3-23"><a href="#cb3-23"></a>  <span class="cf">else</span></span>
-<span id="cb3-24"><a href="#cb3-24"></a>    <span class="kw">stop</span>(<span class="st">"The `data` input should be of class either list or dist."</span>)</span>
-<span id="cb3-25"><a href="#cb3-25"></a></span>
-<span id="cb3-26"><a href="#cb3-26"></a>  indices2 &lt;-<span class="st"> </span><span class="kw">seq_len</span>(n)[<span class="op">-</span>indices1]</span>
-<span id="cb3-27"><a href="#cb3-27"></a></span>
-<span id="cb3-28"><a href="#cb3-28"></a>  x &lt;-<span class="st"> </span>data[indices1]</span>
-<span id="cb3-29"><a href="#cb3-29"></a>  y &lt;-<span class="st"> </span>data[indices2]</span>
-<span id="cb3-30"><a href="#cb3-30"></a></span>
-<span id="cb3-31"><a href="#cb3-31"></a>  <span class="co"># Here comes the code that computes the desired test</span></span>
-<span id="cb3-32"><a href="#cb3-32"></a>  <span class="co"># statistic from input samples stored in lists x and y</span></span>
-<span id="cb3-33"><a href="#cb3-33"></a></span>
-<span id="cb3-34"><a href="#cb3-34"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Test Statistic for the Two-Sample Problem</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' This function computes the test statistic...</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param data A list storing the concatenation of the two samples from which</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#'   the user wants to make inference. Alternatively, a distance matrix stored</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#'   in an object of class \code{\link[stats]{dist}} of pairwise distances</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#'   between data points.</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param indices1 An integer vector that contains the indices of the data</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#'   points belong to the first sample in the current permuted version of the</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#'   data.</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return A numeric value evaluating the desired test statistic.</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">#' @export</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#' @examples</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#' # TO BE DONE BY THE DEVELOPER OF THE PACKAGE</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>stat_{{{name}}} <span class="ot">&lt;-</span> <span class="cf">function</span>(data, indices1) {</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">inherits</span>(data, <span class="st">"dist"</span>))</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">attr</span>(data, <span class="st">"Size"</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">inherits</span>(data, <span class="st">"list"</span>))</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">length</span>(data)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"The `data` input should be of class either list or dist."</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  indices2 <span class="ot">&lt;-</span> <span class="fu">seq_len</span>(n)[<span class="sc">-</span>indices1]</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> data[indices1]</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> data[indices2]</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Here comes the code that computes the desired test</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># statistic from input samples stored in lists x and y</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>For instance, a <a href="https://astamm.github.io/flipr/" class="external-link"><strong>flipr</strong></a>-compatible version of the <span class="math inline">\(t\)</span>-statistic with pooled variance will look like:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">stat_student</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">indices1</span><span class="op">)</span> <span class="op">{</span>
@@ -528,29 +528,29 @@ w_{i,j}, &amp; \mbox{if } (i,j) \in E \mbox{ with weight } w_{i,j}\\
 </div>
 </div>
 <div class="section level2 unnumbered">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references">
-<div id="ref-biswas2014nonparametric">
-<p>Biswas, Munmun, and Anil K Ghosh. 2014. “A Nonparametric Two-Sample Test Applicable to High Dimensional Data.” <em>Journal of Multivariate Analysis</em> 123: 160–71.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-biswas2014nonparametric" class="csl-entry">
+Biswas, Munmun, and Anil K Ghosh. 2014. <span>“A Nonparametric Two-Sample Test Applicable to High Dimensional Data.”</span> <em>Journal of Multivariate Analysis</em> 123: 160–71.
 </div>
-<div id="ref-chen2018weighted">
-<p>Chen, Hao, Xu Chen, and Yi Su. 2018. “A Weighted Edge-Count Two-Sample Test for Multivariate and Object Data.” <em>Journal of the American Statistical Association</em> 113 (523): 1146–55.</p>
+<div id="ref-chen2018weighted" class="csl-entry">
+Chen, Hao, Xu Chen, and Yi Su. 2018. <span>“A Weighted Edge-Count Two-Sample Test for Multivariate and Object Data.”</span> <em>Journal of the American Statistical Association</em> 113 (523): 1146–55.
 </div>
-<div id="ref-chen2010two">
-<p>Chen, Song Xi, and Ying-Li Qin. 2010. “A Two-Sample Test for High-Dimensional Data with Applications to Gene-Set Testing.” <em>The Annals of Statistics</em> 38 (2): 808–35.</p>
+<div id="ref-chen2010two" class="csl-entry">
+Chen, Song Xi, and Ying-Li Qin. 2010. <span>“A Two-Sample Test for High-Dimensional Data with Applications to Gene-Set Testing.”</span> <em>The Annals of Statistics</em> 38 (2): 808–35.
 </div>
-<div id="ref-lovato2021">
-<p>Lovato, Ilenia, Alessia Pini, Aymeric Stamm, Maxime Taquet, and Simone Vantini. 2021. “Multiscale Null Hypothesis Testing for Network-Valued Data: Analysis of Brain Networks of Patients with Autism.” <em>Journal of the Royal Statistical Society: Series C (Applied Statistics)</em>, January. <a href="https://doi.org/10.1111/rssc.12463" class="external-link">https://doi.org/10.1111/rssc.12463</a>.</p>
+<div id="ref-lovato2021" class="csl-entry">
+Lovato, Ilenia, Alessia Pini, Aymeric Stamm, Maxime Taquet, and Simone Vantini. 2021. <span>“Multiscale Null Hypothesis Testing for Network<span>-</span>Valued Data: Analysis of Brain Networks of Patients with Autism.”</span> <em>Journal of the Royal Statistical Society: Series C (Applied Statistics)</em>, January. <a href="https://doi.org/10.1111/rssc.12463" class="external-link">https://doi.org/10.1111/rssc.12463</a>.
 </div>
-<div id="ref-lovato2020">
-<p>Lovato, Ilenia, Alessia Pini, Aymeric Stamm, and Simone Vantini. 2020. “Model-Free Two-Sample Test for Network-Valued Data.” <em>Computational Statistics &amp; Data Analysis</em> 144 (April): 106896. <a href="https://doi.org/10.1016/j.csda.2019.106896" class="external-link">https://doi.org/10.1016/j.csda.2019.106896</a>.</p>
+<div id="ref-lovato2020" class="csl-entry">
+Lovato, Ilenia, Alessia Pini, Aymeric Stamm, and Simone Vantini. 2020. <span>“Model-Free Two-Sample Test for Network-Valued Data.”</span> <em>Computational Statistics &amp; Data Analysis</em> 144 (April): 106896. <a href="https://doi.org/10.1016/j.csda.2019.106896" class="external-link">https://doi.org/10.1016/j.csda.2019.106896</a>.
 </div>
-<div id="ref-pesarin2010permutation">
-<p>Pesarin, Fortunato, and Luigi Salmaso. 2010. <em>Permutation Tests for Complex Data: Theory, Applications and Software</em>. John Wiley &amp; Sons.</p>
+<div id="ref-pesarin2010permutation" class="csl-entry">
+Pesarin, Fortunato, and Luigi Salmaso. 2010. <em>Permutation Tests for Complex Data: Theory, Applications and Software</em>. John Wiley &amp; Sons.
 </div>
-<div id="ref-szekely2013energy">
-<p>Székely, Gábor J, and Maria L Rizzo. 2013. “Energy Statistics: A Class of Statistics Based on Distances.” <em>Journal of Statistical Planning and Inference</em> 143 (8): 1249–72.</p>
+<div id="ref-szekely2013energy" class="csl-entry">
+Székely, Gábor J, and Maria L Rizzo. 2013. <span>“Energy Statistics: A Class of Statistics Based on Distances.”</span> <em>Journal of Statistical Planning and Inference</em> 143 (8): 1249–72.
 </div>
 </div>
 </div>

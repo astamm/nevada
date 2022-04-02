@@ -123,40 +123,40 @@
 <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">nevada</span><span class="fu">::</span><span class="fu"><a href="reference/nvd.html">nvd</a></span><span class="op">(</span><span class="st">"smallworld"</span>, <span class="va">n</span><span class="op">)</span>
 <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">nevada</span><span class="fu">::</span><span class="fu"><a href="reference/nvd.html">nvd</a></span><span class="op">(</span><span class="st">"pa"</span>, <span class="va">n</span><span class="op">)</span></code></pre></div>
 <p>By default the <code><a href="reference/nvd.html">nvd()</a></code> constructor generates networks with 25 nodes. One can wonder whether there is a difference between the distributions that generated these two samples (which there is given the models that we used). The <code><a href="reference/test2_global.html">test2_global()</a></code> function provides an answer to this question:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>t1_global &lt;-<span class="st"> </span>nevada<span class="op">::</span><span class="kw">test2_global</span>(x, y, <span class="dt">seed =</span> <span class="dv">1234</span>)</span>
-<span id="cb4-2"><a href="#cb4-2"></a>t1_global<span class="op">$</span>pvalue</span>
-<span id="cb4-3"><a href="#cb4-3"></a>[<span class="dv">1</span>] <span class="fl">0.0009962984</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>t1_global <span class="ot">&lt;-</span> nevada<span class="sc">::</span><span class="fu">test2_global</span>(x, y, <span class="at">seed =</span> <span class="dv">1234</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>t1_global<span class="sc">$</span>pvalue</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">0.0009962984</span></span></code></pre></div>
 <p>The p-value is very small, leading to the conclusion that we should reject the null hypothesis of equal distributions.</p>
 <p>Although this is a fake example, we could create a partition to try to localize differences along this partition:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">partition</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, each <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>The <code><a href="reference/test2_local.html">test2_local()</a></code> function provides an answer to this question:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>t1_local &lt;-<span class="st"> </span>nevada<span class="op">::</span><span class="kw">test2_local</span>(x, y, partition, <span class="dt">seed =</span> <span class="dv">1234</span>)</span>
-<span id="cb6-2"><a href="#cb6-2"></a>t1_local</span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="op">$</span>intra</span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="co"># A tibble: 5 × 3</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>  E     pvalue truncated</span>
-<span id="cb6-6"><a href="#cb6-6"></a>  <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st">  </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>lgl<span class="op">&gt;</span><span class="st">    </span></span>
-<span id="cb6-7"><a href="#cb6-7"></a><span class="dv">1</span> P1     <span class="fl">0.549</span> <span class="ot">TRUE</span>     </span>
-<span id="cb6-8"><a href="#cb6-8"></a><span class="dv">2</span> P2     <span class="fl">0.549</span> <span class="ot">TRUE</span>     </span>
-<span id="cb6-9"><a href="#cb6-9"></a><span class="dv">3</span> P3     <span class="fl">0.549</span> <span class="ot">TRUE</span>     </span>
-<span id="cb6-10"><a href="#cb6-10"></a><span class="dv">4</span> P4     <span class="fl">0.549</span> <span class="ot">TRUE</span>     </span>
-<span id="cb6-11"><a href="#cb6-11"></a><span class="dv">5</span> P5     <span class="fl">0.549</span> <span class="ot">TRUE</span>     </span>
-<span id="cb6-12"><a href="#cb6-12"></a></span>
-<span id="cb6-13"><a href="#cb6-13"></a><span class="op">$</span>inter</span>
-<span id="cb6-14"><a href="#cb6-14"></a><span class="co"># A tibble: 10 × 4</span></span>
-<span id="cb6-15"><a href="#cb6-15"></a>   E1    E2      pvalue truncated</span>
-<span id="cb6-16"><a href="#cb6-16"></a>   <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>chr<span class="op">&gt;</span><span class="st">    </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>lgl<span class="op">&gt;</span><span class="st">    </span></span>
-<span id="cb6-17"><a href="#cb6-17"></a><span class="st"> </span><span class="dv">1</span> P1    P2    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span>
-<span id="cb6-18"><a href="#cb6-18"></a> <span class="dv">2</span> P1    P3    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span>
-<span id="cb6-19"><a href="#cb6-19"></a> <span class="dv">3</span> P1    P4    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span>
-<span id="cb6-20"><a href="#cb6-20"></a> <span class="dv">4</span> P1    P5    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span>
-<span id="cb6-21"><a href="#cb6-21"></a> <span class="dv">5</span> P2    P3    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span>
-<span id="cb6-22"><a href="#cb6-22"></a> <span class="dv">6</span> P2    P4    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span>
-<span id="cb6-23"><a href="#cb6-23"></a> <span class="dv">7</span> P2    P5    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span>
-<span id="cb6-24"><a href="#cb6-24"></a> <span class="dv">8</span> P3    P4    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span>
-<span id="cb6-25"><a href="#cb6-25"></a> <span class="dv">9</span> P3    P5    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span>
-<span id="cb6-26"><a href="#cb6-26"></a><span class="dv">10</span> P4    P5    <span class="fl">0.000996</span> <span class="ot">FALSE</span>    </span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>t1_local <span class="ot">&lt;-</span> nevada<span class="sc">::</span><span class="fu">test2_local</span>(x, y, partition, <span class="at">seed =</span> <span class="dv">1234</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>t1_local</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="sc">$</span>intra</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># A tibble: 5 × 3</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  E     pvalue truncated</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="sc">&lt;</span>chr<span class="sc">&gt;</span>  <span class="er">&lt;</span>dbl<span class="sc">&gt;</span> <span class="er">&lt;</span>lgl<span class="sc">&gt;</span>    </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> P1     <span class="fl">0.549</span> <span class="cn">TRUE</span>     </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> P2     <span class="fl">0.549</span> <span class="cn">TRUE</span>     </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span> P3     <span class="fl">0.549</span> <span class="cn">TRUE</span>     </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span> P4     <span class="fl">0.549</span> <span class="cn">TRUE</span>     </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span> P5     <span class="fl">0.549</span> <span class="cn">TRUE</span>     </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="sc">$</span>inter</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co"># A tibble: 10 × 4</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>   E1    E2      pvalue truncated</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>   <span class="sc">&lt;</span>chr<span class="sc">&gt;</span> <span class="er">&lt;</span>chr<span class="sc">&gt;</span>    <span class="er">&lt;</span>dbl<span class="sc">&gt;</span> <span class="er">&lt;</span>lgl<span class="sc">&gt;</span>    </span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a> <span class="dv">1</span> P1    P2    <span class="fl">0.000996</span> <span class="cn">FALSE</span>    </span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a> <span class="dv">2</span> P1    P3    <span class="fl">0.000996</span> <span class="cn">FALSE</span>    </span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a> <span class="dv">3</span> P1    P4    <span class="fl">0.000996</span> <span class="cn">FALSE</span>    </span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a> <span class="dv">4</span> P1    P5    <span class="fl">0.000996</span> <span class="cn">FALSE</span>    </span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a> <span class="dv">5</span> P2    P3    <span class="fl">0.000996</span> <span class="cn">FALSE</span>    </span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a> <span class="dv">6</span> P2    P4    <span class="fl">0.000996</span> <span class="cn">FALSE</span>    </span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a> <span class="dv">7</span> P2    P5    <span class="fl">0.000996</span> <span class="cn">FALSE</span>    </span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a> <span class="dv">8</span> P3    P4    <span class="fl">0.000996</span> <span class="cn">FALSE</span>    </span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a> <span class="dv">9</span> P3    P5    <span class="fl">0.000996</span> <span class="cn">FALSE</span>    </span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> P4    P5    <span class="fl">0.000996</span> <span class="cn">FALSE</span>    </span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-2">Example 2<a class="anchor" aria-label="anchor" href="#example-2"></a>
@@ -167,9 +167,9 @@
 <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">nevada</span><span class="fu">::</span><span class="fu"><a href="reference/nvd.html">nvd</a></span><span class="op">(</span><span class="st">"smallworld"</span>, <span class="va">n</span><span class="op">)</span>
 <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">nevada</span><span class="fu">::</span><span class="fu"><a href="reference/nvd.html">nvd</a></span><span class="op">(</span><span class="st">"smallworld"</span>, <span class="va">n</span><span class="op">)</span></code></pre></div>
 <p>One can wonder whether there is a difference between the distributions that generated these two samples (which there is given the models that we used). The <code><a href="reference/test2_global.html">test2_global()</a></code> function provides an answer to this question:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>t2 &lt;-<span class="st"> </span>nevada<span class="op">::</span><span class="kw">test2_global</span>(x, y, <span class="dt">seed =</span> <span class="dv">1234</span>)</span>
-<span id="cb8-2"><a href="#cb8-2"></a>t2<span class="op">$</span>pvalue</span>
-<span id="cb8-3"><a href="#cb8-3"></a>[<span class="dv">1</span>] <span class="fl">0.2257715</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>t2 <span class="ot">&lt;-</span> nevada<span class="sc">::</span><span class="fu">test2_global</span>(x, y, <span class="at">seed =</span> <span class="dv">1234</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>t2<span class="sc">$</span>pvalue</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">0.2257715</span></span></code></pre></div>
 <p>The p-value is larger than 5% or even 10%, leading us to failing to reject the null hypothesis of equal distributions at these significance thresholds.</p>
 </div>
 </div>
