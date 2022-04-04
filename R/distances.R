@@ -143,7 +143,7 @@ ipro_frobenius <- function(x, y, representation = "laplacian") {
 #'   \code{"graphon"}. Default is \code{"laplacian"}.
 #' @param distance A string specifying the chosen distance for calculating the
 #'   test statistic, among: \code{"hamming"}, \code{"frobenius"},
-#'   \code{"spectral"} and \code{"root-euclidean"}. Default is
+#'   \code{"spectral"}, \code{"root-euclidean"} and \code{"match-frobenius"}. Default is
 #'   \code{"frobenius"}.
 #'
 #' @return A matrix of dimension \eqn{(n1+n2) \times (n1+n2)} containing the
@@ -160,7 +160,58 @@ dist_nvd <- function(x,
                      y = NULL,
                      representation = "adjacency",
                      distance = "frobenius") {
+  if(distance == "match-frobenius"){
 
-  x <- repr_nvd(x, y, representation = representation)
-  dist_nvd_impl(x, distance)
+    x <- repr_nvd(x, y, representation = representation)
+    n <- length(x)
+    mat_d <- rep(-1, n * (n - 1) / 2)
+    attr(mat_d,"class") <- "dist"
+    attr(mat_d,"Size") <- n
+    attr(mat_d,"Diag") <- FALSE
+    attr(mat_d,"Upper") <- FALSE
+
+    for(i in 1:(n-1)){
+      net1 = x[[i]]
+
+      for(j in (i+1):n){
+        net2 = x[[j]]
+
+        distanceValue = -1
+
+        m <- 0 #number of nodes I know a priori that are in correspondence in A and B
+        mat1 <- as.matrix(net1)
+        mat2 <- as.matrix(net2)
+        perm <-igraph::match_vertices(mat1, mat2, m, start=diag(rep(1, nrow(mat1))), 20)
+        P <- perm$P
+        Pmat2P <- P%*%mat2%*%t(P)
+
+        # n1 <- nrow(mat1)
+        #
+        # squaredDiff <- 0
+        # for (l in 1:n1)
+        # {
+        #   for (k in l:n1)
+        #   {
+        #     tmpVal <- (mat1[l,k] - Pmat2P[l,k]) * (mat1[l,k] - Pmat2P[l,k])
+        #     squaredDiff <- squaredDiff + tmpVal
+        #
+        #     if (l != k)
+        #       squaredDiff <- squaredDiff + tmpVal
+        #   }
+        # }
+        #
+        # distanceValue <- sqrt(squaredDiff)
+
+        distanceValue <- dist_frobenius(mat1, Pmat2P, representation = "adjacency")
+
+        rowIndex <- i
+        colIndex <- j
+        indexValue <- n * (rowIndex - 1) - rowIndex * (rowIndex - 1) / 2 + colIndex - rowIndex
+        mat_d[indexValue] <- distanceValue
+      }
+  }
+    mat_d} else{
+    x <- repr_nvd(x, y, representation = representation)
+    dist_nvd_impl(x, distance)
+  }
 }

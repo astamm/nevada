@@ -15,7 +15,7 @@
 #'   Defaults to \code{"adjacency"}.
 #' @param distance A string specifying the chosen distance for calculating the
 #'   test statistic, among: \code{"hamming"}, \code{"frobenius"},
-#'   \code{"spectral"} and \code{"root-euclidean"}. Defaults to
+#'   \code{"spectral"}, \code{"root-euclidean"} and \code{match-frobenius}. Defaults to
 #'   \code{"frobenius"}.
 #' @param stats A character vector specifying the chosen test statistic(s),
 #'   among: `"original_edge_count"`, `"generalized_edge_count"`,
@@ -76,7 +76,7 @@ test2_global <- function(x, y,
 
   distance <- match.arg(
     distance,
-    c("hamming", "frobenius", "spectral", "root-euclidean")
+    c("hamming", "frobenius", "spectral", "root-euclidean", "match-frobenius")
   )
 
   use_frechet_stats <- any(grepl("student_euclidean", stats)) ||
