@@ -145,6 +145,7 @@ ipro_frobenius <- function(x, y, representation = "laplacian") {
 #'   test statistic, among: \code{"hamming"}, \code{"frobenius"},
 #'   \code{"spectral"}, \code{"root-euclidean"} and \code{"match-frobenius"}. Default is
 #'   \code{"frobenius"}.
+#' @param iteration The number of iterations for the Frank-Wolfe algorithm. Default to 20L.
 #'
 #' @return A matrix of dimension \eqn{(n1+n2) \times (n1+n2)} containing the
 #'   distances between all the elements of the two samples put together.
@@ -159,7 +160,8 @@ ipro_frobenius <- function(x, y, representation = "laplacian") {
 dist_nvd <- function(x,
                      y = NULL,
                      representation = "adjacency",
-                     distance = "frobenius") {
+                     distance = "frobenius",
+                     iteration = 20L) {
   if(distance == "match-frobenius"){
 
     x <- repr_nvd(x, y, representation = representation)
@@ -181,7 +183,7 @@ dist_nvd <- function(x,
         m <- 0 #number of nodes I know a priori that are in correspondence in A and B
         mat1 <- as.matrix(net1)
         mat2 <- as.matrix(net2)
-        perm <-igraph::match_vertices(mat1, mat2, m, start=diag(rep(1, nrow(mat1))), 20)
+        perm <-igraph::match_vertices(A = mat1, B = mat2, m = m, start=diag(rep(1, nrow(mat1))), iteration = iteration)
         P <- perm$P
         Pmat2P <- P%*%mat2%*%t(P)
 

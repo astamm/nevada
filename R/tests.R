@@ -34,6 +34,7 @@
 #'   for the edge count statistics. Defaults to `5L`.
 #' @param seed An integer for specifying the seed of the random generator for
 #'   result reproducibility. Defaults to `NULL`.
+#' @param iteration The number of iterations for the Frank-Wolfe algorithm. Default to 20L.
 #'
 #' @return A \code{\link[base]{list}} with three components: the value of the
 #'   statistic for the original two samples, the p-value of the resulting
@@ -64,7 +65,8 @@ test2_global <- function(x, y,
                          B = 1000L,
                          test = "exact",
                          k = 5L,
-                         seed = NULL) {
+                         seed = NULL,
+                         iteration = 20L) {
   n1 <- length(x)
   n2 <- length(y)
   n <- n1 + n2
@@ -90,7 +92,7 @@ test2_global <- function(x, y,
   if (use_frechet_stats)
     d <- repr_nvd(x, y, representation = representation)
   else {
-    d <- dist_nvd(x, y, representation = representation, distance = distance)
+    d <- dist_nvd(x, y, representation = representation, distance = distance, iteration = iteration)
     if (any(grepl("edge_count", stats)))
       ecp <- edge_count_global_variables(d, n1, k = k)
   }
