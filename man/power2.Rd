@@ -22,7 +22,8 @@ power2(
   test = "exact",
   k = 5L,
   R = 1000L,
-  seed = 1234
+  seed = 1234,
+  parallel = FALSE
 )
 }
 \arguments{
@@ -86,6 +87,8 @@ for the edge count statistics. Defaults to \code{5L}.}
 
 \item{seed}{An integer specifying the random generator seed. Defaults to
 `1234.}
+
+\item{parallel}{A boolean specifying whether the function should be performed in parallel. Defaults to \code{FALSE}.}
 }
 \value{
 A numeric value estimating the power of the test.

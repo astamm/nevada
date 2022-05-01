@@ -26,6 +26,7 @@
 #'   `1000L`.
 #' @param seed An integer specifying the random generator seed. Defaults to
 #'   `1234.
+#' @param parallel A boolean specifying whether the function should be performed in parallel. Defaults to `FALSE`.
 #'
 #' @return A numeric value estimating the power of the test.
 #' @export
@@ -54,9 +55,12 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
                    test = "exact",
                    k = 5L,
                    R = 1000L,
-                   seed = 1234) {
+                   seed = 1234,
+                   parallel = FALSE) {
   if (!is.null(seed))
     withr::local_seed(seed)
+
+  if(!parallel){
 
   pvalues <- replicate(
     R,
@@ -86,6 +90,42 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
       iteration = iteration
     )$pvalue
   )
+  }else{
+    pvalues=numeric(R)
+    n.cores <- parallel::detectCores() - 1
+    cl <- parallel::makeCluster(n.cores)
+    fun <- function(dummy){
+      pvalues <- nevada::test2_global(
+        x = nevada::nvd(
+          model = model1,
+          n = n1,
+          num_vertices = num_vertices,
+          model_params = model1_params,
+          seed = NULL
+        ),
+        y = nevada::nvd(
+          model = model2,
+          n = n2,
+          num_vertices = num_vertices,
+          model_params = model2_params,
+          seed = NULL
+        ),
+        representation = representation,
+        distance = distance,
+        stats = stats,
+        B = B,
+        test = test,
+        k = k,
+        seed = 1234,
+        start = start,
+        iteration = iteration
+      )$pvalue
+    }
+    parallel::clusterExport(cl=cl,list('model1','model2','n1','n2','num_vertices','model1_params','model2_params','representation','distance','stats','B','start','iteration','test','k'), envir=environment())
+    #pvalues <- parallel::parLapply(pvalues, fun, cl=cl)
+    pvalues <- pbapply::pbsapply(pvalues, fun, cl=cl) # with a progress bar
+    parallel::stopCluster(cl)
+  }
 
   mean(pvalues <= alpha)
 }
