@@ -4,6 +4,7 @@
 \alias{distances}
 \alias{dist_hamming}
 \alias{dist_frobenius}
+\alias{dist_match_frobenius}
 \alias{dist_spectral}
 \alias{dist_root_euclidean}
 \title{Distances Between Networks}
@@ -11,6 +12,14 @@
 dist_hamming(x, y, representation = "laplacian")
 
 dist_frobenius(x, y, representation = "laplacian")
+
+dist_match_frobenius(
+  x,
+  y,
+  representation = "adjacency",
+  start = "barycenter",
+  iteration = 20
+)
 
 dist_spectral(x, y, representation = "laplacian")
 
@@ -26,6 +35,11 @@ underlying network. Should have the same number of vertices as \code{x}.}
 \item{representation}{A string specifying the desired type of representation,
 among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
 \code{"graphon"}. Default is \code{"laplacian"}.}
+
+\item{iteration}{The number of iterations for the Frank-Wolfe algorithm. Default to 20L. It is required for \code{distance == "match-frobenius"}.}
+
+\item{A}{string specifying the initialization of the permutation matrix estimate, among: \code{"barycenter"} and \code{"identity"}. Default is
+\code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.}
 }
 \value{
 A scalar measuring the distance between the two input networks.
@@ -52,6 +66,8 @@ respectively. The root-Euclidean distance between \eqn{x} and \eqn{y} is
 given by \deqn{\sqrt{\sum_i (V \sqrt{A} V^{-1} - U \sqrt{B} U^{-1})^2}.}
 Root-Euclidean distance can used only with the laplacian matrix
 representation.
+The match-Frobenius distance is the Frobenius distance considering networks in the Graph Space (alignment approach).
+Match-Frobenius distance can be used only with adjacency matrix representation.
 }
 \examples{
 g1 <- igraph::sample_gnp(20, 0.1)

@@ -13,7 +13,9 @@ test2_global(
   B = 1000L,
   test = "exact",
   k = 5L,
-  seed = NULL
+  seed = NULL,
+  start = "barycenter",
+  iteration = 20L
 )
 }
 \arguments{
@@ -27,7 +29,7 @@ Defaults to \code{"adjacency"}.}
 
 \item{distance}{A string specifying the chosen distance for calculating the
 test statistic, among: \code{"hamming"}, \code{"frobenius"},
-\code{"spectral"} and \code{"root-euclidean"}. Defaults to
+\code{"spectral"}, \code{"root-euclidean"} and \code{match-frobenius}. Defaults to
 \code{"frobenius"}.}
 
 \item{stats}{A character vector specifying the chosen test statistic(s),
@@ -50,6 +52,11 @@ for the edge count statistics. Defaults to \code{5L}.}
 
 \item{seed}{An integer for specifying the seed of the random generator for
 result reproducibility. Defaults to \code{NULL}.}
+
+\item{start}{A string specifying the initialization of the permutation matrix estimate, among: \code{"barycenter"} and \code{"identity"}. Default is
+\code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.}
+
+\item{iteration}{The number of iterations for the Frank-Wolfe algorithm. Default to \code{20L}. It is required for \code{distance == "match-frobenius"}.}
 }
 \value{
 A \code{\link[base]{list}} with three components: the value of the

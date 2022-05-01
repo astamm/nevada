@@ -34,7 +34,9 @@
 #'   for the edge count statistics. Defaults to `5L`.
 #' @param seed An integer for specifying the seed of the random generator for
 #'   result reproducibility. Defaults to `NULL`.
-#' @param iteration The number of iterations for the Frank-Wolfe algorithm. Default to 20L.
+#' @param start A string specifying the initialization of the permutation matrix estimate, among: \code{"barycenter"} and \code{"identity"}. Default is
+#'   \code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.
+#' @param iteration The number of iterations for the Frank-Wolfe algorithm. Default to `20L`. It is required for \code{distance == "match-frobenius"}.
 #'
 #' @return A \code{\link[base]{list}} with three components: the value of the
 #'   statistic for the original two samples, the p-value of the resulting
@@ -66,6 +68,7 @@ test2_global <- function(x, y,
                          test = "exact",
                          k = 5L,
                          seed = NULL,
+                         start = "barycenter",
                          iteration = 20L) {
   n1 <- length(x)
   n2 <- length(y)
@@ -92,7 +95,7 @@ test2_global <- function(x, y,
   if (use_frechet_stats)
     d <- repr_nvd(x, y, representation = representation)
   else {
-    d <- dist_nvd(x, y, representation = representation, distance = distance, iteration = iteration)
+    d <- dist_nvd(x, y, representation = representation, distance = distance, start = start, iteration = iteration)
     if (any(grepl("edge_count", stats)))
       ecp <- edge_count_global_variables(d, n1, k = k)
   }

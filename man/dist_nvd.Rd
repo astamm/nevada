@@ -4,7 +4,14 @@
 \alias{dist_nvd}
 \title{Pairwise Distance Matrix Between Two Samples of Networks}
 \usage{
-dist_nvd(x, y = NULL, representation = "adjacency", distance = "frobenius")
+dist_nvd(
+  x,
+  y = NULL,
+  representation = "adjacency",
+  distance = "frobenius",
+  start = "barycenter",
+  iteration = 20L
+)
 }
 \arguments{
 \item{x}{A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects
@@ -21,8 +28,13 @@ among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
 
 \item{distance}{A string specifying the chosen distance for calculating the
 test statistic, among: \code{"hamming"}, \code{"frobenius"},
-\code{"spectral"} and \code{"root-euclidean"}. Default is
+\code{"spectral"}, \code{"root-euclidean"} and \code{"match-frobenius"}. Default is
 \code{"frobenius"}.}
+
+\item{start}{A string specifying the initialization of the permutation matrix estimate, among: \code{"barycenter"} and \code{"identity"}. Default is
+\code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.}
+
+\item{iteration}{The number of iterations for the Frank-Wolfe algorithm. Default to 20L. It is required for \code{distance == "match-frobenius"}.}
 }
 \value{
 A matrix of dimension \eqn{(n1+n2) \times (n1+n2)} containing the

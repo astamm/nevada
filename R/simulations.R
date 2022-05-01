@@ -48,6 +48,8 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
                    distance = "frobenius",
                    stats = c("flipr:t_ip", "flipr:f_ip"),
                    B = 1000L,
+                   start = "barycenter",
+                   iteration = 20L,
                    alpha = 0.05,
                    test = "exact",
                    k = 5L,
@@ -79,7 +81,9 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
       B = B,
       test = test,
       k = k,
-      seed = 1234
+      seed = 1234,
+      start = start,
+      iteration = iteration
     )$pvalue
   )
 

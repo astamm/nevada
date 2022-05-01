@@ -20,6 +20,8 @@
 #' given by \deqn{\sqrt{\sum_i (V \sqrt{A} V^{-1} - U \sqrt{B} U^{-1})^2}.}
 #' Root-Euclidean distance can used only with the laplacian matrix
 #' representation.
+#' The match-Frobenius distance is the Frobenius distance considering networks in the Graph Space (alignment approach).
+#' Match-Frobenius distance can be used only with adjacency matrix representation.
 #'
 #' @param x An \code{\link[igraph]{igraph}} object or a matrix representing an
 #'   underlying network.
@@ -28,6 +30,9 @@
 #' @param representation A string specifying the desired type of representation,
 #'   among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
 #'   \code{"graphon"}. Default is \code{"laplacian"}.
+#' @param A string specifying the initialization of the permutation matrix estimate, among: \code{"barycenter"} and \code{"identity"}. Default is
+#'   \code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.
+#' @param iteration The number of iterations for the Frank-Wolfe algorithm. Default to 20L. It is required for \code{distance == "match-frobenius"}.
 #'
 #' @return A scalar measuring the distance between the two input networks.
 #'
@@ -63,6 +68,40 @@ dist_frobenius <- function(x, y, representation = "laplacian") {
   y <- format_input(y, representation)
 
   dist_frobenius_impl(x, y)
+}
+
+#' @rdname distances
+#' @export
+dist_match_frobenius <- function(x, y, representation = "adjacency", start = "barycenter", iteration = 20) {
+  if (representation != "adjacency")
+    stop("The match-Frobenius distance can only be used with the Adjacency matrix representation.")
+
+  if (!compatible_networks(x, y))
+    stop("Input networks are incompatible.")
+
+  num_nodes <- nrow(repr_adjacency(y))
+
+  if (start == "barycenter"){
+    start_mat <- matrix(1, num_nodes, num_nodes)/num_nodes
+  } else if (start == "identity"){
+    start_mat <- diag(rep(1, num_nodes))
+  } else stop("Input start matrix is not valid. The initialization of the permutation matrix estimate should be among: barycenter and identity.")
+
+
+  x <- format_input(x, representation)
+  y <- format_input(y, representation)
+
+  distanceValue = -1
+
+  m <- 0 #number of nodes I know a priori that are in correspondence in A and B
+  mat1 <- as.matrix(x)
+  mat2 <- as.matrix(y)
+  perm <- igraph::match_vertices(A = mat1, B = mat2, m = m, start = start_mat, iteration = iteration)
+  P <- perm$P
+  Pmat2P <- P%*%mat2%*%t(P)
+
+  distanceValue <- dist_frobenius(mat1, Pmat2P, representation = "adjacency")
+  distanceValue
 }
 
 #' @rdname distances
@@ -145,7 +184,9 @@ ipro_frobenius <- function(x, y, representation = "laplacian") {
 #'   test statistic, among: \code{"hamming"}, \code{"frobenius"},
 #'   \code{"spectral"}, \code{"root-euclidean"} and \code{"match-frobenius"}. Default is
 #'   \code{"frobenius"}.
-#' @param iteration The number of iterations for the Frank-Wolfe algorithm. Default to 20L.
+#' @param start A string specifying the initialization of the permutation matrix estimate, among: \code{"barycenter"} and \code{"identity"}. Default is
+#'   \code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.
+#' @param iteration The number of iterations for the Frank-Wolfe algorithm. Default to 20L. It is required for \code{distance == "match-frobenius"}.
 #'
 #' @return A matrix of dimension \eqn{(n1+n2) \times (n1+n2)} containing the
 #'   distances between all the elements of the two samples put together.
@@ -161,58 +202,32 @@ dist_nvd <- function(x,
                      y = NULL,
                      representation = "adjacency",
                      distance = "frobenius",
+                     start = "barycenter",
                      iteration = 20L) {
   if(distance == "match-frobenius"){
 
-    x <- repr_nvd(x, y, representation = representation)
+    x <- append(x, y)
     n <- length(x)
     mat_d <- rep(-1, n * (n - 1) / 2)
+
+    fun <- function(k) {
+      j <-floor((2*(n-1)+1-sqrt((2*(n-1)+1)*(2*(n-1)+1)-8*k))/2)
+      i <- k-((2*(n-1)-1-j)*j)/2
+
+      net1 = x[[i+2]]
+      net2 = x[[j+1]]
+
+      distanceValue <- dist_match_frobenius(net1, net2, representation = representation, start = start, iteration = iteration)
+      distanceValue
+    }
+
+    mat_d <- sapply(0:((n * (n - 1) / 2)-1), fun)
     attr(mat_d,"class") <- "dist"
     attr(mat_d,"Size") <- n
     attr(mat_d,"Diag") <- FALSE
     attr(mat_d,"Upper") <- FALSE
-
-    for(i in 1:(n-1)){
-      net1 = x[[i]]
-
-      for(j in (i+1):n){
-        net2 = x[[j]]
-
-        distanceValue = -1
-
-        m <- 0 #number of nodes I know a priori that are in correspondence in A and B
-        mat1 <- as.matrix(net1)
-        mat2 <- as.matrix(net2)
-        perm <-igraph::match_vertices(A = mat1, B = mat2, m = m, start=diag(rep(1, nrow(mat1))), iteration = iteration)
-        P <- perm$P
-        Pmat2P <- P%*%mat2%*%t(P)
-
-        # n1 <- nrow(mat1)
-        #
-        # squaredDiff <- 0
-        # for (l in 1:n1)
-        # {
-        #   for (k in l:n1)
-        #   {
-        #     tmpVal <- (mat1[l,k] - Pmat2P[l,k]) * (mat1[l,k] - Pmat2P[l,k])
-        #     squaredDiff <- squaredDiff + tmpVal
-        #
-        #     if (l != k)
-        #       squaredDiff <- squaredDiff + tmpVal
-        #   }
-        # }
-        #
-        # distanceValue <- sqrt(squaredDiff)
-
-        distanceValue <- dist_frobenius(mat1, Pmat2P, representation = "adjacency")
-
-        rowIndex <- i
-        colIndex <- j
-        indexValue <- n * (rowIndex - 1) - rowIndex * (rowIndex - 1) / 2 + colIndex - rowIndex
-        mat_d[indexValue] <- distanceValue
-      }
-  }
-    mat_d} else{
+    mat_d
+    } else{
     x <- repr_nvd(x, y, representation = representation)
     dist_nvd_impl(x, distance)
   }

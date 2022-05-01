@@ -16,6 +16,8 @@ power2(
   distance = "frobenius",
   stats = c("flipr:t_ip", "flipr:f_ip"),
   B = 1000L,
+  start = "barycenter",
+  iteration = 20L,
   alpha = 0.05,
   test = "exact",
   k = 5L,
@@ -51,7 +53,7 @@ Defaults to \code{"adjacency"}.}
 
 \item{distance}{A string specifying the chosen distance for calculating the
 test statistic, among: \code{"hamming"}, \code{"frobenius"},
-\code{"spectral"} and \code{"root-euclidean"}. Defaults to
+\code{"spectral"}, \code{"root-euclidean"} and \code{match-frobenius}. Defaults to
 \code{"frobenius"}.}
 
 \item{stats}{A character vector specifying the chosen test statistic(s),
@@ -64,6 +66,11 @@ package: \code{"flipr:student_ip"}, \code{"flipr:fisher_ip"}, \code{"flipr:bg_ip
 \item{B}{The number of permutation or the tolerance. If this number is lower
 than \code{1}, it is intended as a tolerance. Otherwise, it is intended as
 the number of required permutations. Defaults to \code{1000L}.}
+
+\item{start}{A string specifying the initialization of the permutation matrix estimate, among: \code{"barycenter"} and \code{"identity"}. Default is
+\code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.}
+
+\item{iteration}{The number of iterations for the Frank-Wolfe algorithm. Default to \code{20L}. It is required for \code{distance == "match-frobenius"}.}
 
 \item{alpha}{Significance level for hypothesis testing. Defaults to \code{0.05}.}
 
