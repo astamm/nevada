@@ -209,6 +209,11 @@ sample2_sbm <- function(n, nv, p1, b1, p2 = p1, b2 = b1, seed = NULL) {
 #' @param representation A string specifying the graph representation to be
 #'   used. Choices are adjacency, laplacian, modularity, graphon. Default is
 #'   adjacency.
+#' @param aac A boolean specifying whether the function should perform the Align All and Compute algorithm (AAC). If it is \code{TRUE}, the alignment is performed via FAQ (Frank-Wolfe algorithm), with barycenter as initialization of the permutation matrix and 20 iterations. Defaults to `FALSE`.
+#' @param tol Tolerance for AAC. Default to `0.001`.
+#' @param max_iteration Maximum number of iteration for AAC. Default to `200`.
+#' @param seed An integer specifying the random generator seed for AAC. Defaults to
+#'   `1234`.
 #' @param ... Other argument to be parsed to the \code{\link[base]{mean}}
 #'   function.
 #'
@@ -220,17 +225,51 @@ sample2_sbm <- function(n, nv, p1, b1, p2 = p1, b2 = b1, seed = NULL) {
 #' gnp_params <- list(p = 1/3)
 #' x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
 #' mean(x)
-mean.nvd <- function(x, weights = rep(1, length(x)), representation = "adjacency", ...) {
-  x <- repr_nvd(x, representation = representation)
-  if (is.null(weights)) weights <- rep(1, length(x))
-  x <- mean_nvd_impl(x, weights)
-  switch(
-    representation,
-    adjacency = as_adjacency(x),
-    laplacian = as_laplacian(x),
-    modularity = as_modularity(x),
-    graphon = as_graphon(x)
-  )
+mean.nvd <- function(x, weights = rep(1, length(x)), representation = "adjacency", aac = FALSE, tol = 0.001, max_iteration = 200, seed = 1234, ...) {
+  if(!aac){
+    x <- repr_nvd(x, representation = representation)
+    if (is.null(weights)) weights <- rep(1, length(x))
+    x <- mean_nvd_impl(x, weights)
+    switch(
+      representation,
+      adjacency = as_adjacency(x),
+      laplacian = as_laplacian(x),
+      modularity = as_modularity(x),
+      graphon = as_graphon(x)
+    )
+  } else {
+    if (!is.null(seed))
+      withr::local_seed(seed)
+    x <- repr_nvd(x, representation = representation)
+    if (is.null(weights)) weights <- rep(1, length(x))
+
+    first_id <- sample(1:length(x), 1)
+    m <- x[[first_id]]
+    randP <- randRotation::randpermut(nrow(m))
+    m <- randP%*%m%*%t(randP)
+
+    s <- tol + 1
+    k <- 1
+    while (s > tol & k <= max_iteration) {
+      cat("Start iteration ", k, "\n")
+      x_aligned <- align_networks(m, x)
+      fm <- mean_nvd_impl(x_aligned, weights)
+      s <- dist_frobenius_impl(m, fm)
+      m <- fm
+      k <- k+1
+    }
+
+    if(k >= max_iteration)
+      print("Max number of iteration reached")
+
+    switch(
+      representation,
+      adjacency = as_adjacency(m),
+      laplacian = as_laplacian(m),
+      modularity = as_modularity(m),
+      graphon = as_graphon(m)
+    )
+  }
 }
 
 #' Fréchet Variance of Network-Valued Data Around a Given Network

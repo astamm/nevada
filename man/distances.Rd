@@ -36,10 +36,10 @@ underlying network. Should have the same number of vertices as \code{x}.}
 among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
 \code{"graphon"}. Default is \code{"laplacian"}.}
 
-\item{iteration}{The number of iterations for the Frank-Wolfe algorithm. Default to 20L. It is required for \code{distance == "match-frobenius"}.}
-
-\item{A}{string specifying the initialization of the permutation matrix estimate, among: \code{"barycenter"} and \code{"identity"}. Default is
+\item{start}{A string specifying the initialization of the permutation matrix estimate, among: \code{"barycenter"} and \code{"identity"}. Default is
 \code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.}
+
+\item{iteration}{The number of iterations for the Frank-Wolfe algorithm. Default to 20L. It is required for \code{distance == "match-frobenius"}.}
 }
 \value{
 A scalar measuring the distance between the two input networks.

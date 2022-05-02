@@ -30,7 +30,7 @@
 #' @param representation A string specifying the desired type of representation,
 #'   among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
 #'   \code{"graphon"}. Default is \code{"laplacian"}.
-#' @param A string specifying the initialization of the permutation matrix estimate, among: \code{"barycenter"} and \code{"identity"}. Default is
+#' @param start A string specifying the initialization of the permutation matrix estimate, among: \code{"barycenter"} and \code{"identity"}. Default is
 #'   \code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.
 #' @param iteration The number of iterations for the Frank-Wolfe algorithm. Default to 20L. It is required for \code{distance == "match-frobenius"}.
 #'

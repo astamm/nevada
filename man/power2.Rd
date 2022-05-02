@@ -86,7 +86,7 @@ for the edge count statistics. Defaults to \code{5L}.}
 \code{1000L}.}
 
 \item{seed}{An integer specifying the random generator seed. Defaults to
-`1234.}
+\code{1234}.}
 
 \item{parallel}{A boolean specifying whether the function should be performed in parallel. Defaults to \code{FALSE}.}
 }

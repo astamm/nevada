@@ -25,7 +25,7 @@
 #' @param R Number of Monte-Carlo trials used to estimate the power. Defaults to
 #'   `1000L`.
 #' @param seed An integer specifying the random generator seed. Defaults to
-#'   `1234.
+#'   `1234`.
 #' @param parallel A boolean specifying whether the function should be performed in parallel. Defaults to `FALSE`.
 #'
 #' @return A numeric value estimating the power of the test.

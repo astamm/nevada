@@ -4,7 +4,16 @@
 \alias{mean.nvd}
 \title{Fréchet Mean of Network-Valued Data}
 \usage{
-\method{mean}{nvd}(x, weights = rep(1, length(x)), representation = "adjacency", ...)
+\method{mean}{nvd}(
+  x,
+  weights = rep(1, length(x)),
+  representation = "adjacency",
+  aac = FALSE,
+  tol = 0.001,
+  max_iteration = 200,
+  seed = 1234,
+  ...
+)
 }
 \arguments{
 \item{x}{An \code{\link{nvd}} object.}
@@ -15,6 +24,15 @@
 \item{representation}{A string specifying the graph representation to be
 used. Choices are adjacency, laplacian, modularity, graphon. Default is
 adjacency.}
+
+\item{aac}{A boolean specifying whether the function should perform the Align All and Compute algorithm (AAC). If it is \code{TRUE}, the alignment is performed via FAQ (Frank-Wolfe algorithm), with barycenter as initialization of the permutation matrix and 20 iterations. Defaults to \code{FALSE}.}
+
+\item{tol}{Tolerance for AAC. Default to \code{0.001}.}
+
+\item{max_iteration}{Maximum number of iteration for AAC. Default to \code{200}.}
+
+\item{seed}{An integer specifying the random generator seed for AAC. Defaults to
+\code{1234}.}
 
 \item{...}{Other argument to be parsed to the \code{\link[base]{mean}}
 function.}
