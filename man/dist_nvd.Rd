@@ -10,7 +10,8 @@ dist_nvd(
   representation = "adjacency",
   distance = "frobenius",
   start = "barycenter",
-  iteration = 20L
+  iteration = 20L,
+  parallel = FALSE
 )
 }
 \arguments{
@@ -35,6 +36,8 @@ test statistic, among: \code{"hamming"}, \code{"frobenius"},
 \code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.}
 
 \item{iteration}{The number of iterations for the Frank-Wolfe algorithm. Default to 20L. It is required for \code{distance == "match-frobenius"}.}
+
+\item{parallel}{A boolean specifying whether the function should be performed in parallel (only for \code{"match-frobenius"} distance). Defaults to \code{FALSE}.}
 }
 \value{
 A matrix of dimension \eqn{(n1+n2) \times (n1+n2)} containing the

@@ -37,6 +37,7 @@
 #' @param start A string specifying the initialization of the permutation matrix estimate, among: \code{"barycenter"} and \code{"identity"}. Default is
 #'   \code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.
 #' @param iteration The number of iterations for the Frank-Wolfe algorithm. Default to `20L`. It is required for \code{distance == "match-frobenius"}.
+#' @param parallel A boolean specifying whether the distance matrix computation should be performed in parallel (only for \code{"match-frobenius"} distance). Defaults to `FALSE`.
 #'
 #' @return A \code{\link[base]{list}} with three components: the value of the
 #'   statistic for the original two samples, the p-value of the resulting
@@ -69,7 +70,8 @@ test2_global <- function(x, y,
                          k = 5L,
                          seed = NULL,
                          start = "barycenter",
-                         iteration = 20L) {
+                         iteration = 20L,
+                         parallel = FALSE) {
   n1 <- length(x)
   n2 <- length(y)
   n <- n1 + n2
@@ -95,7 +97,7 @@ test2_global <- function(x, y,
   if (use_frechet_stats)
     d <- repr_nvd(x, y, representation = representation)
   else {
-    d <- dist_nvd(x, y, representation = representation, distance = distance, start = start, iteration = iteration)
+    d <- dist_nvd(x, y, representation = representation, distance = distance, start = start, iteration = iteration, parallel = parallel)
     if (any(grepl("edge_count", stats)))
       ecp <- edge_count_global_variables(d, n1, k = k)
   }

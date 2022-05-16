@@ -15,7 +15,8 @@ test2_global(
   k = 5L,
   seed = NULL,
   start = "barycenter",
-  iteration = 20L
+  iteration = 20L,
+  parallel = FALSE
 )
 }
 \arguments{
@@ -57,6 +58,8 @@ result reproducibility. Defaults to \code{NULL}.}
 \code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.}
 
 \item{iteration}{The number of iterations for the Frank-Wolfe algorithm. Default to \code{20L}. It is required for \code{distance == "match-frobenius"}.}
+
+\item{parallel}{A boolean specifying whether the distance matrix computation should be performed in parallel (only for \code{"match-frobenius"} distance). Defaults to \code{FALSE}.}
 }
 \value{
 A \code{\link[base]{list}} with three components: the value of the

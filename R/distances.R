@@ -187,6 +187,7 @@ ipro_frobenius <- function(x, y, representation = "laplacian") {
 #' @param start A string specifying the initialization of the permutation matrix estimate, among: \code{"barycenter"} and \code{"identity"}. Default is
 #'   \code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.
 #' @param iteration The number of iterations for the Frank-Wolfe algorithm. Default to 20L. It is required for \code{distance == "match-frobenius"}.
+#' @param parallel A boolean specifying whether the function should be performed in parallel (only for \code{"match-frobenius"} distance). Defaults to `FALSE`.
 #'
 #' @return A matrix of dimension \eqn{(n1+n2) \times (n1+n2)} containing the
 #'   distances between all the elements of the two samples put together.
@@ -203,30 +204,59 @@ dist_nvd <- function(x,
                      representation = "adjacency",
                      distance = "frobenius",
                      start = "barycenter",
-                     iteration = 20L) {
+                     iteration = 20L,
+                     parallel = FALSE) {
   if(distance == "match-frobenius"){
 
     x <- append(x, y)
     n <- length(x)
     mat_d <- rep(-1, n * (n - 1) / 2)
 
-    fun <- function(k) {
-      j <-floor((2*(n-1)+1-sqrt((2*(n-1)+1)*(2*(n-1)+1)-8*k))/2)
-      i <- k-((2*(n-1)-1-j)*j)/2
+    if(!parallel){
+      fun <- function(k) {
+        j <-floor((2*(n-1)+1-sqrt((2*(n-1)+1)*(2*(n-1)+1)-8*k))/2)
+        i <- k-((2*(n-1)-1-j)*j)/2
 
-      net1 = x[[i+2]]
-      net2 = x[[j+1]]
+        net1 = x[[i+2]]
+        net2 = x[[j+1]]
 
-      distanceValue <- dist_match_frobenius(net1, net2, representation = representation, start = start, iteration = iteration)
-      distanceValue
+        distanceValue <- dist_match_frobenius(net1, net2, representation = representation, start = start, iteration = iteration)
+        distanceValue
+      }
+
+      mat_d <- sapply(0:((n * (n - 1) / 2)-1), fun)
+      attr(mat_d,"class") <- "dist"
+      attr(mat_d,"Size") <- n
+      attr(mat_d,"Diag") <- FALSE
+      attr(mat_d,"Upper") <- FALSE
+      mat_d
+    } else{
+      future::plan(future::multisession)
+      progressr::handlers(progressr::handler_progress(format="[:bar] :percent :eta :message"))
+      fun <- function(xs) {
+        p <- progressr::progressor(along = xs)
+        pbfun <- function(k) {
+          p() #signal progress
+          j <-floor((2*(n-1)+1-sqrt((2*(n-1)+1)*(2*(n-1)+1)-8*k))/2)
+          i <- k-((2*(n-1)-1-j)*j)/2
+
+          net1 = x[[i+2]]
+          net2 = x[[j+1]]
+
+          distanceValue <- dist_match_frobenius(net1, net2, representation = representation, start = start, iteration = iteration)
+          distanceValue
+        }
+        future.apply::future_sapply(xs, pbfun, future.seed = TRUE)
+      }
+
+      progressr::with_progress(mat_d <- fun(0:((n * (n - 1) / 2)-1)))
+      attr(mat_d,"class") <- "dist"
+      attr(mat_d,"Size") <- n
+      attr(mat_d,"Diag") <- FALSE
+      attr(mat_d,"Upper") <- FALSE
+      mat_d
     }
 
-    mat_d <- sapply(0:((n * (n - 1) / 2)-1), fun)
-    attr(mat_d,"class") <- "dist"
-    attr(mat_d,"Size") <- n
-    attr(mat_d,"Diag") <- FALSE
-    attr(mat_d,"Upper") <- FALSE
-    mat_d
     } else{
     x <- repr_nvd(x, y, representation = representation)
     dist_nvd_impl(x, distance)
