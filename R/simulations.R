@@ -56,32 +56,40 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
   if (!is.null(seed))
     withr::local_seed(seed)
 
-  pvalues <- replicate(
-    R,
-    test2_global(
-      x = nvd(
-        model = model1,
-        n = n1,
-        num_vertices = num_vertices,
-        model_params = model1_params,
-        seed = NULL
-      ),
-      y = nvd(
-        model = model2,
-        n = n2,
-        num_vertices = num_vertices,
-        model_params = model2_params,
-        seed = NULL
-      ),
-      representation = representation,
-      distance = distance,
-      stats = stats,
-      B = B,
-      test = test,
-      k = k,
-      seed = 1234
-    )$pvalue
-  )
+  progressr::handlers(progressr::handler_progress(format="[:bar] :percent :eta :message"))
+
+  fun <- function(xs) {
+    p <- progressr::progressor(steps = xs)
+    pbfun <- function(dummy){
+      p() #signal progress
+      test2_global(
+        x = nvd(
+          model = model1,
+          n = n1,
+          num_vertices = num_vertices,
+          model_params = model1_params,
+          seed = NULL
+        ),
+        y = nvd(
+          model = model2,
+          n = n2,
+          num_vertices = num_vertices,
+          model_params = model2_params,
+          seed = NULL
+        ),
+        representation = representation,
+        distance = distance,
+        stats = stats,
+        B = B,
+        test = test,
+        k = k,
+        seed = 1234
+      )$pvalue
+    }
+    y <- furrr::future_map_dbl(1:xs, pbfun, .options = furrr::furrr_options(seed = TRUE))
+  }
+
+  progressr::with_progress(pvalues <- fun(R))
 
   mean(pvalues <= alpha)
 }
