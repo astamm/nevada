@@ -6,6 +6,8 @@
 #' Currently, six scenarios of pairs of populations are implemented. Scenario 0
 #' allows to make sure that all our permutation tests are exact.
 #'
+#' To perform it in a parallel fashion, use future::plan(future::multisession) before the call.
+#'
 #' @param model1 A string specifying the model to be used for generating the
 #'   first sample. Choices are `"sbm"`, `"k_regular"`, `"gnp"`, `"smallworld"`,
 #'   `"pa"`, `"poisson"` and `"binomial"`. Defaults to `"gnp"`.
@@ -26,7 +28,6 @@
 #'   `1000L`.
 #' @param seed An integer specifying the random generator seed. Defaults to
 #'   `1234`.
-#' @param parallel A boolean specifying whether the function should be performed in parallel. Defaults to `FALSE`.
 #'
 #' @return A numeric value estimating the power of the test.
 #' @export
@@ -55,13 +56,10 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
                    test = "exact",
                    k = 5L,
                    R = 1000L,
-                   seed = 1234,
-                   parallel = FALSE) {
+                   seed = 1234) {
   if (!is.null(seed))
     withr::local_seed(seed)
 
-  if(!parallel){
-    future::plan(future::sequential)
     progressr::handlers(progressr::handler_progress(format="[:bar] :percent :eta :message"))
 
     fun <- function(xs) {
@@ -94,50 +92,10 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
           iteration = iteration
         )$pvalue
       }
-      y <- future.apply::future_replicate(xs, pbfun(NULL), future.seed=TRUE)
+        y <- furrr::future_map_dbl(1:xs, pbfun, .options = furrr::furrr_options(seed = TRUE))
     }
 
     progressr::with_progress(pvalues <- fun(R))
 
-  }else{
-    future::plan(future::multisession)
-    progressr::handlers(progressr::handler_progress(format="[:bar] :percent :eta :message"))
-
-    fun <- function(xs) {
-      p <- progressr::progressor(steps = xs)
-      pbfun <- function(dummy){
-        p() #signal progress
-        test2_global(
-          x = nvd(
-            model = model1,
-            n = n1,
-            num_vertices = num_vertices,
-            model_params = model1_params,
-            seed = NULL
-          ),
-          y = nvd(
-            model = model2,
-            n = n2,
-            num_vertices = num_vertices,
-            model_params = model2_params,
-            seed = NULL
-          ),
-          representation = representation,
-          distance = distance,
-          stats = stats,
-          B = B,
-          test = test,
-          k = k,
-          seed = 1234,
-          start = start,
-          iteration = iteration
-        )$pvalue
-      }
-      y <- future.apply::future_replicate(xs, pbfun(NULL), future.seed=TRUE)
-    }
-
-    progressr::with_progress(pvalues <- fun(R))
-
-  }
   mean(pvalues <= alpha)
 }
