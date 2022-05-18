@@ -361,3 +361,110 @@ var2_nvd <- function(x, representation = "adjacency", distance = "frobenius") {
   x <- repr_nvd(x, representation = representation)
   var_nvd_impl(x, distance)
 }
+
+#' From adjacency matrices to \code{nvd} object
+#'
+#' This function creates an \code{nvd} object from a list of adjacency matrices.
+#'
+#' @param adjmat A list of adjacency matrices.
+#' @param directed A boolean specifying whether the function should consider the input matrices as directed or undirected. Default to `FALSE`.
+#' @param weighted A boolean specifying whether the function should consider the input matrices as weighted or unweighted Default to `FALSE`.
+#'
+#' @return An \code{nvd} object.
+#' @export
+#'
+#' @examples
+#' gnp_params <- list(p = 1/3)
+#' x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
+#' x_adj <- repr_nvd(x, representation = "adjacency")
+#' nvd_from_adjacency_matrix(x_adj, directed = FALSE, weighted = FALSE)
+nvd_from_adjacency_matrix <- function(adjmat, directed = FALSE, weighted = FALSE){
+  sample_size <- length(adjmat)
+  y <- lapply(1:sample_size, function(x) NULL)
+
+  if (!directed) {
+    mode <- "undirected"
+  } else{
+    mode <- "directed"
+  }
+  if (!weighted) {
+    weight <- NULL
+  } else{
+    weight <- TRUE
+  }
+
+  for (i in 1:sample_size) {
+    attr(adjmat[[i]], "representation") <- "adjacency"
+    y[[i]] <- igraph::graph_from_adjacency_matrix(adjmat[[i]], weighted = weight, mode = mode)
+  }
+  as_nvd(y)
+}
+
+#' Summary of number of vertices in a sample of networks
+#'
+#' This function summarizes information related to the number of vertices in an \code{nvd} object.
+#'
+#' @param x An \code{nvd} object.
+#'
+#' @return A \code{\link[base]{list}} with 5 components: a vector with the number of vertices of each network, the maximum, the minimum, the mean and the variance of the number of vertices of the networks.
+#' @export
+#'
+#' @examples
+#' gnp_params <- list(p = 1/3)
+#' x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
+#' nodes <- nvd_num_vertices(x)
+#' nodes$num_vertices
+#' nodes$max
+nvd_num_vertices <- function(x){
+  sample_size <- length(x)
+  vec <- rep(-1, sample_size)
+  x_adj <- repr_nvd(x, representation = "adjacency")
+  for (i in 1:sample_size) {
+    vec[i] <- nrow(x_adj[[i]])
+  }
+  list("num_vertices" = vec, "max" = max(vec), "min" = min(vec), "mean" = mean(vec), "var" = var(vec))
+}
+
+#' Adding null nodes to networks
+#'
+#' This function adds null nodes to networks stored in an \code{nvd} object.
+#'
+#' @param x An \code{nvd} object.
+#' @param num_vertices An integer specifying the desired number of vertices of the networks. If necessary, null nodes are added in each network to reach this number.  If `NULL`, the maximum number of vertices in the sample is considered. Default to `NULL`.
+#' @param directed A boolean specifying whether the function should consider the input networks as directed or undirected. Default to `FALSE`.
+#' @param weighted A boolean specifying whether the function should consider the input networks as weighted or unweighted Default to `FALSE`.
+#'
+#' @return An \code{nvd} object.
+#' @export
+#'
+#' @examples
+#' gnp_params <- list(p = 1/3)
+#' x <- nvd(model = "gnp", n = 10L, num_vertices = 10L, model_params = gnp_params)
+#' add_null_nodes(x, num_vertices = 12L, directed = FALSE, weighted = FALSE)
+add_null_nodes <- function(x, num_vertices = NULL, directed = FALSE, weighted = FALSE){
+  max_num_vertices <- nvd_num_vertices(x)$max
+
+  if (is.null(num_vertices)) {
+    num_vertices <- max_num_vertices
+  } else if (num_vertices < max_num_vertices){
+    stop("The input number of vertices is smaller than the maximum number of vertices in the sample.")
+  }
+
+  sample_size <- length(x)
+
+  zero_mat <- matrix(0, num_vertices, num_vertices)
+  attr(zero_mat, "representation") <- "adjacency"
+  x_null <- lapply(1:sample_size, function(x) zero_mat)
+
+  x_adj <- repr_nvd(x, representation = "adjacency")
+  for (k in 1:sample_size) {
+    num_vertices_old <- nrow(x_adj[[k]])
+    for (l in 1:num_vertices_old) {
+      for (g in 1:num_vertices_old) {
+        x_null[[k]][l,g] <- x_adj[[k]][l,g]
+      }
+    }
+  }
+
+  nvd_from_adjacency_matrix(x_null, directed = directed, weighted = weighted)
+}
