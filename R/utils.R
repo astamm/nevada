@@ -213,3 +213,22 @@ align_networks <- function(m, x){
   }
   x_out
 }
+
+rbinom_network2 <- function(num_vertices, size = 1, prob = 0.5) {
+  A <- diag(0, num_vertices)
+  A[upper.tri(A)] <- stats::rbinom(
+    n = num_vertices * (num_vertices - 1L) / 2L,
+    size = size,
+    prob = prob
+  )
+  igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
+}
+
+rpois_network2 <- function(num_vertices, lambda = 1) {
+  A <- diag(0, num_vertices)
+  A[upper.tri(A)] <- stats::rpois(
+    n = num_vertices * (num_vertices - 1L) / 2L,
+    lambda = lambda
+  )
+  igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
+}

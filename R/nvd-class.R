@@ -12,6 +12,8 @@
 #'   considering. Defaults to `NULL`.
 #' @param seed An integer specifying the random generator seed. Defaults to
 #'   `1234`.
+#' @param rand_num_vertices A boolean specifying whether the number of vertices of the networks in the sample should be random. In particular $N_1,...,N_{sample size} iid Poisson(num_vertices)$. It is compatible with `"gnp"`, `"smallworld"`,
+#'   `"pa"`, `"poisson"` and `"binomial"` models. Defaults to `FALSE`.
 #'
 #' @return A \code{nvd} object which is a list of \code{\link[igraph]{igraph}}
 #'   objects.
@@ -24,7 +26,8 @@ nvd <- function(model = "smallworld",
                 n = 1L,
                 num_vertices = 25L,
                 model_params = NULL,
-                seed = 1234) {
+                seed = 1234,
+                rand_num_vertices = FALSE) {
   if (!is.null(seed))
     withr::local_seed(seed)
 
@@ -33,65 +36,119 @@ nvd <- function(model = "smallworld",
     c("sbm", "k_regular", "gnp", "smallworld", "pa", "poisson", "binomial")
   )
 
-  if (!rlang::is_named2(model_params))
-    cli::cli_abort("The {.code model_params} list should be named after the parameters of the model you are considering but is not.")
+  if (!rand_num_vertices) {
+    if (!rlang::is_named2(model_params))
+      cli::cli_abort("The {.code model_params} list should be named after the parameters of the model you are considering but is not.")
 
-  if (model == "poisson") {
-    if (!all(c("lambda") %in% names(model_params)))
-      cli::cli_abort("The {.code model_params} list should contain the field {.field lambda} to use the Poisson generator.")
-    return(rlang::eval_tidy(rlang::quo(
-      rpois_network(n = n, num_vertices = num_vertices, !!!model_params)
-    )))
+    if (model == "poisson") {
+      if (!all(c("lambda") %in% names(model_params)))
+        cli::cli_abort("The {.code model_params} list should contain the field {.field lambda} to use the Poisson generator.")
+      return(rlang::eval_tidy(rlang::quo(
+        rpois_network(n = n, num_vertices = num_vertices, !!!model_params)
+      )))
+    }
+
+    if (model == "binomial") {
+      if (!all(c("size", "prob") %in% names(model_params)))
+        cli::cli_abort("The {.code model_params} list should contain the fields {.field size} and {.field prob} to use the binomial generator.")
+      return(rlang::eval_tidy(rlang::quo(
+        rbinom_network(n = n, num_vertices = num_vertices, !!!model_params)
+      )))
+    }
+
+    if (model == "sbm" && !all(c("pref.matrix", "block.sizes") %in% names(model_params)))
+      cli::cli_abort("The {.code model_params} list should contain the fields {.field pref.matrix} and {.field block.sizes} to use the SBM generator.")
+
+    if (model == "k_regular" && !all(c("k") %in% names(model_params)))
+      cli::cli_abort("The {.code model_params} list should contain the field {.field k} to use the k-regular model generator.")
+
+    if (model == "gnp" && !all(c("p") %in% names(model_params)))
+      cli::cli_abort("The {.code model_params} list should contain the field {.field p} to use the GNP model generator.")
+
+    if (model == "smallworld" && !all(c("dim", "nei", "p") %in% names(model_params)))
+      cli::cli_abort("The {.code model_params} list should contain the fields {.field dim}, {.field nei} and {.field p} to use the Watts-Strogatz small-world model generator.")
+
+    if (model == "pa" && !all(c("power", "m", "directed") %in% names(model_params)))
+      cli::cli_abort("The {.code model_params} list should contain the fields {.field power}, {.field m} and {.field directed} to use the Barabasi-Albert scale-free model generator.")
+
+    obj <- replicate(n, {
+      rlang::eval_tidy(rlang::quo(switch(
+        model,
+        "sbm" = igraph::sample_sbm(
+          n = num_vertices,
+          !!!model_params
+        ),
+        "k_regular" = igraph::sample_k_regular(
+          no.of.nodes = num_vertices,
+          !!!model_params
+        ),
+        "gnp" = igraph::sample_gnp(
+          n = num_vertices,
+          !!!model_params
+        ),
+        "smallworld" = igraph::sample_smallworld(
+          size = num_vertices,
+          !!!model_params
+        ),
+        "pa" = igraph::sample_pa(
+          n = num_vertices,
+          !!!model_params
+        )
+      )))
+    }, simplify = FALSE)
+  } else {
+
+    if (!rlang::is_named2(model_params))
+      cli::cli_abort("The {.code model_params} list should be named after the parameters of the model you are considering but is not.")
+
+    if (model == "sbm" || model == "k_regular") {
+      cli::cli_abort("It is not possible to generate a sample with random number of vertices from this model.")
+    }
+
+    if (model == "poisson") {
+      if (!all(c("lambda") %in% names(model_params)))
+        cli::cli_abort("The {.code model_params} list should contain the field {.field lambda} to use the Poisson generator.")
+    }
+
+    if (model == "binomial") {
+      if (!all(c("size", "prob") %in% names(model_params)))
+        cli::cli_abort("The {.code model_params} list should contain the fields {.field size} and {.field prob} to use the binomial generator.")
+    }
+
+    if (model == "gnp" && !all(c("p") %in% names(model_params)))
+      cli::cli_abort("The {.code model_params} list should contain the field {.field p} to use the GNP model generator.")
+
+    if (model == "smallworld" && !all(c("dim", "nei", "p") %in% names(model_params)))
+      cli::cli_abort("The {.code model_params} list should contain the fields {.field dim}, {.field nei} and {.field p} to use the Watts-Strogatz small-world model generator.")
+
+    if (model == "pa" && !all(c("power", "m", "directed") %in% names(model_params)))
+      cli::cli_abort("The {.code model_params} list should contain the fields {.field power}, {.field m} and {.field directed} to use the Barabasi-Albert scale-free model generator.")
+
+    obj <- replicate(n, {
+      rlang::eval_tidy(rlang::quo(switch(
+        model,
+        "binomial" = rbinom_network2(
+          num_vertices = stats::rpois(n = 1, lambda = num_vertices),
+          !!!model_params),
+        "poisson" = rpois_network2(
+          num_vertices = stats::rpois(n = 1, lambda = num_vertices),
+          !!!model_params),
+        "gnp" = igraph::sample_gnp(
+          n = stats::rpois(n = 1, lambda = num_vertices),
+          !!!model_params
+        ),
+        "smallworld" = igraph::sample_smallworld(
+          size = stats::rpois(n = 1, lambda = num_vertices),
+          !!!model_params
+        ),
+        "pa" = igraph::sample_pa(
+          n = stats::rpois(n = 1, lambda = num_vertices),
+          !!!model_params
+        )
+      )))
+    }, simplify = FALSE)
   }
 
-  if (model == "binomial") {
-    if (!all(c("size", "prob") %in% names(model_params)))
-      cli::cli_abort("The {.code model_params} list should contain the fields {.field size} and {.field prob} to use the binomial generator.")
-    return(rlang::eval_tidy(rlang::quo(
-      rbinom_network(n = n, num_vertices = num_vertices, !!!model_params)
-    )))
-  }
-
-  if (model == "sbm" && !all(c("pref.matrix", "block.sizes") %in% names(model_params)))
-    cli::cli_abort("The {.code model_params} list should contain the fields {.field pref.matrix} and {.field block.sizes} to use the SBM generator.")
-
-  if (model == "k_regular" && !all(c("k") %in% names(model_params)))
-    cli::cli_abort("The {.code model_params} list should contain the field {.field k} to use the k-regular model generator.")
-
-  if (model == "gnp" && !all(c("p") %in% names(model_params)))
-    cli::cli_abort("The {.code model_params} list should contain the field {.field p} to use the GNP model generator.")
-
-  if (model == "smallworld" && !all(c("dim", "nei", "p") %in% names(model_params)))
-    cli::cli_abort("The {.code model_params} list should contain the fields {.field dim}, {.field nei} and {.field p} to use the Watts-Strogatz small-world model generator.")
-
-  if (model == "pa" && !all(c("power", "m", "directed") %in% names(model_params)))
-    cli::cli_abort("The {.code model_params} list should contain the fields {.field power}, {.field m} and {.field directed} to use the Barabasi-Albert scale-free model generator.")
-
-  obj <- replicate(n, {
-    rlang::eval_tidy(rlang::quo(switch(
-      model,
-      "sbm" = igraph::sample_sbm(
-        n = num_vertices,
-        !!!model_params
-      ),
-      "k_regular" = igraph::sample_k_regular(
-        no.of.nodes = num_vertices,
-        !!!model_params
-      ),
-      "gnp" = igraph::sample_gnp(
-        n = num_vertices,
-        !!!model_params
-      ),
-      "smallworld" = igraph::sample_smallworld(
-        size = num_vertices,
-        !!!model_params
-      ),
-      "pa" = igraph::sample_pa(
-        n = num_vertices,
-        !!!model_params
-      )
-    )))
-  }, simplify = FALSE)
 
   as_nvd(obj)
 }
