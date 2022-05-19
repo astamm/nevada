@@ -9,7 +9,8 @@ power2(
   model2 = "k_regular",
   n1 = 20L,
   n2 = 20L,
-  num_vertices = 25L,
+  num_vertices1 = 25L,
+  num_vertices2 = 25L,
   model1_params = NULL,
   model2_params = NULL,
   representation = "adjacency",
@@ -22,7 +23,9 @@ power2(
   test = "exact",
   k = 5L,
   R = 1000L,
-  seed = 1234
+  seed = 1234,
+  rand_num_vertices1 = FALSE,
+  rand_num_vertices2 = FALSE
 )
 }
 \arguments{
@@ -38,7 +41,10 @@ second sample. Choices are \code{"sbm"}, \code{"k_regular"}, \code{"gnp"}, \code
 
 \item{n2}{The size of the second sample. Defaults to \code{20L}.}
 
-\item{num_vertices}{The number of nodes in the generated graphs. Defaults to
+\item{num_vertices1}{The number of nodes in the generated graphs of the first sample. Defaults to
+\code{25L}.}
+
+\item{num_vertices2}{The number of nodes in the generated graphs of the second sample. Defaults to
 \code{25L}.}
 
 \item{model1_params}{A named list setting the parameters of the first chosen
@@ -86,6 +92,12 @@ for the edge count statistics. Defaults to \code{5L}.}
 
 \item{seed}{An integer specifying the random generator seed. Defaults to
 \code{1234}.}
+
+\item{rand_num_vertices1}{A boolean specifying whether the number of vertices of the networks in the first sample should be random. In particular N_1,...,N_sample_size iid Poisson(num_vertices1). It is compatible with \code{"gnp"}, \code{"smallworld"},
+\code{"pa"}, \code{"poisson"} and \code{"binomial"} models. Defaults to \code{FALSE}.}
+
+\item{rand_num_vertices2}{A boolean specifying whether the number of vertices of the networks in the second sample should be random. In particular N_1,...,N_sample_size iid Poisson(num_vertices2). It is compatible with \code{"gnp"}, \code{"smallworld"},
+\code{"pa"}, \code{"poisson"} and \code{"binomial"} models. Defaults to \code{FALSE}.}
 }
 \value{
 A numeric value estimating the power of the test.

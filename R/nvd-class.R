@@ -12,7 +12,7 @@
 #'   considering. Defaults to `NULL`.
 #' @param seed An integer specifying the random generator seed. Defaults to
 #'   `1234`.
-#' @param rand_num_vertices A boolean specifying whether the number of vertices of the networks in the sample should be random. In particular $N_1,...,N_{sample size} iid Poisson(num_vertices)$. It is compatible with `"gnp"`, `"smallworld"`,
+#' @param rand_num_vertices A boolean specifying whether the number of vertices of the networks in the sample should be random. In particular N_1,...,N_sample_size iid Poisson(num_vertices). It is compatible with `"gnp"`, `"smallworld"`,
 #'   `"pa"`, `"poisson"` and `"binomial"` models. Defaults to `FALSE`.
 #'
 #' @return A \code{nvd} object which is a list of \code{\link[igraph]{igraph}}
@@ -516,9 +516,11 @@ add_null_nodes <- function(x, num_vertices = NULL, directed = FALSE, weighted = 
   x_adj <- repr_nvd(x, representation = "adjacency")
   for (k in 1:sample_size) {
     num_vertices_old <- nrow(x_adj[[k]])
-    for (l in 1:num_vertices_old) {
-      for (g in 1:num_vertices_old) {
-        x_null[[k]][l,g] <- x_adj[[k]][l,g]
+    if(num_vertices_old != 0){
+      for (l in 1:num_vertices_old) {
+        for (g in 1:num_vertices_old) {
+          x_null[[k]][l,g] <- x_adj[[k]][l,g]
+        }
       }
     }
   }

@@ -29,7 +29,7 @@ considering. Defaults to \code{NULL}.}
 \item{seed}{An integer specifying the random generator seed. Defaults to
 \code{1234}.}
 
-\item{rand_num_vertices}{A boolean specifying whether the number of vertices of the networks in the sample should be random. In particular $N_1,...,N_{sample size} iid Poisson(num_vertices)$. It is compatible with \code{"gnp"}, \code{"smallworld"},
+\item{rand_num_vertices}{A boolean specifying whether the number of vertices of the networks in the sample should be random. In particular N_1,...,N_sample_size iid Poisson(num_vertices). It is compatible with \code{"gnp"}, \code{"smallworld"},
 \code{"pa"}, \code{"poisson"} and \code{"binomial"} models. Defaults to \code{FALSE}.}
 }
 \value{
