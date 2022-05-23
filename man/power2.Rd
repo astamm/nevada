@@ -24,8 +24,10 @@ power2(
   k = 5L,
   R = 1000L,
   seed = 1234,
-  rand_num_vertices1 = FALSE,
-  rand_num_vertices2 = FALSE
+  rand_num_vertices1 = NULL,
+  rand_num_vertices2 = NULL,
+  rate1 = 0.25,
+  rate2 = 0.25
 )
 }
 \arguments{
@@ -93,11 +95,15 @@ for the edge count statistics. Defaults to \code{5L}.}
 \item{seed}{An integer specifying the random generator seed. Defaults to
 \code{1234}.}
 
-\item{rand_num_vertices1}{A boolean specifying whether the number of vertices of the networks in the first sample should be random. In particular N_1,...,N_sample_size iid Poisson(num_vertices1). It is compatible with \code{"gnp"}, \code{"smallworld"},
-\code{"pa"}, \code{"poisson"} and \code{"binomial"} models. Defaults to \code{FALSE}.}
+\item{rand_num_vertices1}{A string specifying whether the number of vertices of the networks in the first sample should be random. Choices are \code{"poisson"}, \code{"uniform"}. In particular, if \code{"poisson"} N_1,...,N_sample_size iid Poisson(num_vertices1), if \code{"uniform"} N_1,...,N_sample_size iid Uniform(floor(num_vertices1*(1-rate)), ceiling(num_vertices1*(1+rate))). It is compatible with \code{"gnp"}, \code{"smallworld"},
+\code{"pa"}, \code{"poisson"} and \code{"binomial"} models. Defaults to \code{NULL}.}
 
-\item{rand_num_vertices2}{A boolean specifying whether the number of vertices of the networks in the second sample should be random. In particular N_1,...,N_sample_size iid Poisson(num_vertices2). It is compatible with \code{"gnp"}, \code{"smallworld"},
-\code{"pa"}, \code{"poisson"} and \code{"binomial"} models. Defaults to \code{FALSE}.}
+\item{rand_num_vertices2}{A string specifying whether the number of vertices of the networks in the first sample should be random. Choices are \code{"poisson"}, \code{"uniform"}. In particular, if \code{"poisson"} N_1,...,N_sample_size iid Poisson(num_vertices2), if \code{"uniform"} N_1,...,N_sample_size iid Uniform(floor(num_vertices2*(1-rate)), ceiling(num_vertices2*(1+rate))). It is compatible with \code{"gnp"}, \code{"smallworld"},
+\code{"pa"}, \code{"poisson"} and \code{"binomial"} models. Defaults to \code{NULL}.}
+
+\item{rate1}{A rate. See \code{rand_num_vertices1} for further information. Defaults to \code{0.25}.}
+
+\item{rate2}{A rate. See \code{rand_num_vertices2} for further information. Defaults to \code{0.25}.}
 }
 \value{
 A numeric value estimating the power of the test.

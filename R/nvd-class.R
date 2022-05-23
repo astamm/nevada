@@ -14,6 +14,9 @@
 #'   `1234`.
 #' @param rand_num_vertices A boolean specifying whether the number of vertices of the networks in the sample should be random. In particular N_1,...,N_sample_size iid Poisson(num_vertices). It is compatible with `"gnp"`, `"smallworld"`,
 #'   `"pa"`, `"poisson"` and `"binomial"` models. Defaults to `FALSE`.
+#' @param  rand_num_vertices A string specifying whether the number of vertices of the networks in the first sample should be random. Choices are `"poisson"`, `"uniform"`. In particular, if `"poisson"` N_1,...,N_sample_size iid Poisson(num_vertices), if `"uniform"` N_1,...,N_sample_size iid Uniform(floor(num_vertices*(1-rate)), ceiling(num_vertices*(1+rate))). It is compatible with `"gnp"`, `"smallworld"`,
+#'   `"pa"`, `"poisson"` and `"binomial"` models. Defaults to `NULL`.
+#' @param rate A rate. See `rand_num_vertices` for further information. Defaults to `0.25`.
 #'
 #' @return A \code{nvd} object which is a list of \code{\link[igraph]{igraph}}
 #'   objects.
@@ -27,7 +30,8 @@ nvd <- function(model = "smallworld",
                 num_vertices = 25L,
                 model_params = NULL,
                 seed = 1234,
-                rand_num_vertices = FALSE) {
+                rand_num_vertices = NULL,
+                rate = 0.25) {
   if (!is.null(seed))
     withr::local_seed(seed)
 
@@ -36,7 +40,7 @@ nvd <- function(model = "smallworld",
     c("sbm", "k_regular", "gnp", "smallworld", "pa", "poisson", "binomial")
   )
 
-  if (!rand_num_vertices) {
+  if (is.null(rand_num_vertices)) {
     if (!rlang::is_named2(model_params))
       cli::cli_abort("The {.code model_params} list should be named after the parameters of the model you are considering but is not.")
 
@@ -123,32 +127,59 @@ nvd <- function(model = "smallworld",
 
     if (model == "pa" && !all(c("power", "m", "directed") %in% names(model_params)))
       cli::cli_abort("The {.code model_params} list should contain the fields {.field power}, {.field m} and {.field directed} to use the Barabasi-Albert scale-free model generator.")
+    if (rand_num_vertices == "poisson") {
+      obj <- replicate(n, {
+        rlang::eval_tidy(rlang::quo(switch(
+          model,
+          "binomial" = rbinom_network2(
+            num_vertices = stats::rpois(n = 1, lambda = num_vertices),
+            !!!model_params),
+          "poisson" = rpois_network2(
+            num_vertices = stats::rpois(n = 1, lambda = num_vertices),
+            !!!model_params),
+          "gnp" = igraph::sample_gnp(
+            n = stats::rpois(n = 1, lambda = num_vertices),
+            !!!model_params
+          ),
+          "smallworld" = igraph::sample_smallworld(
+            size = stats::rpois(n = 1, lambda = num_vertices),
+            !!!model_params
+          ),
+          "pa" = igraph::sample_pa(
+            n = stats::rpois(n = 1, lambda = num_vertices),
+            !!!model_params
+          )
+        )))
+      }, simplify = FALSE)
+    } else if (rand_num_vertices == "uniform") {
+      obj <- replicate(n, {
+        rlang::eval_tidy(rlang::quo(switch(
+          model,
+          "binomial" = rbinom_network2(
+            num_vertices = sample(floor(num_vertices*(1-rate)):ceiling(num_vertices*(1+rate)), size = 1),
+            !!!model_params),
+          "poisson" = rpois_network2(
+            num_vertices = sample(floor(num_vertices*(1-rate)):ceiling(num_vertices*(1+rate)), size = 1),
+            !!!model_params),
+          "gnp" = igraph::sample_gnp(
+            n = sample(floor(num_vertices*(1-rate)):ceiling(num_vertices*(1+rate)), size = 1),
+            !!!model_params
+          ),
+          "smallworld" = igraph::sample_smallworld(
+            size = sample(floor(num_vertices*(1-rate)):ceiling(num_vertices*(1+rate)), size = 1),
+            !!!model_params
+          ),
+          "pa" = igraph::sample_pa(
+            n = sample(floor(num_vertices*(1-rate)):ceiling(num_vertices*(1+rate)), size = 1),
+            !!!model_params
+          )
+        )))
+      }, simplify = FALSE)
+    } else {
+      cli::cli_abort("rand_num_vertices is not correctly initialized.")
+    }
 
-    obj <- replicate(n, {
-      rlang::eval_tidy(rlang::quo(switch(
-        model,
-        "binomial" = rbinom_network2(
-          num_vertices = stats::rpois(n = 1, lambda = num_vertices),
-          !!!model_params),
-        "poisson" = rpois_network2(
-          num_vertices = stats::rpois(n = 1, lambda = num_vertices),
-          !!!model_params),
-        "gnp" = igraph::sample_gnp(
-          n = stats::rpois(n = 1, lambda = num_vertices),
-          !!!model_params
-        ),
-        "smallworld" = igraph::sample_smallworld(
-          size = stats::rpois(n = 1, lambda = num_vertices),
-          !!!model_params
-        ),
-        "pa" = igraph::sample_pa(
-          n = stats::rpois(n = 1, lambda = num_vertices),
-          !!!model_params
-        )
-      )))
-    }, simplify = FALSE)
   }
-
 
   as_nvd(obj)
 }

@@ -30,10 +30,12 @@
 #'   `1000L`.
 #' @param seed An integer specifying the random generator seed. Defaults to
 #'   `1234`.
-#' @param  rand_num_vertices1 A boolean specifying whether the number of vertices of the networks in the first sample should be random. In particular N_1,...,N_sample_size iid Poisson(num_vertices1). It is compatible with `"gnp"`, `"smallworld"`,
-#'   `"pa"`, `"poisson"` and `"binomial"` models. Defaults to `FALSE`.
-#' @param  rand_num_vertices2 A boolean specifying whether the number of vertices of the networks in the second sample should be random. In particular N_1,...,N_sample_size iid Poisson(num_vertices2). It is compatible with `"gnp"`, `"smallworld"`,
-#'   `"pa"`, `"poisson"` and `"binomial"` models. Defaults to `FALSE`.
+#' @param  rand_num_vertices1 A string specifying whether the number of vertices of the networks in the first sample should be random. Choices are `"poisson"`, `"uniform"`. In particular, if `"poisson"` N_1,...,N_sample_size iid Poisson(num_vertices1), if `"uniform"` N_1,...,N_sample_size iid Uniform(floor(num_vertices1*(1-rate)), ceiling(num_vertices1*(1+rate))). It is compatible with `"gnp"`, `"smallworld"`,
+#'   `"pa"`, `"poisson"` and `"binomial"` models. Defaults to `NULL`.
+#' @param  rand_num_vertices2 A string specifying whether the number of vertices of the networks in the first sample should be random. Choices are `"poisson"`, `"uniform"`. In particular, if `"poisson"` N_1,...,N_sample_size iid Poisson(num_vertices2), if `"uniform"` N_1,...,N_sample_size iid Uniform(floor(num_vertices2*(1-rate)), ceiling(num_vertices2*(1+rate))). It is compatible with `"gnp"`, `"smallworld"`,
+#'   `"pa"`, `"poisson"` and `"binomial"` models. Defaults to `NULL`.
+#' @param rate1 A rate. See `rand_num_vertices1` for further information. Defaults to `0.25`.
+#' @param rate2 A rate. See `rand_num_vertices2` for further information. Defaults to `0.25`.
 #'
 #' @return A numeric value estimating the power of the test.
 #' @export
@@ -49,29 +51,31 @@
 #'   seed = 1234
 #' )
 power2 <- function(model1 = "gnp", model2 = "k_regular",
-                    n1 = 20L, n2 = 20L,
-                    num_vertices1 = 25L,
-                    num_vertices2 = 25L,
-                    model1_params = NULL, model2_params = NULL,
-                    representation = "adjacency",
-                    distance = "frobenius",
-                    stats = c("flipr:t_ip", "flipr:f_ip"),
-                    B = 1000L,
-                    start = "barycenter",
-                    iteration = 20L,
-                    alpha = 0.05,
-                    test = "exact",
-                    k = 5L,
-                    R = 1000L,
-                    seed = 1234,
-                    rand_num_vertices1 = FALSE,
-                    rand_num_vertices2 = FALSE) {
+                   n1 = 20L, n2 = 20L,
+                   num_vertices1 = 25L,
+                   num_vertices2 = 25L,
+                   model1_params = NULL, model2_params = NULL,
+                   representation = "adjacency",
+                   distance = "frobenius",
+                   stats = c("flipr:t_ip", "flipr:f_ip"),
+                   B = 1000L,
+                   start = "barycenter",
+                   iteration = 20L,
+                   alpha = 0.05,
+                   test = "exact",
+                   k = 5L,
+                   R = 1000L,
+                   seed = 1234,
+                   rand_num_vertices1 = NULL,
+                   rand_num_vertices2 = NULL,
+                   rate1 = 0.25,
+                   rate2 = 0.25) {
   if (!is.null(seed))
     withr::local_seed(seed)
 
   progressr::handlers(progressr::handler_progress(format="[:bar] :percent :eta :message"))
 
-  if (num_vertices1 != num_vertices2 | rand_num_vertices1 | rand_num_vertices2){
+  if (num_vertices1 != num_vertices2 | !is.null(rand_num_vertices1) | !is.null(rand_num_vertices2)){
     fun <- function(xs) {
       p <- progressr::progressor(steps = xs)
       pbfun <- function(dummy){
@@ -82,7 +86,8 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
           num_vertices = num_vertices1,
           model_params = model1_params,
           seed = NULL,
-          rand_num_vertices = rand_num_vertices1
+          rand_num_vertices = rand_num_vertices1,
+          rate = rate1
         )
         y = nvd(
           model = model2,
@@ -90,7 +95,8 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
           num_vertices = num_vertices2,
           model_params = model2_params,
           seed = NULL,
-          rand_num_vertices = rand_num_vertices2
+          rand_num_vertices = rand_num_vertices2,
+          rate = rate2
         )
         maximum_num_vertices <- max(c(nvd_num_vertices(x)$max, nvd_num_vertices(y)$max))
         x <- add_null_nodes(x = x, num_vertices = maximum_num_vertices, directed = FALSE, weighted = ifelse(model1 == "binomial" | model1 == "poisson", TRUE, FALSE))
