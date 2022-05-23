@@ -8,9 +8,19 @@
   tibble::as_tibble(x)
 }
 
-nvd_data <- function(x, y) {
-  rchoices <- c("adjacency", "laplacian", "modularity")
-  dchoices <- c("hamming", "frobenius", "spectral", "root-euclidean")
+nvd_data <- function(x, y, representation = NULL, distance = NULL) {
+  if (is.null(representation)) {
+    rchoices <- c("adjacency", "laplacian", "modularity")
+  } else {
+    rchoices <- representation
+  }
+
+  if (is.null(distance)) {
+    dchoices <- c("hamming", "frobenius", "spectral", "root-euclidean")
+  } else {
+    dchoices <- distance
+  }
+
   tidyr::crossing(Representation = rchoices, Distance = dchoices) %>%
     dplyr::mutate(
       mds = purrr::map2(
@@ -45,6 +55,12 @@ nvd_data <- function(x, y) {
 #'
 #' @param x A \code{\link{nvd}} object.
 #' @param y A \code{\link{nvd}} object.
+#' @param representation A character vector specifying the chosen representation(s),
+#'   among: `"adjacency"`, `"laplacian"`,
+#'   `"modularity"`. If `NULL`, each representation is chosen. Defaults to `NULL`.
+#' @param distance A character vector specifying the chosen distance(s),
+#'   among: `"frobenius"`, `"hamming"`,
+#'   `"spectral"`, `"root-euclidean"` and `"match-frobenius"`. If `NULL`, the first four distances are chosen. Defaults to `NULL`.
 #' @param ... Extra arguments to be passed to the plot function.
 #'
 #' @return Invisibly returns a \code{\link[ggplot2]{ggplot}} object. In
@@ -74,8 +90,8 @@ NULL
 #' @export
 #' @rdname nvd-plot
 #' @importFrom ggplot2 autoplot
-autoplot.nvd <- function(x, y, ...) {
-  nvd_data(x, y) %>%
+autoplot.nvd <- function(x, y, representation = NULL, distance = NULL, ...) {
+  nvd_data(x, y, representation = representation, distance = distance) %>%
     ggplot2::ggplot(ggplot2::aes(
       x = .data$V1,
       y = .data$V2,
@@ -98,6 +114,6 @@ autoplot.nvd <- function(x, y, ...) {
 #' @export
 #' @rdname nvd-plot
 #' @importFrom graphics plot
-plot.nvd <- function(x, y, ...) {
-  print(autoplot(x, y, ...))
+plot.nvd <- function(x, y, representation = NULL, distance = NULL, ...) {
+  print(autoplot(x, y, representation = representation, distance = distance, ...))
 }

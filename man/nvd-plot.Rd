@@ -6,9 +6,9 @@
 \alias{plot.nvd}
 \title{MDS Visualization of Network Distributions}
 \usage{
-\method{autoplot}{nvd}(x, y, ...)
+\method{autoplot}{nvd}(x, y, representation = NULL, distance = NULL, ...)
 
-\method{plot}{nvd}(x, y, ...)
+\method{plot}{nvd}(x, y, representation = NULL, distance = NULL, ...)
 }
 \arguments{
 \item{x}{A \code{\link{nvd}} object.}
