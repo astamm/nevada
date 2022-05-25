@@ -333,8 +333,8 @@ mean.nvd <- function(x, weights = rep(1, length(x)), representation = "adjacency
 
     first_id <- sample(1:length(x), 1)
     m <- x[[first_id]]
-    randP <- randRotation::randpermut(nrow(m))
-    m <- randP%*%m%*%t(randP)
+    #randP <- randRotation::randpermut(nrow(m))
+    #m <- randP%*%m%*%t(randP)
 
     s <- tol + 1
     k <- 1

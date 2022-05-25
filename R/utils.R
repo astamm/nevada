@@ -199,7 +199,7 @@ solve_partial <- function(M) {
   Minv
 }
 
-align_networks <- function(m, x){
+align_networks_old <- function(m, x){
   x_out <- x
   mat1 <- as.matrix(m)
   num_nodes <- nrow(mat1)
@@ -211,6 +211,31 @@ align_networks <- function(m, x){
     attr(Pmat2P,"representation") <- attr(x[[i]],"representation")
     x_out[[i]] <- Pmat2P
   }
+  x_out
+}
+
+align_networks <- function(m, x){
+  progressr::handlers(progressr::handler_progress(format="[:bar] :percent :eta :message"))
+  x_out <- x
+  mat1 <- as.matrix(m)
+  num_nodes <- nrow(mat1)
+
+  fun <- function(xs) {
+    p <- progressr::progressor(steps = xs)
+
+    pbfun <- function(dummy){
+      p() #signal progress
+      mat2 <- as.matrix(x[[dummy]])
+      perm <- igraph::match_vertices(A = mat1, B = mat2, m = 0, start = matrix(1, num_nodes, num_nodes)/num_nodes, iteration = 20)
+      P <- perm$P
+      Pmat2P <- P%*%mat2%*%t(P)
+      attr(Pmat2P,"representation") <- attr(x[[dummy]],"representation")
+      Pmat2P
+    }
+
+    y <- furrr::future_map(1:xs, pbfun, .options = furrr::furrr_options(seed = TRUE))
+  }
+  progressr::with_progress(x_out <- fun(length(x)))
   x_out
 }
 

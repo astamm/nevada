@@ -15,6 +15,14 @@
 
 \item{y}{A \code{\link{nvd}} object.}
 
+\item{representation}{A character vector specifying the chosen representation(s),
+among: \code{"adjacency"}, \code{"laplacian"},
+\code{"modularity"}. If \code{NULL}, each representation is chosen. Defaults to \code{NULL}.}
+
+\item{distance}{A character vector specifying the chosen distance(s),
+among: \code{"frobenius"}, \code{"hamming"},
+\code{"spectral"}, \code{"root-euclidean"} and \code{"match-frobenius"}. If \code{NULL}, the first four distances are chosen. Defaults to \code{NULL}.}
+
 \item{...}{Extra arguments to be passed to the plot function.}
 }
 \value{
