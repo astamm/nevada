@@ -82,9 +82,10 @@ dist_match_frobenius <- function(x, y, representation = "adjacency", start = "ba
   num_nodes <- nrow(repr_adjacency(y))
 
   if (start == "barycenter"){
-    start_mat <- matrix(1, num_nodes, num_nodes)/num_nodes
+    start_mat <- "bari"
   } else if (start == "identity"){
-    start_mat <- diag(rep(1, num_nodes))
+    #start_mat <- diag(rep(1, num_nodes))
+    stop("Identity matrix not available in this version. Try using barycenter")
   } else stop("Input start matrix is not valid. The initialization of the permutation matrix estimate should be among: barycenter and identity.")
 
 
@@ -96,9 +97,8 @@ dist_match_frobenius <- function(x, y, representation = "adjacency", start = "ba
   m <- 0 #number of nodes I know a priori that are in correspondence in A and B
   mat1 <- as.matrix(x)
   mat2 <- as.matrix(y)
-  perm <- igraph::match_vertices(A = mat1, B = mat2, m = m, start = start_mat, iteration = iteration)
-  P <- perm$P
-  Pmat2P <- P%*%mat2%*%t(P)
+  perm <- iGraphMatch::gm(A = mat1, B = mat2, method = "indefinite", start = start_mat, max_iter = iteration)
+  Pmat2P <- perm %*% mat2
 
   distanceValue <- dist_frobenius(mat1, Pmat2P, representation = "adjacency")
   distanceValue
