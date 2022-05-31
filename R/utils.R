@@ -14,12 +14,12 @@ format_input <- function(x, representation = "adjacency") {
           (attributes(x)$representation == "adjacency" && representation == "adjacency"))
         return(x)
     } else {
-      if (any(x < 0))
-        stop("All entries of an adjacency matrix should be non-negative.")
+      # if (any(x < 0))
+      #   stop("All entries of an adjacency matrix should be non-negative.")
       if (any(x != t(x)))
         stop("The input adjacency matrix should be symmetric.")
-      if (any(diag(x) != 0))
-        stop("The input adjacency matrix should have a value of 0 on the diagonal.")
+      # if (any(diag(x) != 0))
+      #   stop("The input adjacency matrix should have a value of 0 on the diagonal.")
 
       x <- switch(
         representation,

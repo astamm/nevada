@@ -98,7 +98,8 @@ dist_match_frobenius <- function(x, y, representation = "adjacency", start = "ba
   mat1 <- as.matrix(x)
   mat2 <- as.matrix(y)
   perm <- iGraphMatch::gm(A = mat1, B = mat2, method = "indefinite", start = start_mat, max_iter = iteration)
-  Pmat2P <- perm %*% mat2
+  Pmat2P <- as.matrix(perm %*% mat2)
+  Pmat2P <- format_input(Pmat2P, representation)
 
   distanceValue <- dist_frobenius(mat1, Pmat2P, representation = "adjacency")
   distanceValue
