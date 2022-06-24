@@ -56,12 +56,8 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
   if (!is.null(seed))
     withr::local_seed(seed)
 
-  progressr::handlers(progressr::handler_progress(format="[:bar] :percent :eta :message"))
-
-  fun <- function(xs) {
-    p <- progressr::progressor(steps = xs)
-    pbfun <- function(dummy){
-      p() #signal progress
+  pvalues_function <- function(R) {
+    test_function <- function(x){
       test2_global(
         x = nvd(
           model = model1,
@@ -86,10 +82,9 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
         seed = 1234
       )$pvalue
     }
-    y <- furrr::future_map_dbl(1:xs, pbfun, .options = furrr::furrr_options(seed = TRUE))
+    y <- furrr::future_map_dbl(1:R, test_function, .options = furrr::furrr_options(seed = TRUE))
   }
 
-  progressr::with_progress(pvalues <- fun(R))
-
+  pvalues <- pvalues_function(R)
   mean(pvalues <= alpha)
 }
