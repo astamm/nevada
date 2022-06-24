@@ -226,9 +226,8 @@ align_networks <- function(m, x){
     pbfun <- function(dummy){
       p() #signal progress
       mat2 <- as.matrix(x[[dummy]])
-      perm <- igraph::match_vertices(A = mat1, B = mat2, m = 0, start = matrix(1, num_nodes, num_nodes)/num_nodes, iteration = 20)
-      P <- perm$P
-      Pmat2P <- P%*%mat2%*%t(P)
+      perm <- iGraphMatch::gm(A = mat1, B = mat2, method = "indefinite", start = "bari", max_iter = 20)
+      Pmat2P <- as.matrix(perm %*% mat2)
       attr(Pmat2P,"representation") <- attr(x[[dummy]],"representation")
       Pmat2P
     }
