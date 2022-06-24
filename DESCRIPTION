@@ -54,7 +54,9 @@ Imports:
     magrittr,
     flipr,
     cli,
-    withr
+    withr,
+    progressr,
+    furrr
 RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 URL: https://astamm.github.io/nevada/, https://github.com/astamm/nevada/
