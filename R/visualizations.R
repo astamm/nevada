@@ -16,7 +16,7 @@ nvd_data <- function(x, y, representation = NULL, distance = NULL) {
   }
 
   if (is.null(distance)) {
-    dchoices <- c("hamming", "frobenius", "spectral", "root-euclidean", "match-frobenius")
+    dchoices <- c("hamming", "frobenius", "spectral", "root-euclidean")
   } else {
     dchoices <- distance
   }
@@ -64,7 +64,7 @@ nvd_data <- function(x, y, representation = NULL, distance = NULL) {
 #'   `"modularity"`. If `NULL`, each representation is chosen. Defaults to `NULL`.
 #' @param distance A character vector specifying the chosen distance(s),
 #'   among: `"frobenius"`, `"hamming"`,
-#'   `"spectral"`, `"root-euclidean"` and `"match-frobenius"`. If `NULL`, each distance is chosen. Defaults to `NULL`.
+#'   `"spectral"`, `"root-euclidean"` and `"match-frobenius"`. If `NULL`, the first four distances are chosen. Defaults to `NULL`.
 #' @param ... Extra arguments to be passed to the plot function.
 #'
 #' @return Invisibly returns a \code{\link[ggplot2]{ggplot}} object. In
