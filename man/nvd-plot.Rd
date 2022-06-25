@@ -21,7 +21,7 @@ among: \code{"adjacency"}, \code{"laplacian"},
 
 \item{distance}{A character vector specifying the chosen distance(s),
 among: \code{"frobenius"}, \code{"hamming"},
-\code{"spectral"}, \code{"root-euclidean"} and \code{"match-frobenius"}. If \code{NULL}, the first four distances are chosen. Defaults to \code{NULL}.}
+\code{"spectral"}, \code{"root-euclidean"} and \code{"match-frobenius"}. If \code{NULL}, each distance is chosen. Defaults to \code{NULL}.}
 
 \item{...}{Extra arguments to be passed to the plot function.}
 }
@@ -44,6 +44,11 @@ the others.
 This function generates 2-dimensional plots of samples of networks via
 multi-dimensional scaling using all representations and distances included in
 the package.
+}
+\details{
+Match-Frobenius distance is the Frobenius distance considering networks in the Graph Space.
+Match-Frobenius distance is computed via the graph matching algorithm with indefinite relaxation (via Frank-Wolfe), using \code{\link[iGraphMatch]{iGraphMatch}} \code{\link[iGraphMatch]{gm}} function (starting matrix is initialized to the barycenter and the maximum number of iterations to 20).
+Match-Frobenius distance can be used only with adjacency matrix representation.
 }
 \examples{
 gnp_params <- list(p = 1/3)

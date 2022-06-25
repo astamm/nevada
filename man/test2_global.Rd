@@ -54,12 +54,12 @@ for the edge count statistics. Defaults to \code{5L}.}
 \item{seed}{An integer for specifying the seed of the random generator for
 result reproducibility. Defaults to \code{NULL}.}
 
-\item{start}{A string specifying the initialization of the permutation matrix estimate, among: \code{"barycenter"} and \code{"identity"}. Default is
+\item{start}{A string specifying the initialization of the permutation matrix estimate. Currently, only \code{"barycenter"} is supported. Default is
 \code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.}
 
 \item{iteration}{The number of iterations for the Frank-Wolfe algorithm. Default to \code{20L}. It is required for \code{distance == "match-frobenius"}.}
 
-\item{parallel}{A boolean specifying whether the distance matrix computation should be performed in parallel (only for \code{"match-frobenius"} distance). Defaults to \code{FALSE}.}
+\item{parallel}{A boolean specifying whether the distance matrix computation should be performed in parallel (only for \code{"match-frobenius"} distance).  If \code{TRUE}, use \code{future::plan(future::multisession)} before the call. Defaults to \code{FALSE}.}
 }
 \value{
 A \code{\link[base]{list}} with three components: the value of the
@@ -75,6 +75,11 @@ from different distributions. The test is performed in a non-parametric
 fashion using a permutational framework in which several statistics can be
 used, together with several choices of network matrix representations and
 distances between networks.
+}
+\details{
+Match-Frobenius distance is the Frobenius distance considering networks in the Graph Space.
+Match-Frobenius distance is computed via the graph matching algorithm with indefinite relaxation (via Frank-Wolfe), using \code{\link[iGraphMatch]{iGraphMatch}} \code{\link[iGraphMatch]{gm}} function.
+Match-Frobenius distance can be used only with adjacency matrix representation.
 }
 \examples{
 n <- 10L

@@ -25,7 +25,7 @@
 used. Choices are adjacency, laplacian, modularity, graphon. Default is
 adjacency.}
 
-\item{aac}{A boolean specifying whether the function should perform the Align All and Compute algorithm (AAC). If it is \code{TRUE}, the alignment is performed via FAQ (Frank-Wolfe algorithm), with barycenter as initialization of the permutation matrix and 20 iterations. Defaults to \code{FALSE}.}
+\item{aac}{A boolean specifying whether the function should perform the Align All and Compute algorithm (AAC). Defaults to \code{FALSE}.}
 
 \item{tol}{Tolerance for AAC. Default to \code{0.001}.}
 
@@ -47,6 +47,12 @@ network-valued random variables according to a specified matrix
 representation. It currently only supports the Euclidean geometry i.e. the
 sample Fréchet mean is obtained as the argmin of the sum of squared Frobenius
 distances.
+}
+\details{
+If Align All and Compute (AAC) algorithm is selected, the graph matching algorithm with indefinite relaxation (via Frank-Wolfe) is used to align networks, using \code{\link[iGraphMatch]{iGraphMatch}} \code{\link[iGraphMatch]{gm}} function (starting matrix is initialized to the barycenter and the maximum number of iterations to 20).
+For more information about AAC algorithm, see A. Calissano, A. Feragen, S. Vantini, Populations of unlabeled networks: Graph space geometry and geodesic principal components, MOX Report (2020).
+
+To perform it in a parallel fashion, use \code{future::plan(future::multisession)} before the call.
 }
 \examples{
 gnp_params <- list(p = 1/3)

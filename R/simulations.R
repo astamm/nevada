@@ -6,7 +6,11 @@
 #' Currently, six scenarios of pairs of populations are implemented. Scenario 0
 #' allows to make sure that all our permutation tests are exact.
 #'
-#' To perform it in a parallel fashion, use future::plan(future::multisession) before the call.
+#' Match-Frobenius distance is the Frobenius distance considering networks in the Graph Space.
+#' Match-Frobenius distance is computed via the graph matching algorithm with indefinite relaxation (via Frank-Wolfe), using \code{\link[iGraphMatch]{iGraphMatch}} \code{\link[iGraphMatch]{gm}} function.
+#' Match-Frobenius distance can be used only with adjacency matrix representation.
+#'
+#' To perform it in a parallel fashion, use \code{future::plan(future::multisession)} before the call.
 #'
 #' @param model1 A string specifying the model to be used for generating the
 #'   first sample. Choices are `"sbm"`, `"k_regular"`, `"gnp"`, `"smallworld"`,
@@ -73,13 +77,12 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
   if (!is.null(seed))
     withr::local_seed(seed)
 
-  progressr::handlers(progressr::handler_progress(format="[:bar] :percent :eta :message"))
 
   if (num_vertices1 != num_vertices2 | !is.null(rand_num_vertices1) | !is.null(rand_num_vertices2)){
-    fun <- function(xs) {
-      p <- progressr::progressor(steps = xs)
-      pbfun <- function(dummy){
-        p() #signal progress
+
+    pvalues_function <- function(xs) {
+
+      test_function <- function(x){
         x = nvd(
           model = model1,
           n = n1,
@@ -116,13 +119,11 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
           iteration = iteration
         )$pvalue
       }
-      y <- furrr::future_map_dbl(1:xs, pbfun, .options = furrr::furrr_options(seed = TRUE))
+      y <- furrr::future_map_dbl(1:xs, test_function, .options = furrr::furrr_options(seed = TRUE))
     }
   } else {
-    fun <- function(xs) {
-      p <- progressr::progressor(steps = xs)
-      pbfun <- function(dummy){
-        p() #signal progress
+    pvalues_function <- function(xs) {
+      test_function <- function(x){
         x = nvd(
           model = model1,
           n = n1,
@@ -154,11 +155,11 @@ power2 <- function(model1 = "gnp", model2 = "k_regular",
           iteration = iteration
         )$pvalue
       }
-      y <- furrr::future_map_dbl(1:xs, pbfun, .options = furrr::furrr_options(seed = TRUE))
+      y <- furrr::future_map_dbl(1:xs, test_function, .options = furrr::furrr_options(seed = TRUE))
     }
   }
 
-  progressr::with_progress(pvalues <- fun(R))
+  pvalues <- pvalues_function(R)
 
   mean(pvalues <= alpha)
 }

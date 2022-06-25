@@ -291,13 +291,18 @@ sample2_sbm <- function(n, nv, p1, b1, p2 = p1, b2 = b1, seed = NULL) {
 #' sample Fréchet mean is obtained as the argmin of the sum of squared Frobenius
 #' distances.
 #'
+#' If Align All and Compute (AAC) algorithm is selected, the graph matching algorithm with indefinite relaxation (via Frank-Wolfe) is used to align networks, using \code{\link[iGraphMatch]{iGraphMatch}} \code{\link[iGraphMatch]{gm}} function (starting matrix is initialized to the barycenter and the maximum number of iterations to 20).
+#' For more information about AAC algorithm, see A. Calissano, A. Feragen, S. Vantini, Populations of unlabeled networks: Graph space geometry and geodesic principal components, MOX Report (2020).
+#'
+#' To perform it in a parallel fashion, use \code{future::plan(future::multisession)} before the call.
+#'
 #' @param x An \code{\link{nvd}} object.
 #' @param weights A numeric vector specifying weights for each observation
 #'   (default: equally weighted).
 #' @param representation A string specifying the graph representation to be
 #'   used. Choices are adjacency, laplacian, modularity, graphon. Default is
 #'   adjacency.
-#' @param aac A boolean specifying whether the function should perform the Align All and Compute algorithm (AAC). If it is \code{TRUE}, the alignment is performed via FAQ (Frank-Wolfe algorithm), with barycenter as initialization of the permutation matrix and 20 iterations. Defaults to `FALSE`.
+#' @param aac A boolean specifying whether the function should perform the Align All and Compute algorithm (AAC). Defaults to `FALSE`.
 #' @param tol Tolerance for AAC. Default to `0.001`.
 #' @param max_iteration Maximum number of iteration for AAC. Default to `200`.
 #' @param seed An integer specifying the random generator seed for AAC. Defaults to
@@ -333,8 +338,6 @@ mean.nvd <- function(x, weights = rep(1, length(x)), representation = "adjacency
 
     first_id <- sample(1:length(x), 1)
     m <- x[[first_id]]
-    #randP <- randRotation::randpermut(nrow(m))
-    #m <- randP%*%m%*%t(randP)
 
     s <- tol + 1
     k <- 1
@@ -510,7 +513,7 @@ nvd_num_vertices <- function(x){
   for (i in 1:sample_size) {
     vec[i] <- nrow(x_adj[[i]])
   }
-  list("num_vertices" = vec, "max" = max(vec), "min" = min(vec), "mean" = mean(vec), "var" = var(vec))
+  list("num_vertices" = vec, "max" = max(vec), "min" = min(vec), "mean" = mean(vec), "var" = stats::var(vec))
 }
 
 #' Adding null nodes to networks

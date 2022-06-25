@@ -75,7 +75,7 @@ package: \code{"flipr:student_ip"}, \code{"flipr:fisher_ip"}, \code{"flipr:bg_ip
 than \code{1}, it is intended as a tolerance. Otherwise, it is intended as
 the number of required permutations. Defaults to \code{1000L}.}
 
-\item{start}{A string specifying the initialization of the permutation matrix estimate, among: \code{"barycenter"} and \code{"identity"}. Default is
+\item{start}{A string specifying the initialization of the permutation matrix estimate. Currently, only \code{"barycenter"} is supported. Default is
 \code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.}
 
 \item{iteration}{The number of iterations for the Frank-Wolfe algorithm. Default to \code{20L}. It is required for \code{distance == "match-frobenius"}.}
@@ -116,7 +116,11 @@ tests proposed in this package.
 Currently, six scenarios of pairs of populations are implemented. Scenario 0
 allows to make sure that all our permutation tests are exact.
 
-To perform it in a parallel fashion, use future::plan(future::multisession) before the call.
+Match-Frobenius distance is the Frobenius distance considering networks in the Graph Space.
+Match-Frobenius distance is computed via the graph matching algorithm with indefinite relaxation (via Frank-Wolfe), using \code{\link[iGraphMatch]{iGraphMatch}} \code{\link[iGraphMatch]{gm}} function.
+Match-Frobenius distance can be used only with adjacency matrix representation.
+
+To perform it in a parallel fashion, use \code{future::plan(future::multisession)} before the call.
 }
 \examples{
 gnp_params <- list(p = 1/3)

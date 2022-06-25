@@ -199,42 +199,24 @@ solve_partial <- function(M) {
   Minv
 }
 
-align_networks_old <- function(m, x){
-  x_out <- x
-  mat1 <- as.matrix(m)
-  num_nodes <- nrow(mat1)
-  for (i in 1:length(x)) {
-    mat2 <- as.matrix(x[[i]])
-    perm <- igraph::match_vertices(A = mat1, B = mat2, m = 0, start = matrix(1, num_nodes, num_nodes)/num_nodes, iteration = 20)
-    P <- perm$P
-    Pmat2P <- P%*%mat2%*%t(P)
-    attr(Pmat2P,"representation") <- attr(x[[i]],"representation")
-    x_out[[i]] <- Pmat2P
-  }
-  x_out
-}
-
 align_networks <- function(m, x){
-  progressr::handlers(progressr::handler_progress(format="[:bar] :percent :eta :message"))
   x_out <- x
   mat1 <- as.matrix(m)
   num_nodes <- nrow(mat1)
 
-  fun <- function(xs) {
-    p <- progressr::progressor(steps = xs)
+  align_graphs <- function(xs) {
 
-    pbfun <- function(dummy){
-      p() #signal progress
-      mat2 <- as.matrix(x[[dummy]])
+    align_one_graph <- function(i){
+      mat2 <- as.matrix(x[[i]])
       perm <- iGraphMatch::gm(A = mat1, B = mat2, method = "indefinite", start = "bari", max_iter = 20)
       Pmat2P <- as.matrix(perm %*% mat2)
-      attr(Pmat2P,"representation") <- attr(x[[dummy]],"representation")
+      attr(Pmat2P,"representation") <- attr(x[[i]],"representation")
       Pmat2P
     }
 
-    y <- furrr::future_map(1:xs, pbfun, .options = furrr::furrr_options(seed = TRUE))
+    y <- furrr::future_map(1:xs, align_one_graph, .options = furrr::furrr_options(seed = TRUE))
   }
-  progressr::with_progress(x_out <- fun(length(x)))
+  x_out <- align_graphs(length(x))
   x_out
 }
 

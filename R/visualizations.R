@@ -16,7 +16,7 @@ nvd_data <- function(x, y, representation = NULL, distance = NULL) {
   }
 
   if (is.null(distance)) {
-    dchoices <- c("hamming", "frobenius", "spectral", "root-euclidean")
+    dchoices <- c("hamming", "frobenius", "spectral", "root-euclidean", "match-frobenius")
   } else {
     dchoices <- distance
   }
@@ -53,6 +53,10 @@ nvd_data <- function(x, y, representation = NULL, distance = NULL) {
 #' multi-dimensional scaling using all representations and distances included in
 #' the package.
 #'
+#' Match-Frobenius distance is the Frobenius distance considering networks in the Graph Space.
+#' Match-Frobenius distance is computed via the graph matching algorithm with indefinite relaxation (via Frank-Wolfe), using \code{\link[iGraphMatch]{iGraphMatch}} \code{\link[iGraphMatch]{gm}} function (starting matrix is initialized to the barycenter and the maximum number of iterations to 20).
+#' Match-Frobenius distance can be used only with adjacency matrix representation.
+#'
 #' @param x A \code{\link{nvd}} object.
 #' @param y A \code{\link{nvd}} object.
 #' @param representation A character vector specifying the chosen representation(s),
@@ -60,7 +64,7 @@ nvd_data <- function(x, y, representation = NULL, distance = NULL) {
 #'   `"modularity"`. If `NULL`, each representation is chosen. Defaults to `NULL`.
 #' @param distance A character vector specifying the chosen distance(s),
 #'   among: `"frobenius"`, `"hamming"`,
-#'   `"spectral"`, `"root-euclidean"` and `"match-frobenius"`. If `NULL`, the first four distances are chosen. Defaults to `NULL`.
+#'   `"spectral"`, `"root-euclidean"` and `"match-frobenius"`. If `NULL`, each distance is chosen. Defaults to `NULL`.
 #' @param ... Extra arguments to be passed to the plot function.
 #'
 #' @return Invisibly returns a \code{\link[ggplot2]{ggplot}} object. In

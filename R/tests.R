@@ -8,6 +8,10 @@
 #' used, together with several choices of network matrix representations and
 #' distances between networks.
 #'
+#' Match-Frobenius distance is the Frobenius distance considering networks in the Graph Space.
+#' Match-Frobenius distance is computed via the graph matching algorithm with indefinite relaxation (via Frank-Wolfe), using \code{\link[iGraphMatch]{iGraphMatch}} \code{\link[iGraphMatch]{gm}} function.
+#' Match-Frobenius distance can be used only with adjacency matrix representation.
+#'
 #' @param x An \code{\link{nvd}} object listing networks in sample 1.
 #' @param y An \code{\link{nvd}} object listing networks in sample 2.
 #' @param representation A string specifying the desired type of representation,
@@ -34,10 +38,10 @@
 #'   for the edge count statistics. Defaults to `5L`.
 #' @param seed An integer for specifying the seed of the random generator for
 #'   result reproducibility. Defaults to `NULL`.
-#' @param start A string specifying the initialization of the permutation matrix estimate, among: \code{"barycenter"} and \code{"identity"}. Default is
+#' @param start A string specifying the initialization of the permutation matrix estimate. Currently, only \code{"barycenter"} is supported. Default is
 #'   \code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.
 #' @param iteration The number of iterations for the Frank-Wolfe algorithm. Default to `20L`. It is required for \code{distance == "match-frobenius"}.
-#' @param parallel A boolean specifying whether the distance matrix computation should be performed in parallel (only for \code{"match-frobenius"} distance). Defaults to `FALSE`.
+#' @param parallel A boolean specifying whether the distance matrix computation should be performed in parallel (only for \code{"match-frobenius"} distance).  If `TRUE`, use \code{future::plan(future::multisession)} before the call. Defaults to `FALSE`.
 #'
 #' @return A \code{\link[base]{list}} with three components: the value of the
 #'   statistic for the original two samples, the p-value of the resulting

@@ -20,7 +20,8 @@
 #' given by \deqn{\sqrt{\sum_i (V \sqrt{A} V^{-1} - U \sqrt{B} U^{-1})^2}.}
 #' Root-Euclidean distance can used only with the laplacian matrix
 #' representation.
-#' The match-Frobenius distance is the Frobenius distance considering networks in the Graph Space (alignment approach).
+#' Match-Frobenius distance is the Frobenius distance considering networks in the Graph Space.
+#' Match-Frobenius distance is computed via the graph matching algorithm with indefinite relaxation (via Frank-Wolfe), using \code{\link[iGraphMatch]{iGraphMatch}} \code{\link[iGraphMatch]{gm}} function.
 #' Match-Frobenius distance can be used only with adjacency matrix representation.
 #'
 #' @param x An \code{\link[igraph]{igraph}} object or a matrix representing an
@@ -30,7 +31,7 @@
 #' @param representation A string specifying the desired type of representation,
 #'   among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
 #'   \code{"graphon"}. Default is \code{"laplacian"}.
-#' @param start A string specifying the initialization of the permutation matrix estimate, among: \code{"barycenter"} and \code{"identity"}. Default is
+#' @param start A string specifying the initialization of the permutation matrix estimate. Currently, only \code{"barycenter"} is supported. Default is
 #'   \code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.
 #' @param iteration The number of iterations for the Frank-Wolfe algorithm. Default to 20L. It is required for \code{distance == "match-frobenius"}.
 #'
@@ -172,6 +173,10 @@ ipro_frobenius <- function(x, y, representation = "laplacian") {
 #' elements of the two samples put together. The cardinality of the fist sample
 #' is denoted by \eqn{n1} and that of the second one is denoted by \eqn{n2}.
 #'
+#' Match-Frobenius distance is the Frobenius distance considering networks in the Graph Space.
+#' Match-Frobenius distance is computed via the graph matching algorithm with indefinite relaxation (via Frank-Wolfe), using \code{\link[iGraphMatch]{iGraphMatch}} \code{\link[iGraphMatch]{gm}} function.
+#' Match-Frobenius distance can be used only with adjacency matrix representation.
+#'
 #' @param x A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects
 #'   or matrix representations of underlying networks from a given first
 #'   population.
@@ -185,10 +190,10 @@ ipro_frobenius <- function(x, y, representation = "laplacian") {
 #'   test statistic, among: \code{"hamming"}, \code{"frobenius"},
 #'   \code{"spectral"}, \code{"root-euclidean"} and \code{"match-frobenius"}. Default is
 #'   \code{"frobenius"}.
-#' @param start A string specifying the initialization of the permutation matrix estimate, among: \code{"barycenter"} and \code{"identity"}. Default is
+#' @param start A string specifying the initialization of the permutation matrix estimate. Currently, only \code{"barycenter"} is supported. Default is
 #'   \code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.
 #' @param iteration The number of iterations for the Frank-Wolfe algorithm. Default to 20L. It is required for \code{distance == "match-frobenius"}.
-#' @param parallel A boolean specifying whether the function should be performed in parallel (only for \code{"match-frobenius"} distance). Defaults to `FALSE`.
+#' @param parallel A boolean specifying whether the function should be performed in parallel (only for \code{"match-frobenius"} distance). If `TRUE`, use \code{future::plan(future::multisession)} before the call. Defaults to `FALSE`.
 #'
 #' @return A matrix of dimension \eqn{(n1+n2) \times (n1+n2)} containing the
 #'   distances between all the elements of the two samples put together.
@@ -214,7 +219,7 @@ dist_nvd <- function(x,
     mat_d <- rep(-1, n * (n - 1) / 2)
 
     if(!parallel){
-      fun <- function(k) {
+      compute_distance <- function(k) {
         j <-floor((2*(n-1)+1-sqrt((2*(n-1)+1)*(2*(n-1)+1)-8*k))/2)
         i <- k-((2*(n-1)-1-j)*j)/2
 
@@ -225,19 +230,15 @@ dist_nvd <- function(x,
         distanceValue
       }
 
-      mat_d <- sapply(0:((n * (n - 1) / 2)-1), fun)
+      mat_d <- sapply(0:((n * (n - 1) / 2)-1), compute_distance)
       attr(mat_d,"class") <- "dist"
       attr(mat_d,"Size") <- n
       attr(mat_d,"Diag") <- FALSE
       attr(mat_d,"Upper") <- FALSE
       mat_d
     } else{
-      future::plan(future::multisession)
-      progressr::handlers(progressr::handler_progress(format="[:bar] :percent :eta :message"))
-      fun <- function(xs) {
-        p <- progressr::progressor(along = xs)
-        pbfun <- function(k) {
-          p() #signal progress
+      compute_distance_matrix <- function(xs) {
+        compute_distance <- function(k) {
           j <-floor((2*(n-1)+1-sqrt((2*(n-1)+1)*(2*(n-1)+1)-8*k))/2)
           i <- k-((2*(n-1)-1-j)*j)/2
 
@@ -247,10 +248,10 @@ dist_nvd <- function(x,
           distanceValue <- dist_match_frobenius(net1, net2, representation = representation, start = start, iteration = iteration)
           distanceValue
         }
-        future.apply::future_sapply(xs, pbfun, future.seed = TRUE)
+        furrr::future_map_dbl(0:xs, compute_distance, .options = furrr::furrr_options(seed = TRUE))
       }
 
-      progressr::with_progress(mat_d <- fun(0:((n * (n - 1) / 2)-1)))
+      mat_d <- compute_distance_matrix(((n * (n - 1) / 2)-1))
       attr(mat_d,"class") <- "dist"
       attr(mat_d,"Size") <- n
       attr(mat_d,"Diag") <- FALSE
