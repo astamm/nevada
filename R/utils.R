@@ -14,12 +14,12 @@ format_input <- function(x, representation = "adjacency") {
           (attributes(x)$representation == "adjacency" && representation == "adjacency"))
         return(x)
     } else {
-      if (any(x < 0))
-        stop("All entries of an adjacency matrix should be non-negative.")
+      # if (any(x < 0))
+      #   stop("All entries of an adjacency matrix should be non-negative.")
       if (any(x != t(x)))
         stop("The input adjacency matrix should be symmetric.")
-      if (any(diag(x) != 0))
-        stop("The input adjacency matrix should have a value of 0 on the diagonal.")
+      # if (any(diag(x) != 0))
+      #   stop("The input adjacency matrix should have a value of 0 on the diagonal.")
 
       x <- switch(
         representation,
@@ -197,4 +197,44 @@ solve_partial <- function(M) {
     Minv <- Minv + (v %*% t(v)) / l
   }
   Minv
+}
+
+align_networks <- function(m, x){
+  x_out <- x
+  mat1 <- as.matrix(m)
+  num_nodes <- nrow(mat1)
+
+  align_graphs <- function(xs) {
+
+    align_one_graph <- function(i){
+      mat2 <- as.matrix(x[[i]])
+      perm <- iGraphMatch::gm(A = mat1, B = mat2, method = "indefinite", start = "bari", max_iter = 20)
+      Pmat2P <- as.matrix(perm %*% mat2)
+      attr(Pmat2P,"representation") <- attr(x[[i]],"representation")
+      Pmat2P
+    }
+
+    y <- furrr::future_map(1:xs, align_one_graph, .options = furrr::furrr_options(seed = TRUE))
+  }
+  x_out <- align_graphs(length(x))
+  x_out
+}
+
+rbinom_network2 <- function(num_vertices, size = 1, prob = 0.5) {
+  A <- diag(0, num_vertices)
+  A[upper.tri(A)] <- stats::rbinom(
+    n = num_vertices * (num_vertices - 1L) / 2L,
+    size = size,
+    prob = prob
+  )
+  igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
+}
+
+rpois_network2 <- function(num_vertices, lambda = 1) {
+  A <- diag(0, num_vertices)
+  A[upper.tri(A)] <- stats::rpois(
+    n = num_vertices * (num_vertices - 1L) / 2L,
+    lambda = lambda
+  )
+  igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
 }

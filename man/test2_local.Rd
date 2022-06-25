@@ -33,7 +33,7 @@ Defaults to \code{"adjacency"}.}
 
 \item{distance}{A string specifying the chosen distance for calculating the
 test statistic, among: \code{"hamming"}, \code{"frobenius"},
-\code{"spectral"} and \code{"root-euclidean"}. Defaults to
+\code{"spectral"}, \code{"root-euclidean"} and \code{match-frobenius}. Defaults to
 \code{"frobenius"}.}
 
 \item{stats}{A character vector specifying the chosen test statistic(s),

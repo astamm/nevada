@@ -9,18 +9,25 @@ power2(
   model2 = "k_regular",
   n1 = 20L,
   n2 = 20L,
-  num_vertices = 25L,
+  num_vertices1 = 25L,
+  num_vertices2 = 25L,
   model1_params = NULL,
   model2_params = NULL,
   representation = "adjacency",
   distance = "frobenius",
   stats = c("flipr:t_ip", "flipr:f_ip"),
   B = 1000L,
+  start = "barycenter",
+  iteration = 20L,
   alpha = 0.05,
   test = "exact",
   k = 5L,
   R = 1000L,
-  seed = 1234
+  seed = 1234,
+  rand_num_vertices1 = NULL,
+  rand_num_vertices2 = NULL,
+  rate1 = 0.25,
+  rate2 = 0.25
 )
 }
 \arguments{
@@ -36,7 +43,10 @@ second sample. Choices are \code{"sbm"}, \code{"k_regular"}, \code{"gnp"}, \code
 
 \item{n2}{The size of the second sample. Defaults to \code{20L}.}
 
-\item{num_vertices}{The number of nodes in the generated graphs. Defaults to
+\item{num_vertices1}{The number of nodes in the generated graphs of the first sample. Defaults to
+\code{25L}.}
+
+\item{num_vertices2}{The number of nodes in the generated graphs of the second sample. Defaults to
 \code{25L}.}
 
 \item{model1_params}{A named list setting the parameters of the first chosen
@@ -51,7 +61,7 @@ Defaults to \code{"adjacency"}.}
 
 \item{distance}{A string specifying the chosen distance for calculating the
 test statistic, among: \code{"hamming"}, \code{"frobenius"},
-\code{"spectral"} and \code{"root-euclidean"}. Defaults to
+\code{"spectral"}, \code{"root-euclidean"} and \code{match-frobenius}. Defaults to
 \code{"frobenius"}.}
 
 \item{stats}{A character vector specifying the chosen test statistic(s),
@@ -64,6 +74,11 @@ package: \code{"flipr:student_ip"}, \code{"flipr:fisher_ip"}, \code{"flipr:bg_ip
 \item{B}{The number of permutation or the tolerance. If this number is lower
 than \code{1}, it is intended as a tolerance. Otherwise, it is intended as
 the number of required permutations. Defaults to \code{1000L}.}
+
+\item{start}{A string specifying the initialization of the permutation matrix estimate. Currently, only \code{"barycenter"} is supported. Default is
+\code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.}
+
+\item{iteration}{The number of iterations for the Frank-Wolfe algorithm. Default to \code{20L}. It is required for \code{distance == "match-frobenius"}.}
 
 \item{alpha}{Significance level for hypothesis testing. Defaults to \code{0.05}.}
 
@@ -78,7 +93,17 @@ for the edge count statistics. Defaults to \code{5L}.}
 \code{1000L}.}
 
 \item{seed}{An integer specifying the random generator seed. Defaults to
-`1234.}
+\code{1234}.}
+
+\item{rand_num_vertices1}{A string specifying whether the number of vertices of the networks in the first sample should be random. Choices are \code{"poisson"}, \code{"uniform"}. In particular, if \code{"poisson"} N_1,...,N_sample_size iid Poisson(num_vertices1), if \code{"uniform"} N_1,...,N_sample_size iid Uniform(floor(num_vertices1*(1-rate)), ceiling(num_vertices1*(1+rate))). It is compatible with \code{"gnp"}, \code{"smallworld"},
+\code{"pa"}, \code{"poisson"} and \code{"binomial"} models. Defaults to \code{NULL}.}
+
+\item{rand_num_vertices2}{A string specifying whether the number of vertices of the networks in the first sample should be random. Choices are \code{"poisson"}, \code{"uniform"}. In particular, if \code{"poisson"} N_1,...,N_sample_size iid Poisson(num_vertices2), if \code{"uniform"} N_1,...,N_sample_size iid Uniform(floor(num_vertices2*(1-rate)), ceiling(num_vertices2*(1+rate))). It is compatible with \code{"gnp"}, \code{"smallworld"},
+\code{"pa"}, \code{"poisson"} and \code{"binomial"} models. Defaults to \code{NULL}.}
+
+\item{rate1}{A rate. See \code{rand_num_vertices1} for further information. Defaults to \code{0.25}.}
+
+\item{rate2}{A rate. See \code{rand_num_vertices2} for further information. Defaults to \code{0.25}.}
 }
 \value{
 A numeric value estimating the power of the test.
@@ -90,6 +115,12 @@ tests proposed in this package.
 \details{
 Currently, six scenarios of pairs of populations are implemented. Scenario 0
 allows to make sure that all our permutation tests are exact.
+
+Match-Frobenius distance is the Frobenius distance considering networks in the Graph Space.
+Match-Frobenius distance is computed via the graph matching algorithm with indefinite relaxation (via Frank-Wolfe), using \code{\link[iGraphMatch]{iGraphMatch}} \code{\link[iGraphMatch]{gm}} function.
+Match-Frobenius distance can be used only with adjacency matrix representation.
+
+To perform it in a parallel fashion, use \code{future::plan(future::multisession)} before the call.
 }
 \examples{
 gnp_params <- list(p = 1/3)

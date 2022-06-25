@@ -4,7 +4,15 @@
 \alias{dist_nvd}
 \title{Pairwise Distance Matrix Between Two Samples of Networks}
 \usage{
-dist_nvd(x, y = NULL, representation = "adjacency", distance = "frobenius")
+dist_nvd(
+  x,
+  y = NULL,
+  representation = "adjacency",
+  distance = "frobenius",
+  start = "barycenter",
+  iteration = 20L,
+  parallel = FALSE
+)
 }
 \arguments{
 \item{x}{A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects
@@ -21,8 +29,15 @@ among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
 
 \item{distance}{A string specifying the chosen distance for calculating the
 test statistic, among: \code{"hamming"}, \code{"frobenius"},
-\code{"spectral"} and \code{"root-euclidean"}. Default is
+\code{"spectral"}, \code{"root-euclidean"} and \code{"match-frobenius"}. Default is
 \code{"frobenius"}.}
+
+\item{start}{A string specifying the initialization of the permutation matrix estimate. Currently, only \code{"barycenter"} is supported. Default is
+\code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.}
+
+\item{iteration}{The number of iterations for the Frank-Wolfe algorithm. Default to 20L. It is required for \code{distance == "match-frobenius"}.}
+
+\item{parallel}{A boolean specifying whether the function should be performed in parallel (only for \code{"match-frobenius"} distance). If \code{TRUE}, use \code{future::plan(future::multisession)} before the call. Defaults to \code{FALSE}.}
 }
 \value{
 A matrix of dimension \eqn{(n1+n2) \times (n1+n2)} containing the
@@ -32,6 +47,11 @@ distances between all the elements of the two samples put together.
 This function computes the matrix of pairwise distances between all the
 elements of the two samples put together. The cardinality of the fist sample
 is denoted by \eqn{n1} and that of the second one is denoted by \eqn{n2}.
+}
+\details{
+Match-Frobenius distance is the Frobenius distance considering networks in the Graph Space.
+Match-Frobenius distance is computed via the graph matching algorithm with indefinite relaxation (via Frank-Wolfe), using \code{\link[iGraphMatch]{iGraphMatch}} \code{\link[iGraphMatch]{gm}} function.
+Match-Frobenius distance can be used only with adjacency matrix representation.
 }
 \examples{
 gnp_params <- list(p = 1/3)

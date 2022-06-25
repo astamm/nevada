@@ -8,6 +8,10 @@
 #' used, together with several choices of network matrix representations and
 #' distances between networks.
 #'
+#' Match-Frobenius distance is the Frobenius distance considering networks in the Graph Space.
+#' Match-Frobenius distance is computed via the graph matching algorithm with indefinite relaxation (via Frank-Wolfe), using \code{\link[iGraphMatch]{iGraphMatch}} \code{\link[iGraphMatch]{gm}} function.
+#' Match-Frobenius distance can be used only with adjacency matrix representation.
+#'
 #' @param x An \code{\link{nvd}} object listing networks in sample 1.
 #' @param y An \code{\link{nvd}} object listing networks in sample 2.
 #' @param representation A string specifying the desired type of representation,
@@ -15,7 +19,7 @@
 #'   Defaults to \code{"adjacency"}.
 #' @param distance A string specifying the chosen distance for calculating the
 #'   test statistic, among: \code{"hamming"}, \code{"frobenius"},
-#'   \code{"spectral"} and \code{"root-euclidean"}. Defaults to
+#'   \code{"spectral"}, \code{"root-euclidean"} and \code{match-frobenius}. Defaults to
 #'   \code{"frobenius"}.
 #' @param stats A character vector specifying the chosen test statistic(s),
 #'   among: `"original_edge_count"`, `"generalized_edge_count"`,
@@ -34,6 +38,10 @@
 #'   for the edge count statistics. Defaults to `5L`.
 #' @param seed An integer for specifying the seed of the random generator for
 #'   result reproducibility. Defaults to `NULL`.
+#' @param start A string specifying the initialization of the permutation matrix estimate. Currently, only \code{"barycenter"} is supported. Default is
+#'   \code{"barycenter"}. It is required for \code{distance == "match-frobenius"}.
+#' @param iteration The number of iterations for the Frank-Wolfe algorithm. Default to `20L`. It is required for \code{distance == "match-frobenius"}.
+#' @param parallel A boolean specifying whether the distance matrix computation should be performed in parallel (only for \code{"match-frobenius"} distance).  If `TRUE`, use \code{future::plan(future::multisession)} before the call. Defaults to `FALSE`.
 #'
 #' @return A \code{\link[base]{list}} with three components: the value of the
 #'   statistic for the original two samples, the p-value of the resulting
@@ -64,7 +72,10 @@ test2_global <- function(x, y,
                          B = 1000L,
                          test = "exact",
                          k = 5L,
-                         seed = NULL) {
+                         seed = NULL,
+                         start = "barycenter",
+                         iteration = 20L,
+                         parallel = FALSE) {
   n1 <- length(x)
   n2 <- length(y)
   n <- n1 + n2
@@ -76,7 +87,7 @@ test2_global <- function(x, y,
 
   distance <- match.arg(
     distance,
-    c("hamming", "frobenius", "spectral", "root-euclidean")
+    c("hamming", "frobenius", "spectral", "root-euclidean", "match-frobenius")
   )
 
   use_frechet_stats <- any(grepl("student_euclidean", stats)) ||
@@ -90,7 +101,7 @@ test2_global <- function(x, y,
   if (use_frechet_stats)
     d <- repr_nvd(x, y, representation = representation)
   else {
-    d <- dist_nvd(x, y, representation = representation, distance = distance)
+    d <- dist_nvd(x, y, representation = representation, distance = distance, start = start, iteration = iteration, parallel = parallel)
     if (any(grepl("edge_count", stats)))
       ecp <- edge_count_global_variables(d, n1, k = k)
   }

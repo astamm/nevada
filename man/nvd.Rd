@@ -9,7 +9,9 @@ nvd(
   n = 1L,
   num_vertices = 25L,
   model_params = NULL,
-  seed = 1234
+  seed = 1234,
+  rand_num_vertices = NULL,
+  rate = 0.25
 )
 }
 \arguments{
@@ -27,6 +29,11 @@ considering. Defaults to \code{NULL}.}
 
 \item{seed}{An integer specifying the random generator seed. Defaults to
 \code{1234}.}
+
+\item{rand_num_vertices}{A string specifying whether the number of vertices of the networks in the first sample should be random. Choices are \code{"poisson"}, \code{"uniform"}. In particular, if \code{"poisson"} N_1,...,N_sample_size iid Poisson(num_vertices), if \code{"uniform"} N_1,...,N_sample_size iid Uniform(floor(num_vertices*(1-rate)), ceiling(num_vertices*(1+rate))). It is compatible with \code{"gnp"}, \code{"smallworld"},
+\code{"pa"}, \code{"poisson"} and \code{"binomial"} models. Defaults to \code{NULL}.}
+
+\item{rate}{A rate. See \code{rand_num_vertices} for further information. Defaults to \code{0.25}.}
 }
 \value{
 A \code{nvd} object which is a list of \code{\link[igraph]{igraph}}
