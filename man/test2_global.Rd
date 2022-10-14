@@ -13,7 +13,8 @@ test2_global(
   B = 1000L,
   test = "exact",
   k = 5L,
-  seed = NULL
+  seed = NULL,
+  ...
 )
 }
 \arguments{
@@ -50,6 +51,8 @@ for the edge count statistics. Defaults to \code{5L}.}
 
 \item{seed}{An integer for specifying the seed of the random generator for
 result reproducibility. Defaults to \code{NULL}.}
+
+\item{...}{Extra arguments to be passed to the distance function.}
 }
 \value{
 A \code{\link[base]{list}} with three components: the value of the
