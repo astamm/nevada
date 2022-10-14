@@ -56,10 +56,12 @@ Imports:
     cli,
     withr,
     tsne,
-    umap
+    umap,
+    furrr
 RoxygenNote: 7.2.1
 Roxygen: list(markdown = TRUE)
-URL: https://astamm.github.io/nevada/, https://github.com/astamm/nevada/
+URL: https://astamm.github.io/nevada/,
+    https://github.com/astamm/nevada/
 BugReports: https://github.com/astamm/nevada/issues/
 Suggests: 
     knitr,
