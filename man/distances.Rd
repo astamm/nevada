@@ -10,22 +10,39 @@
 \usage{
 dist_hamming(x, y, representation = "laplacian")
 
-dist_frobenius(x, y, representation = "laplacian")
+dist_frobenius(
+  x,
+  y,
+  representation = "laplacian",
+  matching_iterations = 0,
+  target_matrix = NULL
+)
 
 dist_spectral(x, y, representation = "laplacian")
 
 dist_root_euclidean(x, y, representation = "laplacian")
 }
 \arguments{
-\item{x}{An \code{\link[igraph]{igraph}} object or a matrix representing an
-underlying network.}
+\item{x}{An \code{\link[igraph:aaa-igraph-package]{igraph::igraph}} object or a matrix representing an underlying
+network.}
 
-\item{y}{An \code{\link[igraph]{igraph}} object or a matrix representing an
-underlying network. Should have the same number of vertices as \code{x}.}
+\item{y}{An \code{\link[igraph:aaa-igraph-package]{igraph::igraph}} object or a matrix representing an underlying
+network. Should have the same number of vertices as \code{x}.}
 
 \item{representation}{A string specifying the desired type of representation,
 among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
 \code{"graphon"}. Default is \code{"laplacian"}.}
+
+\item{matching_iterations}{An integer value specifying the maximum number of
+runs when looking for the optimal permutation for graph matching. Defaults
+to \code{0L} in which case no matching is done.}
+
+\item{target_matrix}{A square numeric matrix of size \code{n} equal to the order
+of the graphs specifying a target matrix towards which the initial doubly
+stochastic matrix is shrunk each time the graph matching algorithm fails to
+provide a good minimum. Defaults to \code{NULL} in which case the target matrix
+is automatically chosen between the identity matrix or the uniform matrix
+on the n-simplex.}
 }
 \value{
 A scalar measuring the distance between the two input networks.

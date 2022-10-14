@@ -21,13 +21,22 @@
 #' Root-Euclidean distance can used only with the laplacian matrix
 #' representation.
 #'
-#' @param x An \code{\link[igraph]{igraph}} object or a matrix representing an
-#'   underlying network.
-#' @param y An \code{\link[igraph]{igraph}} object or a matrix representing an
-#'   underlying network. Should have the same number of vertices as \code{x}.
+#' @param x An [`igraph::igraph`] object or a matrix representing an underlying
+#'   network.
+#' @param y An [`igraph::igraph`] object or a matrix representing an underlying
+#'   network. Should have the same number of vertices as `x`.
 #' @param representation A string specifying the desired type of representation,
 #'   among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
 #'   \code{"graphon"}. Default is \code{"laplacian"}.
+#' @param matching_iterations An integer value specifying the maximum number of
+#'   runs when looking for the optimal permutation for graph matching. Defaults
+#'   to `0L` in which case no matching is done.
+#' @param target_matrix A square numeric matrix of size `n` equal to the order
+#'   of the graphs specifying a target matrix towards which the initial doubly
+#'   stochastic matrix is shrunk each time the graph matching algorithm fails to
+#'   provide a good minimum. Defaults to `NULL` in which case the target matrix
+#'   is automatically chosen between the identity matrix or the uniform matrix
+#'   on the n-simplex.
 #'
 #' @return A scalar measuring the distance between the two input networks.
 #'
@@ -55,9 +64,57 @@ dist_hamming <- function(x, y, representation = "laplacian") {
 
 #' @rdname distances
 #' @export
-dist_frobenius <- function(x, y, representation = "laplacian") {
+dist_frobenius <- function(x, y,
+                           representation = "laplacian",
+                           matching_iterations = 0,
+                           target_matrix = NULL) {
   if (!compatible_networks(x, y))
-    stop("Input networks are incompatible.")
+    cli::cli_abort("Input networks are incompatible.")
+
+  if (matching_iterations > 0) {
+    d0 <- dist_frobenius(x, y, representation = representation)
+    Ax <- repr_adjacency(x, validate = FALSE)
+    Ay <- repr_adjacency(y, validate = FALSE)
+
+    if (is.null(target_matrix)) {
+      n <- igraph::gorder(x)
+      target_matrix <- diag(1 / n, n)
+      l <- align_graphs(x, y, Ax, Ay, target_matrix = target_matrix, alpha = 1)
+      dy <- dist_frobenius(x, l$y, representation = representation)
+      dx <- dist_frobenius(l$x, y, representation = representation)
+      d1 <- min(dx, dy)
+      unif_matrix <- matrix(1 / n^2, n, n)
+      l <- align_graphs(x, y, Ax, Ay, target_matrix = unif_matrix, alpha = 1)
+      dy <- dist_frobenius(x, l$y, representation = representation)
+      dx <- dist_frobenius(l$x, y, representation = representation)
+      d2 <- min(dx, dy)
+      if (d2 < d1)
+        target_matrix <- unif_matrix
+      d0 <- min(d0, d1, d2)
+    } else {
+      l <- align_graphs(x, y, Ax, Ay, target_matrix = target_matrix, alpha = 1)
+      dy <- dist_frobenius(x, l$y, representation = representation)
+      dx <- dist_frobenius(l$x, y, representation = representation)
+      d0 <- min(d0, dx, dy)
+    }
+
+    dP <- d0 + 1
+    cnt <- 0
+    while (dP > d0 && cnt <= matching_iterations) {
+      l <- align_graphs(x, y, Ax, Ay, target_matrix = target_matrix, alpha = cnt / matching_iterations)
+      dy <- dist_frobenius(x, l$y, representation = representation)
+      dx <- dist_frobenius(l$x, y, representation = representation)
+      dP <- min(dx, dy)
+      cnt <- cnt + 1
+    }
+
+    if (cnt > matching_iterations) {
+      cli::cli_alert_info("The maximal number of iterations ({matching_iterations}) has been reached.")
+      dP <- d0
+    }
+
+    return(dP)
+  }
 
   x <- format_input(x, representation)
   y <- format_input(y, representation)
@@ -130,14 +187,12 @@ ipro_frobenius <- function(x, y, representation = "laplacian") {
 #'
 #' This function computes the matrix of pairwise distances between all the
 #' elements of the two samples put together. The cardinality of the fist sample
-#' is denoted by \eqn{n1} and that of the second one is denoted by \eqn{n2}.
+#' is denoted by \eqn{n_1} and that of the second one is denoted by \eqn{n_2}.
 #'
-#' @param x A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects
-#'   or matrix representations of underlying networks from a given first
-#'   population.
-#' @param y A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects
-#'   or matrix representations of underlying networks from a given second
-#'   population.
+#' @param x A [`base::list`] of [`igraph::igraph`] objects or matrix
+#'   representations of underlying networks from a given first population.
+#' @param y A [`base::list`] of [`igraph::igraph`] objects or matrix
+#'   representations of underlying networks from a given second population.
 #' @param representation A string specifying the desired type of representation,
 #'   among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
 #'   \code{"graphon"}. Default is \code{"laplacian"}.
@@ -145,8 +200,17 @@ ipro_frobenius <- function(x, y, representation = "laplacian") {
 #'   test statistic, among: \code{"hamming"}, \code{"frobenius"},
 #'   \code{"spectral"} and \code{"root-euclidean"}. Default is
 #'   \code{"frobenius"}.
+#' @param matching_iterations An integer value specifying the maximum number of
+#'   runs when looking for the optimal permutation for graph matching. Defaults
+#'   to `0L` in which case no matching is done.
+#' @param target_matrix A square numeric matrix of size `n` equal to the order
+#'   of the graphs specifying a target matrix towards which the initial doubly
+#'   stochastic matrix is shrunk each time the graph matching algorithm fails to
+#'   provide a good minimum. Defaults to `NULL` in which case the target matrix
+#'   is automatically chosen between the identity matrix or the uniform matrix
+#'   on the n-simplex.
 #'
-#' @return A matrix of dimension \eqn{(n1+n2) \times (n1+n2)} containing the
+#' @return A matrix of dimension \eqn{(n_1+n_2) \times (n_1+n_2)} containing the
 #'   distances between all the elements of the two samples put together.
 #' @export
 #'
@@ -159,7 +223,32 @@ ipro_frobenius <- function(x, y, representation = "laplacian") {
 dist_nvd <- function(x,
                      y = NULL,
                      representation = "adjacency",
-                     distance = "frobenius") {
+                     distance = "frobenius",
+                     matching_iterations = 0,
+                     target_matrix = NULL) {
+  if (matching_iterations > 0 && distance == "frobenius") {
+    if (!is.null(y)) x <- c(x, y)
+    n <- length(x)
+    labels <- 1:n
+    indices <- linear_index(n)
+    D <- furrr::future_map_dbl(indices$k, ~ {
+      i <- indices$i[.x]
+      j <- indices$j[.x]
+      dist_frobenius(
+        x[[i]], x[[j]],
+        representation = representation,
+        matching_iterations = matching_iterations,
+        target_matrix = target_matrix
+      )
+    }, .options = furrr::furrr_options(seed = TRUE))
+
+    attributes(D) <- NULL
+    attr(D, "Labels") <- labels
+    attr(D, "Size") <- n
+    attr(D, "call") <- match.call()
+    class(D) <- "dist"
+    return(D)
+  }
 
   x <- repr_nvd(x, y, representation = representation)
   dist_nvd_impl(x, distance)

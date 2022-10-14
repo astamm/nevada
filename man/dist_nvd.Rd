@@ -4,16 +4,21 @@
 \alias{dist_nvd}
 \title{Pairwise Distance Matrix Between Two Samples of Networks}
 \usage{
-dist_nvd(x, y = NULL, representation = "adjacency", distance = "frobenius")
+dist_nvd(
+  x,
+  y = NULL,
+  representation = "adjacency",
+  distance = "frobenius",
+  matching_iterations = 0,
+  target_matrix = NULL
+)
 }
 \arguments{
-\item{x}{A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects
-or matrix representations of underlying networks from a given first
-population.}
+\item{x}{A \code{\link[base:list]{base::list}} of \code{\link[igraph:aaa-igraph-package]{igraph::igraph}} objects or matrix
+representations of underlying networks from a given first population.}
 
-\item{y}{A \code{\link[base]{list}} of \code{\link[igraph]{igraph}} objects
-or matrix representations of underlying networks from a given second
-population.}
+\item{y}{A \code{\link[base:list]{base::list}} of \code{\link[igraph:aaa-igraph-package]{igraph::igraph}} objects or matrix
+representations of underlying networks from a given second population.}
 
 \item{representation}{A string specifying the desired type of representation,
 among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
@@ -23,15 +28,26 @@ among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
 test statistic, among: \code{"hamming"}, \code{"frobenius"},
 \code{"spectral"} and \code{"root-euclidean"}. Default is
 \code{"frobenius"}.}
+
+\item{matching_iterations}{An integer value specifying the maximum number of
+runs when looking for the optimal permutation for graph matching. Defaults
+to \code{0L} in which case no matching is done.}
+
+\item{target_matrix}{A square numeric matrix of size \code{n} equal to the order
+of the graphs specifying a target matrix towards which the initial doubly
+stochastic matrix is shrunk each time the graph matching algorithm fails to
+provide a good minimum. Defaults to \code{NULL} in which case the target matrix
+is automatically chosen between the identity matrix or the uniform matrix
+on the n-simplex.}
 }
 \value{
-A matrix of dimension \eqn{(n1+n2) \times (n1+n2)} containing the
+A matrix of dimension \eqn{(n_1+n_2) \times (n_1+n_2)} containing the
 distances between all the elements of the two samples put together.
 }
 \description{
 This function computes the matrix of pairwise distances between all the
 elements of the two samples put together. The cardinality of the fist sample
-is denoted by \eqn{n1} and that of the second one is denoted by \eqn{n2}.
+is denoted by \eqn{n_1} and that of the second one is denoted by \eqn{n_2}.
 }
 \examples{
 gnp_params <- list(p = 1/3)
