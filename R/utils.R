@@ -210,7 +210,7 @@ align_graphs <- function(x, y, Ax, Ay, target_matrix, alpha = 0, max_iter = 20) 
 }
 
 sample_simplex <- function(n) {
-  diff(sort(c(runif(n - 1), 0, 1)))
+  diff(sort(c(stats::runif(n - 1), 0, 1)))
 }
 
 linear_index <- function(n) {
