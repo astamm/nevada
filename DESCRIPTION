@@ -54,8 +54,10 @@ Imports:
     magrittr,
     flipr,
     cli,
-    withr
-RoxygenNote: 7.1.2
+    withr,
+    tsne,
+    umap
+RoxygenNote: 7.2.1
 Roxygen: list(markdown = TRUE)
 URL: https://astamm.github.io/nevada/, https://github.com/astamm/nevada/
 BugReports: https://github.com/astamm/nevada/issues/

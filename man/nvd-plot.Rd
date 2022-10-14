@@ -6,14 +6,18 @@
 \alias{plot.nvd}
 \title{MDS Visualization of Network Distributions}
 \usage{
-\method{autoplot}{nvd}(x, y, ...)
+\method{autoplot}{nvd}(x, y, method = "mds", ...)
 
-\method{plot}{nvd}(x, y, ...)
+\method{plot}{nvd}(x, y, method = "mds", ...)
 }
 \arguments{
 \item{x}{A \code{\link{nvd}} object.}
 
 \item{y}{A \code{\link{nvd}} object.}
+
+\item{method}{A string specifying which dimensionality reduction method to
+use for projecting the samples into the cartesian plane. Choices are
+\code{"mds"}, \code{"tsne"} or \code{"umap"}. Defaults to \code{"mds"}.}
 
 \item{...}{Extra arguments to be passed to the plot function.}
 }

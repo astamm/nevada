@@ -3,12 +3,20 @@
     n <- attr(x, "Size")
     return(tibble(V1 = rep(0, n), V2 = rep(0, n)))
   }
-  x <- stats::cmdscale(x, add = TRUE)$points
+  x <- switch (method,
+    mds = stats::cmdscale(x, add = TRUE)$points,
+    tsne = suppressMessages(tsne::tsne(x)),
+    umap = {
+      custom_settings <- umap::umap.defaults
+      custom_settings$input <- "dist"
+      umap::umap(as.matrix(x), config = custom_settings)$layout
+    }
+  )
   colnames(x) <-  c("V1", "V2")
   tibble::as_tibble(x)
 }
 
-nvd_data <- function(x, y) {
+nvd_data <- function(x, y, method = "mds") {
   rchoices <- c("adjacency", "laplacian", "modularity")
   dchoices <- c("hamming", "frobenius", "spectral", "root-euclidean")
   tidyr::crossing(Representation = rchoices, Distance = dchoices) %>%
@@ -19,7 +27,7 @@ nvd_data <- function(x, y) {
         .f = dist_nvd,
         x = x, y = y
       ) %>%
-        purrr::map(.project_data) %>%
+        purrr::map(.project_data, method = method) %>%
         purrr::map(
           .f = dplyr::mutate,
           Label = c(rep("1", length(x)), rep("2", length(y)))
@@ -45,6 +53,9 @@ nvd_data <- function(x, y) {
 #'
 #' @param x A \code{\link{nvd}} object.
 #' @param y A \code{\link{nvd}} object.
+#' @param method A string specifying which dimensionality reduction method to
+#'   use for projecting the samples into the cartesian plane. Choices are
+#'   `"mds"`, `"tsne"` or `"umap"`. Defaults to `"mds"`.
 #' @param ... Extra arguments to be passed to the plot function.
 #'
 #' @return Invisibly returns a \code{\link[ggplot2]{ggplot}} object. In
@@ -74,8 +85,8 @@ NULL
 #' @export
 #' @rdname nvd-plot
 #' @importFrom ggplot2 autoplot
-autoplot.nvd <- function(x, y, ...) {
-  nvd_data(x, y) %>%
+autoplot.nvd <- function(x, y, method = "mds", ...) {
+  nvd_data(x, y, method = method) %>%
     ggplot2::ggplot(ggplot2::aes(
       x = .data$V1,
       y = .data$V2,
@@ -98,6 +109,6 @@ autoplot.nvd <- function(x, y, ...) {
 #' @export
 #' @rdname nvd-plot
 #' @importFrom graphics plot
-plot.nvd <- function(x, y, ...) {
-  print(autoplot(x, y, ...))
+plot.nvd <- function(x, y, method = "mds", ...) {
+  print(autoplot(x, y, method = method, ...))
 }
