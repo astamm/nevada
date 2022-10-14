@@ -60,7 +60,7 @@ is denoted by \(n1\) and that of the second one is denoted by \(n2\).</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">dist_nvd</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, representation <span class="op">=</span> <span class="st">"adjacency"</span>, distance <span class="op">=</span> <span class="st">"frobenius"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dist_nvd</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, representation <span class="op">=</span> <span class="st">"adjacency"</span>, distance <span class="op">=</span> <span class="st">"frobenius"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -69,33 +69,42 @@ is denoted by \(n1\) and that of the second one is denoted by \(n2\).</p>
 <dd><p>A <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></code> of <code><a href="https://rdrr.io/pkg/igraph/man/aaa-igraph-package.html" class="external-link">igraph</a></code> objects
 or matrix representations of underlying networks from a given first
 population.</p></dd>
+
+
 <dt>y</dt>
 <dd><p>A <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></code> of <code><a href="https://rdrr.io/pkg/igraph/man/aaa-igraph-package.html" class="external-link">igraph</a></code> objects
 or matrix representations of underlying networks from a given second
 population.</p></dd>
+
+
 <dt>representation</dt>
 <dd><p>A string specifying the desired type of representation,
 among: <code>"adjacency"</code>, <code>"laplacian"</code>, <code>"modularity"</code> or
 <code>"graphon"</code>. Default is <code>"laplacian"</code>.</p></dd>
+
+
 <dt>distance</dt>
 <dd><p>A string specifying the chosen distance for calculating the
 test statistic, among: <code>"hamming"</code>, <code>"frobenius"</code>,
 <code>"spectral"</code> and <code>"root-euclidean"</code>. Default is
 <code>"frobenius"</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A matrix of dimension \((n1+n2) \times (n1+n2)\) containing the
+    
+
+<p>A matrix of dimension \((n1+n2) \times (n1+n2)\) containing the
 distances between all the elements of the two samples put together.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">gnp_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">k_regular_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">8L</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gnp"</span>, n <span class="op">=</span> <span class="fl">10L</span>, model_params <span class="op">=</span> <span class="va">gnp_params</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"k_regular"</span>, n <span class="op">=</span> <span class="fl">10L</span>, model_params <span class="op">=</span> <span class="va">k_regular_params</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">dist_nvd</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="st">"adjacency"</span>, <span class="st">"spectral"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">gnp_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">k_regular_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">8L</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gnp"</span>, n <span class="op">=</span> <span class="fl">10L</span>, model_params <span class="op">=</span> <span class="va">gnp_params</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"k_regular"</span>, n <span class="op">=</span> <span class="fl">10L</span>, model_params <span class="op">=</span> <span class="va">k_regular_params</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">dist_nvd</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="st">"adjacency"</span>, <span class="st">"spectral"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            1         2         3         4         5         6         7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  1.6182188                                                            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  2.3346721 1.8292590                                                  </span>
@@ -170,7 +179,7 @@ distances between all the elements of the two samples put together.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

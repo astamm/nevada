@@ -97,18 +97,17 @@
 <a class="anchor" aria-label="anchor" href="#overview-"></a>
 </h1></div>
 <!-- badges: start -->
-
 <p>The package <a href="https://astamm.github.io/nevada/" class="external-link"><strong>nevada</strong></a> (NEtwork-VAlued Data Analysis) is an R package for the statistical analysis of network-valued data. In this setting, a sample is made of statistical units that are networks themselves. The package provides a set of matrix representations for networks so that network-valued data can be transformed into matrix-valued data. Subsequently, a number of distances between matrices is provided as well to quantify how far two networks are from each other and several test statistics are proposed for testing equality in distribution between samples of networks using exact permutation testing procedures. The permutation scheme is carried out by the <a href="https://astamm.github.io/flipr/" class="external-link"><strong>flipr</strong></a> package which also provides a number of test statistics based on inter-point distances that play nicely with network-valued data. The implementation is largely made in C++ and the matrix of inter- and intra-sample distances is pre-computed, which alleviates the computational burden often associated with permutation tests.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>You can install the latest stable version of <strong>nevada</strong> on CRAN with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"nevada"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"nevada"</span><span class="op">)</span></span></code></pre></div>
 <p>Or you can install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("remotes")</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"astamm/nevada"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"astamm/nevada"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -118,10 +117,10 @@
 </h3>
 <p>In this first example, we compare two populations of networks generated according to two different models (Watts-Strogatz and Barabasi), using the adjacency matrix representation of networks, the Frobenius distance to compare single networks and the combination of Student-like and Fisher-like statistics based on inter-point distances to summarize information and perform the permutation test.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
-<span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10L</span>
-<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">nevada</span><span class="fu">::</span><span class="fu"><a href="reference/nvd.html">nvd</a></span><span class="op">(</span><span class="st">"smallworld"</span>, <span class="va">n</span><span class="op">)</span>
-<span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">nevada</span><span class="fu">::</span><span class="fu"><a href="reference/nvd.html">nvd</a></span><span class="op">(</span><span class="st">"pa"</span>, <span class="va">n</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10L</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">nevada</span><span class="fu">::</span><span class="fu"><a href="reference/nvd.html">nvd</a></span><span class="op">(</span><span class="st">"smallworld"</span>, <span class="va">n</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">nevada</span><span class="fu">::</span><span class="fu"><a href="reference/nvd.html">nvd</a></span><span class="op">(</span><span class="st">"pa"</span>, <span class="va">n</span><span class="op">)</span></span></code></pre></div>
 <p>By default the <code><a href="reference/nvd.html">nvd()</a></code> constructor generates networks with 25 nodes. One can wonder whether there is a difference between the distributions that generated these two samples (which there is given the models that we used). The <code><a href="reference/test2_global.html">test2_global()</a></code> function provides an answer to this question:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>t1_global <span class="ot">&lt;-</span> nevada<span class="sc">::</span><span class="fu">test2_global</span>(x, y, <span class="at">seed =</span> <span class="dv">1234</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>t1_global<span class="sc">$</span>pvalue</span>
@@ -129,7 +128,7 @@
 <p>The p-value is very small, leading to the conclusion that we should reject the null hypothesis of equal distributions.</p>
 <p>Although this is a fake example, we could create a partition to try to localize differences along this partition:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">partition</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, each <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">partition</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, each <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The <code><a href="reference/test2_local.html">test2_local()</a></code> function provides an answer to this question:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>t1_local <span class="ot">&lt;-</span> nevada<span class="sc">::</span><span class="fu">test2_local</span>(x, y, partition, <span class="at">seed =</span> <span class="dv">1234</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>t1_local</span>
@@ -163,9 +162,9 @@
 </h3>
 <p>In this second example, we compare two populations of networks generated according to the same model (Watts-Strogatz), using the adjacency matrix representation of networks, the Frobenius distance to compare single networks and the combination of Student-like and Fisher-like statistics based on inter-point distances to summarize information and perform the permutation test.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10L</span>
-<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">nevada</span><span class="fu">::</span><span class="fu"><a href="reference/nvd.html">nvd</a></span><span class="op">(</span><span class="st">"smallworld"</span>, <span class="va">n</span><span class="op">)</span>
-<span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">nevada</span><span class="fu">::</span><span class="fu"><a href="reference/nvd.html">nvd</a></span><span class="op">(</span><span class="st">"smallworld"</span>, <span class="va">n</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10L</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">nevada</span><span class="fu">::</span><span class="fu"><a href="reference/nvd.html">nvd</a></span><span class="op">(</span><span class="st">"smallworld"</span>, <span class="va">n</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">nevada</span><span class="fu">::</span><span class="fu"><a href="reference/nvd.html">nvd</a></span><span class="op">(</span><span class="st">"smallworld"</span>, <span class="va">n</span><span class="op">)</span></span></code></pre></div>
 <p>One can wonder whether there is a difference between the distributions that generated these two samples (which there is given the models that we used). The <code><a href="reference/test2_global.html">test2_global()</a></code> function provides an answer to this question:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>t2 <span class="ot">&lt;-</span> nevada<span class="sc">::</span><span class="fu">test2_global</span>(x, y, <span class="at">seed =</span> <span class="dv">1234</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>t2<span class="sc">$</span>pvalue</span>
@@ -234,7 +233,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

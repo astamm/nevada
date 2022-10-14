@@ -58,49 +58,66 @@ distribution.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">rpois_network</span><span class="op">(</span><span class="va">n</span>, <span class="va">num_vertices</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-
-<span class="fu">rexp_network</span><span class="op">(</span><span class="va">n</span>, <span class="va">num_vertices</span>, rate <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-
-<span class="fu">rbinom_network</span><span class="op">(</span><span class="va">n</span>, <span class="va">num_vertices</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
-
-<span class="fu">rsbm</span><span class="op">(</span><span class="va">n</span>, <span class="va">num_vertices</span>, <span class="va">pref_matrix</span>, <span class="va">block_sizes</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rpois_network</span><span class="op">(</span><span class="va">n</span>, <span class="va">num_vertices</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">rexp_network</span><span class="op">(</span><span class="va">n</span>, <span class="va">num_vertices</span>, rate <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">rbinom_network</span><span class="op">(</span><span class="va">n</span>, <span class="va">num_vertices</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">rsbm</span><span class="op">(</span><span class="va">n</span>, <span class="va">num_vertices</span>, <span class="va">pref_matrix</span>, <span class="va">block_sizes</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>n</dt>
 <dd><p>Sample size.</p></dd>
+
+
 <dt>num_vertices</dt>
 <dd><p>Number of vertices.</p></dd>
+
+
 <dt>lambda</dt>
 <dd><p>The mean parameter for the Poisson distribution (default: 1).</p></dd>
+
+
 <dt>rate</dt>
 <dd><p>The rate parameter for the exponential distribution (default: 1).</p></dd>
+
+
 <dt>size</dt>
 <dd><p>The number of trials for the binomial distribution (default: 1).</p></dd>
+
+
 <dt>prob</dt>
 <dd><p>The probability of success on each trial for the binomial
 distribution (default: 0.5).</p></dd>
+
+
 <dt>pref_matrix</dt>
 <dd><p>The matrix giving the Bernoulli rates. This is a KxK
 matrix, where K is the number of groups. The probability of creating an
 edge between vertices from groups i and j is given by element (i,j). For
 undirected graphs, this matrix must be symmetric. See
 <code><a href="https://rdrr.io/pkg/igraph/man/sample_sbm.html" class="external-link">sample_sbm</a></code>.</p></dd>
+
+
 <dt>block_sizes</dt>
 <dd><p>Numeric vector giving the number of vertices in each
 group. The sum of the vector must match the number of vertices. See
 <code><a href="https://rdrr.io/pkg/igraph/man/sample_sbm.html" class="external-link">sample_sbm</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A object of class <code><a href="nvd.html">nvd</a></code> containing the sample of graphs.</p>
+    
+
+<p>A object of class <code><a href="nvd.html">nvd</a></code> containing the sample of graphs.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">nvd</span> <span class="op">&lt;-</span> <span class="fu">rexp_network</span><span class="op">(</span><span class="fl">10</span>, <span class="fl">68</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">nvd</span> <span class="op">&lt;-</span> <span class="fu">rexp_network</span><span class="op">(</span><span class="fl">10</span>, <span class="fl">68</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -115,7 +132,7 @@ group. The sum of the vector must match the number of vertices. See
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

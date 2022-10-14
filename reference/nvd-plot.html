@@ -60,25 +60,38 @@ the package.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for nvd</span>
-<span class="fu">autoplot</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for nvd</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for nvd</span></span>
+<span><span class="fu">autoplot</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, method <span class="op">=</span> <span class="st">"mds"</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for nvd</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, method <span class="op">=</span> <span class="st">"mds"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>A <code><a href="nvd.html">nvd</a></code> object.</p></dd>
+
+
 <dt>y</dt>
 <dd><p>A <code><a href="nvd.html">nvd</a></code> object.</p></dd>
+
+
+<dt>method</dt>
+<dd><p>A string specifying which dimensionality reduction method to
+use for projecting the samples into the cartesian plane. Choices are
+<code>"mds"</code>, <code>"tsne"</code> or <code>"umap"</code>. Defaults to <code>"mds"</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Extra arguments to be passed to the plot function.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Invisibly returns a <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></code> object. In
+    
+
+<p>Invisibly returns a <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></code> object. In
 particular, the data set computed to generate the plot can be retrieved via
 <code>$data</code>. This is a <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></code> containing the following
 variables:</p><ul><li><p><code>V1</code>: the x-coordinate of each observation in the plane,</p></li>
@@ -92,13 +105,13 @@ the others.</p></li>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">gnp_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">k_regular_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">8L</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gnp"</span>, n <span class="op">=</span> <span class="fl">10L</span>, model_params <span class="op">=</span> <span class="va">gnp_params</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"k_regular"</span>, n <span class="op">=</span> <span class="fl">10L</span>, model_params <span class="op">=</span> <span class="va">k_regular_params</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">gnp_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">k_regular_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">8L</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gnp"</span>, n <span class="op">=</span> <span class="fl">10L</span>, model_params <span class="op">=</span> <span class="va">gnp_params</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"k_regular"</span>, n <span class="op">=</span> <span class="fl">10L</span>, model_params <span class="op">=</span> <span class="va">k_regular_params</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="nvd-plot-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="nvd-plot-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -114,7 +127,7 @@ the others.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

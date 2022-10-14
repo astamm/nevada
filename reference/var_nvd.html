@@ -70,38 +70,47 @@ minimized in order to find the Fréchet mean for a given distance.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">var_nvd</span><span class="op">(</span><span class="va">x</span>, <span class="va">x0</span>, weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, distance <span class="op">=</span> <span class="st">"frobenius"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">var_nvd</span><span class="op">(</span><span class="va">x</span>, <span class="va">x0</span>, weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, distance <span class="op">=</span> <span class="st">"frobenius"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>An <code><a href="nvd.html">nvd</a></code> object listing a sample of networks.</p></dd>
+
+
 <dt>x0</dt>
 <dd><p>A network already in matrix representation around which to
 calculate variance (usually the Fréchet mean but not necessarily). Note
 that the chosen matrix representation is extracted from this parameter.</p></dd>
+
+
 <dt>weights</dt>
 <dd><p>A numeric vector specifying weights for each observation
 (default: equally weighted).</p></dd>
+
+
 <dt>distance</dt>
 <dd><p>A string specifying the distance to be used. Possible choices
 are: hamming, frobenius, spectral or root-euclidean. Default is frobenius.
 When the Fréchet mean is used as <code>x0</code> parameter, the distance should
 match the one used to compute the mean. This is not currently checked.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A positive scalar value evaluating the amount of variability of the
+    
+
+<p>A positive scalar value evaluating the amount of variability of the
 sample around the specified network.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">gnp_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gnp"</span>, n <span class="op">=</span> <span class="fl">10L</span>, model_params <span class="op">=</span> <span class="va">gnp_params</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">var_nvd</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, x0 <span class="op">=</span> <span class="va">m</span>, distance <span class="op">=</span> <span class="st">"frobenius"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">gnp_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="nvd.html">nvd</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gnp"</span>, n <span class="op">=</span> <span class="fl">10L</span>, model_params <span class="op">=</span> <span class="va">gnp_params</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">var_nvd</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, x0 <span class="op">=</span> <span class="va">m</span>, distance <span class="op">=</span> <span class="st">"frobenius"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 120.3</span>
 </code></pre></div>
     </div>
@@ -117,7 +126,7 @@ sample around the specified network.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

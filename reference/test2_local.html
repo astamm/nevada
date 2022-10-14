@@ -56,40 +56,50 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">test2_local</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">y</span>,
-  <span class="va">partition</span>,
-  representation <span class="op">=</span> <span class="st">"adjacency"</span>,
-  distance <span class="op">=</span> <span class="st">"frobenius"</span>,
-  stats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"flipr:t_ip"</span>, <span class="st">"flipr:f_ip"</span><span class="op">)</span>,
-  B <span class="op">=</span> <span class="fl">1000L</span>,
-  alpha <span class="op">=</span> <span class="fl">0.05</span>,
-  test <span class="op">=</span> <span class="st">"exact"</span>,
-  k <span class="op">=</span> <span class="fl">5L</span>,
-  seed <span class="op">=</span> <span class="cn">NULL</span>,
-  verbose <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">test2_local</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">y</span>,</span>
+<span>  <span class="va">partition</span>,</span>
+<span>  representation <span class="op">=</span> <span class="st">"adjacency"</span>,</span>
+<span>  distance <span class="op">=</span> <span class="st">"frobenius"</span>,</span>
+<span>  stats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"flipr:t_ip"</span>, <span class="st">"flipr:f_ip"</span><span class="op">)</span>,</span>
+<span>  B <span class="op">=</span> <span class="fl">1000L</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  test <span class="op">=</span> <span class="st">"exact"</span>,</span>
+<span>  k <span class="op">=</span> <span class="fl">5L</span>,</span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>An <code><a href="nvd.html">nvd</a></code> object listing networks in sample 1.</p></dd>
+
+
 <dt>y</dt>
 <dd><p>An <code><a href="nvd.html">nvd</a></code> object listing networks in sample 2.</p></dd>
+
+
 <dt>partition</dt>
 <dd><p>Either a list or an integer vector specifying vertex
 memberships into partition elements.</p></dd>
+
+
 <dt>representation</dt>
 <dd><p>A string specifying the desired type of representation,
 among: <code>"adjacency"</code>, <code>"laplacian"</code> and <code>"modularity"</code>.
 Defaults to <code>"adjacency"</code>.</p></dd>
+
+
 <dt>distance</dt>
 <dd><p>A string specifying the chosen distance for calculating the
 test statistic, among: <code>"hamming"</code>, <code>"frobenius"</code>,
 <code>"spectral"</code> and <code>"root-euclidean"</code>. Defaults to
 <code>"frobenius"</code>.</p></dd>
+
+
 <dt>stats</dt>
 <dd><p>A character vector specifying the chosen test statistic(s),
 among: <code>"original_edge_count"</code>, <code>"generalized_edge_count"</code>,
@@ -97,61 +107,76 @@ among: <code>"original_edge_count"</code>, <code>"generalized_edge_count"</code>
 statistics based on inter-point distances available in the <strong>flipr</strong>
 package: <code>"flipr:student_ip"</code>, <code>"flipr:fisher_ip"</code>, <code>"flipr:bg_ip"</code>,
 <code>"flipr:energy_ip"</code>, <code>"flipr:cq_ip"</code>. Defaults to <code>c("flipr:student_ip", "flipr:fisher_ip")</code>.</p></dd>
+
+
 <dt>B</dt>
 <dd><p>The number of permutation or the tolerance. If this number is lower
 than <code>1</code>, it is intended as a tolerance. Otherwise, it is intended as
 the number of required permutations. Defaults to <code>1000L</code>.</p></dd>
+
+
 <dt>alpha</dt>
 <dd><p>Significance level for hypothesis testing. If set to 1, the
 function outputs properly adjusted p-values. If lower than 1, then only
 p-values lower than alpha are properly adjusted. Defaults to <code>0.05</code>.</p></dd>
+
+
 <dt>test</dt>
 <dd><p>A character string specifying the formula to be used to compute
 the permutation p-value. Choices are <code>"estimate"</code>, <code>"upper_bound"</code> and
 <code>"exact"</code>. Defaults to <code>"exact"</code> which provides exact tests.</p></dd>
+
+
 <dt>k</dt>
 <dd><p>An integer specifying the density of the minimum spanning tree used
 for the edge count statistics. Defaults to <code>5L</code>.</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>An integer for specifying the seed of the random generator for
 result reproducibility. Defaults to <code>NULL</code>.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Boolean specifying whether information on intermediate tests
 should be printed in the process (default: <code>FALSE</code>).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A length-2 list reporting the adjusted p-values of each element of
+    
+
+<p>A length-2 list reporting the adjusted p-values of each element of
 the partition for the intra- and inter-tests.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
-<span class="r-in"><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
-<span class="r-in">  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>, <span class="fl">0.4</span>,</span>
-<span class="r-in">           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>, <span class="fl">0.4</span>,</span>
-<span class="r-in">           <span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>,</span>
-<span class="r-in">           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span><span class="op">)</span>,</span>
-<span class="r-in">  nrow <span class="op">=</span> <span class="fl">4</span>,</span>
-<span class="r-in">  ncol <span class="op">=</span> <span class="fl">4</span>,</span>
-<span class="r-in">  byrow <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
-<span class="r-in">  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>,</span>
-<span class="r-in">           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>,</span>
-<span class="r-in">           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>,</span>
-<span class="r-in">           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>, <span class="fl">0.4</span><span class="op">)</span>,</span>
-<span class="r-in">  nrow <span class="op">=</span> <span class="fl">4</span>,</span>
-<span class="r-in">  ncol <span class="op">=</span> <span class="fl">4</span>,</span>
-<span class="r-in">  byrow <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="sample2_sbm.html">sample2_sbm</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">68</span>, <span class="va">p1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">17</span>, <span class="fl">17</span>, <span class="fl">17</span>, <span class="fl">17</span><span class="op">)</span>, <span class="va">p2</span>, seed <span class="op">=</span> <span class="fl">1234</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">17</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">17</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">17</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">17</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">test2_local</span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="va">x</span>, <span class="va">sim</span><span class="op">$</span><span class="va">y</span>, <span class="va">m</span>,</span>
-<span class="r-in">            seed <span class="op">=</span> <span class="fl">1234</span>,</span>
-<span class="r-in">            alpha <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span class="r-in">            B <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10</span></span></span>
+<span class="r-in"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>, <span class="fl">0.4</span>,</span></span>
+<span class="r-in"><span>           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>, <span class="fl">0.4</span>,</span></span>
+<span class="r-in"><span>           <span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>,</span></span>
+<span class="r-in"><span>           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  nrow <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>  ncol <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>  byrow <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>,</span></span>
+<span class="r-in"><span>           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>,</span></span>
+<span class="r-in"><span>           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>,</span></span>
+<span class="r-in"><span>           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>, <span class="fl">0.4</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  nrow <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>  ncol <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>  byrow <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="sample2_sbm.html">sample2_sbm</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">68</span>, <span class="va">p1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">17</span>, <span class="fl">17</span>, <span class="fl">17</span>, <span class="fl">17</span><span class="op">)</span>, <span class="va">p2</span>, seed <span class="op">=</span> <span class="fl">1234</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">17</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">17</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">17</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">17</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">test2_local</span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="va">x</span>, <span class="va">sim</span><span class="op">$</span><span class="va">y</span>, <span class="va">m</span>,</span></span>
+<span class="r-in"><span>            seed <span class="op">=</span> <span class="fl">1234</span>,</span></span>
+<span class="r-in"><span>            alpha <span class="op">=</span> <span class="fl">0.05</span>,</span></span>
+<span class="r-in"><span>            B <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $intra</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   E      pvalue truncated</span>
@@ -186,7 +211,7 @@ the partition for the intra- and inter-tests.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

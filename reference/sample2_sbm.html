@@ -62,65 +62,80 @@ the SBM.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">sample2_sbm</span><span class="op">(</span><span class="va">n</span>, <span class="va">nv</span>, <span class="va">p1</span>, <span class="va">b1</span>, p2 <span class="op">=</span> <span class="va">p1</span>, b2 <span class="op">=</span> <span class="va">b1</span>, seed <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sample2_sbm</span><span class="op">(</span><span class="va">n</span>, <span class="va">nv</span>, <span class="va">p1</span>, <span class="va">b1</span>, p2 <span class="op">=</span> <span class="va">p1</span>, b2 <span class="op">=</span> <span class="va">b1</span>, seed <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>n</dt>
 <dd><p>Integer scalar giving the sample size.</p></dd>
+
+
 <dt>nv</dt>
 <dd><p>Integer scalar giving the number of vertices of the generated
 networks, common to all networks in both samples.</p></dd>
+
+
 <dt>p1</dt>
 <dd><p>The matrix giving the Bernoulli rates for the 1st sample. This is a
 KxK matrix, where K is the number of groups. The probability of creating an
 edge between vertices from groups i and j is given by element (i,j). For
 undirected graphs, this matrix must be symmetric.</p></dd>
+
+
 <dt>b1</dt>
 <dd><p>Numeric vector giving the number of vertices in each group for the
 first sample. The sum of the vector must match the number of vertices.</p></dd>
+
+
 <dt>p2</dt>
 <dd><p>The matrix giving the Bernoulli rates for the 2nd sample (default:
 same as 1st sample). This is a KxK matrix, where K is the number of groups.
 The probability of creating an edge between vertices from groups i and j is
 given by element (i,j). For undirected graphs, this matrix must be
 symmetric.</p></dd>
+
+
 <dt>b2</dt>
 <dd><p>Numeric vector giving the number of vertices in each group for the
 second sample (default: same as 1st sample). The sum of the vector must
 match the number of vertices.</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>The seed for the random number generator (default: <code>NULL</code>).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A length-2 list containing the two samples stored as
+    
+
+<p>A length-2 list containing the two samples stored as
 <code><a href="nvd.html">nvd</a></code> objects.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
-<span class="r-in"><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
-<span class="r-in">  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>, <span class="fl">0.4</span>,</span>
-<span class="r-in">           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>, <span class="fl">0.4</span>,</span>
-<span class="r-in">           <span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>,</span>
-<span class="r-in">           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span><span class="op">)</span>,</span>
-<span class="r-in">  nrow <span class="op">=</span> <span class="fl">4</span>,</span>
-<span class="r-in">  ncol <span class="op">=</span> <span class="fl">4</span>,</span>
-<span class="r-in">  byrow <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
-<span class="r-in">  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>,</span>
-<span class="r-in">           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>,</span>
-<span class="r-in">           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>,</span>
-<span class="r-in">           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>, <span class="fl">0.4</span><span class="op">)</span>,</span>
-<span class="r-in">  nrow <span class="op">=</span> <span class="fl">4</span>,</span>
-<span class="r-in">  ncol <span class="op">=</span> <span class="fl">4</span>,</span>
-<span class="r-in">  byrow <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu">sample2_sbm</span><span class="op">(</span><span class="va">n</span>, <span class="fl">68</span>, <span class="va">p1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">17</span>, <span class="fl">17</span>, <span class="fl">17</span>, <span class="fl">17</span><span class="op">)</span>, <span class="va">p2</span>, seed <span class="op">=</span> <span class="fl">1234</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10</span></span></span>
+<span class="r-in"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>, <span class="fl">0.4</span>,</span></span>
+<span class="r-in"><span>           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>, <span class="fl">0.4</span>,</span></span>
+<span class="r-in"><span>           <span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>,</span></span>
+<span class="r-in"><span>           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  nrow <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>  ncol <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>  byrow <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>,</span></span>
+<span class="r-in"><span>           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>,</span></span>
+<span class="r-in"><span>           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>,</span></span>
+<span class="r-in"><span>           <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>, <span class="fl">0.4</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  nrow <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>  ncol <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>  byrow <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu">sample2_sbm</span><span class="op">(</span><span class="va">n</span>, <span class="fl">68</span>, <span class="va">p1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">17</span>, <span class="fl">17</span>, <span class="fl">17</span>, <span class="fl">17</span><span class="op">)</span>, <span class="va">p2</span>, seed <span class="op">=</span> <span class="fl">1234</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -135,7 +150,7 @@ match the number of vertices.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

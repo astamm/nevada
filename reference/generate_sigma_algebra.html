@@ -56,28 +56,31 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">generate_sigma_algebra</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">generate_sigma_algebra</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>Input partition stored as a <code>vertex_partition</code> object.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Sigma-algebra</p>
+    
+
+<p>Sigma-algebra</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/make_ring.html" class="external-link">make_ring</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_vertex_partition.html">as_vertex_partition</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">sa</span> <span class="op">&lt;-</span> <span class="fu">generate_sigma_algebra</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">all_full</span>  <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/modify.html" class="external-link">modify_depth</a></span><span class="op">(</span><span class="va">sa</span>, <span class="fl">2</span>, <span class="op">~</span> <span class="fu"><a href="subgraphs.html">subgraph_full</a></span> <span class="op">(</span><span class="va">g</span>, <span class="va">.x</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">all_intra</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/modify.html" class="external-link">modify_depth</a></span><span class="op">(</span><span class="va">sa</span>, <span class="fl">2</span>, <span class="op">~</span> <span class="fu"><a href="subgraphs.html">subgraph_intra</a></span><span class="op">(</span><span class="va">g</span>, <span class="va">.x</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">all_inter</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/modify.html" class="external-link">modify_depth</a></span><span class="op">(</span><span class="va">sa</span>, <span class="fl">2</span>, <span class="op">~</span> <span class="fu"><a href="subgraphs.html">subgraph_inter</a></span><span class="op">(</span><span class="va">g</span>, <span class="va">.x</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/make_ring.html" class="external-link">make_ring</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_vertex_partition.html">as_vertex_partition</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sa</span> <span class="op">&lt;-</span> <span class="fu">generate_sigma_algebra</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">all_full</span>  <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/modify.html" class="external-link">modify_depth</a></span><span class="op">(</span><span class="va">sa</span>, <span class="fl">2</span>, <span class="op">~</span> <span class="fu"><a href="subgraphs.html">subgraph_full</a></span> <span class="op">(</span><span class="va">g</span>, <span class="va">.x</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">all_intra</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/modify.html" class="external-link">modify_depth</a></span><span class="op">(</span><span class="va">sa</span>, <span class="fl">2</span>, <span class="op">~</span> <span class="fu"><a href="subgraphs.html">subgraph_intra</a></span><span class="op">(</span><span class="va">g</span>, <span class="va">.x</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">all_inter</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/modify.html" class="external-link">modify_depth</a></span><span class="op">(</span><span class="va">sa</span>, <span class="fl">2</span>, <span class="op">~</span> <span class="fu"><a href="subgraphs.html">subgraph_inter</a></span><span class="op">(</span><span class="va">g</span>, <span class="va">.x</span><span class="op">)</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -92,7 +95,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

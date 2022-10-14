@@ -58,24 +58,24 @@ tests proposed in this package.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">power2</span><span class="op">(</span>
-  model1 <span class="op">=</span> <span class="st">"gnp"</span>,
-  model2 <span class="op">=</span> <span class="st">"k_regular"</span>,
-  n1 <span class="op">=</span> <span class="fl">20L</span>,
-  n2 <span class="op">=</span> <span class="fl">20L</span>,
-  num_vertices <span class="op">=</span> <span class="fl">25L</span>,
-  model1_params <span class="op">=</span> <span class="cn">NULL</span>,
-  model2_params <span class="op">=</span> <span class="cn">NULL</span>,
-  representation <span class="op">=</span> <span class="st">"adjacency"</span>,
-  distance <span class="op">=</span> <span class="st">"frobenius"</span>,
-  stats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"flipr:t_ip"</span>, <span class="st">"flipr:f_ip"</span><span class="op">)</span>,
-  B <span class="op">=</span> <span class="fl">1000L</span>,
-  alpha <span class="op">=</span> <span class="fl">0.05</span>,
-  test <span class="op">=</span> <span class="st">"exact"</span>,
-  k <span class="op">=</span> <span class="fl">5L</span>,
-  R <span class="op">=</span> <span class="fl">1000L</span>,
-  seed <span class="op">=</span> <span class="fl">1234</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">power2</span><span class="op">(</span></span>
+<span>  model1 <span class="op">=</span> <span class="st">"gnp"</span>,</span>
+<span>  model2 <span class="op">=</span> <span class="st">"k_regular"</span>,</span>
+<span>  n1 <span class="op">=</span> <span class="fl">20L</span>,</span>
+<span>  n2 <span class="op">=</span> <span class="fl">20L</span>,</span>
+<span>  num_vertices <span class="op">=</span> <span class="fl">25L</span>,</span>
+<span>  model1_params <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  model2_params <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  representation <span class="op">=</span> <span class="st">"adjacency"</span>,</span>
+<span>  distance <span class="op">=</span> <span class="st">"frobenius"</span>,</span>
+<span>  stats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"flipr:t_ip"</span>, <span class="st">"flipr:f_ip"</span><span class="op">)</span>,</span>
+<span>  B <span class="op">=</span> <span class="fl">1000L</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  test <span class="op">=</span> <span class="st">"exact"</span>,</span>
+<span>  k <span class="op">=</span> <span class="fl">5L</span>,</span>
+<span>  R <span class="op">=</span> <span class="fl">1000L</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">1234</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -84,32 +84,50 @@ tests proposed in this package.</p>
 <dd><p>A string specifying the model to be used for generating the
 first sample. Choices are <code>"sbm"</code>, <code>"k_regular"</code>, <code>"gnp"</code>, <code>"smallworld"</code>,
 <code>"pa"</code>, <code>"poisson"</code> and <code>"binomial"</code>. Defaults to <code>"gnp"</code>.</p></dd>
+
+
 <dt>model2</dt>
 <dd><p>A string specifying the model to be used for generating the
 second sample. Choices are <code>"sbm"</code>, <code>"k_regular"</code>, <code>"gnp"</code>, <code>"smallworld"</code>,
 <code>"pa"</code>, <code>"poisson"</code> and <code>"binomial"</code>. Defaults to <code>"k_regular"</code>.</p></dd>
+
+
 <dt>n1</dt>
 <dd><p>The size of the first sample. Defaults to <code>20L</code>.</p></dd>
+
+
 <dt>n2</dt>
 <dd><p>The size of the second sample. Defaults to <code>20L</code>.</p></dd>
+
+
 <dt>num_vertices</dt>
 <dd><p>The number of nodes in the generated graphs. Defaults to
 <code>25L</code>.</p></dd>
+
+
 <dt>model1_params</dt>
 <dd><p>A named list setting the parameters of the first chosen
 model. Defaults to <code>list(p = 1/3)</code>.</p></dd>
+
+
 <dt>model2_params</dt>
 <dd><p>A named list setting the parameters of the second chosen
 model. Defaults to <code>list(k = 8L)</code>.</p></dd>
+
+
 <dt>representation</dt>
 <dd><p>A string specifying the desired type of representation,
 among: <code>"adjacency"</code>, <code>"laplacian"</code> and <code>"modularity"</code>.
 Defaults to <code>"adjacency"</code>.</p></dd>
+
+
 <dt>distance</dt>
 <dd><p>A string specifying the chosen distance for calculating the
 test statistic, among: <code>"hamming"</code>, <code>"frobenius"</code>,
 <code>"spectral"</code> and <code>"root-euclidean"</code>. Defaults to
 <code>"frobenius"</code>.</p></dd>
+
+
 <dt>stats</dt>
 <dd><p>A character vector specifying the chosen test statistic(s),
 among: <code>"original_edge_count"</code>, <code>"generalized_edge_count"</code>,
@@ -117,29 +135,44 @@ among: <code>"original_edge_count"</code>, <code>"generalized_edge_count"</code>
 statistics based on inter-point distances available in the <strong>flipr</strong>
 package: <code>"flipr:student_ip"</code>, <code>"flipr:fisher_ip"</code>, <code>"flipr:bg_ip"</code>,
 <code>"flipr:energy_ip"</code>, <code>"flipr:cq_ip"</code>. Defaults to <code>c("flipr:student_ip", "flipr:fisher_ip")</code>.</p></dd>
+
+
 <dt>B</dt>
 <dd><p>The number of permutation or the tolerance. If this number is lower
 than <code>1</code>, it is intended as a tolerance. Otherwise, it is intended as
 the number of required permutations. Defaults to <code>1000L</code>.</p></dd>
+
+
 <dt>alpha</dt>
 <dd><p>Significance level for hypothesis testing. Defaults to <code>0.05</code>.</p></dd>
+
+
 <dt>test</dt>
 <dd><p>A character string specifying the formula to be used to compute
 the permutation p-value. Choices are <code>"estimate"</code>, <code>"upper_bound"</code> and
 <code>"exact"</code>. Defaults to <code>"exact"</code> which provides exact tests.</p></dd>
+
+
 <dt>k</dt>
 <dd><p>An integer specifying the density of the minimum spanning tree used
 for the edge count statistics. Defaults to <code>5L</code>.</p></dd>
+
+
 <dt>R</dt>
 <dd><p>Number of Monte-Carlo trials used to estimate the power. Defaults to
 <code>1000L</code>.</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>An integer specifying the random generator seed. Defaults to
 `1234.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A numeric value estimating the power of the test.</p>
+    
+
+<p>A numeric value estimating the power of the test.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -149,15 +182,15 @@ allows to make sure that all our permutation tests are exact.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">gnp_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">k_regular_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">8L</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">power2</span><span class="op">(</span></span>
-<span class="r-in">  model1_params <span class="op">=</span> <span class="va">gnp_params</span>,</span>
-<span class="r-in">  model2_params <span class="op">=</span> <span class="va">k_regular_params</span>,</span>
-<span class="r-in">  R <span class="op">=</span> <span class="fl">10</span>,</span>
-<span class="r-in">  B <span class="op">=</span> <span class="fl">100</span>,</span>
-<span class="r-in">  seed <span class="op">=</span> <span class="fl">1234</span></span>
-<span class="r-in"><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">gnp_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">k_regular_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">8L</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">power2</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  model1_params <span class="op">=</span> <span class="va">gnp_params</span>,</span></span>
+<span class="r-in"><span>  model2_params <span class="op">=</span> <span class="va">k_regular_params</span>,</span></span>
+<span class="r-in"><span>  R <span class="op">=</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span>  B <span class="op">=</span> <span class="fl">100</span>,</span></span>
+<span class="r-in"><span>  seed <span class="op">=</span> <span class="fl">1234</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1</span>
 </code></pre></div>
     </div>
@@ -173,7 +206,7 @@ allows to make sure that all our permutation tests are exact.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
