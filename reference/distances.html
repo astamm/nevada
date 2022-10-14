@@ -60,7 +60,13 @@ networks.</p>
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dist_hamming</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, representation <span class="op">=</span> <span class="st">"laplacian"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">dist_frobenius</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, representation <span class="op">=</span> <span class="st">"laplacian"</span><span class="op">)</span></span>
+<span><span class="fu">dist_frobenius</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">y</span>,</span>
+<span>  representation <span class="op">=</span> <span class="st">"laplacian"</span>,</span>
+<span>  matching_iterations <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  target_matrix <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">dist_spectral</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, representation <span class="op">=</span> <span class="st">"laplacian"</span><span class="op">)</span></span>
 <span></span>
@@ -70,19 +76,34 @@ networks.</p>
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
-<dd><p>An <code><a href="https://rdrr.io/pkg/igraph/man/aaa-igraph-package.html" class="external-link">igraph</a></code> object or a matrix representing an
-underlying network.</p></dd>
+<dd><p>An <code><a href="https://rdrr.io/pkg/igraph/man/aaa-igraph-package.html" class="external-link">igraph::igraph</a></code> object or a matrix representing an underlying
+network.</p></dd>
 
 
 <dt>y</dt>
-<dd><p>An <code><a href="https://rdrr.io/pkg/igraph/man/aaa-igraph-package.html" class="external-link">igraph</a></code> object or a matrix representing an
-underlying network. Should have the same number of vertices as <code>x</code>.</p></dd>
+<dd><p>An <code><a href="https://rdrr.io/pkg/igraph/man/aaa-igraph-package.html" class="external-link">igraph::igraph</a></code> object or a matrix representing an underlying
+network. Should have the same number of vertices as <code>x</code>.</p></dd>
 
 
 <dt>representation</dt>
 <dd><p>A string specifying the desired type of representation,
 among: <code>"adjacency"</code>, <code>"laplacian"</code>, <code>"modularity"</code> or
 <code>"graphon"</code>. Default is <code>"laplacian"</code>.</p></dd>
+
+
+<dt>matching_iterations</dt>
+<dd><p>An integer value specifying the maximum number of
+runs when looking for the optimal permutation for graph matching. Defaults
+to <code>0L</code> in which case no matching is done.</p></dd>
+
+
+<dt>target_matrix</dt>
+<dd><p>A square numeric matrix of size <code>n</code> equal to the order
+of the graphs specifying a target matrix towards which the initial doubly
+stochastic matrix is shrunk each time the graph matching algorithm fails to
+provide a good minimum. Defaults to <code>NULL</code> in which case the target matrix
+is automatically chosen between the identity matrix or the uniform matrix
+on the n-simplex.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -117,13 +138,13 @@ representation.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/sample_gnp.html" class="external-link">sample_gnp</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">0.1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">g2</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/sample_gnp.html" class="external-link">sample_gnp</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">0.2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">dist_hamming</span><span class="op">(</span><span class="va">g1</span>, <span class="va">g2</span>, <span class="st">"adjacency"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2842105</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2631579</span>
 <span class="r-in"><span><span class="fu">dist_frobenius</span><span class="op">(</span><span class="va">g1</span>, <span class="va">g2</span>, <span class="st">"adjacency"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10.3923</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
 <span class="r-in"><span><span class="fu">dist_spectral</span><span class="op">(</span><span class="va">g1</span>, <span class="va">g2</span>, <span class="st">"laplacian"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 9.746055</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 8.790327</span>
 <span class="r-in"><span><span class="fu">dist_root_euclidean</span><span class="op">(</span><span class="va">g1</span>, <span class="va">g2</span>, <span class="st">"laplacian"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10.39778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10.21795</span>
 </code></pre></div>
     </div>
   </div>
