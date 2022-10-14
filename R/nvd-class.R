@@ -123,7 +123,14 @@ as_nvd <- function(obj) {
   }
 
   if (!input_ok)
-    cli::cli_abort("List elements should be igraph objects.")
+    cli::cli_abort("All elements in the input list should be {.cls igraph} objects.")
+
+  # Here we handle graphs of different orders by adding as many vertices as
+  # necessary to match the order of the largest graph (a.k.a pushing graphs into
+  # graph space structure).
+  num_vertices <- purrr::map_int(obj, igraph::gorder)
+  max_num_vertices <- max(num_vertices)
+  obj <- purrr::map2(obj, num_vertices, ~ igraph::add_vertices(.x, max_num_vertices - .y))
 
   class(obj) <- c("nvd", "list")
   obj
