@@ -9,7 +9,8 @@
 #' @param num_vertices An integer specifying the order of the graphs to be
 #'   generated (i.e. the number of nodes). Defaults to `25L`.
 #' @param model_params A named list setting the parameters of the model you are
-#'   considering. Defaults to `NULL`.
+#'   considering. Defaults to `list(dim = 1L, nei = 4L, p = 0.15)` which sets
+#'   defaults parameters for the Watts-Strogatz small-world model generator.
 #' @param seed An integer specifying the random generator seed. Defaults to
 #'   `1234`.
 #'
@@ -23,7 +24,7 @@
 nvd <- function(model = "smallworld",
                 n = 1L,
                 num_vertices = 25L,
-                model_params = NULL,
+                model_params = list(dim = 1L, nei = 4L, p = 0.15),
                 seed = 1234) {
   if (!is.null(seed))
     withr::local_seed(seed)
