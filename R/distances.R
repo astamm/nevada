@@ -78,12 +78,12 @@ dist_frobenius <- function(x, y,
 
     if (is.null(target_matrix)) {
       n <- igraph::gorder(x)
-      target_matrix <- diag(1 / n, n)
+      target_matrix <- diag(1, n)
       l <- align_graphs(x, y, Ax, Ay, target_matrix = target_matrix, alpha = 1)
       dy <- dist_frobenius(x, l$y, representation = representation)
       dx <- dist_frobenius(l$x, y, representation = representation)
       d1 <- min(dx, dy)
-      unif_matrix <- matrix(1 / n^2, n, n)
+      unif_matrix <- matrix(1, n, n) / n
       l <- align_graphs(x, y, Ax, Ay, target_matrix = unif_matrix, alpha = 1)
       dy <- dist_frobenius(x, l$y, representation = representation)
       dx <- dist_frobenius(l$x, y, representation = representation)
