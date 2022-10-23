@@ -57,7 +57,8 @@ Imports:
     withr,
     tsne,
     umap,
-    furrr
+    furrr,
+    rgeomstats (>= 0.0.0.9000)
 RoxygenNote: 7.2.1
 Roxygen: list(markdown = TRUE)
 URL: https://astamm.github.io/nevada/,
@@ -69,3 +70,5 @@ Suggests:
     covr
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo
+Remotes:  
+    lmjl-alea/rgeomstats

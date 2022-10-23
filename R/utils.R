@@ -201,7 +201,8 @@ solve_partial <- function(M) {
 
 align_graphs <- function(x, y, Ax, Ay, target_matrix, alpha = 0, max_iter = 20) {
   n <- igraph::gorder(x)
-  init <- alpha * target_matrix + (1 - alpha) * matrix(sample_simplex(n^2), n, n)
+  P <- sample_doubly_stochastic_matrices(n = 1, matrix_size = n)
+  init <- alpha * target_matrix + (1 - alpha) * P
   perm <- igraph::match_vertices(Ax, Ay, m = 0, iteration = max_iter, start = init)$corr[, 2]
   yp <- igraph::permute(y, perm)
   perm <- igraph::match_vertices(Ay, Ax, m = 0, iteration = max_iter, start = init)$corr[, 2]
@@ -211,6 +212,11 @@ align_graphs <- function(x, y, Ax, Ay, target_matrix, alpha = 0, max_iter = 20) 
 
 sample_simplex <- function(n) {
   diff(sort(c(stats::runif(n - 1), 0, 1)))
+}
+
+sample_doubly_stochastic_matrices <- function(n, matrix_size) {
+  so3 <- rgeomstats::SpecialOrthogonal(n = matrix_size)
+  so3$random_point(n = n)^2
 }
 
 linear_index <- function(n) {
