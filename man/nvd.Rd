@@ -8,7 +8,7 @@ nvd(
   model = "smallworld",
   n = 1L,
   num_vertices = 25L,
-  model_params = NULL,
+  model_params = list(dim = 1L, nei = 4L, p = 0.15),
   seed = 1234
 )
 }
@@ -23,7 +23,8 @@ nvd(
 generated (i.e. the number of nodes). Defaults to \code{25L}.}
 
 \item{model_params}{A named list setting the parameters of the model you are
-considering. Defaults to \code{NULL}.}
+considering. Defaults to \code{list(dim = 1L, nei = 4L, p = 0.15)} which sets
+defaults parameters for the Watts-Strogatz small-world model generator.}
 
 \item{seed}{An integer specifying the random generator seed. Defaults to
 \code{1234}.}

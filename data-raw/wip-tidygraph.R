@@ -15,7 +15,7 @@ as_tbl_graph.nvd <- function(x, directed = TRUE, ...) {
     as_tbl_graph(directed = directed)
 }
 
-x <- nvd("pa", 6)
+x <- nvd("pa", 6, model_params = list(power = , m = d))
 xx <- purrr::map(x, igraph::as_edgelist, names = FALSE) |>
   purrr::imap(~ cbind(.x, .y)) |>
   purrr::map(`colnames<-`, c("from", "to", "id")) |>
