@@ -75,8 +75,8 @@ distances between networks.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">test2_global</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  <span class="va">y</span>,</span>
-<span>  representation <span class="op">=</span> <span class="st">"adjacency"</span>,</span>
-<span>  distance <span class="op">=</span> <span class="st">"frobenius"</span>,</span>
+<span>  representation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"adjacency"</span>, <span class="st">"laplacian"</span>, <span class="st">"modularity"</span>, <span class="st">"transitivity"</span><span class="op">)</span>,</span>
+<span>  distance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"frobenius"</span>, <span class="st">"hamming"</span>, <span class="st">"spectral"</span>, <span class="st">"root-euclidean"</span><span class="op">)</span>,</span>
 <span>  stats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"flipr:t_ip"</span>, <span class="st">"flipr:f_ip"</span><span class="op">)</span>,</span>
 <span>  B <span class="op">=</span> <span class="fl">1000L</span>,</span>
 <span>  test <span class="op">=</span> <span class="st">"exact"</span>,</span>
@@ -89,11 +89,14 @@ distances between networks.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>An <code><a href="nvd.html">nvd</a></code> object listing networks in sample 1.</p></dd>
+<dd><p>Either an object of class <a href="nvd.html">nvd</a> listing networks in sample 1 or a
+distance matrix of size \(n_1 + n_2\).</p></dd>
 
 
 <dt>y</dt>
-<dd><p>An <code><a href="nvd.html">nvd</a></code> object listing networks in sample 2.</p></dd>
+<dd><p>Either an object of class <a href="nvd.html">nvd</a> listing networks in sample 2 or an
+integer value specifying the size of sample 1 or an integer vector
+specifying the indices of the observations belonging to sample 1.</p></dd>
 
 
 <dt>representation</dt>
