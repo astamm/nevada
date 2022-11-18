@@ -7,8 +7,8 @@
 test2_global(
   x,
   y,
-  representation = "adjacency",
-  distance = "frobenius",
+  representation = c("adjacency", "laplacian", "modularity", "transitivity"),
+  distance = c("frobenius", "hamming", "spectral", "root-euclidean"),
   stats = c("flipr:t_ip", "flipr:f_ip"),
   B = 1000L,
   test = "exact",
@@ -18,9 +18,12 @@ test2_global(
 )
 }
 \arguments{
-\item{x}{An \code{\link{nvd}} object listing networks in sample 1.}
+\item{x}{Either an object of class \link{nvd} listing networks in sample 1 or a
+distance matrix of size \eqn{n_1 + n_2}.}
 
-\item{y}{An \code{\link{nvd}} object listing networks in sample 2.}
+\item{y}{Either an object of class \link{nvd} listing networks in sample 2 or an
+integer value specifying the size of sample 1 or an integer vector
+specifying the indices of the observations belonging to sample 1.}
 
 \item{representation}{A string specifying the desired type of representation,
 among: \code{"adjacency"}, \code{"laplacian"} and \code{"modularity"}.

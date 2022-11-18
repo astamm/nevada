@@ -8,8 +8,11 @@
 #' used, together with several choices of network matrix representations and
 #' distances between networks.
 #'
-#' @param x An \code{\link{nvd}} object listing networks in sample 1.
-#' @param y An \code{\link{nvd}} object listing networks in sample 2.
+#' @param x Either an object of class [nvd] listing networks in sample 1 or a
+#'   distance matrix of size \eqn{n_1 + n_2}.
+#' @param y Either an object of class [nvd] listing networks in sample 2 or an
+#'   integer value specifying the size of sample 1 or an integer vector
+#'   specifying the indices of the observations belonging to sample 1.
 #' @param representation A string specifying the desired type of representation,
 #'   among: \code{"adjacency"}, \code{"laplacian"} and \code{"modularity"}.
 #'   Defaults to \code{"adjacency"}.
@@ -59,40 +62,73 @@
 #' t2 <- test2_global(x, y, representation = "modularity")
 #' t2$pvalue
 test2_global <- function(x, y,
-                         representation = "adjacency",
-                         distance = "frobenius",
+                         representation = c("adjacency", "laplacian", "modularity", "transitivity"),
+                         distance = c("frobenius", "hamming", "spectral", "root-euclidean"),
                          stats = c("flipr:t_ip", "flipr:f_ip"),
                          B = 1000L,
                          test = "exact",
                          k = 5L,
                          seed = NULL,
                          ...) {
-  n1 <- length(x)
-  n2 <- length(y)
-  n <- n1 + n2
+  dist_input <- inherits(x, "dist")
+  if (dist_input) {
+    if (!is.integer(y))
+      cli::cli_abort(
+        "When the input {.arg x} is an object of class {.cls dist}, the input
+        {.arg y} should be an integer value specifying the size of the first
+        sample or an integer vector specifying the indices of the observations
+        belonging to the first sample."
+      )
+    if (length(y) > 1) {
+      n1 <- length(y)
+      n <- attr(x, "Size")
+      n2 <- n - n1
+      dy <- setdiff(1:n, y)
+      xm1 <- as.matrix(x)
+      xm2 <- xm1
+      xm2[1:n1, 1:n1] <- xm1[y, y]
+      xm2[(n1+1):n, (n1+1):n] <- xm1[dy, dy]
+      xm2[1:n1, (n1+1):n] <- xm1[y, dy]
+      xm2[(n1+1):n, 1:n1] <- xm1[dy, y]
+      x <- stats::as.dist(xm2)
+    } else
+      n1 <- y
+  } else {
+    n1 <- length(x)
+    n2 <- length(y)
+    n <- n1 + n2
+  }
 
-  representation <- match.arg(
-    representation,
-    c("adjacency", "laplacian", "modularity", "transitivity")
-  )
-
-  distance <- match.arg(
-    distance,
-    c("hamming", "frobenius", "spectral", "root-euclidean")
-  )
+  representation <- rlang::arg_match(representation)
+  distance <- rlang::arg_match(distance)
 
   use_frechet_stats <- any(grepl("student_euclidean", stats)) ||
     any(grepl("welch_euclidean", stats))
+
   if (use_frechet_stats &&
       (any(grepl("_ip", stats)) ||
        any(grepl("edge_count", stats))))
-    cli::cli_abort("It is not possible to mix statistics based on Frechet means and statistics based on inter-point distances.")
+    cli::cli_abort(
+      "It is not possible to mix statistics based on Frechet means and
+      statistics based on inter-point distances."
+    )
+
+  if (use_frechet_stats && dist_input)
+    cli::cli_abort(
+      "You cannot use statistics based on Frechet mean computations when using a
+      distance matrix as input."
+    )
 
   ecp <- NULL
   if (use_frechet_stats)
     d <- repr_nvd(x, y, representation = representation)
   else {
-    d <- dist_nvd(x, y, representation = representation, distance = distance, ...)
+    d <- if (dist_input) x else dist_nvd(
+      x, y,
+      representation = representation,
+      distance = distance,
+      ...
+    )
     if (any(grepl("edge_count", stats)))
       ecp <- edge_count_global_variables(d, n1, k = k)
   }

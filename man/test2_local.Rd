@@ -20,9 +20,12 @@ test2_local(
 )
 }
 \arguments{
-\item{x}{An \code{\link{nvd}} object listing networks in sample 1.}
+\item{x}{Either an object of class \link{nvd} listing networks in sample 1 or a
+distance matrix of size \eqn{n_1 + n_2}.}
 
-\item{y}{An \code{\link{nvd}} object listing networks in sample 2.}
+\item{y}{Either an object of class \link{nvd} listing networks in sample 2 or an
+integer value specifying the size of sample 1 or an integer vector
+specifying the indices of the observations belonging to sample 1.}
 
 \item{partition}{Either a list or an integer vector specifying vertex
 memberships into partition elements.}
