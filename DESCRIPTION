@@ -59,7 +59,7 @@ Imports:
     umap,
     furrr,
     rgeomstats
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 URL: https://astamm.github.io/nevada/,
     https://github.com/astamm/nevada/

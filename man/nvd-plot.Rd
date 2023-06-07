@@ -6,14 +6,18 @@
 \alias{plot.nvd}
 \title{MDS Visualization of Network Distributions}
 \usage{
-\method{autoplot}{nvd}(x, y, method = "mds", ...)
+\method{autoplot}{nvd}(object, memberships = rep(1, length(object)), method = "mds", ...)
 
-\method{plot}{nvd}(x, y, method = "mds", ...)
+\method{plot}{nvd}(x, method = "mds", ...)
 }
 \arguments{
-\item{x}{A \code{\link{nvd}} object.}
+\item{object, x}{A list containing two samples of network-valued data stored
+as objects of class \code{\link{nvd}}.}
 
-\item{y}{A \code{\link{nvd}} object.}
+\item{memberships}{An integer vector specifying the membership of each
+network to a specific sample. Defaults to \code{rep(1, length(nvd))} which
+assumes that all networks in the input \code{\link{nvd}} object belong to a single
+group.}
 
 \item{method}{A string specifying which dimensionality reduction method to
 use for projecting the samples into the cartesian plane. Choices are
@@ -46,6 +50,8 @@ gnp_params <- list(p = 1/3)
 k_regular_params <- list(k = 8L)
 x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
 y <- nvd(model = "k_regular", n = 10L, model_params = k_regular_params)
-ggplot2::autoplot(x, y)
-plot(x, y)
+mb <- c(rep(1, length(x)), rep(2, length(y)))
+z <- as_nvd(c(x, y))
+ggplot2::autoplot(z, memberships = mb)
+plot(z, memberships = mb)
 }
