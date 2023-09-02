@@ -15,7 +15,7 @@ There were no ERRORs or WARNINGs.
 There was 2 NOTEs:
 
     * checking CRAN incoming feasibility ... NOTE
-    Maintainer: 'Aymeric Stamm <aymeric.stamm@math.cnrs.fr>'
+    Maintainer: 'Aymeric Stamm <aymeric.stamm@cnrs.fr>'
 
     New submission
 
