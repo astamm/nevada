@@ -1,15 +1,8 @@
-## Resubmission
-This is a resubmission. In this version I have:
-
-* Written package names, software names and API (application programming interface) names in single quotes in `Title` and `Description` fields in the DESCRIPTION file.
-
-* Changed 'Two types of inference is provided' to 'Two types of inference are provided' in the `Description` field of the DESCRIPTION file.
-
 ## Test environments
-* local macOS R installation, R 4.1.0
-* macOS latest release (via [R-CMD-check](https://github.com/r-lib/actions/blob/master/examples/check-standard.yaml) github action)
-* windows latest release (via [R-CMD-check](https://github.com/r-lib/actions/blob/master/examples/check-standard.yaml) github action)
-* ubuntu 20.04 latest both release and devel (via [R-CMD-check](https://github.com/r-lib/actions/blob/master/examples/check-standard.yaml) github action)
+* local macOS R installation, R 4.3.1
+* macOS latest release (via [R-CMD-check](https://github.com/astamm/nevada/actions/workflows/R-CMD-check.yaml) github action)
+* windows latest release (via [R-CMD-check](https://github.com/astamm/nevada/actions/workflows/R-CMD-check.yaml) github action)
+* ubuntu 20.04 latest both release and devel (via [R-CMD-check](https://github.com/astamm/nevada/actions/workflows/R-CMD-check.yaml) github action)
 * [win-builder](https://win-builder.r-project.org/) (release and devel)
 * [R-hub](https://builder.r-hub.io)
   - Windows Server 2008 R2 SP1, R-devel, 32/64 bit

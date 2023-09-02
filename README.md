@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![check-standard](https://github.com/astamm/nevada/workflows/R-CMD-check/badge.svg)](https://github.com/astamm/nevada/actions)
+[![R-CMD-check](https://github.com/astamm/nevada/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/astamm/nevada/actions/workflows/R-CMD-check.yaml)
 [![test-coverage](https://github.com/astamm/nevada/workflows/test-coverage/badge.svg)](https://github.com/astamm/nevada/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/astamm/nevada/branch/master/graph/badge.svg)](https://codecov.io/gh/astamm/nevada?branch=master)
@@ -61,8 +61,16 @@ information and perform the permutation test.
 ``` r
 set.seed(123)
 n <- 10L
-x <- nevada::nvd("smallworld", n)
-y <- nevada::nvd("pa", n)
+x <- nevada::nvd(
+  model = "smallworld", 
+  n = n, 
+  model_params = list(dim = 1L, nei = 4L, p = 0.15)
+)
+y <- nevada::nvd(
+  model = "pa", 
+  n = n, 
+  model_params = list(power = 1L, m = NULL, directed = FALSE)
+)
 ```
 
 By default the `nvd()` constructor generates networks with 25 nodes. One
@@ -94,28 +102,28 @@ t1_local <- nevada::test2_local(x, y, partition, seed = 1234)
 t1_local
 $intra
 # A tibble: 5 × 3
-  E     pvalue truncated
-  <chr>  <dbl> <lgl>    
-1 P1     0.549 TRUE     
-2 P2     0.549 TRUE     
-3 P3     0.549 TRUE     
-4 P4     0.549 TRUE     
-5 P5     0.549 TRUE     
+  E      pvalue truncated
+  <chr>   <dbl> <lgl>    
+1 P1    0.175   TRUE     
+2 P2    0.175   TRUE     
+3 P3    0.175   TRUE     
+4 P4    0.0859  TRUE     
+5 P5    0.00299 FALSE    
 
 $inter
 # A tibble: 10 × 4
    E1    E2      pvalue truncated
    <chr> <chr>    <dbl> <lgl>    
- 1 P1    P2    0.000996 FALSE    
- 2 P1    P3    0.000996 FALSE    
- 3 P1    P4    0.000996 FALSE    
- 4 P1    P5    0.000996 FALSE    
- 5 P2    P3    0.000996 FALSE    
- 6 P2    P4    0.000996 FALSE    
+ 1 P1    P2    0.175    TRUE     
+ 2 P1    P3    0.175    TRUE     
+ 3 P1    P4    0.0859   TRUE     
+ 4 P1    P5    0.0240   FALSE    
+ 5 P2    P3    0.175    TRUE     
+ 6 P2    P4    0.00499  FALSE    
  7 P2    P5    0.000996 FALSE    
- 8 P3    P4    0.000996 FALSE    
- 9 P3    P5    0.000996 FALSE    
-10 P4    P5    0.000996 FALSE    
+ 8 P3    P4    0.0140   FALSE    
+ 9 P3    P5    0.00200  FALSE    
+10 P4    P5    0.0420   FALSE    
 ```
 
 ### Example 2
@@ -141,7 +149,7 @@ question:
 ``` r
 t2 <- nevada::test2_global(x, y, seed = 1234)
 t2$pvalue
-[1] 0.2257715
+[1] 0.9999973
 ```
 
 The p-value is larger than 5% or even 10%, leading us to failing to

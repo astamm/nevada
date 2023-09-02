@@ -15,7 +15,7 @@ as_tbl_graph.nvd <- function(x, directed = TRUE, ...) {
     as_tbl_graph(directed = directed)
 }
 
-x <- nvd("pa", 6, model_params = list(power = , m = d))
+x <- nvd("pa", 6, model_params = list(power = 1, m = 1, directed = FALSE))
 xx <- purrr::map(x, igraph::as_edgelist, names = FALSE) |>
   purrr::imap(~ cbind(.x, .y)) |>
   purrr::map(`colnames<-`, c("from", "to", "id")) |>
@@ -25,7 +25,7 @@ xx <- purrr::map(x, igraph::as_edgelist, names = FALSE) |>
   mutate(Popularity = centrality_degree(mode = 'in'))
 
 ggraph(xx, layout = 'kk') +
-  geom_edge_fan(aes(alpha = stat(index)), show.legend = FALSE) +
+  geom_edge_fan(aes(alpha = after_stat(index)), show.legend = FALSE) +
   geom_node_point(aes(size = Popularity)) +
   facet_edges(~id, nrow = 2) +
   theme_graph(foreground = 'steelblue', fg_text_colour = 'white')
@@ -61,6 +61,12 @@ p2 <- matrix(
 )
 sim <- sample2_sbm(n, 68, p1, c(17, 17, 17, 17), p2, seed = 1234)
 m <- as.integer(c(rep(1, 17), rep(2, 17), rep(3, 17), rep(4, 17)))
+
+ggraph(as_tbl_graph(sim[[1]]), layout = 'stress') +
+  geom_edge_fan(aes(alpha = after_stat(index)), show.legend = FALSE) +
+  facet_edges(vars(id), nrow = 2) +
+  theme_graph(foreground = 'steelblue', fg_text_colour = 'white')
+
 res <- test2_local(sim$x, sim$y, m,
                    seed = 1234,
                    # alpha = 0.05,

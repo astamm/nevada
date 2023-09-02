@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # Overview <a href='https://astamm.github.io/nevada/'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
-[![check-standard](https://github.com/astamm/nevada/workflows/R-CMD-check/badge.svg)](https://github.com/astamm/nevada/actions)
+[![R-CMD-check](https://github.com/astamm/nevada/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/astamm/nevada/actions/workflows/R-CMD-check.yaml)
 [![test-coverage](https://github.com/astamm/nevada/workflows/test-coverage/badge.svg)](https://github.com/astamm/nevada/actions)
 [![Codecov test coverage](https://codecov.io/gh/astamm/nevada/branch/master/graph/badge.svg)](https://codecov.io/gh/astamm/nevada?branch=master)
 [![pkgdown](https://github.com/astamm/nevada/workflows/pkgdown/badge.svg)](https://github.com/astamm/nevada/actions)
@@ -48,8 +48,16 @@ In this first example, we compare two populations of networks generated accordin
 ```{r}
 set.seed(123)
 n <- 10L
-x <- nevada::nvd("smallworld", n)
-y <- nevada::nvd("pa", n)
+x <- nevada::nvd(
+  model = "smallworld", 
+  n = n, 
+  model_params = list(dim = 1L, nei = 4L, p = 0.15)
+)
+y <- nevada::nvd(
+  model = "pa", 
+  n = n, 
+  model_params = list(power = 1L, m = NULL, directed = FALSE)
+)
 ```
 
 By default the `nvd()` constructor generates networks with 25 nodes. One can wonder whether there is a difference between the distributions that generated these two samples (which there is given the models that we used). The `test2_global()` function provides an answer to this question:
