@@ -40,7 +40,6 @@ Description: A flexible statistical framework for network-valued data analysis.
     autism" <doi:10.1111/rssc.12463>.
 License: GPL (>= 3)
 Encoding: UTF-8
-LazyData: true
 Imports: 
     igraph,
     Rcpp,
