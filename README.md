@@ -24,7 +24,7 @@ distances between matrices is provided as well to quantify how far two
 networks are from each other and several test statistics are proposed
 for testing equality in distribution between samples of networks using
 exact permutation testing procedures. The permutation scheme is carried
-out by the [**flipr**](https://astamm.github.io/flipr/) package which
+out by the [**flipr**](https://lmjl-alea.github.io/flipr/) package which
 also provides a number of test statistics based on inter-point distances
 that play nicely with network-valued data. The implementation is largely
 made in C++ and the matrix of inter- and intra-sample distances is

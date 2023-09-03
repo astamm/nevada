@@ -26,11 +26,13 @@ library(nevada)
 - Choose one or more test statistics to define your alternative hypothesis.
 - Compute an empirical permutation-based approximation of the null distribution.
 
-The package focuses for now on the two-sample testing problem and assumes that all networks from both samples share the same node structure.
+The package focuses for now on the two-sample testing problem and assumes that
+all networks from both samples share the same node structure.
 
 There are two types of questions that one can ask:
 
-1. Is there a difference between the distributions that generated the two observed samples?
+1. Is there a difference between the distributions that generated the two
+observed samples?
 2. Can we localize the differences between the distributions on the node structure?
 
 The [**nevada**](https://astamm.github.io/nevada/) package offers a dedicated function for answering each of these two questions:
@@ -40,7 +42,9 @@ The [**nevada**](https://astamm.github.io/nevada/) package offers a dedicated fu
 
 ## The `nvd` class for network-valued data
 
-In [**nevada**](https://astamm.github.io/nevada/), network-valued data are stored in an object of class `nvd`, which is basically a list of [**igraph**](https://igraph.org/r/) objects. We provide:
+In [**nevada**](https://astamm.github.io/nevada/), network-valued data are
+stored in an object of class `nvd`, which is basically a list of
+[**igraph**](https://igraph.org/r/) objects. We provide:
 
 - a constructor [`nvd()`](https://astamm.github.io/nevada/reference/nvd.html) which allows the user to simulate samples of networks using some of the popular models from [**igraph**](https://igraph.org/r/). Currently, one can use:
 
@@ -73,33 +77,40 @@ w_{i,j}, & \mbox{if } (i,j) \in E \mbox{ with weight } w_{i,j}\\
 \end{cases}
 $$
 
-In [**nevada**](https://astamm.github.io/nevada/), this representation can be achieved with [`repr_adjacency()`](https://astamm.github.io/nevada/reference/representations.html).
+In [**nevada**](https://astamm.github.io/nevada/), this representation can be
+achieved with
+[`repr_adjacency()`](https://astamm.github.io/nevada/reference/representations.html).
 
 ### Laplacian matrix
 
-The *Laplacian matrix* $L$ of the network $G$ is
-defined in the following way:
+The *Laplacian matrix* $L$ of the network $G$ is defined in the following way:
 
 $$ L = D(W) - W, $$ 
 where $D(W)$ is the diagonal matrix whose $i$-*th* diagonal element is the
 degree of vertex $i$.
 
-In [**nevada**](https://astamm.github.io/nevada/), this representation can be achieved with [`repr_laplacian()`](https://astamm.github.io/nevada/reference/representations.html).
+In [**nevada**](https://astamm.github.io/nevada/), this representation can be
+achieved with
+[`repr_laplacian()`](https://astamm.github.io/nevada/reference/representations.html).
 
 ### Modularity matrix
 
-The elements of the *modularity matrix* $B$ are
-given by
+The elements of the *modularity matrix* $B$ are given by
 
 $$ B_{ij} = W_{ij} - \frac{d_i d_j}{2m}, $$
-where $d_i$ and $d_j$ are the degrees of vertices $i$ and
-$j$ respectively, and $m$ is the total number of edges in the network.
+where $d_i$ and $d_j$ are the degrees of vertices $i$ and $j$ respectively, and
+$m$ is the total number of edges in the network.
 
-In [**nevada**](https://astamm.github.io/nevada/), this representation can be achieved with [`repr_modularity()`](https://astamm.github.io/nevada/reference/representations.html).
+In [**nevada**](https://astamm.github.io/nevada/), this representation can be
+achieved with
+[`repr_modularity()`](https://astamm.github.io/nevada/reference/representations.html).
 
 ### Choosing a representation for an object of class `nvd`
 
-Instead of going through every single network in a sample to make its representation, [**nevada**](https://astamm.github.io/nevada/) provides the [`repr_nvd()`](https://astamm.github.io/nevada/reference/repr_nvd.html) function which does exactly that for an object of class `nvd`.
+Instead of going through every single network in a sample to make its
+representation, [**nevada**](https://astamm.github.io/nevada/) provides the
+[`repr_nvd()`](https://astamm.github.io/nevada/reference/repr_nvd.html) function
+which does exactly that for an object of class `nvd`.
 
 ```{r}
 x <- nvd(model = "gnp", n = 3, model_params = list(p = 1/3))
@@ -108,7 +119,10 @@ repr_nvd(x, representation = "laplacian")
 
 ## Distances between networks
 
-It is possible to choose which distance consider in the analysis. Let $G$ and $H$ be two networks with $N$ nodes each and suppose that $X$ and $Y$ are the matrix representations of $G$ and $H$, respectively. The user can currently choose among 4 distances: Hamming, Frobenius, spectral and root-Euclidean.
+It is possible to choose which distance consider in the analysis. Let $G$ and
+$H$ be two networks with $N$ nodes each and suppose that $X$ and $Y$ are the
+matrix representations of $G$ and $H$, respectively. The user can currently
+choose among 4 distances: Hamming, Frobenius, spectral and root-Euclidean.
 
 ### Hamming distance
 
@@ -120,16 +134,20 @@ In [**nevada**](https://astamm.github.io/nevada/), this distance can be computed
 
 $$ \rho_F(G,H) = \left\| X - Y \right\|_F^2 = \sum_{i \neq j}^N \bigl ( X_{i,j}-Y_{i,j} \bigr )^2. $$
 
-In [**nevada**](https://astamm.github.io/nevada/), this distance can be computed with [`dist_frobenius()`](https://astamm.github.io/nevada/reference/distances.html).
+In [**nevada**](https://astamm.github.io/nevada/), this distance can be computed
+with
+[`dist_frobenius()`](https://astamm.github.io/nevada/reference/distances.html).
 
 ### Spectral distance
 
 $$ \rho_S(G,H)=\sum_{i \neq j}^N \bigl ( \Lambda^X_{i,j}-\Lambda^Y_{i,j} \bigr )^2, $$
-where $\Lambda^X$ and $\Lambda^Y$ are the diagonal matrices with
-eigenvalues on the diagonal given by the spectral decomposition of
-the matrix representations of $G$ and $H$.
+where $\Lambda^X$ and $\Lambda^Y$ are the diagonal matrices with eigenvalues on
+the diagonal given by the spectral decomposition of the matrix representations
+of $G$ and $H$.
 
-In [**nevada**](https://astamm.github.io/nevada/), this distance can be computed with [`dist_spectral()`](https://astamm.github.io/nevada/reference/distances.html).
+In [**nevada**](https://astamm.github.io/nevada/), this distance can be computed
+with
+[`dist_spectral()`](https://astamm.github.io/nevada/reference/distances.html).
 
 ### Root Euclidean distance
 
@@ -137,11 +155,17 @@ $$ \rho_{RE}(G,H) = \left\| X^{1/2} - Y^{1/2} \right\|_F^2. $$
 
 Note that this distance is not compatible with all matrix representations as it requires that the representation be semi-positive definite.
 
-In [**nevada**](https://astamm.github.io/nevada/), this distance can be computed with [`dist_root_euclidean()`](https://astamm.github.io/nevada/reference/distances.html).
+In [**nevada**](https://astamm.github.io/nevada/), this distance can be computed
+with
+[`dist_root_euclidean()`](https://astamm.github.io/nevada/reference/distances.html).
 
 ### Computing a matrix of pairwise distances for an object of class `nvd`
 
-Pre-computation of the matrix of pairwise distances for samples of networks alleviates the computational burden of permutation testing. This is why [**nevada**](https://astamm.github.io/nevada/) provides the convenient [`dist_nvd()`](https://astamm.github.io/nevada/reference/dist_nvd.html) function which does exactly that for an object of class `nvd`.
+Pre-computation of the matrix of pairwise distances for samples of networks
+alleviates the computational burden of permutation testing. This is why
+[**nevada**](https://astamm.github.io/nevada/) provides the convenient
+[`dist_nvd()`](https://astamm.github.io/nevada/reference/dist_nvd.html) function
+which does exactly that for an object of class `nvd`.
 
 ```{r}
 x <- nvd(model = "gnp", n = 3, model_params = list(p = 1/3))
@@ -150,21 +174,21 @@ dist_nvd(x, representation = "laplacian", distance = "hamming")
 
 ## Test statistics
 
-The [**nevada**](https://astamm.github.io/nevada/) package has been designed to work well with the [**flipr**](https://astamm.github.io/flipr/) package, which handles the permutation scheme once suitable representation, distance and test statistics have been chosen. The most efficient way to two-sample testing with network-valued data pertains to use statistics based on inter-point distances, that is pairwise distances between observations.
+The [**nevada**](https://astamm.github.io/nevada/) package has been designed to work well with the [**flipr**](https://lmjl-alea.github.io/flipr/) package, which handles the permutation scheme once suitable representation, distance and test statistics have been chosen. The most efficient way to two-sample testing with network-valued data pertains to use statistics based on inter-point distances, that is pairwise distances between observations.
 
 ### Available statistics
 
-#### From [**flipr**](https://astamm.github.io/flipr/)
+#### From [**flipr**](https://lmjl-alea.github.io/flipr/)
 
-A number of test statistics along this line have been proposed in the literature, including ours [@lovato2020]. As these test statistics rely on inter-point distances, they are not specific to network-valued data. As such, they can be found in [**flipr**](https://astamm.github.io/flipr/). We adopt the naming convention that a test statistic function shall start with the prefix `stat_`. All statistics based on inter-point distances are named with the suffix `_ip`. Here is the list of test statistics based on inter-point distances that are currently available in [**flipr**](https://astamm.github.io/flipr/):
+A number of test statistics along this line have been proposed in the literature, including ours [@lovato2020]. As these test statistics rely on inter-point distances, they are not specific to network-valued data. As such, they can be found in [**flipr**](https://lmjl-alea.github.io/flipr/). We adopt the naming convention that a test statistic function shall start with the prefix `stat_`. All statistics based on inter-point distances are named with the suffix `_ip`. Here is the list of test statistics based on inter-point distances that are currently available in [**flipr**](https://lmjl-alea.github.io/flipr/):
 
-- [`stat_student_ip()`](https://astamm.github.io/flipr/reference/two-sample-stats.html) and its alias `stat_t_ip()` implement a Student-like test statistic based on inter-point distances proposed by @lovato2020;
-- [`stat_fisher_ip()`](https://astamm.github.io/flipr/reference/two-sample-stats.html) and its alias `stat_f_ip()` implement a Fisher-like test statistic based on inter-point distances proposed by @lovato2020;
-- [`stat_bg_ip()`](https://astamm.github.io/flipr/reference/two-sample-stats.html) implements the statistic proposed by @biswas2014nonparametric;
-- [`stat_energy_ip()`](https://astamm.github.io/flipr/reference/two-sample-stats.html) implements the class of energy-based statistics as proposed by @szekely2013energy;
-- [`stat_cq_ip()`](https://astamm.github.io/flipr/reference/two-sample-stats.html) implements the statistic proposed by @chen2010two;
-- [`stat_mod_ip()`](https://astamm.github.io/flipr/reference/two-sample-stats.html) implements a statistic that computes the mean of inter-point distances;
-- [`stat_dom_ip()`](https://astamm.github.io/flipr/reference/two-sample-stats.html) implements a statistic that computes the distance between the medoids of the two samples, possibly standardized by the pooled corresponding variances.
+- [`stat_student_ip()`](https://lmjl-alea.github.io/flipr/reference/two-sample-stats.html) and its alias `stat_t_ip()` implement a Student-like test statistic based on inter-point distances proposed by @lovato2020;
+- [`stat_fisher_ip()`](https://lmjl-alea.github.io/flipr/reference/two-sample-stats.html) and its alias `stat_f_ip()` implement a Fisher-like test statistic based on inter-point distances proposed by @lovato2020;
+- [`stat_bg_ip()`](https://lmjl-alea.github.io/flipr/reference/two-sample-stats.html) implements the statistic proposed by @biswas2014nonparametric;
+- [`stat_energy_ip()`](https://lmjl-alea.github.io/flipr/reference/two-sample-stats.html) implements the class of energy-based statistics as proposed by @szekely2013energy;
+- [`stat_cq_ip()`](https://lmjl-alea.github.io/flipr/reference/two-sample-stats.html) implements the statistic proposed by @chen2010two;
+- [`stat_mod_ip()`](https://lmjl-alea.github.io/flipr/reference/two-sample-stats.html) implements a statistic that computes the mean of inter-point distances;
+- [`stat_dom_ip()`](https://lmjl-alea.github.io/flipr/reference/two-sample-stats.html) implements a statistic that computes the distance between the medoids of the two samples, possibly standardized by the pooled corresponding variances.
 
 #### From [**nevada**](https://astamm.github.io/nevada/)
 
@@ -181,12 +205,12 @@ There are also Student-like statistics available only for Frobenius distance for
 
 #### Write your own test statistic function
 
-In addition to the test statistic functions already implemented in [**flipr**](https://astamm.github.io/flipr/) and [**nevada**](https://astamm.github.io/nevada/), you can also implement your own function. Test statistic functions compatible with [**flipr**](https://astamm.github.io/flipr/) should have at least two mandatory input arguments:
+In addition to the test statistic functions already implemented in [**flipr**](https://lmjl-alea.github.io/flipr/) and [**nevada**](https://astamm.github.io/nevada/), you can also implement your own function. Test statistic functions compatible with [**flipr**](https://lmjl-alea.github.io/flipr/) should have at least two mandatory input arguments:
 
 - `data` which is either a concatenated list of size $n_x + n_y$ regrouping the data points of both samples or a distance matrix of size $(n_x + n_y) \times (n_x + n_y)$ stored as an object of class `dist`.
 - `indices1` which is an integer vector of size $n_x$ storing the indices of the data points belonging to the first sample in the current permuted version of the data.
 
-The [**flipr**](https://astamm.github.io/flipr/) package provides a helper function `use_stat(nsamples = 2, stat_name = )` which makes it easy for users to create their own test statistic ready to be used by [**nevada**](https://astamm.github.io/nevada/). This function creates and saves a `.R` file in the `R/` folder of the current working directory and populates it with the following template:
+The [**flipr**](https://lmjl-alea.github.io/flipr/) package provides a helper function `use_stat(nsamples = 2, stat_name = )` which makes it easy for users to create their own test statistic ready to be used by [**nevada**](https://astamm.github.io/nevada/). This function creates and saves a `.R` file in the `R/` folder of the current working directory and populates it with the following template:
 ```{r, eval=FALSE}
 #' Test Statistic for the Two-Sample Problem
 #'
@@ -224,7 +248,7 @@ stat_{{{name}}} <- function(data, indices1) {
 }
 ```
 
-For instance, a [**flipr**](https://astamm.github.io/flipr/)-compatible version of the $t$-statistic with pooled variance will look like:
+For instance, a [**flipr**](https://lmjl-alea.github.io/flipr/)-compatible version of the $t$-statistic with pooled variance will look like:
 ```{r, eval=FALSE}
 stat_student <- function(data, indices1) {
   n <- if (inherits(data, "dist"))
@@ -255,7 +279,7 @@ stat_student <- function(data, indices1) {
 Test statistics are passed to the functions `test2_global()` and `test2_local()` via the argument `stats` which accepts a character vector in which:
 
 - statistics from [**nevada**](https://astamm.github.io/nevada/) expected to be named without the `stat_` prefix (e.g. `"original_edge_count"` or `"student_euclidean"`).
-- statistics from [**flipr**](https://astamm.github.io/flipr/) are expected to be named without the `stat_` prefix but adding the `flipr:` prefix (e.g., `"flipr:student_ip"`).
+- statistics from [**flipr**](https://lmjl-alea.github.io/flipr/) are expected to be named without the `stat_` prefix but adding the `flipr:` prefix (e.g., `"flipr:student_ip"`).
 - statistics from any other package **pkg** are expected to be named without the `stat_` prefix but adding the `pkg:` prefix.
 
 ```{r}
@@ -271,12 +295,12 @@ test2_global(
 )$pvalue
 ```
 
-Note that you can also refer to test statistic function from [**nevada**](https://astamm.github.io/nevada/) using the naming `"nevada:original_edge_count"` as you would do for test statistics from [**flipr**](https://astamm.github.io/flipr/). This is mandatory for instance if you have not yet loaded [**nevada**](https://astamm.github.io/nevada/) in your environment via `library(nevada)`.
+Note that you can also refer to test statistic function from [**nevada**](https://astamm.github.io/nevada/) using the naming `"nevada:original_edge_count"` as you would do for test statistics from [**flipr**](https://lmjl-alea.github.io/flipr/). This is mandatory for instance if you have not yet loaded [**nevada**](https://astamm.github.io/nevada/) in your environment via `library(nevada)`.
 
 #### Using multiple test statistics
 
 In permutation testing, the choice of a test statistic determines the alternative hypothesis, while the null hypothesis is always that the distributions that generated the observed samples are the same. This means that if you were to use the Student statistic `stat_student_ip()` for instance, then what you would be actually testing is whether the means of the distributions are different. If you'd rather be sensitive to differences in variances of the distributions, then you should go with the Fisher statistic `stat_fisher_ip()`.
 
-You can also be sensitive to multiple aspects of a distribution when testing via the permutation framework. This is achieved under the hood by the [**flipr**](https://astamm.github.io/flipr/) package which implements the so-called *non-parametric combination* (NPC) approach proposed by @pesarin2010permutation when you provide more than one test statistics in the `stats` argument. You can read [this article](https://astamm.github.io/flipr/articles/alternative.html) to know more about its implementation in [**flipr**](https://astamm.github.io/flipr/). The bottom line is that, for example, you can choose both the Student and Fisher statistics to test simultaneously for differences in mean and in variance.
+You can also be sensitive to multiple aspects of a distribution when testing via the permutation framework. This is achieved under the hood by the [**flipr**](https://lmjl-alea.github.io/flipr/) package which implements the so-called *non-parametric combination* (NPC) approach proposed by @pesarin2010permutation when you provide more than one test statistics in the `stats` argument. You can read [this article](https://lmjl-alea.github.io/flipr/articles/alternative.html) to know more about its implementation in [**flipr**](https://lmjl-alea.github.io/flipr/). The bottom line is that, for example, you can choose both the Student and Fisher statistics to test simultaneously for differences in mean and in variance.
 
 ## References
