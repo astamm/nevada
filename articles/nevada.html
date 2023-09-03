@@ -444,7 +444,7 @@ function which does exactly that for an object of class
 <h2 id="test-statistics">Test statistics<a class="anchor" aria-label="anchor" href="#test-statistics"></a>
 </h2>
 <p>The <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a>
-package has been designed to work well with the <a href="https://astamm.github.io/flipr/" class="external-link"><strong>flipr</strong></a>
+package has been designed to work well with the <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a>
 package, which handles the permutation scheme once suitable
 representation, distance and test statistics have been chosen. The most
 efficient way to two-sample testing with network-valued data pertains to
@@ -454,44 +454,44 @@ distances between observations.</p>
 <h3 id="available-statistics">Available statistics<a class="anchor" aria-label="anchor" href="#available-statistics"></a>
 </h3>
 <div class="section level4">
-<h4 id="from-flipr">From <a href="https://astamm.github.io/flipr/" class="external-link"><strong>flipr</strong></a><a class="anchor" aria-label="anchor" href="#from-flipr"></a>
+<h4 id="from-flipr">From <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a><a class="anchor" aria-label="anchor" href="#from-flipr"></a>
 </h4>
 <p>A number of test statistics along this line have been proposed in the
 literature, including ours <span class="citation">(Lovato et al.
 2020)</span>. As these test statistics rely on inter-point distances,
 they are not specific to network-valued data. As such, they can be found
-in <a href="https://astamm.github.io/flipr/" class="external-link"><strong>flipr</strong></a>.
-We adopt the naming convention that a test statistic function shall
-start with the prefix <code>stat_</code>. All statistics based on
-inter-point distances are named with the suffix <code>_ip</code>. Here
-is the list of test statistics based on inter-point distances that are
-currently available in <a href="https://astamm.github.io/flipr/" class="external-link"><strong>flipr</strong></a>:</p>
+in <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a>. We
+adopt the naming convention that a test statistic function shall start
+with the prefix <code>stat_</code>. All statistics based on inter-point
+distances are named with the suffix <code>_ip</code>. Here is the list
+of test statistics based on inter-point distances that are currently
+available in <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a>:</p>
 <ul>
 <li>
-<a href="https://astamm.github.io/flipr/reference/two-sample-stats.html" class="external-link"><code>stat_student_ip()</code></a>
+<a href="https://lmjl-alea.github.io/flipr/reference/two-sample-stats.html" class="external-link"><code>stat_student_ip()</code></a>
 and its alias <code>stat_t_ip()</code> implement a Student-like test
 statistic based on inter-point distances proposed by <span class="citation">Lovato et al. (2020)</span>;</li>
 <li>
-<a href="https://astamm.github.io/flipr/reference/two-sample-stats.html" class="external-link"><code>stat_fisher_ip()</code></a>
+<a href="https://lmjl-alea.github.io/flipr/reference/two-sample-stats.html" class="external-link"><code>stat_fisher_ip()</code></a>
 and its alias <code>stat_f_ip()</code> implement a Fisher-like test
 statistic based on inter-point distances proposed by <span class="citation">Lovato et al. (2020)</span>;</li>
 <li>
-<a href="https://astamm.github.io/flipr/reference/two-sample-stats.html" class="external-link"><code>stat_bg_ip()</code></a>
+<a href="https://lmjl-alea.github.io/flipr/reference/two-sample-stats.html" class="external-link"><code>stat_bg_ip()</code></a>
 implements the statistic proposed by <span class="citation">Biswas and
 Ghosh (2014)</span>;</li>
 <li>
-<a href="https://astamm.github.io/flipr/reference/two-sample-stats.html" class="external-link"><code>stat_energy_ip()</code></a>
+<a href="https://lmjl-alea.github.io/flipr/reference/two-sample-stats.html" class="external-link"><code>stat_energy_ip()</code></a>
 implements the class of energy-based statistics as proposed by <span class="citation">Székely and Rizzo (2013)</span>;</li>
 <li>
-<a href="https://astamm.github.io/flipr/reference/two-sample-stats.html" class="external-link"><code>stat_cq_ip()</code></a>
+<a href="https://lmjl-alea.github.io/flipr/reference/two-sample-stats.html" class="external-link"><code>stat_cq_ip()</code></a>
 implements the statistic proposed by <span class="citation">S. X. Chen
 and Qin (2010)</span>;</li>
 <li>
-<a href="https://astamm.github.io/flipr/reference/two-sample-stats.html" class="external-link"><code>stat_mod_ip()</code></a>
+<a href="https://lmjl-alea.github.io/flipr/reference/two-sample-stats.html" class="external-link"><code>stat_mod_ip()</code></a>
 implements a statistic that computes the mean of inter-point
 distances;</li>
 <li>
-<a href="https://astamm.github.io/flipr/reference/two-sample-stats.html" class="external-link"><code>stat_dom_ip()</code></a>
+<a href="https://lmjl-alea.github.io/flipr/reference/two-sample-stats.html" class="external-link"><code>stat_dom_ip()</code></a>
 implements a statistic that computes the distance between the medoids of
 the two samples, possibly standardized by the pooled corresponding
 variances.</li>
@@ -524,10 +524,11 @@ are:</p>
 <div class="section level4">
 <h4 id="write-your-own-test-statistic-function">Write your own test statistic function<a class="anchor" aria-label="anchor" href="#write-your-own-test-statistic-function"></a>
 </h4>
-<p>In addition to the test statistic functions already implemented in <a href="https://astamm.github.io/flipr/" class="external-link"><strong>flipr</strong></a> and <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a>, you
-can also implement your own function. Test statistic functions
-compatible with <a href="https://astamm.github.io/flipr/" class="external-link"><strong>flipr</strong></a> should
-have at least two mandatory input arguments:</p>
+<p>In addition to the test statistic functions already implemented in <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a> and
+<a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a>,
+you can also implement your own function. Test statistic functions
+compatible with <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a>
+should have at least two mandatory input arguments:</p>
 <ul>
 <li>
 <code>data</code> which is either a concatenated list of size <span class="math inline">\(n_x + n_y\)</span> regrouping the data points of
@@ -538,7 +539,7 @@ an object of class <code>dist</code>.</li>
 points belonging to the first sample in the current permuted version of
 the data.</li>
 </ul>
-<p>The <a href="https://astamm.github.io/flipr/" class="external-link"><strong>flipr</strong></a>
+<p>The <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a>
 package provides a helper function
 <code>use_stat(nsamples = 2, stat_name = )</code> which makes it easy
 for users to create their own test statistic ready to be used by <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a>.
@@ -579,7 +580,7 @@ with the following template:</p>
 <span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># statistic from input samples stored in lists x and y</span></span>
 <span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<p>For instance, a <a href="https://astamm.github.io/flipr/" class="external-link"><strong>flipr</strong></a>-compatible
+<p>For instance, a <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a>-compatible
 version of the <span class="math inline">\(t\)</span>-statistic with
 pooled variance will look like:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -620,7 +621,7 @@ which:</p>
 expected to be named without the <code>stat_</code> prefix
 (e.g. <code>"original_edge_count"</code> or
 <code>"student_euclidean"</code>).</li>
-<li>statistics from <a href="https://astamm.github.io/flipr/" class="external-link"><strong>flipr</strong></a> are
+<li>statistics from <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a> are
 expected to be named without the <code>stat_</code> prefix but adding
 the <code>flipr:</code> prefix (e.g.,
 <code>"flipr:student_ip"</code>).</li>
@@ -642,8 +643,8 @@ to be named without the <code>stat_</code> prefix but adding the
 <span><span class="co">#&gt; [1] 0.0009962984</span></span></code></pre></div>
 <p>Note that you can also refer to test statistic function from <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a>
 using the naming <code>"nevada:original_edge_count"</code> as you would
-do for test statistics from <a href="https://astamm.github.io/flipr/" class="external-link"><strong>flipr</strong></a>. This
-is mandatory for instance if you have not yet loaded <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a> in
+do for test statistics from <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a>.
+This is mandatory for instance if you have not yet loaded <a href="https://astamm.github.io/nevada/"><strong>nevada</strong></a> in
 your environment via <code><a href="https://astamm.github.io/nevada/">library(nevada)</a></code>.</p>
 </div>
 <div class="section level4">
@@ -660,15 +661,15 @@ the distributions, then you should go with the Fisher statistic
 <code>stat_fisher_ip()</code>.</p>
 <p>You can also be sensitive to multiple aspects of a distribution when
 testing via the permutation framework. This is achieved under the hood
-by the <a href="https://astamm.github.io/flipr/" class="external-link"><strong>flipr</strong></a>
+by the <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a>
 package which implements the so-called <em>non-parametric
 combination</em> (NPC) approach proposed by <span class="citation">Pesarin and Salmaso (2010)</span> when you provide more
 than one test statistics in the <code>stats</code> argument. You can
-read <a href="https://astamm.github.io/flipr/articles/alternative.html" class="external-link">this
-article</a> to know more about its implementation in <a href="https://astamm.github.io/flipr/" class="external-link"><strong>flipr</strong></a>. The
-bottom line is that, for example, you can choose both the Student and
-Fisher statistics to test simultaneously for differences in mean and in
-variance.</p>
+read <a href="https://lmjl-alea.github.io/flipr/articles/alternative.html" class="external-link">this
+article</a> to know more about its implementation in <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a>.
+The bottom line is that, for example, you can choose both the Student
+and Fisher statistics to test simultaneously for differences in mean and
+in variance.</p>
 </div>
 </div>
 </div>
