@@ -8,7 +8,7 @@
 [![R-CMD-check](https://github.com/astamm/nevada/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/astamm/nevada/actions/workflows/R-CMD-check.yaml)
 [![test-coverage](https://github.com/astamm/nevada/workflows/test-coverage/badge.svg)](https://github.com/astamm/nevada/actions)
 [![Codecov test
-coverage](https://codecov.io/gh/astamm/nevada/branch/master/graph/badge.svg)](https://codecov.io/gh/astamm/nevada?branch=master)
+coverage](https://codecov.io/gh/astamm/nevada/branch/master/graph/badge.svg)](https://app.codecov.io/gh/astamm/nevada?branch=master)
 [![pkgdown](https://github.com/astamm/nevada/workflows/pkgdown/badge.svg)](https://github.com/astamm/nevada/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/nevada)](https://CRAN.R-project.org/package=nevada)
