@@ -73,7 +73,7 @@ used, together with several choices of network matrix representations and
 distances between networks.
 }
 \examples{
-n <- 10L
+n <- 5L
 gnp_params <- list(p = 1/3)
 k_regular_params <- list(k = 8L)
 

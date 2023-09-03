@@ -75,7 +75,7 @@ the partition for the intra- and inter-tests.
 Local Two-Sample Test for Network-Valued Data
 }
 \examples{
-n <- 10
+n <- 5L
 p1 <- matrix(
   data = c(0.1, 0.4, 0.1, 0.4,
            0.4, 0.4, 0.1, 0.4,
@@ -99,5 +99,5 @@ m <- as.integer(c(rep(1, 17), rep(2, 17), rep(3, 17), rep(4, 17)))
 test2_local(sim$x, sim$y, m,
             seed = 1234,
             alpha = 0.05,
-            B = 100)
+            B = 19)
 }

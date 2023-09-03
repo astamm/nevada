@@ -46,7 +46,7 @@
 #' @export
 #'
 #' @examples
-#' n <- 10L
+#' n <- 5L
 #' gnp_params <- list(p = 1/3)
 #' k_regular_params <- list(k = 8L)
 #'
@@ -192,7 +192,7 @@ test2_global <- function(x, y,
 #' @export
 #'
 #' @examples
-#' n <- 10
+#' n <- 5L
 #' p1 <- matrix(
 #'   data = c(0.1, 0.4, 0.1, 0.4,
 #'            0.4, 0.4, 0.1, 0.4,
@@ -216,7 +216,7 @@ test2_global <- function(x, y,
 #' test2_local(sim$x, sim$y, m,
 #'             seed = 1234,
 #'             alpha = 0.05,
-#'             B = 100)
+#'             B = 19)
 test2_local <- function(x, y, partition,
                         representation = "adjacency",
                         distance = "frobenius",
