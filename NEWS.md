@@ -1,3 +1,5 @@
+# nevada (development version)
+
 # nevada 0.2.0
 
 * Improved [`nvd`](https://astamm.github.io/nevada/reference/as_nvd.html) constructor.
