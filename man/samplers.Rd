@@ -2,26 +2,32 @@
 % Please edit documentation in R/samplers.R
 \name{samplers}
 \alias{samplers}
+\alias{play_poisson}
 \alias{rpois_network}
+\alias{play_exponential}
 \alias{rexp_network}
+\alias{play_binomial}
 \alias{rbinom_network}
-\alias{rsbm}
 \title{Graph samplers using edge distributions}
 \usage{
+play_poisson(num_vertices, lambda = 1)
+
 rpois_network(n, num_vertices, lambda = 1)
+
+play_exponential(num_vertices, rate = 1)
 
 rexp_network(n, num_vertices, rate = 1)
 
-rbinom_network(n, num_vertices, size = 1, prob = 0.5)
+play_binomial(num_vertices, size = 1, prob = 0.5)
 
-rsbm(n, num_vertices, pref_matrix, block_sizes)
+rbinom_network(n, num_vertices, size = 1, prob = 0.5)
 }
 \arguments{
-\item{n}{Sample size.}
-
 \item{num_vertices}{Number of vertices.}
 
 \item{lambda}{The mean parameter for the Poisson distribution (default: 1).}
+
+\item{n}{Sample size.}
 
 \item{rate}{The rate parameter for the exponential distribution (default: 1).}
 
@@ -29,16 +35,6 @@ rsbm(n, num_vertices, pref_matrix, block_sizes)
 
 \item{prob}{The probability of success on each trial for the binomial
 distribution (default: 0.5).}
-
-\item{pref_matrix}{The matrix giving the Bernoulli rates. This is a KxK
-matrix, where K is the number of groups. The probability of creating an
-edge between vertices from groups i and j is given by element (i,j). For
-undirected graphs, this matrix must be symmetric. See
-\code{\link[igraph]{sample_sbm}}.}
-
-\item{block_sizes}{Numeric vector giving the number of vertices in each
-group. The sum of the vector must match the number of vertices. See
-\code{\link[igraph]{sample_sbm}}.}
 }
 \value{
 A object of class \code{\link{nvd}} containing the sample of graphs.

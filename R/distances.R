@@ -21,9 +21,9 @@
 #' Root-Euclidean distance can used only with the laplacian matrix
 #' representation.
 #'
-#' @param x An [`igraph::igraph`] object or a matrix representing an underlying
+#' @param x A [`tidygraph::tbl_graph`] object or a matrix representing an underlying
 #'   network.
-#' @param y An [`igraph::igraph`] object or a matrix representing an underlying
+#' @param y A [`tidygraph::tbl_graph`] object or a matrix representing an underlying
 #'   network. Should have the same number of vertices as `x`.
 #' @param representation A string specifying the desired type of representation,
 #'   among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
@@ -189,9 +189,9 @@ ipro_frobenius <- function(x, y, representation = "laplacian") {
 #' elements of the two samples put together. The cardinality of the fist sample
 #' is denoted by \eqn{n_1} and that of the second one is denoted by \eqn{n_2}.
 #'
-#' @param x A [`base::list`] of [`igraph::igraph`] objects or matrix
+#' @param x A [`base::list`] of [`tidygraph::tbl_graph`] objects or matrix
 #'   representations of underlying networks from a given first population.
-#' @param y A [`base::list`] of [`igraph::igraph`] objects or matrix
+#' @param y A [`base::list`] of [`tidygraph::tbl_graph`] objects or matrix
 #'   representations of underlying networks from a given second population.
 #' @param representation A string specifying the desired type of representation,
 #'   among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
@@ -215,10 +215,10 @@ ipro_frobenius <- function(x, y, representation = "laplacian") {
 #' @export
 #'
 #' @examples
-#' gnp_params <- list(p = 1/3)
-#' k_regular_params <- list(k = 8L)
-#' x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
-#' y <- nvd(model = "k_regular", n = 10L, model_params = k_regular_params)
+#' gnp_params <- list(n = 24L, p = 1/3)
+#' degree_params <- list(out_degree = rep(2, 24L), method = "configuration")
+#' x <- nvd(sample_size = 10L, model = "gnp", !!!gnp_params)
+#' y <- nvd(sample_size = 10L, model = "degree", !!!degree_params)
 #' dist_nvd(x, y, "adjacency", "spectral")
 dist_nvd <- function(x,
                      y = NULL,

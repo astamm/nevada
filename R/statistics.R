@@ -25,10 +25,10 @@
 #' @examples
 #' n1 <- 30L
 #' n2 <- 10L
-#' gnp_params <- list(p = 1/3)
-#' k_regular_params <- list(k = 8L)
-#' x <- nvd(model = "gnp", n = n1, model_params = gnp_params)
-#' y <- nvd(model = "k_regular", n = n2, model_params = k_regular_params)
+#' gnp_params <- list(n = 24L, p = 1/3)
+#' degree_params <- list(out_degree = rep(2, 24L), method = "configuration")
+#' x <- nvd(sample_size = n1, model = "gnp", !!!gnp_params)
+#' y <- nvd(sample_size = n2, model = "degree", !!!degree_params)
 #' r <- repr_nvd(x, y, representation = "laplacian")
 #' stat_student_euclidean(r, 1:n1)
 #' stat_welch_euclidean(r, 1:n1)
@@ -113,10 +113,10 @@ stat_weighted_edge_count <- function(d, indices, edge_count_prep, ...) {
 #' @examples
 #' n1 <- 30L
 #' n2 <- 10L
-#' gnp_params <- list(p = 1/3)
-#' k_regular_params <- list(k = 8L)
-#' x <- nvd(model = "gnp", n = n1, model_params = gnp_params)
-#' y <- nvd(model = "k_regular", n = n2, model_params = k_regular_params)
+#' gnp_params <- list(n = 24L, p = 1/3)
+#' degree_params <- list(out_degree = rep(2, 24L), method = "configuration")
+#' x <- nvd(sample_size = n1, model = "gnp", !!!gnp_params)
+#' y <- nvd(sample_size = n2, model = "degree", !!!degree_params)
 #' d <- dist_nvd(x, y, representation = "laplacian", distance = "frobenius")
 #' e <- edge_count_global_variables(d, n1, k = 5L)
 edge_count_global_variables <- function(d, n1, k = 1L) {

@@ -5,13 +5,12 @@
 \title{Power Simulations for Permutation Tests}
 \usage{
 power2(
-  model1 = "gnp",
-  model2 = "k_regular",
-  n1 = 20L,
-  n2 = 20L,
-  num_vertices = 25L,
-  model1_params = NULL,
-  model2_params = NULL,
+  sample_size1,
+  model1,
+  params1,
+  sample_size2,
+  model2,
+  params2,
   representation = "adjacency",
   distance = "frobenius",
   stats = c("flipr:t_ip", "flipr:f_ip"),
@@ -19,31 +18,28 @@ power2(
   alpha = 0.05,
   test = "exact",
   k = 5L,
-  R = 1000L,
-  seed = 1234
+  R = 1000L
 )
 }
 \arguments{
-\item{model1}{A string specifying the model to be used for generating the
-first sample. Choices are \code{"sbm"}, \code{"k_regular"}, \code{"gnp"}, \code{"smallworld"},
-\code{"pa"}, \code{"poisson"} and \code{"binomial"}. Defaults to \code{"gnp"}.}
+\item{sample_size1}{An integer specifying the size of the first sample.}
 
-\item{model2}{A string specifying the model to be used for generating the
-second sample. Choices are \code{"sbm"}, \code{"k_regular"}, \code{"gnp"}, \code{"smallworld"},
-\code{"pa"}, \code{"poisson"} and \code{"binomial"}. Defaults to \code{"k_regular"}.}
+\item{model1}{A string specifying the model to be used for sampling networks
+in the first sample. All \code{tidygraph::play_} functions are supported. The
+model name corresponds to the name of the function without the \code{play_}
+prefix.}
 
-\item{n1}{The size of the first sample. Defaults to \code{20L}.}
+\item{params1}{A list specifying the parameters to be passed to the model
+function that will generate the first sample.}
 
-\item{n2}{The size of the second sample. Defaults to \code{20L}.}
+\item{sample_size2}{An integer specifying the size of the second sample.}
 
-\item{num_vertices}{The number of nodes in the generated graphs. Defaults to
-\code{25L}.}
+\item{model2}{A string specifying the model to be used for sampling networks
+in the second sample. All \code{tidygraph::play_} functions are supported. The
+model name corresponds to the name of the function without the \code{play_}
+prefix.}
 
-\item{model1_params}{A named list setting the parameters of the first chosen
-model. Defaults to \code{list(p = 1/3)}.}
-
-\item{model2_params}{A named list setting the parameters of the second chosen
-model. Defaults to \code{list(k = 8L)}.}
+\item{params2}{A list specifying the parameters to be passed to the model}
 
 \item{representation}{A string specifying the desired type of representation,
 among: \code{"adjacency"}, \code{"laplacian"} and \code{"modularity"}.
@@ -76,9 +72,6 @@ for the edge count statistics. Defaults to \code{5L}.}
 
 \item{R}{Number of Monte-Carlo trials used to estimate the power. Defaults to
 \code{1000L}.}
-
-\item{seed}{An integer specifying the random generator seed. Defaults to
-`1234.}
 }
 \value{
 A numeric value estimating the power of the test.
@@ -92,13 +85,12 @@ Currently, six scenarios of pairs of populations are implemented. Scenario 0
 allows to make sure that all our permutation tests are exact.
 }
 \examples{
-gnp_params <- list(p = 1/3)
-k_regular_params <- list(k = 8L)
+gnp_params <- list(n = 24L, p = 1/3)
+degree_params <- list(out_degree = rep(2, 24L), method = "configuration")
 power2(
-  model1_params = gnp_params,
-  model2_params = k_regular_params,
-  R = 10,
-  B = 100,
-  seed = 1234
+  sample_size1 = 10L, model1 = "gnp", params1 = gnp_params,
+  sample_size2 = 10L, model2 = "degree", params2 = degree_params,
+  R = 10L,
+  B = 100L
 )
 }

@@ -36,8 +36,8 @@ Fréchet mean. This function can also be used as is as the function to be
 minimized in order to find the Fréchet mean for a given distance.
 }
 \examples{
-gnp_params <- list(p = 1/3)
-x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
+params <- list(n = 24L, p = 1/3)
+x <- nvd(sample_size = 1L, model = "gnp", !!!params)
 m <- mean(x)
 var_nvd(x = x, x0 = m, distance = "frobenius")
 }

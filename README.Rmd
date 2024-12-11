@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/astamm/nevada/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/astamm/nevada/actions/workflows/R-CMD-check.yaml)
 [![test-coverage](https://github.com/astamm/nevada/workflows/test-coverage/badge.svg)](https://github.com/astamm/nevada/actions)
-[![Codecov test coverage](https://codecov.io/gh/astamm/nevada/branch/master/graph/badge.svg)](https://app.codecov.io/gh/astamm/nevada?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/astamm/nevada/graph/badge.svg)](https://app.codecov.io/gh/astamm/nevada)
 [![pkgdown](https://github.com/astamm/nevada/workflows/pkgdown/badge.svg)](https://github.com/astamm/nevada/actions)
 [![CRAN status](https://www.r-pkg.org/badges/version/nevada)](https://CRAN.R-project.org/package=nevada)
 <!-- badges: end -->
@@ -46,18 +46,23 @@ remotes::install_github("astamm/nevada")
 In this first example, we compare two populations of networks generated according to two different models (Watts-Strogatz and Barabasi), using the adjacency matrix representation of networks, the Frobenius distance to compare single networks and the combination of Student-like and Fisher-like statistics based on inter-point distances to summarize information and perform the permutation test.
 
 ```{r}
-set.seed(123)
-n <- 10L
-x <- nevada::nvd(
-  model = "smallworld", 
-  n = n, 
-  model_params = list(dim = 1L, nei = 4L, p = 0.15)
-)
-y <- nevada::nvd(
-  model = "pa", 
-  n = n, 
-  model_params = list(power = 1L, m = NULL, directed = FALSE)
-)
+sample_size <- 10L
+num_vertices <- 10L
+smallworld_params <- list(n_dim = 1L, dim_size = num_vertices, order = 4L, p_rewire = 0.15)
+barabasi_albert_params <- list(power = 1L, n = num_vertices)
+
+withr::with_seed(1234, {
+  x <- nevada::nvd(
+    sample_size = sample_size,
+    model = "smallworld", 
+    !!!smallworld_params
+  )
+  y <- nevada::nvd(
+    sample_size = sample_size,
+    model = "barabasi_albert", 
+    !!!barabasi_albert_params
+  )
+})
 ```
 
 By default the `nvd()` constructor generates networks with 25 nodes. One can wonder whether there is a difference between the distributions that generated these two samples (which there is given the models that we used). The `test2_global()` function provides an answer to this question:
@@ -84,9 +89,18 @@ t1_local
 In this second example, we compare two populations of networks generated according to the same model (Watts-Strogatz), using the adjacency matrix representation of networks, the Frobenius distance to compare single networks and the combination of Student-like and Fisher-like statistics based on inter-point distances to summarize information and perform the permutation test.
 
 ```{r}
-n <- 10L
-x <- nevada::nvd("smallworld", n)
-y <- nevada::nvd("smallworld", n)
+withr::with_seed(1234, {
+  x <- nevada::nvd(
+    sample_size = sample_size,
+    model = "smallworld", 
+    !!!smallworld_params
+  )
+  y <- nevada::nvd(
+    sample_size = sample_size,
+    model = "smallworld", 
+    !!!smallworld_params
+  )
+})
 ```
 
 One can wonder whether there is a difference between the distributions that generated these two samples (which there is given the models that we used). The `test2_global()` function provides an answer to this question:

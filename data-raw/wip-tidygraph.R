@@ -3,13 +3,30 @@ library(ggraph)
 library(tidygraph)
 library(graphlayouts)
 
-as_tbl_graph.nvd <- function(x, directed = TRUE, ...) {
+as_tbl_graph.nvd <- function(x, directed = TRUE, memberships = NULL, ...) {
   nm <- names(x)
-  if (is.null(nm)) nm <- seq_len(length(x))
-  x |>
+  if (is.null(nm)) {
+    if (is.null(memberships))
+      nm <- seq_len(length(x))
+    else {
+      nm <- numeric(length(x))
+      groups <- unique(memberships)
+      for (.g in groups)
+        nm[memberships == .g] <- seq_len(sum(memberships == .g))
+    }
+  }
+  print(nm)
+  x <- x |>
     purrr::map(igraph::as_edgelist, names = FALSE) |>
-    purrr::map2(nm, cbind) |>
-    purrr::map(`colnames<-`, c("from", "to", "id")) |>
+    purrr::map2(nm, cbind)
+  if (is.null(memberships)) {
+    x <- purrr::map(x, `colnames<-`, c("from", "to", "id"))
+  } else {
+    x <- x |>
+      purrr::map2(memberships, cbind) |>
+      purrr::map(`colnames<-`, c("from", "to", "id", "membership"))
+  }
+  x |>
     purrr::map(tibble::as_tibble) |>
     purrr::reduce(rbind) |>
     as_tbl_graph(directed = directed)
@@ -67,6 +84,11 @@ ggraph(as_tbl_graph(sim[[1]]), layout = 'stress') +
   facet_edges(vars(id), nrow = 2) +
   theme_graph(foreground = 'steelblue', fg_text_colour = 'white')
 
+ggraph(as_tbl_graph(sim[[2]]), layout = 'stress') +
+  geom_edge_fan(aes(alpha = after_stat(index)), show.legend = FALSE) +
+  facet_edges(vars(id), nrow = 2) +
+  theme_graph(foreground = 'steelblue', fg_text_colour = 'white')
+
 res <- test2_local(sim$x, sim$y, m,
                    seed = 1234,
                    # alpha = 0.05,
@@ -101,3 +123,55 @@ ggraph(g, layout = 'stress') +
   scale_size(range = c(0, 5)) +
   scale_edge_width(range = c(0, 1)) +
   theme_graph()
+
+
+
+
+n <- 5
+p1 <- matrix(
+  data = c(0.5, 0.5, 0.1, 0.1,
+           0.5, 0.5, 0.1, 0.1,
+           0.1, 0.1, 0.5, 0.5,
+           0.1, 0.1, 0.5, 0.5),
+  nrow = 4,
+  ncol = 4,
+  byrow = TRUE
+)
+p2 <- matrix(
+  data = c(0.1, 0.1, 0.1, 0.1,
+           0.1, 0.5, 0.5, 0.1,
+           0.1, 0.5, 0.5, 0.1,
+           0.1, 0.1, 0.1, 0.1),
+  nrow = 4,
+  ncol = 4,
+  byrow = TRUE
+)
+sim <- sample2_sbm(n, 20, p1, rep(5, 4), p2, seed = 1234)
+m <- as.integer(c(rep(1, 5), rep(2, 5), rep(3, 5), rep(4, 5)))
+
+ggg <- as_tbl_graph(
+  as_nvd(c(sim[[1]], sim[[2]])),
+  memberships = c(rep(1, 5), rep(2, 5))
+)
+ggraph(ggg, layout = 'stress') +
+  geom_edge_fan(aes(alpha = after_stat(index)), show.legend = FALSE) +
+  facet_edges(vars(membership, id), nrow = 2) +
+  theme_graph(foreground = 'steelblue', fg_text_colour = 'white')
+
+sim <- sample2_sbm(30, 20, p1, rep(5, 4), p2, seed = 1234)
+res <- test2_local(sim$x, sim$y, m,
+                   seed = 1234,
+                   # alpha = 0.05,
+                   B = 100)
+res
+
+
+ggraph(as_tbl_graph(sim[[1]]), layout = 'stress') +
+  geom_edge_fan(aes(alpha = after_stat(index)), show.legend = FALSE) +
+  facet_edges(vars(id), nrow = 2) +
+  theme_graph(foreground = 'steelblue', fg_text_colour = 'white')
+
+ggraph(as_tbl_graph(sim[[2]]), layout = 'stress') +
+  geom_edge_fan(aes(alpha = after_stat(index)), show.legend = FALSE) +
+  facet_edges(vars(id), nrow = 2) +
+  theme_graph(foreground = 'steelblue', fg_text_colour = 'white')

@@ -23,10 +23,10 @@ dist_spectral(x, y, representation = "laplacian")
 dist_root_euclidean(x, y, representation = "laplacian")
 }
 \arguments{
-\item{x}{An \code{\link[igraph:aaa-igraph-package]{igraph::igraph}} object or a matrix representing an underlying
+\item{x}{A \code{\link[tidygraph:tbl_graph]{tidygraph::tbl_graph}} object or a matrix representing an underlying
 network.}
 
-\item{y}{An \code{\link[igraph:aaa-igraph-package]{igraph::igraph}} object or a matrix representing an underlying
+\item{y}{A \code{\link[tidygraph:tbl_graph]{tidygraph::tbl_graph}} object or a matrix representing an underlying
 network. Should have the same number of vertices as \code{x}.}
 
 \item{representation}{A string specifying the desired type of representation,

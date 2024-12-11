@@ -72,10 +72,10 @@ nvd_data <- function(x, memberships, method = "mds") {
 #' @name nvd-plot
 #'
 #' @examples
-#' gnp_params <- list(p = 1/3)
-#' k_regular_params <- list(k = 8L)
-#' x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
-#' y <- nvd(model = "k_regular", n = 10L, model_params = k_regular_params)
+#' gnp_params <- list(n = 24L, p = 1/3)
+#' degree_params <- list(out_degree = rep(2, 24L), method = "configuration")
+#' x <- nvd(sample_size = 10L, model = "gnp", !!!gnp_params)
+#' y <- nvd(sample_size = 10L, model = "degree", !!!degree_params)
 #' mb <- c(rep(1, length(x)), rep(2, length(y)))
 #' z <- as_nvd(c(x, y))
 #' ggplot2::autoplot(z, memberships = mb)
@@ -97,8 +97,9 @@ autoplot.nvd <- function(object,
     )) +
     ggplot2::geom_point() +
     ggplot2::theme_bw() +
-    ggplot2::facet_wrap(
-      facets = ggplot2::vars(.data$Representation, .data$Distance),
+    ggplot2::facet_grid(
+      rows = ggplot2::vars(.data$Representation),
+      cols = ggplot2::vars(.data$Distance),
       scales = "free",
       labeller = "label_both"
     ) +
