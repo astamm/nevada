@@ -14,10 +14,10 @@ dist_nvd(
 )
 }
 \arguments{
-\item{x}{A \code{\link[base:list]{base::list}} of \code{\link[igraph:aaa-igraph-package]{igraph::igraph}} objects or matrix
+\item{x}{A \code{\link[base:list]{base::list}} of \code{\link[tidygraph:tbl_graph]{tidygraph::tbl_graph}} objects or matrix
 representations of underlying networks from a given first population.}
 
-\item{y}{A \code{\link[base:list]{base::list}} of \code{\link[igraph:aaa-igraph-package]{igraph::igraph}} objects or matrix
+\item{y}{A \code{\link[base:list]{base::list}} of \code{\link[tidygraph:tbl_graph]{tidygraph::tbl_graph}} objects or matrix
 representations of underlying networks from a given second population.}
 
 \item{representation}{A string specifying the desired type of representation,

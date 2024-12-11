@@ -8,7 +8,7 @@
 #'   to the name of the function without the `play_` prefix.
 #' @param ... Model parameters to be passed to the model function.
 #'
-#' @return A [`nvd`] object which is a list of [`igraph::igraph`] objects.
+#' @return A [`nvd`] object which is a list of [`tidygraph::tbl_graph`] objects.
 #' @export
 #'
 #' @examples

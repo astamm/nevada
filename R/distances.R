@@ -21,9 +21,9 @@
 #' Root-Euclidean distance can used only with the laplacian matrix
 #' representation.
 #'
-#' @param x An [`igraph::igraph`] object or a matrix representing an underlying
+#' @param x A [`tidygraph::tbl_graph`] object or a matrix representing an underlying
 #'   network.
-#' @param y An [`igraph::igraph`] object or a matrix representing an underlying
+#' @param y A [`tidygraph::tbl_graph`] object or a matrix representing an underlying
 #'   network. Should have the same number of vertices as `x`.
 #' @param representation A string specifying the desired type of representation,
 #'   among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or
@@ -189,9 +189,9 @@ ipro_frobenius <- function(x, y, representation = "laplacian") {
 #' elements of the two samples put together. The cardinality of the fist sample
 #' is denoted by \eqn{n_1} and that of the second one is denoted by \eqn{n_2}.
 #'
-#' @param x A [`base::list`] of [`igraph::igraph`] objects or matrix
+#' @param x A [`base::list`] of [`tidygraph::tbl_graph`] objects or matrix
 #'   representations of underlying networks from a given first population.
-#' @param y A [`base::list`] of [`igraph::igraph`] objects or matrix
+#' @param y A [`base::list`] of [`tidygraph::tbl_graph`] objects or matrix
 #'   representations of underlying networks from a given second population.
 #' @param representation A string specifying the desired type of representation,
 #'   among: \code{"adjacency"}, \code{"laplacian"}, \code{"modularity"} or

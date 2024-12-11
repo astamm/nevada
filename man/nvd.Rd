@@ -16,7 +16,7 @@ to the name of the function without the \code{play_} prefix.}
 \item{...}{Model parameters to be passed to the model function.}
 }
 \value{
-A \code{\link{nvd}} object which is a list of \code{\link[igraph:aaa-igraph-package]{igraph::igraph}} objects.
+A \code{\link{nvd}} object which is a list of \code{\link[tidygraph:tbl_graph]{tidygraph::tbl_graph}} objects.
 }
 \description{
 This is the constructor for objects of class \code{nvd}.
