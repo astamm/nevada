@@ -10,22 +10,39 @@
 \alias{rbinom_network}
 \title{Graph samplers using edge distributions}
 \usage{
-play_poisson(num_vertices, lambda = 1)
+play_poisson(num_vertices, lambda = 1, directed = FALSE, loops = FALSE)
 
-rpois_network(n, num_vertices, lambda = 1)
+rpois_network(n, num_vertices, lambda = 1, directed = FALSE, loops = FALSE)
 
-play_exponential(num_vertices, rate = 1)
+play_exponential(num_vertices, rate = 1, directed = FALSE, loops = FALSE)
 
-rexp_network(n, num_vertices, rate = 1)
+rexp_network(n, num_vertices, rate = 1, directed = FALSE, loops = FALSE)
 
-play_binomial(num_vertices, size = 1, prob = 0.5)
+play_binomial(
+  num_vertices,
+  size = 1,
+  prob = 0.5,
+  directed = FALSE,
+  loops = FALSE
+)
 
-rbinom_network(n, num_vertices, size = 1, prob = 0.5)
+rbinom_network(
+  n,
+  num_vertices,
+  size = 1,
+  prob = 0.5,
+  directed = FALSE,
+  loops = FALSE
+)
 }
 \arguments{
 \item{num_vertices}{Number of vertices.}
 
 \item{lambda}{The mean parameter for the Poisson distribution (default: 1).}
+
+\item{directed}{A boolean specifying whether to generate directed or undirected graphs. Defaults to \code{FALSE}.}
+
+\item{loops}{A boolean specifying whether loops are authorized. Defaults to \code{FALSE}.}
 
 \item{n}{Sample size.}
 
