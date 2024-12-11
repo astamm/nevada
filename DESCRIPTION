@@ -40,6 +40,7 @@ Description: A flexible statistical framework for network-valued data analysis.
     autism" <doi:10.1111/rssc.12463>.
 License: GPL (>= 3)
 Encoding: UTF-8
+Depends: R (>= 4.1.0)
 Imports: 
     igraph,
     Rcpp,
@@ -50,7 +51,6 @@ Imports:
     forcats,
     ggplot2,
     rlang,
-    magrittr,
     flipr,
     cli,
     withr,

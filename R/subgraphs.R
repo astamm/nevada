@@ -22,7 +22,7 @@ NULL
 #' @rdname subgraphs
 subgraph_full <- function(g, vids) {
   if (!igraph::is_named(g)) igraph::V(g)$name <- seq_len(igraph::gorder(g))
-  igraph::induced_subgraph(g, unlist(vids)) %>%
+  igraph::induced_subgraph(g, unlist(vids)) |>
     igraph::set_graph_attr("atoms", names(vids))
 }
 
@@ -32,14 +32,14 @@ subgraph_intra <- function(g, vids) {
   if (!igraph::is_named(g)) igraph::V(g)$name <- seq_len(igraph::gorder(g))
   # Handle graph attributes
   ga_names <- igraph::graph_attr_names(g)
-  ga_values <- ga_names %>%
-    purrr::map(~ igraph::graph_attr(g, .x)) %>%
+  ga_values <- ga_names |>
+    purrr::map(~ igraph::graph_attr(g, .x)) |>
     rlang::set_names(ga_names)
-  vids %>%
-    purrr::map(~ igraph::induced_subgraph(g, .x)) %>%
-    purrr::map(delete_graph_attributes) %>%
-    purrr::reduce(igraph::disjoint_union) %>%
-    add_graph_attributes(ga_values) %>%
+  vids |>
+    purrr::map(~ igraph::induced_subgraph(g, .x)) |>
+    purrr::map(delete_graph_attributes) |>
+    purrr::reduce(igraph::disjoint_union) |>
+    add_graph_attributes(ga_values) |>
     igraph::set_graph_attr("atoms", names(vids))
 }
 
@@ -47,10 +47,10 @@ subgraph_intra <- function(g, vids) {
 #' @rdname subgraphs
 subgraph_inter <- function(g, vids) {
   if (!igraph::is_named(g)) igraph::V(g)$name <- seq_len(igraph::gorder(g))
-  vids %>%
-    purrr::map(~ igraph::induced_subgraph(g, .x)) %>%
-    purrr::reduce(igraph::disjoint_union) %>%
-    igraph::difference(big = subgraph_full(g, vids)) %>%
+  vids |>
+    purrr::map(~ igraph::induced_subgraph(g, .x)) |>
+    purrr::reduce(igraph::disjoint_union) |>
+    igraph::difference(big = subgraph_full(g, vids)) |>
     igraph::set_graph_attr("atoms", names(vids))
 }
 

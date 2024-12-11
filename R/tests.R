@@ -137,8 +137,8 @@ test2_global <- function(x, y,
     return(y)
   }
 
-  stat_functions <- stats %>%
-    strsplit(split = ":") %>%
+  stat_functions <- stats |>
+    strsplit(split = ":") |>
     purrr::map(~ {
       if (length(.x) == 1) {
         s <- paste0("stat_", .x)
@@ -237,21 +237,21 @@ test2_local <- function(x, y, partition,
   # Initialize output for intra-adjusted pvalues
   stop_intra <- FALSE
   skip_intra <- NULL
-  p_intra <- utils::combn(E, 1, simplify = FALSE) %>%
-    purrr::transpose() %>%
-    purrr::simplify_all() %>%
-    rlang::set_names("E") %>%
-    tibble::as_tibble() %>%
+  p_intra <- utils::combn(E, 1, simplify = FALSE) |>
+    purrr::transpose() |>
+    purrr::simplify_all() |>
+    rlang::set_names("E") |>
+    tibble::as_tibble() |>
     dplyr::mutate(pvalue = 0, truncated = FALSE)
 
   # Intialize output for inter-adjusted pvalues
   stop_inter <- FALSE
   skip_inter <- NULL
-  p_inter <- utils::combn(E, 2, simplify = FALSE) %>%
-    purrr::transpose() %>%
-    purrr::simplify_all() %>%
-    rlang::set_names(c("E1", "E2")) %>%
-    tibble::as_tibble() %>%
+  p_inter <- utils::combn(E, 2, simplify = FALSE) |>
+    purrr::transpose() |>
+    purrr::simplify_all() |>
+    rlang::set_names(c("E1", "E2")) |>
+    tibble::as_tibble() |>
     dplyr::mutate(pvalue = 0, truncated = FALSE)
 
   for (i in 1:psize) {
@@ -273,8 +273,8 @@ test2_local <- function(x, y, partition,
         next()
 
       element_value <- sas[[j]]
-      individuals <- element_name %>%
-        strsplit(",") %>%
+      individuals <- element_name |>
+        strsplit(",") |>
         purrr::simplify()
 
       # Tests on full subgraphs
@@ -362,7 +362,7 @@ test2_local <- function(x, y, partition,
 }
 
 .update_intra_pvalues <- function(output, c, p, alpha) {
-  output %>%
+  output |>
     dplyr::mutate(
       pvalue = purrr::map2_dbl(.data$E, .data$pvalue, ~ dplyr::if_else(.x %in% c, pmax(.y, p), .y)),
       truncated = .data$pvalue >= alpha
@@ -370,7 +370,7 @@ test2_local <- function(x, y, partition,
 }
 
 .update_inter_pvalues <- function(output, c, p, alpha) {
-  output %>%
+  output |>
     dplyr::mutate(
       pvalue = purrr::pmap_dbl(
         list(.data$E1, .data$E2, .data$pvalue),
@@ -382,8 +382,8 @@ test2_local <- function(x, y, partition,
 
 .update_skip_list <- function(skip_list, individuals) {
   for (k in 1:length(individuals)) {
-    tmp <- individuals %>%
-      utils::combn(k, paste0, collapse = ",", simplify = FALSE) %>%
+    tmp <- individuals |>
+      utils::combn(k, paste0, collapse = ",", simplify = FALSE) |>
       purrr::simplify()
     skip_list <- unique(c(skip_list, tmp))
   }
@@ -392,11 +392,11 @@ test2_local <- function(x, y, partition,
 
 test2_subgraph <- function(x, y, subpartition, fun,
                            representation, distance, stats, B, test, k, seed) {
-  x <- x %>%
-    purrr::map(rlang::as_function(fun), vids = subpartition) %>%
+  x <- x |>
+    purrr::map(rlang::as_function(fun), vids = subpartition) |>
     as_nvd()
-  y <- y %>%
-    purrr::map(rlang::as_function(fun), vids = subpartition) %>%
+  y <- y |>
+    purrr::map(rlang::as_function(fun), vids = subpartition) |>
     as_nvd()
   test2_global(
     x, y,

@@ -33,8 +33,8 @@ as_vertex_partition.list <- function(x) {
 #' @export
 as_vertex_partition.character <- function(x) {
   areas <- sort(unique(x))
-  x <- areas %>%
-    purrr::map(~ which(x == .x)) %>%
+  x <- areas |>
+    purrr::map(~ which(x == .x)) |>
     rlang::set_names(areas)
   class(x) <- c("vertex_partition", class(x))
   x
@@ -63,13 +63,13 @@ as_vertex_partition.integer <- function(x) {
 #' all_inter <- purrr::modify_depth(sa, 2, ~ subgraph_inter(g, .x))
 generate_sigma_algebra <- function(x) {
   N <- length(x)
-  N:1 %>%
-    purrr::map(utils::combn, x = x, simplify = FALSE) %>%
-    rlang::set_names(paste0("D", N:1)) %>%
+  N:1 |>
+    purrr::map(utils::combn, x = x, simplify = FALSE) |>
+    rlang::set_names(paste0("D", N:1)) |>
     purrr::map(~ rlang::set_names(
       x = .x,
-      nm = .x %>%
-        purrr::map(names) %>%
+      nm = .x |>
+        purrr::map(names) |>
         purrr::map_chr(paste0, collapse = ",")
     ))
 }

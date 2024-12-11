@@ -89,7 +89,7 @@ autoplot.nvd <- function(object,
                          memberships = rep(1, length(object)),
                          method = "mds",
                          ...) {
-  nvd_data(x = object, memberships = memberships, method = method) %>%
+  nvd_data(x = object, memberships = memberships, method = method) |>
     ggplot2::ggplot(ggplot2::aes(
       x = .data$V1,
       y = .data$V2,
