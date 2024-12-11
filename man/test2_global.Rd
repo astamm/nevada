@@ -13,7 +13,6 @@ test2_global(
   B = 1000L,
   test = "exact",
   k = 5L,
-  seed = NULL,
   ...
 )
 }
@@ -51,9 +50,6 @@ the permutation p-value. Choices are \code{"estimate"}, \code{"upper_bound"} and
 
 \item{k}{An integer specifying the density of the minimum spanning tree used
 for the edge count statistics. Defaults to \code{5L}.}
-
-\item{seed}{An integer for specifying the seed of the random generator for
-result reproducibility. Defaults to \code{NULL}.}
 
 \item{...}{Extra arguments to be passed to the distance function.}
 }

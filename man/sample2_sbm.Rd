@@ -4,7 +4,7 @@
 \alias{sample2_sbm}
 \title{Two-Sample Stochastic Block Model Generator}
 \usage{
-sample2_sbm(n, nv, p1, b1, p2 = p1, b2 = b1, seed = NULL)
+sample2_sbm(n, nv, p1, b1, p2 = p1, b2 = b1)
 }
 \arguments{
 \item{n}{Integer scalar giving the sample size.}
@@ -29,8 +29,6 @@ symmetric.}
 \item{b2}{Numeric vector giving the number of vertices in each group for the
 second sample (default: same as 1st sample). The sum of the vector must
 match the number of vertices.}
-
-\item{seed}{The seed for the random number generator (default: \code{NULL}).}
 }
 \value{
 A length-2 list containing the two samples stored as
@@ -62,5 +60,5 @@ p2 <- matrix(
   ncol = 4,
   byrow = TRUE
 )
-sim <- sample2_sbm(n, 68, p1, c(17, 17, 17, 17), p2, seed = 1234)
+sim <- sample2_sbm(n, 68, p1, c(17, 17, 17, 17), p2)
 }

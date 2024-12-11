@@ -15,7 +15,6 @@ test2_local(
   alpha = 0.05,
   test = "exact",
   k = 5L,
-  seed = NULL,
   verbose = FALSE
 )
 }
@@ -61,9 +60,6 @@ the permutation p-value. Choices are \code{"estimate"}, \code{"upper_bound"} and
 \item{k}{An integer specifying the density of the minimum spanning tree used
 for the edge count statistics. Defaults to \code{5L}.}
 
-\item{seed}{An integer for specifying the seed of the random generator for
-result reproducibility. Defaults to \code{NULL}.}
-
 \item{verbose}{Boolean specifying whether information on intermediate tests
 should be printed in the process (default: \code{FALSE}).}
 }
@@ -94,10 +90,7 @@ p2 <- matrix(
   ncol = 4,
   byrow = TRUE
 )
-sim <- sample2_sbm(n, 68, p1, c(17, 17, 17, 17), p2, seed = 1234)
+sim <- sample2_sbm(n, 68, p1, c(17, 17, 17, 17), p2)
 m <- as.integer(c(rep(1, 17), rep(2, 17), rep(3, 17), rep(4, 17)))
-test2_local(sim$x, sim$y, m,
-            seed = 1234,
-            alpha = 0.05,
-            B = 19)
+test2_local(sim$x, sim$y, m, alpha = 0.05, B = 19)
 }
