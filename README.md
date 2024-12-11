@@ -8,7 +8,7 @@
 [![R-CMD-check](https://github.com/astamm/nevada/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/astamm/nevada/actions/workflows/R-CMD-check.yaml)
 [![test-coverage](https://github.com/astamm/nevada/workflows/test-coverage/badge.svg)](https://github.com/astamm/nevada/actions)
 [![Codecov test
-coverage](https://codecov.io/gh/astamm/nevada/branch/master/graph/badge.svg)](https://app.codecov.io/gh/astamm/nevada?branch=master)
+coverage](https://codecov.io/gh/astamm/nevada/graph/badge.svg)](https://app.codecov.io/gh/astamm/nevada)
 [![pkgdown](https://github.com/astamm/nevada/workflows/pkgdown/badge.svg)](https://github.com/astamm/nevada/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/nevada)](https://CRAN.R-project.org/package=nevada)
@@ -59,18 +59,39 @@ Fisher-like statistics based on inter-point distances to summarize
 information and perform the permutation test.
 
 ``` r
-set.seed(123)
-n <- 10L
-x <- nevada::nvd(
-  model = "smallworld", 
-  n = n, 
-  model_params = list(dim = 1L, nei = 4L, p = 0.15)
-)
-y <- nevada::nvd(
-  model = "pa", 
-  n = n, 
-  model_params = list(power = 1L, m = NULL, directed = FALSE)
-)
+sample_size <- 10L
+num_vertices <- 10L
+smallworld_params <- list(n_dim = 1L, dim_size = num_vertices, order = 4L, p_rewire = 0.15)
+barabasi_albert_params <- list(power = 1L, n = num_vertices)
+
+withr::with_seed(1234, {
+  x <- nevada::nvd(
+    sample_size = sample_size,
+    model = "smallworld", 
+    !!!smallworld_params
+  )
+  y <- nevada::nvd(
+    sample_size = sample_size,
+    model = "barabasi_albert", 
+    !!!barabasi_albert_params
+  )
+})
+ℹ Calling the `tidygraph::play_smallworld()` function with the following arguments:
+• n_dim: 1
+• dim_size: 10
+• order: 4
+• p_rewire: 0.15
+• loops: FALSE
+• multiple: FALSE
+ℹ Calling the `tidygraph::play_barabasi_albert()` function with the following arguments:
+• power: 1
+• n: 10
+• growth: 1
+• growth_dist: NULL
+• use_out: FALSE
+• appeal_zero: 1
+• directed: TRUE
+• method: psumtree
 ```
 
 By default the `nvd()` constructor generates networks with 25 nodes. One
@@ -102,28 +123,28 @@ t1_local <- nevada::test2_local(x, y, partition, seed = 1234)
 t1_local
 $intra
 # A tibble: 5 × 3
-  E      pvalue truncated
-  <chr>   <dbl> <lgl>    
-1 P1    0.175   TRUE     
-2 P2    0.175   TRUE     
-3 P3    0.175   TRUE     
-4 P4    0.0859  TRUE     
-5 P5    0.00299 FALSE    
+  E     pvalue truncated
+  <chr>  <dbl> <lgl>    
+1 P1     0.425 TRUE     
+2 P2     0.425 TRUE     
+3 P3     0.425 TRUE     
+4 P4     0.425 TRUE     
+5 P5     0.425 TRUE     
 
 $inter
 # A tibble: 10 × 4
    E1    E2      pvalue truncated
    <chr> <chr>    <dbl> <lgl>    
- 1 P1    P2    0.175    TRUE     
- 2 P1    P3    0.175    TRUE     
- 3 P1    P4    0.0859   TRUE     
- 4 P1    P5    0.0240   FALSE    
- 5 P2    P3    0.175    TRUE     
- 6 P2    P4    0.00499  FALSE    
+ 1 P1    P2    0.000996 FALSE    
+ 2 P1    P3    0.000996 FALSE    
+ 3 P1    P4    0.000996 FALSE    
+ 4 P1    P5    0.000996 FALSE    
+ 5 P2    P3    0.000996 FALSE    
+ 6 P2    P4    0.000996 FALSE    
  7 P2    P5    0.000996 FALSE    
- 8 P3    P4    0.0140   FALSE    
- 9 P3    P5    0.00200  FALSE    
-10 P4    P5    0.0420   FALSE    
+ 8 P3    P4    0.000996 FALSE    
+ 9 P3    P5    0.000996 FALSE    
+10 P4    P5    0.000996 FALSE    
 ```
 
 ### Example 2
@@ -136,9 +157,32 @@ based on inter-point distances to summarize information and perform the
 permutation test.
 
 ``` r
-n <- 10L
-x <- nevada::nvd("smallworld", n)
-y <- nevada::nvd("smallworld", n)
+withr::with_seed(1234, {
+  x <- nevada::nvd(
+    sample_size = sample_size,
+    model = "smallworld", 
+    !!!smallworld_params
+  )
+  y <- nevada::nvd(
+    sample_size = sample_size,
+    model = "smallworld", 
+    !!!smallworld_params
+  )
+})
+ℹ Calling the `tidygraph::play_smallworld()` function with the following arguments:
+• n_dim: 1
+• dim_size: 10
+• order: 4
+• p_rewire: 0.15
+• loops: FALSE
+• multiple: FALSE
+ℹ Calling the `tidygraph::play_smallworld()` function with the following arguments:
+• n_dim: 1
+• dim_size: 10
+• order: 4
+• p_rewire: 0.15
+• loops: FALSE
+• multiple: FALSE
 ```
 
 One can wonder whether there is a difference between the distributions
@@ -149,7 +193,7 @@ question:
 ``` r
 t2 <- nevada::test2_global(x, y, seed = 1234)
 t2$pvalue
-[1] 0.9999973
+[1] 0.9190782
 ```
 
 The p-value is larger than 5% or even 10%, leading us to failing to
