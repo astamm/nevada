@@ -280,16 +280,19 @@ Test statistics are passed to the functions `test2_global()` and `test2_local()`
 - statistics from any other package **pkg** are expected to be named without the `stat_` prefix but adding the `pkg:` prefix.
 
 ```{r}
-x <- nvd(sample_size = 10L, model = "gnp", n = 24L, p = 1/3)
-y <- nvd(sample_size = 10L, model = "degree" , out_degree = rep(2, 24L), method = "configuration")
-test2_global(
-  x = x, 
-  y = y, 
-  representation = "laplacian", 
-  distance = "frobenius", 
-  stats = c("flipr:student_ip", "flipr:fisher_ip"), 
-  seed = 1234
-)$pvalue
+gnp_params <- list(n = 24L, p = 1/3)
+degree_params <- list(out_degree = rep(2, 24L), method = "configuration")
+x <- nvd(sample_size = 10L, model = "gnp", !!!gnp_params)
+y <- nvd(sample_size = 10L, model = "degree" , !!!degree_params)
+withr::with_seed(1234, {
+  test2_global(
+    x = x, 
+    y = y, 
+    representation = "laplacian", 
+    distance = "frobenius", 
+    stats = c("flipr:student_ip", "flipr:fisher_ip")
+  )$pvalue
+})
 ```
 
 Note that you can also refer to test statistic function from [**nevada**](https://astamm.github.io/nevada/) using the naming `"nevada:original_edge_count"` as you would do for test statistics from [**flipr**](https://lmjl-alea.github.io/flipr/). This is mandatory for instance if you have not yet loaded [**nevada**](https://astamm.github.io/nevada/) in your environment via `library(nevada)`.

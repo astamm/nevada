@@ -240,7 +240,7 @@ dist_nvd <- function(x,
         matching_iterations = matching_iterations,
         target_matrix = target_matrix
       )
-    }, .options = furrr::furrr_options(seed = TRUE))
+    })
 
     attributes(D) <- NULL
     attr(D, "Labels") <- labels

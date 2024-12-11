@@ -204,7 +204,6 @@ is_nvd <- function(obj) {
 #' @param b2 Numeric vector giving the number of vertices in each group for the
 #'   second sample (default: same as 1st sample). The sum of the vector must
 #'   match the number of vertices.
-#' @param seed The seed for the random number generator (default: \code{NULL}).
 #'
 #' @return A length-2 list containing the two samples stored as
 #'   \code{\link{nvd}} objects.
@@ -230,9 +229,8 @@ is_nvd <- function(obj) {
 #'   ncol = 4,
 #'   byrow = TRUE
 #' )
-#' sim <- sample2_sbm(n, 68, p1, c(17, 17, 17, 17), p2, seed = 1234)
-sample2_sbm <- function(n, nv, p1, b1, p2 = p1, b2 = b1, seed = NULL) {
-  withr::local_seed(seed)
+#' sim <- sample2_sbm(n, 68, p1, c(17, 17, 17, 17), p2)
+sample2_sbm <- function(n, nv, p1, b1, p2 = p1, b2 = b1) {
   sim <- n |>
     purrr::rerun(
       x = igraph::sample_sbm(nv, p1, b1),

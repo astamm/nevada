@@ -67,7 +67,9 @@ withr::with_seed(1234, {
 
 By default the `nvd()` constructor generates networks with 25 nodes. One can wonder whether there is a difference between the distributions that generated these two samples (which there is given the models that we used). The `test2_global()` function provides an answer to this question:
 ```{r}
-t1_global <- nevada::test2_global(x, y, seed = 1234)
+withr::with_seed(1234, {
+  t1_global <- nevada::test2_global(x, y)
+})
 t1_global$pvalue
 ```
 
@@ -80,7 +82,9 @@ partition <- as.integer(c(1:5, each = 5))
 
 The `test2_local()` function provides an answer to this question:
 ```{r}
-t1_local <- nevada::test2_local(x, y, partition, seed = 1234)
+withr::with_seed(1234, {
+  t1_local <- nevada::test2_local(x, y, partition)
+})
 t1_local
 ```
 
@@ -105,7 +109,9 @@ withr::with_seed(1234, {
 
 One can wonder whether there is a difference between the distributions that generated these two samples (which there is given the models that we used). The `test2_global()` function provides an answer to this question:
 ```{r}
-t2 <- nevada::test2_global(x, y, seed = 1234)
+withr::with_seed(1234, {
+  t2 <- nevada::test2_global(x, y)
+})
 t2$pvalue
 ```
 
