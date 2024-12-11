@@ -5,6 +5,8 @@
 #'
 #' @param n Sample size.
 #' @param num_vertices Number of vertices.
+#' @param directed A boolean specifying whether to generate directed or undirected graphs. Defaults to `FALSE`.
+#' @param loops A boolean specifying whether loops are authorized. Defaults to `FALSE`.
 #' @param lambda The mean parameter for the Poisson distribution (default: 1).
 #' @param rate The rate parameter for the exponential distribution (default: 1).
 #' @param size The number of trials for the binomial distribution (default: 1).
@@ -20,59 +22,125 @@ NULL
 
 #' @rdname samplers
 #' @export
-play_poisson <- function(num_vertices, lambda = 1) {
+play_poisson <- function(num_vertices, lambda = 1, directed = FALSE, loops = FALSE) {
   A <- diag(0, num_vertices)
   A[upper.tri(A)] <- stats::rpois(
     n = num_vertices * (num_vertices - 1L) / 2L,
     lambda = lambda
   )
+
+  if (loops) {
+    diag(A) <- stats::rpois(
+      n = num_vertices,
+      lambda = lambda
+    )
+  }
+
+  if (directed) {
+    A[lower.tri(A)] <- stats::rpois(
+      n = num_vertices * (num_vertices - 1L) / 2L,
+      lambda = lambda
+    )
+    return(igraph::graph_from_adjacency_matrix(A, mode = "directed", weighted = TRUE))
+  }
+
   igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
 }
 
 #' @rdname samplers
 #' @export
-rpois_network <- function(n, num_vertices, lambda = 1) {
+rpois_network <- function(n, num_vertices, lambda = 1, directed = FALSE, loops = FALSE) {
   as_nvd(replicate(n, {
-    play_poisson(num_vertices = num_vertices, lambda = lambda)
+    play_poisson(
+      num_vertices = num_vertices, 
+      lambda = lambda, 
+      directed = directed, 
+      loops = loops
+    )
   }, simplify = FALSE))
 }
 
 #' @rdname samplers
 #' @export
-play_exponential <- function(num_vertices, rate = 1) {
+play_exponential <- function(num_vertices, rate = 1, directed = FALSE, loops = FALSE) {
   A <- diag(0, num_vertices)
   A[upper.tri(A)] <- stats::rexp(
     n = num_vertices * (num_vertices - 1L) / 2L,
     rate = rate
   )
+  
+  if (loops) {
+    diag(A) <- stats::rexp(
+      n = num_vertices,
+      rate = rate
+    )
+  }
+
+  if (directed) {
+    A[lower.tri(A)] <- stats::rexp(
+      n = num_vertices * (num_vertices - 1L) / 2L,
+      rate = rate
+    )
+    return(igraph::graph_from_adjacency_matrix(A, mode = "directed", weighted = TRUE))
+  }
+
   igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
 }
 
 #' @rdname samplers
 #' @export
-rexp_network <- function(n, num_vertices, rate = 1) {
+rexp_network <- function(n, num_vertices, rate = 1, directed = FALSE, loops = FALSE) {
   as_nvd(replicate(n, {
-    play_exponential(num_vertices = num_vertices, rate = rate)
+    play_exponential(
+      num_vertices = num_vertices, 
+      rate = rate, 
+      directed = directed, 
+      loops = loops
+    )
   }, simplify = FALSE))
 }
 
 #' @rdname samplers
 #' @export
-play_binomial <- function(num_vertices, size = 1, prob = 0.5) {
+play_binomial <- function(num_vertices, size = 1, prob = 0.5, directed = FALSE, loops = FALSE) {
   A <- diag(0, num_vertices)
   A[upper.tri(A)] <- stats::rbinom(
     n = num_vertices * (num_vertices - 1L) / 2L,
     size = size,
     prob = prob
   )
+  
+  if (loops) {
+    diag(A) <- stats::rbinom(
+      n = num_vertices,
+      size = size,
+      prob = prob
+    )
+  }
+
+  if (directed) {
+    A[lower.tri(A)] <- stats::rbinom(
+      n = num_vertices * (num_vertices - 1L) / 2L,
+      size = size,
+      prob = prob
+    )
+    return(igraph::graph_from_adjacency_matrix(A, mode = "directed", weighted = TRUE))
+  }
+
   igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
 }
 
 #' @rdname samplers
 #' @export
-rbinom_network <- function(n, num_vertices, size = 1, prob = 0.5) {
+rbinom_network <- function(n, num_vertices, size = 1, prob = 0.5, directed = FALSE, loops = FALSE) {
   as_nvd(replicate(n, {
-    play_binomial(num_vertices = num_vertices, size = size, prob = prob)
+    play_binomial(
+      num_vertices = num_vertices, 
+      size = size, 
+      prob = prob, 
+      directed = directed, 
+      loops = loops
+    )
   }, simplify = FALSE))
 }
 
