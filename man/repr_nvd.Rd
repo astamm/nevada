@@ -23,7 +23,7 @@ A list of matrices.
 Network-Valued to Matrix-Valued Data
 }
 \examples{
-gnp_params <- list(p = 1/3)
-x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
+params <- list(n = 24L, p = 1/3)
+x <- nvd(sample_size = 1L, model = "gnp", !!!params)
 xm <- repr_nvd(x)
 }

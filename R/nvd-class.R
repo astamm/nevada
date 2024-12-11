@@ -2,99 +2,102 @@
 #'
 #' This is the constructor for objects of class \code{nvd}.
 #'
-#' @param model A string specifying the model to be used for sampling networks
-#'   (current choices are: `"sbm"`, `"k_regular"`, `"gnp"`, `"smallworld"`,
-#'   `"pa"`, `"poisson"` and `"binomial"`). Defaults to `"smallworld"`.
-#' @param n An integer specifying the sample size. Defaults to `1L`.
-#' @param num_vertices An integer specifying the order of the graphs to be
-#'   generated (i.e. the number of nodes). Defaults to `25L`.
-#' @param model_params A named list setting the parameters of the model you are
-#'   considering. Defaults to `list(dim = 1L, nei = 4L, p = 0.15)` which sets
-#'   defaults parameters for the Watts-Strogatz small-world model generator.
-#' @param seed An integer specifying the random generator seed. Defaults to
-#'   `1234`.
+#' @param sample_size An integer specifying the sample size.
+#' @param model A string specifying the model to be used for sampling networks.
+#'   All `tidygraph::play_` functions are supported. The model name corresponds
+#'   to the name of the function without the `play_` prefix.
+#' @param ... Model parameters to be passed to the model function.
 #'
-#' @return A \code{nvd} object which is a list of \code{\link[igraph]{igraph}}
-#'   objects.
+#' @return A [`nvd`] object which is a list of [`igraph::igraph`] objects.
 #' @export
 #'
 #' @examples
-#' smallworld_params <- list(dim = 1L, nei = 4L, p = 0.15)
-#' nvd(model_params = smallworld_params)
-nvd <- function(model = "smallworld",
-                n = 1L,
-                num_vertices = 25L,
-                model_params = list(dim = 1L, nei = 4L, p = 0.15),
-                seed = 1234) {
-  if (!is.null(seed))
-    withr::local_seed(seed)
-
-  model <- match.arg(
+#' params <- list(n_dim = 1L, dim_size = 4L, order = 4L, p_rewire = 0.15)
+#' nvd(sample_size = 1L, model = "smallworld", !!!params)
+nvd <- function(sample_size, model, ...) {
+  model <- rlang::arg_match(
     model,
-    c("sbm", "k_regular", "gnp", "smallworld", "pa", "poisson", "binomial")
+    c(
+      # Graph games from tidygraph
+      gsub("play_", "", TIDYGRAPH_PLAY_FUNCTIONS()),
+      # User-defined graph games
+      "binomial", "exponential", "poisson"
+    )
   )
 
-  if (!rlang::is_named2(model_params))
-    cli::cli_abort("The {.code model_params} list should be named after the parameters of the model you are considering but is not.")
+  call_data <- build_play_call(model, ...)
 
-  if (model == "poisson") {
-    if (!all(c("lambda") %in% names(model_params)))
-      cli::cli_abort("The {.code model_params} list should contain the field {.field lambda} to use the Poisson generator.")
-    return(rlang::eval_tidy(rlang::quo(
-      rpois_network(n = n, num_vertices = num_vertices, !!!model_params)
-    )))
-  }
-
-  if (model == "binomial") {
-    if (!all(c("size", "prob") %in% names(model_params)))
-      cli::cli_abort("The {.code model_params} list should contain the fields {.field size} and {.field prob} to use the binomial generator.")
-    return(rlang::eval_tidy(rlang::quo(
-      rbinom_network(n = n, num_vertices = num_vertices, !!!model_params)
-    )))
-  }
-
-  if (model == "sbm" && !all(c("pref.matrix", "block.sizes") %in% names(model_params)))
-    cli::cli_abort("The {.code model_params} list should contain the fields {.field pref.matrix} and {.field block.sizes} to use the SBM generator.")
-
-  if (model == "k_regular" && !all(c("k") %in% names(model_params)))
-    cli::cli_abort("The {.code model_params} list should contain the field {.field k} to use the k-regular model generator.")
-
-  if (model == "gnp" && !all(c("p") %in% names(model_params)))
-    cli::cli_abort("The {.code model_params} list should contain the field {.field p} to use the GNP model generator.")
-
-  if (model == "smallworld" && !all(c("dim", "nei", "p") %in% names(model_params)))
-    cli::cli_abort("The {.code model_params} list should contain the fields {.field dim}, {.field nei} and {.field p} to use the Watts-Strogatz small-world model generator.")
-
-  if (model == "pa" && !all(c("power", "m", "directed") %in% names(model_params)))
-    cli::cli_abort("The {.code model_params} list should contain the fields {.field power}, {.field m} and {.field directed} to use the Barabasi-Albert scale-free model generator.")
-
-  obj <- replicate(n, {
-    rlang::eval_tidy(rlang::quo(switch(
-      model,
-      "sbm" = igraph::sample_sbm(
-        n = num_vertices,
-        !!!model_params
-      ),
-      "k_regular" = igraph::sample_k_regular(
-        no.of.nodes = num_vertices,
-        !!!model_params
-      ),
-      "gnp" = igraph::sample_gnp(
-        n = num_vertices,
-        !!!model_params
-      ),
-      "smallworld" = igraph::sample_smallworld(
-        size = num_vertices,
-        !!!model_params
-      ),
-      "pa" = igraph::sample_pa(
-        n = num_vertices,
-        !!!model_params
-      )
-    )))
+  obj <- replicate(sample_size, {
+    rlang::exec(call_data[[1]], !!!call_data[[2]])
   }, simplify = FALSE)
 
   as_nvd(obj)
+}
+
+TIDYGRAPH_PLAY_FUNCTIONS <- function() {
+  nms <- names(getNamespace("tidygraph"))
+  nms[grepl("^play_*", nms)]
+}
+
+#' @importFrom rlang `:=`
+build_play_call <- function(model, ...) {
+  fn_name <- paste0("play_", model)
+  pkg <- if (fn_name %in% TIDYGRAPH_PLAY_FUNCTIONS()) {
+    "tidygraph"
+  } else {
+    "nevada"
+  }
+  fn_call <-utils::getFromNamespace(fn_name, pkg)
+  fn_args <- names(formals(fn_call))
+  fn_mandatory_args <- fn_args[purrr::map_lgl(formals(fn_call), \(el) {
+    class(el) == "name"
+  })]
+  fn_optional_args <- fn_args[!fn_args %in% fn_mandatory_args]
+  user_args <- rlang::list2(...)
+  ok <- all(names(user_args) %in% fn_args)
+  if (!ok) {
+    cli::cli_abort(c(
+      "x" = "The arguments you provided do not match the signature of the {.fn {pkg}::{fn_name}} function.",
+      "i" = "You must provide the {.arg {fn_mandatory_args}} argument{?s} and optionally the {.arg {fn_optional_args}} argument{?s}.",
+      "i" = "Refer to {.fn {pkg}::{fn_name}} for more information on the model parameters."
+    ))
+  }
+  ok <- all(fn_mandatory_args %in% names(user_args))
+  if (!ok) {
+    cli::cli_abort(c(
+      "x" = "You did not provide all the mandatory arguments to the {.fn {pkg}::{fn_name}} function.",
+      "i" = "You must provide the {.arg {fn_mandatory_args}} argument{?s} and optionally the {.arg {fn_optional_args}} argument{?s}.",
+      "i" = "See {.fn {pkg}::{fn_name}} for more information on the model parameters."
+    ))
+  }
+  tb <- table(names(user_args))
+  dups <- names(tb[tb > 1])
+  if (length(dups) > 0) {
+    cli::cli_abort(c(
+      "x" = "You provided duplicate arguments to the {.fn {pkg}::{fn_name}} function.",
+      "i" = "The following arguments are duplicated: {.arg {dups}}."
+    ))
+  }
+
+  if (length(fn_optional_args) > 0) {
+    for (arg in fn_optional_args) {
+      if (!arg %in% names(user_args)) {
+        user_args <- c(user_args, rlang::list2(
+          !!arg := formals(fn_call)[[arg]]
+        ))
+      }
+    }
+  }
+
+  cli::cli_alert_info("Calling the {.fn {pkg}::{fn_name}} function with the following arguments:")
+  lid <- cli::cli_ul()
+  for (i in 1:length(user_args)) {
+    argval <- if (is.null(user_args[[i]])) "NULL" else user_args[[i]]
+    cli::cli_li("{names(user_args)[i]}: {argval}")
+  }
+  cli::cli_end(lid)
+
+  list(fn_call, user_args)
 }
 
 #' Coercion to Network-Valued Data Object
@@ -108,30 +111,66 @@ nvd <- function(model = "smallworld",
 #' @export
 #'
 #' @examples
-#' gnp_params <- list(p = 1/3)
-#' as_nvd(nvd(model = "gnp", n = 10L, model_params = gnp_params))
+#' params <- list(n_dim = 1L, dim_size = 4L, order = 4L, p_rewire = 0.15)
+#' out <- nvd(sample_size = 1L, model = "smallworld", !!!params)
+#' as_nvd(out)
 as_nvd <- function(obj) {
   if (!is.list(obj))
     cli::cli_abort("Input should be a list.")
 
-  # check that entries are igraph objects
-  input_ok <- TRUE
-  for (l in obj) {
-    if (!igraph::is_igraph(l)) {
-      input_ok <- FALSE
-      break()
+  N <- length(obj)
+  if (N == 0)
+    cli::cli_abort("Input list should not be empty.")
+
+  # Input must be a list of graph.
+  # Each entry can be:
+  # - either an igraph object
+  # - or a tidygraph::tbl_graph object
+  # - or a list itself with entries `nodes`, `edges`, `directed` and `node_key`.
+
+  if (igraph::is_igraph(obj[[1]])) {
+    input_ok <- TRUE
+    for (i in 1:N) {
+      if (!igraph::is_igraph(obj[[i]])) {
+        input_ok <- FALSE
+        break()
+      }
+      obj[[i]] <- tidygraph::as_tbl_graph(obj[[i]])
     }
+
+    if (!input_ok)
+      cli::cli_abort("All elements in the input list should be {.cls igraph} objects.")
+  } else if (tidygraph::is.tbl_graph(obj[[1]])) {
+    input_ok <- TRUE
+    for (i in 2:N) {
+      if (!tidygraph::is.tbl_graph(l[[i]])) {
+        input_ok <- FALSE
+        break()
+      }
+    }
+
+    if (!input_ok)
+      cli::cli_abort("All elements in the input list should be {.cls tbl_graph} objects.")
+  } else if (is.list(obj[[1]])) {
+    input_ok <- TRUE
+    for (i in 1:N) {
+      if (!all(c("nodes", "edges", "directed", "node_key") %in% names(l[[i]]))) {
+        input_ok <- FALSE
+        break()
+      }
+      l[[i]] <- tidygraph::tbl_graph(
+        nodes = l[[i]]$nodes,
+        edges = l[[i]]$edges,
+        directed = l[[i]]$directed,
+        node_key = l[[i]]$node_key
+      )
+    }
+
+    if (!input_ok)
+      cli::cli_abort("All elements in the input list should be lists with entries `nodes`, `edges`, `directed` and `node_key`.")
+  } else {
+    cli::cli_abort("All elements in the input list should be either {.cls igraph}, {.cls tbl_graph} or lists with entries `nodes`, `edges`, `directed` and `node_key`.")
   }
-
-  if (!input_ok)
-    cli::cli_abort("All elements in the input list should be {.cls igraph} objects.")
-
-  # Here we handle graphs of different orders by adding as many vertices as
-  # necessary to match the order of the largest graph (a.k.a pushing graphs into
-  # graph space structure).
-  num_vertices <- purrr::map_int(obj, igraph::gorder)
-  max_num_vertices <- max(num_vertices)
-  obj <- purrr::map2(obj, num_vertices, ~ igraph::add_vertices(.x, max_num_vertices - .y))
 
   class(obj) <- c("nvd", "list")
   obj
@@ -225,8 +264,8 @@ sample2_sbm <- function(n, nv, p1, b1, p2 = p1, b2 = b1, seed = NULL) {
 #' @export
 #'
 #' @examples
-#' gnp_params <- list(p = 1/3)
-#' x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
+#' params <- list(n = 24L, p = 1/3)
+#' x <- nvd(sample_size = 1L, model = "gnp", !!!params)
 #' mean(x)
 mean.nvd <- function(x, weights = rep(1, length(x)), representation = "adjacency", ...) {
   x <- repr_nvd(x, representation = representation)
@@ -268,8 +307,8 @@ mean.nvd <- function(x, weights = rep(1, length(x)), representation = "adjacency
 #' @export
 #'
 #' @examples
-#' gnp_params <- list(p = 1/3)
-#' x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
+#' params <- list(n = 24L, p = 1/3)
+#' x <- nvd(sample_size = 1L, model = "gnp", !!!params)
 #' m <- mean(x)
 #' var_nvd(x = x, x0 = m, distance = "frobenius")
 var_nvd <- function(x, x0, weights = rep(1, length(x)), distance = "frobenius") {
@@ -321,8 +360,8 @@ var_nvd <- function(x, x0, weights = rep(1, length(x)), distance = "frobenius") 
 #' @export
 #'
 #' @examples
-#' gnp_params <- list(p = 1/3)
-#' x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
+#' params <- list(n = 24L, p = 1/3)
+#' x <- nvd(sample_size = 1L, model = "gnp", !!!params)
 #' var2_nvd(x = x, representation = "graphon", distance = "frobenius")
 var2_nvd <- function(x, representation = "adjacency", distance = "frobenius") {
   if (!is_nvd(x))

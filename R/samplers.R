@@ -10,16 +10,8 @@
 #' @param size The number of trials for the binomial distribution (default: 1).
 #' @param prob The probability of success on each trial for the binomial
 #'   distribution (default: 0.5).
-#' @param pref_matrix The matrix giving the Bernoulli rates. This is a KxK
-#'   matrix, where K is the number of groups. The probability of creating an
-#'   edge between vertices from groups i and j is given by element (i,j). For
-#'   undirected graphs, this matrix must be symmetric. See
-#'   \code{\link[igraph]{sample_sbm}}.
-#' @param block_sizes Numeric vector giving the number of vertices in each
-#'   group. The sum of the vector must match the number of vertices. See
-#'   \code{\link[igraph]{sample_sbm}}.
 #'
-#' @return A object of class \code{\link{nvd}} containing the sample of graphs.
+#' @return A object of class [`nvd`] containing the sample of graphs.
 #' @name samplers
 #'
 #' @examples
@@ -28,56 +20,60 @@ NULL
 
 #' @rdname samplers
 #' @export
+play_poisson <- function(num_vertices, lambda = 1) {
+  A <- diag(0, num_vertices)
+  A[upper.tri(A)] <- stats::rpois(
+    n = num_vertices * (num_vertices - 1L) / 2L,
+    lambda = lambda
+  )
+  igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
+}
+
+#' @rdname samplers
+#' @export
 rpois_network <- function(n, num_vertices, lambda = 1) {
   as_nvd(replicate(n, {
-    A <- diag(0, num_vertices)
-    A[upper.tri(A)] <- stats::rpois(
-      n = num_vertices * (num_vertices - 1L) / 2L,
-      lambda = lambda
-    )
-    igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
+    play_poisson(num_vertices = num_vertices, lambda = lambda)
   }, simplify = FALSE))
+}
+
+#' @rdname samplers
+#' @export
+play_exponential <- function(num_vertices, rate = 1) {
+  A <- diag(0, num_vertices)
+  A[upper.tri(A)] <- stats::rexp(
+    n = num_vertices * (num_vertices - 1L) / 2L,
+    rate = rate
+  )
+  igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
 }
 
 #' @rdname samplers
 #' @export
 rexp_network <- function(n, num_vertices, rate = 1) {
   as_nvd(replicate(n, {
-    A <- diag(0, num_vertices)
-    A[upper.tri(A)] <- stats::rexp(
-      n = num_vertices * (num_vertices - 1L) / 2L,
-      rate = rate
-    )
-    igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
+    play_exponential(num_vertices = num_vertices, rate = rate)
   }, simplify = FALSE))
+}
+
+#' @rdname samplers
+#' @export
+play_binomial <- function(num_vertices, size = 1, prob = 0.5) {
+  A <- diag(0, num_vertices)
+  A[upper.tri(A)] <- stats::rbinom(
+    n = num_vertices * (num_vertices - 1L) / 2L,
+    size = size,
+    prob = prob
+  )
+  igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
 }
 
 #' @rdname samplers
 #' @export
 rbinom_network <- function(n, num_vertices, size = 1, prob = 0.5) {
   as_nvd(replicate(n, {
-    A <- diag(0, num_vertices)
-    A[upper.tri(A)] <- stats::rbinom(
-      n = num_vertices * (num_vertices - 1L) / 2L,
-      size = size,
-      prob = prob
-    )
-    igraph::graph_from_adjacency_matrix(A, mode = "upper", weighted = TRUE)
+    play_binomial(num_vertices = num_vertices, size = size, prob = prob)
   }, simplify = FALSE))
-}
-
-#' @rdname samplers
-#' @export
-rsbm <- function(n, num_vertices, pref_matrix, block_sizes) {
-  stopifnot(sum(block_sizes) == num_vertices)
-  replicate(n, {
-    igraph::sample_sbm(
-      n = num_vertices,
-      pref.matrix = pref_matrix,
-      block.sizes = block_sizes
-    )
-  }, simplify = FALSE) %>%
-    purrr::map(igraph::set_edge_attr, name = "weight", value = 1)
 }
 
 sample1_nbs <- function(n, num_vertices, rate = 1) {

@@ -17,6 +17,7 @@ This function flags a list of \code{\link[igraph]{igraph}} objects as an
 \code{\link{nvd}} object as defined in this package.
 }
 \examples{
-gnp_params <- list(p = 1/3)
-as_nvd(nvd(model = "gnp", n = 10L, model_params = gnp_params))
+params <- list(n_dim = 1L, dim_size = 4L, order = 4L, p_rewire = 0.15)
+out <- nvd(sample_size = 1L, model = "smallworld", !!!params)
+as_nvd(out)
 }

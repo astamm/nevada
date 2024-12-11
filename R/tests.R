@@ -47,18 +47,18 @@
 #'
 #' @examples
 #' n <- 5L
-#' gnp_params <- list(p = 1/3)
-#' k_regular_params <- list(k = 8L)
+#' gnp_params <- list(n = 24L, p = 1/3)
+#' degree_params <- list(out_degree = rep(2, 24L), method = "configuration")
 #'
 #' # Two different models for the two populations
-#' x <- nvd(model = "gnp", n = n, model_params = gnp_params)
-#' y <- nvd(model = "k_regular", n = n, model_params = k_regular_params)
+#' x <- nvd(sample_size = n, model = "gnp", !!!gnp_params)
+#' y <- nvd(sample_size = n, model = "degree", !!!degree_params)
 #' t1 <- test2_global(x, y, representation = "modularity")
 #' t1$pvalue
 #'
 #' # Same model for the two populations
-#' x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
-#' y <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
+#' x <- nvd(sample_size = n, model = "gnp", !!!gnp_params)
+#' y <- nvd(sample_size = n, model = "gnp", !!!gnp_params)
 #' t2 <- test2_global(x, y, representation = "modularity")
 #' t2$pvalue
 test2_global <- function(x, y,

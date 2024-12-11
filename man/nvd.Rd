@@ -4,39 +4,24 @@
 \alias{nvd}
 \title{Network-Valued Data Constructor}
 \usage{
-nvd(
-  model = "smallworld",
-  n = 1L,
-  num_vertices = 25L,
-  model_params = list(dim = 1L, nei = 4L, p = 0.15),
-  seed = 1234
-)
+nvd(sample_size, model, ...)
 }
 \arguments{
-\item{model}{A string specifying the model to be used for sampling networks
-(current choices are: \code{"sbm"}, \code{"k_regular"}, \code{"gnp"}, \code{"smallworld"},
-\code{"pa"}, \code{"poisson"} and \code{"binomial"}). Defaults to \code{"smallworld"}.}
+\item{sample_size}{An integer specifying the sample size.}
 
-\item{n}{An integer specifying the sample size. Defaults to \code{1L}.}
+\item{model}{A string specifying the model to be used for sampling networks.
+All \code{tidygraph::play_} functions are supported. The model name corresponds
+to the name of the function without the \code{play_} prefix.}
 
-\item{num_vertices}{An integer specifying the order of the graphs to be
-generated (i.e. the number of nodes). Defaults to \code{25L}.}
-
-\item{model_params}{A named list setting the parameters of the model you are
-considering. Defaults to \code{list(dim = 1L, nei = 4L, p = 0.15)} which sets
-defaults parameters for the Watts-Strogatz small-world model generator.}
-
-\item{seed}{An integer specifying the random generator seed. Defaults to
-\code{1234}.}
+\item{...}{Model parameters to be passed to the model function.}
 }
 \value{
-A \code{nvd} object which is a list of \code{\link[igraph]{igraph}}
-objects.
+A \code{\link{nvd}} object which is a list of \code{\link[igraph:aaa-igraph-package]{igraph::igraph}} objects.
 }
 \description{
 This is the constructor for objects of class \code{nvd}.
 }
 \examples{
-smallworld_params <- list(dim = 1L, nei = 4L, p = 0.15)
-nvd(model_params = smallworld_params)
+params <- list(n_dim = 1L, dim_size = 4L, order = 4L, p_rewire = 0.15)
+nvd(sample_size = 1L, model = "smallworld", !!!params)
 }

@@ -215,10 +215,10 @@ ipro_frobenius <- function(x, y, representation = "laplacian") {
 #' @export
 #'
 #' @examples
-#' gnp_params <- list(p = 1/3)
-#' k_regular_params <- list(k = 8L)
-#' x <- nvd(model = "gnp", n = 10L, model_params = gnp_params)
-#' y <- nvd(model = "k_regular", n = 10L, model_params = k_regular_params)
+#' gnp_params <- list(n = 24L, p = 1/3)
+#' degree_params <- list(out_degree = rep(2, 24L), method = "configuration")
+#' x <- nvd(sample_size = 10L, model = "gnp", !!!gnp_params)
+#' y <- nvd(sample_size = 10L, model = "degree", !!!degree_params)
 #' dist_nvd(x, y, "adjacency", "spectral")
 dist_nvd <- function(x,
                      y = NULL,
