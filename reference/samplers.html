@@ -42,17 +42,30 @@ distribution.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">play_poisson</span><span class="op">(</span><span class="va">num_vertices</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">play_poisson</span><span class="op">(</span><span class="va">num_vertices</span>, lambda <span class="op">=</span> <span class="fl">1</span>, directed <span class="op">=</span> <span class="cn">FALSE</span>, loops <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">rpois_network</span><span class="op">(</span><span class="va">n</span>, <span class="va">num_vertices</span>, lambda <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu">rpois_network</span><span class="op">(</span><span class="va">n</span>, <span class="va">num_vertices</span>, lambda <span class="op">=</span> <span class="fl">1</span>, directed <span class="op">=</span> <span class="cn">FALSE</span>, loops <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">play_exponential</span><span class="op">(</span><span class="va">num_vertices</span>, rate <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu">play_exponential</span><span class="op">(</span><span class="va">num_vertices</span>, rate <span class="op">=</span> <span class="fl">1</span>, directed <span class="op">=</span> <span class="cn">FALSE</span>, loops <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">rexp_network</span><span class="op">(</span><span class="va">n</span>, <span class="va">num_vertices</span>, rate <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu">rexp_network</span><span class="op">(</span><span class="va">n</span>, <span class="va">num_vertices</span>, rate <span class="op">=</span> <span class="fl">1</span>, directed <span class="op">=</span> <span class="cn">FALSE</span>, loops <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">play_binomial</span><span class="op">(</span><span class="va">num_vertices</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="fu">play_binomial</span><span class="op">(</span></span>
+<span>  <span class="va">num_vertices</span>,</span>
+<span>  size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  prob <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  directed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  loops <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">rbinom_network</span><span class="op">(</span><span class="va">n</span>, <span class="va">num_vertices</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">rbinom_network</span><span class="op">(</span></span>
+<span>  <span class="va">n</span>,</span>
+<span>  <span class="va">num_vertices</span>,</span>
+<span>  size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  prob <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  directed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  loops <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -65,6 +78,14 @@ distribution.</p>
 
 <dt id="arg-lambda">lambda<a class="anchor" aria-label="anchor" href="#arg-lambda"></a></dt>
 <dd><p>The mean parameter for the Poisson distribution (default: 1).</p></dd>
+
+
+<dt id="arg-directed">directed<a class="anchor" aria-label="anchor" href="#arg-directed"></a></dt>
+<dd><p>A boolean specifying whether to generate directed or undirected graphs. Defaults to <code>FALSE</code>.</p></dd>
+
+
+<dt id="arg-loops">loops<a class="anchor" aria-label="anchor" href="#arg-loops"></a></dt>
+<dd><p>A boolean specifying whether loops are authorized. Defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
